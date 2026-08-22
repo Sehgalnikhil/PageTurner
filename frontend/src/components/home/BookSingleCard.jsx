@@ -1,44 +1,78 @@
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PiBookOpenTextLight } from 'react-icons/pi';
-import { BiUserCircle, BiShow } from 'react-icons/bi';
-import { AiOutlineEdit } from 'react-icons/ai';
-import { BsInfoCircle } from 'react-icons/bs';
-import { MdOutlineDelete } from 'react-icons/md';
-import { useState } from 'react';
+import { PiBookOpenText, PiUserCircle, PiEyeBold, PiPencilSimpleBold, PiTrashBold, PiArticleMediumBold } from 'react-icons/pi';
 import BookModal from './BookModal';
 
 const BookSingleCard = ({ book }) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className='border-2 border-gray-500 rounded-lg px-4 py-2 m-4 relative hover:shadow-xl'>
-      <h2 className='absolute top-1 right-2 px-4 py-1 bg-red-300 rounded-lg'>
-        {book.publishYear}
-      </h2>
-      <h4 className='my-2 text-gray-500'>{book._id}</h4>
-      <div className='flex justify-start items-center gap-x-2'>
-        <PiBookOpenTextLight className='text-red-300 text-2xl' />
-        <h2 className='my-1'>{book.title}</h2>
+    <div className="group relative rounded-2xl bg-white border border-slate-200 p-5 shadow-card hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between">
+      {/* Card Top: Year badge & Quick Modal Trigger */}
+      <div>
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
+            {book.publishYear}
+          </span>
+          <button
+            onClick={() => setShowModal(true)}
+            className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-900 px-2 py-1 rounded-md hover:bg-slate-100 transition-colors"
+            title="Quick Preview"
+          >
+            <PiArticleMediumBold className="text-sm" />
+            <span>Quick View</span>
+          </button>
+        </div>
+
+        {/* Title */}
+        <div className="flex items-start gap-3 my-2">
+          <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800 flex-shrink-0 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            <PiBookOpenText className="text-xl" />
+          </div>
+          <div>
+            <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-slate-700 transition-colors line-clamp-2">
+              {book.title}
+            </h3>
+            <div className="flex items-center gap-1.5 mt-1 text-slate-500 text-xs font-medium">
+              <PiUserCircle className="text-sm text-slate-400" />
+              <span className="truncate">{book.author}</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className='flex justify-start items-center gap-x-2'>
-        <BiUserCircle className='text-red-300 text-2xl' />
-        <h2 className='my-1'>{book.author}</h2>
+
+      {/* Card Bottom: Actions */}
+      <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <span className="text-[11px] font-mono text-slate-400">
+          ID: {book._id.slice(-6)}
+        </span>
+
+        <div className="flex items-center gap-1">
+          <Link
+            to={`/books/details/${book._id}`}
+            title="View Details"
+            className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+          >
+            <PiEyeBold className="text-base" />
+          </Link>
+          <Link
+            to={`/books/edit/${book._id}`}
+            title="Edit"
+            className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+          >
+            <PiPencilSimpleBold className="text-base" />
+          </Link>
+          <Link
+            to={`/books/delete/${book._id}`}
+            title="Delete"
+            className="p-2 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+          >
+            <PiTrashBold className="text-base" />
+          </Link>
+        </div>
       </div>
-      <div className='flex justify-between items-center gap-x-2 mt-4 p-4'>
-        <BiShow
-          className='text-3xl text-blue-800 hover:text-black cursor-pointer'
-          onClick={() => setShowModal(true)}
-        />
-        <Link to={`/books/details/${book._id}`}>
-          <BsInfoCircle className='text-2xl text-green-800 hover:text-black' />
-        </Link>
-        <Link to={`/books/edit/${book._id}`}>
-          <AiOutlineEdit className='text-2xl text-yellow-600 hover:text-black' />
-        </Link>
-        <Link to={`/books/delete/${book._id}`}>
-          <MdOutlineDelete className='text-2xl text-red-600 hover:text-black' />
-        </Link>
-      </div>
+
+      {/* Modal View */}
       {showModal && (
         <BookModal book={book} onClose={() => setShowModal(false)} />
       )}
