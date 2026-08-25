@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState, useMemo, useContext } from 'react';
 import axios from 'axios';
 import Spinner from '../components/Spinner';
 import Navbar from '../components/Navbar';
@@ -11,80 +11,69 @@ import {
   PiSquaresFourBold,
   PiBooks,
   PiPlusBold,
-  PiSortAscendingBold,
   PiBookBookmark
 } from 'react-icons/pi';
+import { AuthContext } from '../context/AuthContext';
 
 const Home = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showType, setShowType] = useState('card');
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('newest');
+  const [category, setCategory] = useState('All');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalBooks, setTotalBooks] = useState(0);
 
-  useEffect(() => {
+  const { user } = useContext(AuthContext);
+  const limit = 8; // Number of items per page
+
+  const fetchBooks = () => {
     setLoading(true);
+    let url = `http://localhost:5555/books?page=${page}&limit=${limit}`;
+    if (searchQuery) url += `&search=${searchQuery}`;
+    if (category && category !== 'All') url += `&category=${category}`;
+
     axios
-      .get('http://localhost:5555/books')
+      .get(url)
       .then((response) => {
         setBooks(response.data.data || []);
+        setTotalPages(response.data.totalPages || 1);
+        setTotalBooks(response.data.count || 0);
         setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching books:', error);
         setLoading(false);
       });
-  }, []);
+  };
 
-  // Filter and Sort Books
-  const filteredAndSortedBooks = useMemo(() => {
-    let result = [...books];
+  useEffect(() => {
+    fetchBooks();
+  }, [page, category]);
 
-    // Search filter
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      result = result.filter(
-        (b) =>
-          b.title?.toLowerCase().includes(q) ||
-          b.author?.toLowerCase().includes(q) ||
-          String(b.publishYear).includes(q)
-      );
+  // Trigger search when user presses Enter or clicks button, to avoid spamming the backend
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      setPage(1); // Reset to page 1 on new search
+      fetchBooks();
     }
+  };
 
-    // Sorting
-    result.sort((a, b) => {
-      if (sortBy === 'newest') {
-        return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-      }
-      if (sortBy === 'oldest') {
-        return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
-      }
-      if (sortBy === 'title-az') {
-        return (a.title || '').localeCompare(b.title || '');
-      }
-      if (sortBy === 'title-za') {
-        return (b.title || '').localeCompare(a.title || '');
-      }
-      if (sortBy === 'year-desc') {
-        return (Number(b.publishYear) || 0) - (Number(a.publishYear) || 0);
-      }
-      if (sortBy === 'year-asc') {
-        return (Number(a.publishYear) || 0) - (Number(b.publishYear) || 0);
-      }
-      return 0;
-    });
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    setPage(1);
+    fetchBooks();
+  };
 
-    return result;
-  }, [books, searchQuery, sortBy]);
-
-  // Statistics
-  const uniqueAuthors = useMemo(() => {
-    return new Set(books.map((b) => b.author?.trim()).filter(Boolean)).size;
-  }, [books]);
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+    setPage(1);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F8F9FA]">
-      <Navbar totalBooks={books.length} />
+      <Navbar totalBooks={totalBooks} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Hero Banner */}
@@ -104,13 +93,9 @@ const Home = () => {
 
           {/* Quick Metrics */}
           <div className="flex items-center gap-3">
-            <div className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 shadow-card flex flex-col min-w-[110px]">
+            <div className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col min-w-[110px]">
               <span className="text-xs font-medium text-slate-400">Total Books</span>
-              <span className="text-lg font-bold text-slate-900">{books.length}</span>
-            </div>
-            <div className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 shadow-card flex flex-col min-w-[110px]">
-              <span className="text-xs font-medium text-slate-400">Authors</span>
-              <span className="text-lg font-bold text-slate-900">{uniqueAuthors}</span>
+              <span className="text-lg font-bold text-slate-900">{totalBooks}</span>
             </div>
           </div>
         </div>
@@ -122,14 +107,15 @@ const Home = () => {
             <PiMagnifyingGlassBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none" />
             <input
               type="text"
-              placeholder="Search by title, author, or year..."
+              placeholder="Search and hit enter..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-800/10 focus:border-slate-800 transition-all shadow-card"
+              onKeyDown={handleSearch}
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-800/10 focus:border-slate-800 transition-all shadow-sm"
             />
             {searchQuery && (
               <button
-                onClick={() => setSearchQuery('')}
+                onClick={handleClearSearch}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 px-1.5 py-0.5 rounded transition-colors"
               >
                 Clear
@@ -137,22 +123,22 @@ const Home = () => {
             )}
           </div>
 
-          {/* Controls: Sorting + View Toggle */}
+          {/* Controls: Category Filter + View Toggle */}
           <div className="flex items-center gap-3 justify-between sm:justify-end flex-wrap">
-            {/* Sorting Select */}
+            {/* Category Select */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-slate-400 hidden lg:inline">Sort:</span>
+              <span className="text-xs font-medium text-slate-400 hidden lg:inline">Category:</span>
               <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:border-slate-800 transition-all shadow-card"
+                value={category}
+                onChange={handleCategoryChange}
+                className="bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:border-slate-800 transition-all shadow-sm"
               >
-                <option value="newest">Recently Added</option>
-                <option value="oldest">First Added</option>
-                <option value="title-az">Title (A - Z)</option>
-                <option value="title-za">Title (Z - A)</option>
-                <option value="year-desc">Year (Newest first)</option>
-                <option value="year-asc">Year (Oldest first)</option>
+                <option value="All">All Categories</option>
+                <option value="Fiction">Fiction</option>
+                <option value="Non-Fiction">Non-Fiction</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Biography">Biography</option>
+                <option value="Uncategorized">Uncategorized</option>
               </select>
             </div>
 
@@ -187,51 +173,55 @@ const Home = () => {
         {/* Main Content Area */}
         {loading ? (
           <Spinner />
-        ) : filteredAndSortedBooks.length > 0 ? (
+        ) : books.length > 0 ? (
           <div>
             {showType === 'table' ? (
-              <BooksTable books={filteredAndSortedBooks} />
+              <BooksTable books={books} />
             ) : (
-              <BooksCard books={filteredAndSortedBooks} />
+              <BooksCard books={books} />
+            )}
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex justify-center items-center gap-4">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="px-4 py-2 border rounded-lg bg-white disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <span className="text-sm">Page {page} of {totalPages}</span>
+                <button
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                  className="px-4 py-2 border rounded-lg bg-white disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
             )}
           </div>
         ) : (
           /* Empty State */
-          <div className="py-16 px-4 text-center rounded-2xl bg-white border border-slate-200/80 shadow-card max-w-lg mx-auto my-6">
+          <div className="py-16 px-4 text-center rounded-2xl bg-white border border-slate-200/80 shadow-sm max-w-lg mx-auto my-6">
             <div className="w-14 h-14 rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center mx-auto mb-4">
               <PiBooks className="text-3xl" />
             </div>
-            {searchQuery ? (
-              <>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  No matching books found
-                </h3>
-                <p className="text-xs text-slate-500 mb-5 max-w-xs mx-auto">
-                  We couldn't find any results matching "{searchQuery}". Try searching with a different keyword.
-                </p>
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
-                >
-                  Clear Search Filter
-                </button>
-              </>
-            ) : (
-              <>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  Your library is currently empty
-                </h3>
-                <p className="text-xs text-slate-500 mb-5 max-w-xs mx-auto">
-                  Get started by adding your very first book title to the catalog.
-                </p>
-                <Link
-                  to="/books/create"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all"
-                >
-                  <PiPlusBold />
-                  <span>Add First Book</span>
-                </Link>
-              </>
+            <h3 className="text-base font-bold text-slate-900 mb-1">
+              No matching books found
+            </h3>
+            <p className="text-xs text-slate-500 mb-5 max-w-xs mx-auto">
+              We couldn't find any results.
+            </p>
+            {user?.role === 'admin' && (
+              <Link
+                to="/books/create"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all"
+              >
+                <PiPlusBold />
+                <span>Add Book</span>
+              </Link>
             )}
           </div>
         )}
