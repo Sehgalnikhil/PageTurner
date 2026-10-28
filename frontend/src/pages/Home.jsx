@@ -149,43 +149,43 @@ const Home = () => {
     <div className="min-h-screen flex flex-col bg-transparent transition-colors duration-300">
       <Navbar totalBooks={totalBooks} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
-        {/* Compact Above-the-Fold Editorial Masthead (Reduced height by ~35-40%) */}
-        <header className="mb-6 pb-5 border-b border-stone-200">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-burgundy block mb-1">
-                Digital Reading Journal &bull; Issue No. 24
-              </span>
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 tracking-tight leading-none">
-                Fall into <span className="italic font-normal text-burgundy">another world.</span>
+      <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
+        {/* Editorial Masthead Banner matching reference screenshot */}
+        <header className="mb-8 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] overflow-hidden shadow-2xs">
+          <div className="flex flex-col lg:flex-row items-center justify-between min-h-[180px] lg:min-h-[210px]">
+            {/* Left Headline */}
+            <div className="p-6 sm:p-8 lg:p-10 max-w-xl">
+              <div className="flex items-center gap-2.5 mb-2">
+                <span className="h-[1px] w-6 bg-[#A38E80]"></span>
+                <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.22em] text-[#7E1A27]/85">
+                  Digital Reading Journal &bull; Issue No. 24
+                </span>
+              </div>
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-[48px] font-bold text-[#1C1917] tracking-tight leading-[1.08]">
+                Fall into <span className="italic font-normal text-[#7E1A27]">another world.</span>
               </h1>
-              <p className="text-xs sm:text-sm text-stone-600 font-serif italic mt-1.5">
+              <p className="text-xs sm:text-sm text-stone-600 font-serif italic mt-2.5">
                 Stories to keep. Ideas to collect. Worlds to get lost in.
               </p>
             </div>
 
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <Link
-                to={user ? "/books/create" : "/login"}
-                className="group inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full btn-burgundy text-xs shadow-xs"
-              >
-                <PiPlusBold className="text-xs group-hover:rotate-90 transition-transform duration-250 ease-out" />
-                <span>Add Story</span>
-              </Link>
-
-              <div className="text-[11px] font-mono text-stone-500 bg-white border border-stone-200 px-3 py-1.5 rounded-full shadow-xs">
-                <span className="font-bold text-stone-800">{totalBooks}</span> works cataloged
-              </div>
+            {/* Right Aesthetic Moodboard Photo Collage matching the screenshot */}
+            <div className="w-full lg:w-auto lg:h-[210px] flex-shrink-0 flex items-center justify-end overflow-hidden">
+              <img
+                src="/images/hero-moodboard.jpg"
+                alt="Literary Moodboard - A quieter brighter you"
+                className="h-44 sm:h-48 lg:h-[210px] w-full lg:w-[480px] xl:w-[540px] object-cover object-center"
+              />
             </div>
           </div>
         </header>
 
-        {/* Curated Atmospheric Collections: Sophisticated, Image-Led Tiles (No Emojis) */}
+        {/* Curated Atmospheric Collections: Sophisticated, Image-Led Tiles matching reference screenshot */}
         <CuratedCollectionTiles
           selectedMood={selectedMood}
           onSelectMood={handleMoodSelect}
           onClearMood={() => setSelectedMood(null)}
+          totalBooks={totalBooks}
         />
 
         {/* Blind Date with a Book Spotlight Invitation Banner */}
