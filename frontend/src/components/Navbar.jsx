@@ -12,9 +12,6 @@ import {
   PiListBold,
   PiXBold,
   PiMagnifyingGlassBold,
-  PiMoonBold,
-  PiSunBold,
-  PiFlameBold,
   PiSpeakerSlashBold,
   PiCloudRainBold,
   PiClockBold,
@@ -37,7 +34,7 @@ const Navbar = ({ totalBooks = 0 }) => {
 
   const { user, logout, isAdmin } = useContext(AuthContext);
   const { count: bookmarkCount, setIsDrawerOpen } = useContext(ReadingListContext);
-  const { theme, cycleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const location = useLocation();
 
   // Scroll detection for dynamic elevation and blur
@@ -217,29 +214,6 @@ const Navbar = ({ totalBooks = 0 }) => {
                 >
                   ⌘K
                 </kbd>
-              </button>
-
-              {/* Atmosphere Switcher (Ivory / Candlelight / Midnight) */}
-              <button
-                type="button"
-                onClick={cycleTheme}
-                title={`Reading Atmosphere: ${theme.toUpperCase()} (Click to cycle)`}
-                className={`group inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs shadow-2xs transition-all duration-200 hover:scale-105 active:scale-95 ${
-                  isDark
-                    ? 'bg-stone-800/80 hover:bg-stone-700/80 text-stone-200 border border-stone-700/70'
-                    : 'bg-white hover:bg-stone-50 text-stone-700 border border-stone-200/90'
-                }`}
-              >
-                {theme === 'midnight' ? (
-                  <PiMoonBold className="text-indigo-400 text-sm group-hover:rotate-45 transition-transform duration-300" />
-                ) : theme === 'candlelight' ? (
-                  <PiFlameBold className="text-amber-500 text-sm group-hover:scale-110 transition-transform duration-300" />
-                ) : (
-                  <PiSunBold className="text-amber-600 text-sm group-hover:rotate-45 transition-transform duration-300" />
-                )}
-                <span className="hidden xl:inline capitalize text-[11px] font-mono font-medium opacity-85">
-                  {theme}
-                </span>
               </button>
 
               {/* Ambient Bookstore Soundscape with Live Visualizer */}
@@ -487,36 +461,20 @@ const Navbar = ({ totalBooks = 0 }) => {
                 </kbd>
               </button>
 
-              <div className="grid grid-cols-2 gap-2 my-1">
-                <button
-                  type="button"
-                  onClick={cycleTheme}
-                  className={`p-2.5 rounded-xl text-xs font-semibold text-left flex items-center justify-between border ${
-                    isDark
-                      ? 'border-stone-700 bg-stone-800/50 text-stone-200'
-                      : 'border-stone-200 bg-white text-stone-800'
-                  }`}
-                >
-                  <span className="capitalize">{theme}</span>
-                  {theme === 'midnight' ? (
-                    <PiMoonBold className="text-indigo-400" />
-                  ) : theme === 'candlelight' ? (
-                    <PiFlameBold className="text-amber-500" />
-                  ) : (
-                    <PiSunBold className="text-amber-600" />
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleCycleAmbient}
-                  className={`p-2.5 rounded-xl text-xs font-semibold text-left flex items-center justify-between border ${
-                    isDark
-                      ? 'border-stone-700 bg-stone-800/50 text-stone-200'
-                      : 'border-stone-200 bg-white text-stone-800'
-                  }`}
-                >
-                  <span className="capitalize">{ambientSound}</span>
+              <button
+                type="button"
+                onClick={handleCycleAmbient}
+                className={`px-3.5 py-2.5 rounded-xl text-sm font-semibold text-left flex items-center justify-between border transition-colors ${
+                  ambientSound !== 'off'
+                    ? isDark
+                      ? 'border-amber-600/40 bg-amber-950/40 text-amber-200'
+                      : 'border-amber-300 bg-amber-50 text-amber-900'
+                    : isDark
+                    ? 'border-stone-700 bg-stone-800/50 text-stone-200'
+                    : 'border-stone-200 bg-white text-stone-800'
+                }`}
+              >
+                <div className="flex items-center gap-2">
                   {ambientSound === 'rain' ? (
                     <PiCloudRainBold className="text-cyan-500" />
                   ) : ambientSound === 'fireplace' ? (
@@ -526,8 +484,19 @@ const Navbar = ({ totalBooks = 0 }) => {
                   ) : (
                     <PiSpeakerSlashBold className="text-stone-400" />
                   )}
-                </button>
-              </div>
+                  <span>Soundscape</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  {ambientSound !== 'off' && (
+                    <div className="flex items-center gap-0.5 h-3">
+                      <span className="w-0.5 rounded-full bg-amber-500 animate-wave-1"></span>
+                      <span className="w-0.5 rounded-full bg-amber-500 animate-wave-2"></span>
+                      <span className="w-0.5 rounded-full bg-amber-500 animate-wave-3"></span>
+                    </div>
+                  )}
+                  <span className="capitalize font-mono text-xs opacity-75">{ambientSound}</span>
+                </div>
+              </button>
 
               <a
                 href="http://localhost:5555/books/export/csv"
