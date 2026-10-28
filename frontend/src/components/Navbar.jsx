@@ -57,10 +57,10 @@ const Navbar = ({ totalBooks = 0, onOpenBlindDate }) => {
       startAmbientSound('rain', 0.25);
       setAmbientSound('rain');
     } else if (ambientSound === 'rain') {
-      startAmbientSound('fireplace', 0.25);
+      startAmbientSound('fireplace', 0.35);
       setAmbientSound('fireplace');
     } else if (ambientSound === 'fireplace') {
-      startAmbientSound('clock', 0.2);
+      startAmbientSound('clock', 0.35);
       setAmbientSound('clock');
     } else {
       stopAmbientSound();

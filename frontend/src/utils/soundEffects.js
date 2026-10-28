@@ -194,15 +194,21 @@ export const playRevealChime = () => {
  * Synthesizes Continuous Ambient Literary Soundscapes
  * Types: 'rain' | 'fireplace' | 'clock'
  */
-export const startAmbientSound = (type = 'rain', volume = 0.3) => {
+export const startAmbientSound = (type = 'rain', volume = 0.35) => {
   try {
+    // 1. Safely stop any currently active ambient sound without destroying new instance
     stopAmbientSound();
+
     const ctx = getAudioContext();
     if (!ctx) return null;
 
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+
     const masterGain = ctx.createGain();
     masterGain.gain.setValueAtTime(0.001, ctx.currentTime);
-    masterGain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 1.2);
+    masterGain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.6);
     masterGain.connect(ctx.destination);
 
     let activeNodes = [];
@@ -240,49 +246,178 @@ export const startAmbientSound = (type = 'rain', volume = 0.3) => {
 
       activeNodes.push(noise, lowpass);
     } else if (type === 'fireplace') {
-      // Warm low frequency rumble + random intermittent micro crackles
-      const rumbleOsc = ctx.createOscillator();
-      rumbleOsc.type = 'sine';
-      rumbleOsc.frequency.setValueAtTime(65, ctx.currentTime);
-      const rumbleGain = ctx.createGain();
-      rumbleGain.gain.setValueAtTime(0.15, ctx.currentTime);
-      rumbleOsc.connect(rumbleGain);
-      rumbleGain.connect(masterGain);
-      rumbleOsc.start();
-      activeNodes.push(rumbleOsc, rumbleGain);
+      // 1. Deep warm burning hearth rumble (filtered noise)
+      const bufferSize = ctx.sampleRate * 2;
+      const rumbleBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const rumbleData = rumbleBuffer.getChannelData(0);
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        lastOut = (lastOut + 0.03 * white) / 1.03;
+        rumbleData[i] = lastOut * 1.8;
+      }
+      const rumbleSource = ctx.createBufferSource();
+      rumbleSource.buffer = rumbleBuffer;
+      rumbleSource.loop = true;
 
-      // Random crackle pops
-      intervalId = setInterval(() => {
-        if (!audioCtx) return;
+      const rumbleFilter = ctx.createBiquadFilter();
+      rumbleFilter.type = 'lowpass';
+      rumbleFilter.frequency.setValueAtTime(220, ctx.currentTime);
+
+      const rumbleGain = ctx.createGain();
+      rumbleGain.gain.setValueAtTime(0.65, ctx.currentTime);
+
+      rumbleSource.connect(rumbleFilter);
+      rumbleFilter.connect(rumbleGain);
+      rumbleGain.connect(masterGain);
+      rumbleSource.start();
+
+      activeNodes.push(rumbleSource, rumbleFilter, rumbleGain);
+
+      // 2. Continuous subtle ember hiss
+      const hissBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const hissData = hissBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        hissData[i] = (Math.random() * 2 - 1) * 0.06;
+      }
+      const hissSource = ctx.createBufferSource();
+      hissSource.buffer = hissBuffer;
+      hissSource.loop = true;
+
+      const hissFilter = ctx.createBiquadFilter();
+      hissFilter.type = 'bandpass';
+      hissFilter.frequency.setValueAtTime(1400, ctx.currentTime);
+      hissFilter.Q.setValueAtTime(1.5, ctx.currentTime);
+
+      const hissGain = ctx.createGain();
+      hissGain.gain.setValueAtTime(0.18, ctx.currentTime);
+
+      hissSource.connect(hissFilter);
+      hissFilter.connect(hissGain);
+      hissGain.connect(masterGain);
+      hissSource.start();
+
+      activeNodes.push(hissSource, hissFilter, hissGain);
+
+      // 3. Dynamic crackle, snaps, and popping embers
+      const playPop = () => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
         const now = audioCtx.currentTime;
-        const popOsc = audioCtx.createOscillator();
-        const popGain = audioCtx.createGain();
-        popOsc.type = 'triangle';
-        popOsc.frequency.setValueAtTime(150 + Math.random() * 450, now);
-        popGain.gain.setValueAtTime(0.04 + Math.random() * 0.07, now);
-        popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
-        popOsc.connect(popGain);
-        popGain.connect(masterGain);
-        popOsc.start(now);
-        popOsc.stop(now + 0.035);
-      }, 160);
+
+        // Realistic wooden ember snap using shaped noise burst
+        const snapLen = Math.floor(audioCtx.sampleRate * (0.012 + Math.random() * 0.025));
+        const snapBuf = audioCtx.createBuffer(1, snapLen, audioCtx.sampleRate);
+        const snapData = snapBuf.getChannelData(0);
+        for (let i = 0; i < snapLen; i++) {
+          const decay = Math.exp(-i / (snapLen * 0.28));
+          snapData[i] = (Math.random() * 2 - 1) * decay;
+        }
+
+        const snapNode = audioCtx.createBufferSource();
+        snapNode.buffer = snapBuf;
+
+        const snapFilter = audioCtx.createBiquadFilter();
+        snapFilter.type = 'bandpass';
+        // Random pitch between 1200Hz (deeper wood snap) to 3800Hz (crisp spark pop)
+        snapFilter.frequency.setValueAtTime(1200 + Math.random() * 2600, now);
+        snapFilter.Q.setValueAtTime(2.2, now);
+
+        const snapGain = audioCtx.createGain();
+        const popVol = 0.25 + Math.random() * 0.55;
+        snapGain.gain.setValueAtTime(popVol, now);
+
+        snapNode.connect(snapFilter);
+        snapFilter.connect(snapGain);
+        snapGain.connect(masterGain);
+
+        snapNode.start(now);
+      };
+
+      // Initial bursts
+      playPop();
+      setTimeout(playPop, 80);
+
+      // Irregular timer for natural wood crackling
+      intervalId = setInterval(() => {
+        if (Math.random() > 0.25) {
+          playPop();
+          // Occasional double micro-crackle
+          if (Math.random() > 0.6) {
+            setTimeout(playPop, 35 + Math.random() * 65);
+          }
+        }
+      }, 140);
     } else if (type === 'clock') {
-      // Gentle antique pendulum tick
-      intervalId = setInterval(() => {
-        if (!audioCtx) return;
+      // Library Antique Pendulum Clock: Alternating Tick & Tock
+      let isTick = true;
+
+      const playPendulumBeat = () => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
         const now = audioCtx.currentTime;
-        const tickOsc = audioCtx.createOscillator();
-        const tickGain = audioCtx.createGain();
-        tickOsc.type = 'sine';
-        tickOsc.frequency.setValueAtTime(750, now);
-        tickOsc.frequency.exponentialRampToValueAtTime(120, now + 0.04);
-        tickGain.gain.setValueAtTime(0.06, now);
-        tickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-        tickOsc.connect(tickGain);
-        tickGain.connect(masterGain);
-        tickOsc.start(now);
-        tickOsc.stop(now + 0.04);
-      }, 1000);
+
+        // 1. Mechanical escapement strike (crisp impulse)
+        const clickOsc = audioCtx.createOscillator();
+        const clickGain = audioCtx.createGain();
+        clickOsc.type = 'triangle';
+        // Tick is slightly higher (1650Hz), Tock is slightly deeper (1250Hz)
+        const baseFreq = isTick ? 1650 : 1250;
+        clickOsc.frequency.setValueAtTime(baseFreq, now);
+        clickOsc.frequency.exponentialRampToValueAtTime(80, now + 0.035);
+
+        clickGain.gain.setValueAtTime(0.45, now);
+        clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+
+        clickOsc.connect(clickGain);
+        clickGain.connect(masterGain);
+        clickOsc.start(now);
+        clickOsc.stop(now + 0.035);
+
+        // 2. Resonant antique wooden clock casing body ring
+        const woodOsc = audioCtx.createOscillator();
+        const woodGain = audioCtx.createGain();
+        woodOsc.type = 'sine';
+        woodOsc.frequency.setValueAtTime(isTick ? 440 : 370, now);
+
+        woodGain.gain.setValueAtTime(0.28, now);
+        woodGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.075);
+
+        woodOsc.connect(woodGain);
+        woodGain.connect(masterGain);
+        woodOsc.start(now);
+        woodOsc.stop(now + 0.075);
+
+        // 3. Very subtle gear friction snap
+        const noiseLen = Math.floor(audioCtx.sampleRate * 0.015);
+        const noiseBuf = audioCtx.createBuffer(1, noiseLen, audioCtx.sampleRate);
+        const noiseData = noiseBuf.getChannelData(0);
+        for (let i = 0; i < noiseLen; i++) {
+          noiseData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (noiseLen * 0.3));
+        }
+        const noiseNode = audioCtx.createBufferSource();
+        noiseNode.buffer = noiseBuf;
+
+        const noiseFilter = audioCtx.createBiquadFilter();
+        noiseFilter.type = 'bandpass';
+        noiseFilter.frequency.setValueAtTime(isTick ? 3200 : 2600, now);
+        noiseFilter.Q.setValueAtTime(3.0, now);
+
+        const noiseGain = audioCtx.createGain();
+        noiseGain.gain.setValueAtTime(0.18, now);
+
+        noiseNode.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(masterGain);
+        noiseNode.start(now);
+
+        // Alternate tick and tock
+        isTick = !isTick;
+      };
+
+      // Play immediate first tick
+      playPendulumBeat();
+
+      // Steady 1-second pendulum cadence (60 BPM)
+      intervalId = setInterval(playPendulumBeat, 1000);
     }
 
     currentAmbient = {
@@ -301,25 +436,27 @@ export const startAmbientSound = (type = 'rain', volume = 0.3) => {
 
 export const stopAmbientSound = () => {
   try {
-    if (currentAmbient) {
-      if (currentAmbient.intervalId) {
-        clearInterval(currentAmbient.intervalId);
+    const instanceToStop = currentAmbient;
+    currentAmbient = null; // Detach immediately so new sounds won't be clobbered
+
+    if (instanceToStop) {
+      if (instanceToStop.intervalId) {
+        clearInterval(instanceToStop.intervalId);
       }
-      if (currentAmbient.masterGain && audioCtx) {
-        currentAmbient.masterGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+      if (instanceToStop.masterGain && audioCtx && audioCtx.state !== 'closed') {
+        instanceToStop.masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+        instanceToStop.masterGain.gain.setValueAtTime(instanceToStop.masterGain.gain.value, audioCtx.currentTime);
+        instanceToStop.masterGain.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
         setTimeout(() => {
-          if (currentAmbient?.activeNodes) {
-            currentAmbient.activeNodes.forEach((node) => {
+          if (instanceToStop.activeNodes) {
+            instanceToStop.activeNodes.forEach((node) => {
               try {
                 if (node.stop) node.stop();
                 if (node.disconnect) node.disconnect();
               } catch (_) {}
             });
           }
-          currentAmbient = null;
-        }, 700);
-      } else {
-        currentAmbient = null;
+        }, 350);
       }
     }
   } catch (err) {
