@@ -5,22 +5,19 @@ import {
   PiPlusBold,
   PiSignOutBold,
   PiBookmarkSimpleBold,
-  PiBookmarkSimpleFill,
   PiFileArrowDownBold,
-  PiUserBold,
-  PiShieldCheckBold,
   PiListBold,
   PiXBold,
   PiMagnifyingGlassBold,
-  PiSpeakerSlashBold,
+  PiSpeakerSimpleHighBold,
+  PiSpeakerSimpleSlashBold,
   PiCloudRainBold,
+  PiFlameBold,
   PiClockBold,
   PiTagBold,
-  PiSparkleFill,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { ReadingListContext } from '../context/ReadingListContext';
-import { ThemeContext } from '../context/ThemeContext';
 import { startAmbientSound, stopAmbientSound } from '../utils/soundEffects';
 import CommandKModal from './common/CommandKModal';
 import BookplateModal from './home/BookplateModal';
@@ -30,24 +27,12 @@ const Navbar = ({ totalBooks = 0 }) => {
   const [showCommandK, setShowCommandK] = useState(false);
   const [showBookplate, setShowBookplate] = useState(false);
   const [ambientSound, setAmbientSound] = useState('off'); // 'off' | 'rain' | 'fireplace' | 'clock'
-  const [isScrolled, setIsScrolled] = useState(false);
 
   const { user, logout, isAdmin } = useContext(AuthContext);
   const { count: bookmarkCount, setIsDrawerOpen } = useContext(ReadingListContext);
-  const { theme } = useContext(ThemeContext);
   const location = useLocation();
 
-  // Scroll detection for dynamic elevation and blur
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
-    };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Global Command-K listener
+  // Global Command-K keyboard shortcut
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key?.toLowerCase() === 'k') {
@@ -75,323 +60,236 @@ const Navbar = ({ totalBooks = 0 }) => {
     }
   };
 
-  // Dynamic theme-aware classes
-  const isDark = theme === 'midnight' || theme === 'candlelight';
+  const isDiscoverActive = location.pathname === '/';
 
   return (
     <>
-      <header
-        className={`sticky top-0 z-40 transition-all duration-300 ease-out ${
-          isScrolled
-            ? isDark
-              ? 'bg-[#151218]/92 backdrop-blur-xl border-b border-[#2E2734]/80 shadow-[0_8px_30px_rgb(0,0,0,0.35)] py-2.5 sm:py-3'
-              : 'bg-[#FAF7F2]/90 backdrop-blur-xl border-b border-[#E8E2D8]/80 shadow-[0_8px_25px_rgb(0,0,0,0.05)] py-2.5 sm:py-3'
-            : isDark
-            ? 'bg-[#151218]/70 backdrop-blur-md border-b border-[#2E2734]/40 py-3.5 sm:py-4'
-            : 'bg-[#FAF7F2]/75 backdrop-blur-md border-b border-[#E8E2D8]/50 py-3.5 sm:py-4'
-        }`}
-      >
+      <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#EAE3DA] transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            {/* Brand Logo & Desktop Nav Links */}
-            <div className="flex items-center gap-7 lg:gap-9">
-              {/* Brand Logo with Smooth 3D Hover & Ambient Glow */}
-              <Link to="/" className="group flex items-center gap-3">
-                <div className="relative">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-[#7B1826] via-[#63121E] to-[#450B14] text-white flex items-center justify-center shadow-md shadow-burgundy/20 group-hover:shadow-lg group-hover:shadow-burgundy/35 group-hover:scale-105 group-hover:-rotate-3 transition-all duration-300 ease-out ring-1 ring-white/20">
-                    <PiBooksBold className="text-xl sm:text-2xl group-hover:rotate-6 transition-transform duration-300" />
-                  </div>
-                  {/* Subtle active glow dot */}
-                  <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-60"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500 ring-2 ring-[#FAF7F2]"></span>
-                  </span>
+          <div className="flex items-center justify-between h-[76px] lg:h-[88px]">
+            {/* 1. BRAND SECTION (LEFT) */}
+            <div className="flex items-center gap-6 lg:gap-8">
+              <Link
+                to="/"
+                className="group flex items-center gap-3 transition-opacity duration-180 hover:opacity-90"
+              >
+                {/* Flat, clean burgundy emblem */}
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#861D2D] text-white flex items-center justify-center flex-shrink-0 transition-colors duration-200 group-hover:bg-[#701624]">
+                  <PiBooksBold className="text-lg sm:text-xl" />
                 </div>
 
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`font-serif text-xl sm:text-2xl font-bold tracking-tight leading-none group-hover:text-burgundy transition-colors duration-200 ${
-                        theme === 'midnight'
-                          ? 'text-[#FAF5ED]'
-                          : theme === 'candlelight'
-                          ? 'text-[#FAF2E8]'
-                          : 'text-stone-900'
-                      }`}
-                    >
+                <div className="flex flex-col">
+                  <div className="flex items-center">
+                    <span className="font-serif text-[21px] sm:text-[23px] font-semibold text-[#292522] tracking-tight leading-none">
                       PageTurner
                     </span>
+                    {/* Tiny restrained amber accent dot */}
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#E8A32A] inline-block ml-1.5 mb-1 flex-shrink-0"></span>
                   </div>
-                  <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-burgundy block mt-0.5 opacity-90 group-hover:opacity-100 transition-opacity">
+                  <span className="text-[9.5px] uppercase font-mono tracking-[0.22em] text-[#861D2D] font-medium block mt-1 leading-none">
                     Literary Journal &amp; Discovery
                   </span>
                 </div>
               </Link>
-
-              {/* Desktop Nav Items */}
-              <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-stone-200/40 dark:bg-stone-800/40 backdrop-blur-md border border-stone-300/40 dark:border-stone-700/40">
-                <Link
-                  to="/"
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
-                    location.pathname === '/'
-                      ? isDark
-                        ? 'bg-amber-100 text-stone-950 shadow-xs scale-[1.02]'
-                        : 'bg-stone-900 text-white shadow-xs scale-[1.02]'
-                      : isDark
-                      ? 'text-stone-300 hover:text-white hover:bg-white/10'
-                      : 'text-stone-600 hover:text-stone-950 hover:bg-stone-200/70'
-                  }`}
-                >
-                  Discover
-                </Link>
-
-                <button
-                  type="button"
-                  onClick={() => setIsDrawerOpen(true)}
-                  className={`group relative px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 ${
-                    isDark
-                      ? 'text-stone-300 hover:text-white hover:bg-white/10'
-                      : 'text-stone-600 hover:text-stone-950 hover:bg-stone-200/70'
-                  }`}
-                >
-                  <PiBookmarkSimpleBold className="text-xs group-hover:scale-110 transition-transform duration-200" />
-                  <span>My Shelf</span>
-                  {bookmarkCount > 0 && (
-                    <span className="ml-0.5 px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-burgundy text-white group-hover:scale-110 transition-transform duration-200 shadow-2xs">
-                      {bookmarkCount}
-                    </span>
-                  )}
-                </button>
-
-                <a
-                  href="#curated-collections"
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
-                    isDark
-                      ? 'text-stone-300 hover:text-white hover:bg-white/10'
-                      : 'text-stone-600 hover:text-stone-950 hover:bg-stone-200/70'
-                  }`}
-                >
-                  Collections
-                </a>
-
-                <button
-                  type="button"
-                  onClick={() => setShowBookplate(true)}
-                  title="Design Ex Libris Bookplate Stamp"
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1 ${
-                    isDark
-                      ? 'text-stone-400 hover:text-amber-200 hover:bg-white/10'
-                      : 'text-stone-500 hover:text-burgundy hover:bg-stone-200/70'
-                  }`}
-                >
-                  <PiTagBold className="text-xs" />
-                  <span>Bookplates</span>
-                </button>
-              </nav>
             </div>
 
-            {/* Right Action Items */}
-            <div className="flex items-center gap-2 sm:gap-2.5">
-              {/* Quick Command-K Omnisearch */}
+            {/* 2. NAVIGATION ROW (CENTER - Completely flat on ivory canvas) */}
+            <nav className="hidden md:flex items-center gap-1 lg:gap-1.5">
+              {/* Discover */}
+              <Link
+                to="/"
+                className={`relative px-3.5 py-2 rounded-md text-xs font-medium transition-all duration-200 ease-out flex items-center ${
+                  isDiscoverActive
+                    ? 'text-[#861D2D] bg-[#F8ECE9]'
+                    : 'text-[#292522] hover:text-[#861D2D] hover:bg-[#FBF2F0]'
+                }`}
+              >
+                <span>Discover</span>
+                {isDiscoverActive && (
+                  <span className="absolute bottom-0.5 left-3.5 right-3.5 h-[1.5px] bg-[#861D2D] rounded-full"></span>
+                )}
+              </Link>
+
+              {/* My Shelf with integrated typography badge */}
+              <button
+                type="button"
+                onClick={() => setIsDrawerOpen(true)}
+                className="relative px-3.5 py-2 rounded-md text-xs font-medium text-[#292522] hover:text-[#861D2D] hover:bg-[#FBF2F0] transition-all duration-200 ease-out flex items-center gap-1.5"
+              >
+                <span>My Shelf</span>
+                {bookmarkCount > 0 && (
+                  <span className="ml-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#861D2D] text-white leading-none">
+                    {bookmarkCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Collections */}
+              <a
+                href="#curated-collections"
+                className="px-3.5 py-2 rounded-md text-xs font-medium text-[#292522] hover:text-[#861D2D] hover:bg-[#FBF2F0] transition-all duration-200 ease-out"
+              >
+                Collections
+              </a>
+
+              {/* Bookplates */}
+              <button
+                type="button"
+                onClick={() => setShowBookplate(true)}
+                className="px-3.5 py-2 rounded-md text-xs font-medium text-[#8D847C] hover:text-[#861D2D] hover:bg-[#FBF2F0] transition-all duration-200 ease-out flex items-center gap-1.5"
+              >
+                <PiTagBold className="text-xs text-[#8D847C]" />
+                <span>Bookplates</span>
+              </button>
+            </nav>
+
+            {/* 3. ACTIONS SECTION (RIGHT) */}
+            <div className="flex items-center gap-2 lg:gap-3">
+              {/* Compact Search Field */}
               <button
                 type="button"
                 onClick={() => setShowCommandK(true)}
-                title="Omnisearch Palette (⌘K / Ctrl+K)"
-                className={`group inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full text-xs transition-all duration-200 shadow-2xs hover:scale-105 active:scale-95 ${
-                  isDark
-                    ? 'bg-stone-800/80 hover:bg-stone-700/80 text-stone-300 hover:text-white border border-stone-700/70 hover:border-amber-400/40'
-                    : 'bg-white hover:bg-stone-50 text-stone-600 hover:text-stone-900 border border-stone-200/90 hover:border-burgundy/30'
-                }`}
+                title="Omnisearch Palette (⌘K)"
+                className="hidden sm:flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-lg border border-[#EAE3DA] bg-white hover:border-[#D6CCC0] hover:bg-[#FAF7F2] transition-colors duration-200 group text-left cursor-pointer"
               >
-                <PiMagnifyingGlassBold className="text-stone-400 group-hover:text-burgundy dark:group-hover:text-amber-400 text-xs transition-colors" />
-                <span className="hidden md:inline font-sans font-medium text-[11px]">Search</span>
-                <kbd
-                  className={`hidden sm:inline px-1.5 py-0.2 rounded text-[10px] font-mono font-bold transition-colors ${
-                    isDark
-                      ? 'bg-stone-900 text-stone-400 border border-stone-700'
-                      : 'bg-stone-100 text-stone-500 border border-stone-200'
-                  }`}
-                >
+                <PiMagnifyingGlassBold className="text-[#8D847C] group-hover:text-[#861D2D] text-xs transition-colors" />
+                <span className="text-xs text-[#8D847C] font-normal pr-1">Search books…</span>
+                <kbd className="px-1.5 py-0.5 rounded bg-[#FAF7F2] border border-[#EAE3DA] text-[10px] font-mono text-[#8D847C] font-semibold leading-none">
                   ⌘K
                 </kbd>
               </button>
 
-              {/* Ambient Bookstore Soundscape with Live Visualizer */}
+              {/* Sound Ambiance Minimal Toggle */}
               <button
                 type="button"
                 onClick={handleCycleAmbient}
-                title={`Bookstore Soundscape: ${ambientSound.toUpperCase()} (Click to cycle)`}
-                className={`group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all duration-200 shadow-2xs hover:scale-105 active:scale-95 ${
+                title={`Ambient Soundscape: ${ambientSound.toUpperCase()} (Click to cycle)`}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-medium transition-all duration-200 ${
                   ambientSound !== 'off'
-                    ? isDark
-                      ? 'bg-amber-950/60 border border-amber-600/40 text-amber-200 shadow-amber-950/30'
-                      : 'bg-amber-50 border border-amber-300/80 text-amber-900 shadow-amber-100'
-                    : isDark
-                    ? 'bg-stone-800/80 hover:bg-stone-700/80 text-stone-400 hover:text-stone-200 border border-stone-700/70'
-                    : 'bg-white hover:bg-stone-50 text-stone-500 hover:text-stone-800 border border-stone-200/90'
+                    ? 'border-[#861D2D]/20 bg-[#F8ECE9] text-[#861D2D]'
+                    : 'border-transparent hover:border-[#EAE3DA] hover:bg-white text-[#8D847C] hover:text-[#292522]'
                 }`}
               >
                 {ambientSound === 'rain' ? (
-                  <PiCloudRainBold className="text-cyan-500 text-sm animate-pulse" />
+                  <PiCloudRainBold className="text-sm text-[#861D2D]" />
                 ) : ambientSound === 'fireplace' ? (
-                  <PiFlameBold className="text-orange-500 text-sm animate-bounce" />
+                  <PiFlameBold className="text-sm text-[#861D2D]" />
                 ) : ambientSound === 'clock' ? (
-                  <PiClockBold className="text-amber-500 text-sm animate-spin" />
+                  <PiClockBold className="text-sm text-[#861D2D]" />
                 ) : (
-                  <PiSpeakerSlashBold className="text-stone-400 text-sm group-hover:text-stone-600 dark:group-hover:text-stone-300 transition-colors" />
+                  <PiSpeakerSimpleSlashBold className="text-sm" />
                 )}
 
-                {/* Animated micro-waveform when audio is active */}
-                {ambientSound !== 'off' && (
-                  <div className="flex items-center gap-0.5 h-3">
-                    <span className="w-0.5 rounded-full bg-amber-500 animate-wave-1"></span>
-                    <span className="w-0.5 rounded-full bg-amber-500 animate-wave-2"></span>
-                    <span className="w-0.5 rounded-full bg-amber-500 animate-wave-3"></span>
-                  </div>
-                )}
-
-                <span className="hidden xl:inline text-[11px] font-mono font-semibold capitalize">
+                <span className="hidden xl:inline capitalize text-[11px]">
                   {ambientSound === 'off' ? 'Sound' : ambientSound}
                 </span>
+
+                {ambientSound !== 'off' && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#E8A32A] flex-shrink-0"></span>
+                )}
               </button>
 
-              {/* CSV Stream Export */}
+              {/* Quiet Export Action */}
               <a
                 href="http://localhost:5555/books/export/csv"
                 download
-                title="Export entire catalog as CSV"
-                className={`group hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all duration-200 shadow-2xs hover:scale-105 active:scale-95 ${
-                  isDark
-                    ? 'bg-stone-800/80 hover:bg-stone-700/80 text-stone-300 hover:text-white border border-stone-700/70'
-                    : 'bg-white hover:bg-stone-50 text-stone-700 hover:text-stone-950 border border-stone-200/90'
-                }`}
+                title="Export catalog as CSV"
+                className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-transparent hover:border-[#EAE3DA] hover:bg-white text-xs font-medium text-[#8D847C] hover:text-[#292522] transition-all duration-200"
               >
-                <PiFileArrowDownBold className="text-stone-400 group-hover:text-burgundy dark:group-hover:text-amber-400 text-sm group-hover:translate-y-0.5 transition-transform duration-200" />
-                <span className="font-medium text-[11px]">Export</span>
+                <PiFileArrowDownBold className="text-sm text-[#8D847C]" />
+                <span className="text-[11px]">Export</span>
               </a>
 
-              {/* Add Book CTA with Shimmer & Spring Icon */}
+              {/* Add Book CTA (Primary Action - Moderately rounded, rich flat burgundy) */}
               <Link
                 to={user ? '/books/create' : '/login'}
-                className="group relative overflow-hidden inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-[#7B1826] via-[#8E1C2D] to-[#63121E] hover:from-[#63121E] hover:to-[#500E18] shadow-md shadow-burgundy/25 hover:shadow-lg hover:shadow-burgundy/40 hover:scale-105 active:scale-95 transition-all duration-200 ring-1 ring-white/20"
+                className="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-lg bg-[#861D2D] hover:bg-[#701624] text-white text-xs font-medium transition-all duration-200 hover:-translate-y-[1px] active:translate-y-0"
               >
-                {/* Light Sweep Shimmer Effect on Hover */}
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out pointer-events-none"></span>
-                <PiPlusBold className="text-sm stroke-[3] group-hover:rotate-90 transition-transform duration-300 ease-out" />
+                <PiPlusBold className="text-xs stroke-[2.5]" />
                 <span>Add Book</span>
               </Link>
 
-              {/* User Profile / Auth State */}
+              {/* User Profile & Logout (Editorial Minimalist) */}
               {user ? (
-                <div
-                  className={`hidden sm:flex items-center gap-2 pl-2 sm:pl-3 border-l ${
-                    isDark ? 'border-stone-700/70' : 'border-stone-300/80'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    {/* User Avatar Circle */}
-                    <div className="w-7 h-7 rounded-full bg-burgundy/10 dark:bg-amber-400/10 border border-burgundy/20 dark:border-amber-400/20 text-burgundy dark:text-amber-300 flex items-center justify-center font-serif font-bold text-xs">
-                      {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
-                    </div>
-
-                    <div className="flex flex-col text-left leading-tight">
-                      <span
-                        className={`text-xs font-bold truncate max-w-[90px] ${
-                          isDark ? 'text-stone-100' : 'text-stone-900'
-                        }`}
-                      >
-                        {user.username}
-                      </span>
-                      <span className="text-[9px] uppercase font-mono tracking-wider font-semibold">
-                        {isAdmin ? (
-                          <span className="text-burgundy dark:text-amber-400 font-bold">Admin</span>
-                        ) : (
-                          <span className="text-stone-400">Reader</span>
-                        )}
-                      </span>
-                    </div>
+                <div className="hidden sm:flex items-center gap-2 pl-2 lg:pl-3 border-l border-[#EAE3DA]">
+                  {/* Minimalist circular avatar with amber initial */}
+                  <div className="w-7 h-7 rounded-full bg-[#FAF1DF] border border-[#EED7B0] text-[#C27803] font-serif font-semibold text-xs flex items-center justify-center flex-shrink-0">
+                    {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
                   </div>
 
+                  <div className="flex flex-col text-left leading-none">
+                    <span className="text-xs font-semibold text-[#292522] truncate max-w-[105px]">
+                      {user.username}
+                    </span>
+                    <span className="text-[9px] uppercase font-mono tracking-wider font-semibold text-[#8D847C] mt-0.5">
+                      {isAdmin ? 'ADMIN' : 'READER'}
+                    </span>
+                  </div>
+
+                  {/* Discreet logout button */}
                   <button
                     onClick={logout}
-                    title="Sign out of PageTurner"
-                    className="p-1.5 rounded-full text-stone-400 hover:text-burgundy hover:bg-rose-50 dark:hover:bg-stone-800 transition-colors"
+                    title="Sign out"
+                    className="p-1.5 rounded-md text-[#8D847C] hover:text-[#861D2D] hover:bg-white transition-colors duration-180 ml-0.5"
                   >
                     <PiSignOutBold className="text-sm" />
                   </button>
                 </div>
               ) : (
-                <div
-                  className={`hidden sm:flex items-center gap-1.5 pl-2 sm:pl-3 border-l ${
-                    isDark ? 'border-stone-700/70' : 'border-stone-300/80'
-                  }`}
-                >
+                <div className="hidden sm:flex items-center gap-1.5 pl-2 lg:pl-3 border-l border-[#EAE3DA]">
                   <Link
                     to="/login"
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 ${
-                      isDark
-                        ? 'text-stone-300 hover:text-white hover:bg-stone-800'
-                        : 'text-stone-700 hover:text-stone-950 hover:bg-stone-100'
-                    }`}
+                    className="px-2.5 py-1.5 text-xs font-medium text-[#292522] hover:text-[#861D2D] hover:bg-white rounded-md transition-colors duration-180"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
-                    className="px-3.5 py-1.5 rounded-full bg-stone-900 hover:bg-black dark:bg-amber-100 dark:hover:bg-amber-200 text-white dark:text-stone-950 text-xs font-semibold shadow-xs hover:scale-105 active:scale-95 transition-all duration-200"
+                    className="px-3.5 py-1.5 rounded-lg bg-[#292522] hover:bg-black text-white text-xs font-medium transition-colors duration-180"
                   >
                     Join
                   </Link>
                 </div>
               )}
 
-              {/* Mobile Hamburger Button with Smooth Icon Animation */}
+              {/* Mobile Search Button & Menu Toggle */}
+              <button
+                type="button"
+                onClick={() => setShowCommandK(true)}
+                className="sm:hidden p-2 rounded-lg text-[#8D847C] hover:text-[#292522] hover:bg-white transition-colors"
+                aria-label="Search"
+              >
+                <PiMagnifyingGlassBold className="text-base" />
+              </button>
+
               <button
                 onClick={() => setMobileMenuOpen((prev) => !prev)}
                 aria-label="Toggle navigation menu"
-                className={`md:hidden p-2 rounded-xl transition-all duration-200 active:scale-90 ${
-                  isDark
-                    ? 'text-stone-300 hover:bg-stone-800'
-                    : 'text-stone-700 hover:bg-stone-100'
-                }`}
+                className="md:hidden p-2 rounded-lg text-[#292522] hover:bg-white transition-colors duration-180"
               >
-                {mobileMenuOpen ? (
-                  <PiXBold className="text-xl rotate-90 transition-transform duration-200" />
-                ) : (
-                  <PiListBold className="text-xl transition-transform duration-200" />
-                )}
+                {mobileMenuOpen ? <PiXBold className="text-lg" /> : <PiListBold className="text-lg" />}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer with Smooth Slide & Blur */}
+        {/* 4. MOBILE SLIDE-DOWN DRAWER (Flat, warm ivory paper) */}
         {mobileMenuOpen && (
-          <div
-            className={`md:hidden border-t px-4 py-5 animate-in fade-in slide-in-from-top-3 duration-200 ${
-              theme === 'midnight'
-                ? 'bg-[#151218]/98 border-[#2E2734] text-[#FAF5ED]'
-                : theme === 'candlelight'
-                ? 'bg-[#261E18]/98 border-[#45362B] text-[#FAF2E8]'
-                : 'bg-[#FAF7F2]/98 border-stone-200 text-stone-900 shadow-xl'
-            }`}
-          >
-            <nav className="flex flex-col gap-2">
+          <div className="md:hidden border-t border-[#EAE3DA] bg-[#FAF7F2] px-4 py-4 transition-all duration-200">
+            <nav className="flex flex-col gap-1">
               <Link
                 to="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between ${
-                  location.pathname === '/'
-                    ? isDark
-                      ? 'bg-amber-100 text-stone-950'
-                      : 'bg-stone-900 text-white'
-                    : isDark
-                    ? 'hover:bg-white/10 text-stone-200'
-                    : 'hover:bg-stone-100 text-stone-800'
+                className={`px-3.5 py-2.5 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${
+                  isDiscoverActive
+                    ? 'text-[#861D2D] bg-[#F8ECE9]'
+                    : 'text-[#292522] hover:bg-[#FBF2F0]'
                 }`}
               >
                 <span>Discover</span>
-                <span className="text-[10px] uppercase font-mono tracking-wider opacity-60">Home</span>
+                {isDiscoverActive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#861D2D]"></span>
+                )}
               </Link>
 
               <button
@@ -400,16 +298,14 @@ const Navbar = ({ totalBooks = 0 }) => {
                   setMobileMenuOpen(false);
                   setIsDrawerOpen(true);
                 }}
-                className={`px-3.5 py-2.5 rounded-xl text-sm font-semibold text-left flex items-center justify-between transition-colors ${
-                  isDark ? 'hover:bg-white/10 text-stone-200' : 'hover:bg-stone-100 text-stone-800'
-                }`}
+                className="px-3.5 py-2.5 rounded-lg text-xs font-medium text-[#292522] hover:bg-[#FBF2F0] text-left flex items-center justify-between transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <PiBookmarkSimpleBold className="text-burgundy" />
+                  <PiBookmarkSimpleBold className="text-sm text-[#861D2D]" />
                   <span>My Shelf</span>
                 </div>
                 {bookmarkCount > 0 && (
-                  <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-burgundy text-white">
+                  <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#861D2D] text-white">
                     {bookmarkCount}
                   </span>
                 )}
@@ -418,9 +314,7 @@ const Navbar = ({ totalBooks = 0 }) => {
               <a
                 href="#curated-collections"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  isDark ? 'hover:bg-white/10 text-stone-200' : 'hover:bg-stone-100 text-stone-800'
-                }`}
+                className="px-3.5 py-2.5 rounded-lg text-xs font-medium text-[#292522] hover:bg-[#FBF2F0] transition-colors"
               >
                 Curated Collections
               </a>
@@ -431,99 +325,64 @@ const Navbar = ({ totalBooks = 0 }) => {
                   setMobileMenuOpen(false);
                   setShowBookplate(true);
                 }}
-                className={`px-3.5 py-2.5 rounded-xl text-sm font-semibold text-left flex items-center justify-between transition-colors ${
-                  isDark ? 'hover:bg-white/10 text-stone-200' : 'hover:bg-stone-100 text-stone-800'
-                }`}
+                className="px-3.5 py-2.5 rounded-lg text-xs font-medium text-[#8D847C] hover:text-[#861D2D] hover:bg-[#FBF2F0] text-left flex items-center gap-2 transition-colors"
               >
-                <div className="flex items-center gap-2">
-                  <PiTagBold className="text-burgundy" />
-                  <span>Ex Libris Bookplates</span>
-                </div>
-                <span className="text-[10px] font-mono text-stone-400">Printable</span>
+                <PiTagBold className="text-sm" />
+                <span>Ex Libris Bookplates</span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setShowCommandK(true);
-                }}
-                className={`px-3.5 py-2.5 rounded-xl text-sm font-semibold text-left flex items-center justify-between transition-colors ${
-                  isDark ? 'hover:bg-white/10 text-stone-200' : 'hover:bg-stone-100 text-stone-800'
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <PiMagnifyingGlassBold className="text-burgundy" />
-                  <span>Search Catalog</span>
-                </div>
-                <kbd className="px-2 py-0.5 rounded bg-stone-200 dark:bg-stone-800 text-xs font-mono font-bold">
-                  ⌘K
-                </kbd>
-              </button>
-
+              {/* Sound Ambiance Row */}
               <button
                 type="button"
                 onClick={handleCycleAmbient}
-                className={`px-3.5 py-2.5 rounded-xl text-sm font-semibold text-left flex items-center justify-between border transition-colors ${
-                  ambientSound !== 'off'
-                    ? isDark
-                      ? 'border-amber-600/40 bg-amber-950/40 text-amber-200'
-                      : 'border-amber-300 bg-amber-50 text-amber-900'
-                    : isDark
-                    ? 'border-stone-700 bg-stone-800/50 text-stone-200'
-                    : 'border-stone-200 bg-white text-stone-800'
-                }`}
+                className="px-3.5 py-2.5 rounded-lg text-xs font-medium text-[#292522] hover:bg-[#FBF2F0] text-left flex items-center justify-between transition-colors"
               >
                 <div className="flex items-center gap-2">
                   {ambientSound === 'rain' ? (
-                    <PiCloudRainBold className="text-cyan-500" />
+                    <PiCloudRainBold className="text-[#861D2D]" />
                   ) : ambientSound === 'fireplace' ? (
-                    <PiFlameBold className="text-orange-500" />
+                    <PiFlameBold className="text-[#861D2D]" />
                   ) : ambientSound === 'clock' ? (
-                    <PiClockBold className="text-amber-500" />
+                    <PiClockBold className="text-[#861D2D]" />
                   ) : (
-                    <PiSpeakerSlashBold className="text-stone-400" />
+                    <PiSpeakerSimpleSlashBold className="text-[#8D847C]" />
                   )}
                   <span>Soundscape</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="capitalize font-mono text-[11px] text-[#8D847C]">
+                    {ambientSound}
+                  </span>
                   {ambientSound !== 'off' && (
-                    <div className="flex items-center gap-0.5 h-3">
-                      <span className="w-0.5 rounded-full bg-amber-500 animate-wave-1"></span>
-                      <span className="w-0.5 rounded-full bg-amber-500 animate-wave-2"></span>
-                      <span className="w-0.5 rounded-full bg-amber-500 animate-wave-3"></span>
-                    </div>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#E8A32A]"></span>
                   )}
-                  <span className="capitalize font-mono text-xs opacity-75">{ambientSound}</span>
                 </div>
               </button>
 
+              {/* Export Catalog CSV */}
               <a
                 href="http://localhost:5555/books/export/csv"
                 download
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 ${
-                  isDark ? 'hover:bg-white/10 text-stone-200' : 'hover:bg-stone-100 text-stone-800'
-                }`}
+                className="px-3.5 py-2.5 rounded-lg text-xs font-medium text-[#8D847C] hover:text-[#292522] hover:bg-[#FBF2F0] flex items-center gap-2 transition-colors"
               >
-                <PiFileArrowDownBold className="text-stone-400" />
-                <span>Export Catalog CSV</span>
+                <PiFileArrowDownBold className="text-sm" />
+                <span>Export Catalog (CSV)</span>
               </a>
 
+              {/* Auth / Profile in Mobile Drawer */}
               {user ? (
-                <div
-                  className={`pt-3 mt-2 border-t flex items-center justify-between ${
-                    isDark ? 'border-stone-700' : 'border-stone-200'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center font-bold text-xs">
-                      {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                <div className="pt-3 mt-2 border-t border-[#EAE3DA] flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-full bg-[#FAF1DF] border border-[#EED7B0] text-[#C27803] font-serif font-semibold text-xs flex items-center justify-center">
+                      {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
                     </div>
                     <div>
-                      <span className="text-xs font-bold block">{user.username}</span>
-                      <span className="text-[10px] font-mono text-stone-400">
-                        {isAdmin ? 'Admin' : 'Reader'}
+                      <span className="text-xs font-semibold text-[#292522] block leading-none">
+                        {user.username}
+                      </span>
+                      <span className="text-[9px] uppercase font-mono text-[#8D847C] tracking-wider mt-0.5 block">
+                        {isAdmin ? 'ADMIN' : 'READER'}
                       </span>
                     </div>
                   </div>
@@ -533,28 +392,24 @@ const Navbar = ({ totalBooks = 0 }) => {
                       setMobileMenuOpen(false);
                       logout();
                     }}
-                    className="px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    className="px-2.5 py-1 text-xs font-medium text-[#861D2D] hover:bg-[#F8ECE9] rounded-md transition-colors"
                   >
                     Sign Out
                   </button>
                 </div>
               ) : (
-                <div
-                  className={`pt-3 mt-2 border-t flex items-center gap-2 ${
-                    isDark ? 'border-stone-700' : 'border-stone-200'
-                  }`}
-                >
+                <div className="pt-3 mt-2 border-t border-[#EAE3DA] grid grid-cols-2 gap-2">
                   <Link
                     to="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex-1 py-2 text-center text-xs font-semibold rounded-xl bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200"
+                    className="py-2 text-center text-xs font-medium rounded-lg border border-[#EAE3DA] bg-white text-[#292522] hover:bg-[#FAF7F2] transition-colors"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex-1 py-2 text-center text-xs font-semibold rounded-xl bg-burgundy text-white shadow-xs"
+                    className="py-2 text-center text-xs font-medium rounded-lg bg-[#861D2D] text-white hover:bg-[#701624] transition-colors"
                   >
                     Join
                   </Link>
