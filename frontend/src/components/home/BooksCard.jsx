@@ -1,16 +1,8 @@
 import React from 'react';
-import BookSingleCard from './BookSingleCard';
+import BooksMasonry from './BooksMasonry';
 
 const BooksCard = ({ books = [] }) => {
-  if (!books.length) return null;
-
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {books.map((item) => (
-        <BookSingleCard key={item._id} book={item} />
-      ))}
-    </div>
-  );
+  return <BooksMasonry books={books} />;
 };
 
 export default BooksCard;

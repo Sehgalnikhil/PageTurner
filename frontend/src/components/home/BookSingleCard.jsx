@@ -1,110 +1,136 @@
 import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { PiBookOpenText, PiUserCircle, PiEyeBold, PiPencilSimpleBold, PiTrashBold, PiArticleMediumBold, PiStarFill } from 'react-icons/pi';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  PiEyeBold,
+  PiPencilSimpleBold,
+  PiTrashBold,
+  PiStarFill,
+  PiBookmarkSimpleBold,
+  PiBookmarkSimpleFill,
+  PiBookOpenTextBold,
+} from 'react-icons/pi';
 import BookModal from './BookModal';
 import { AuthContext } from '../../context/AuthContext';
+import { ReadingListContext } from '../../context/ReadingListContext';
 
 const BookSingleCard = ({ book }) => {
   const [showModal, setShowModal] = useState(false);
-  const { user } = useContext(AuthContext);
-  
-  const isAdmin = user && user.role === 'admin';
-  const imageUrl = book.image ? `http://localhost:5555${book.image}` : null;
+  const navigate = useNavigate();
+  const { isAdmin } = useContext(AuthContext);
+  const { isBookSaved, toggleBook } = useContext(ReadingListContext);
+
+  const isSaved = isBookSaved(book._id);
+  const imageUrl = book.image
+    ? book.image.startsWith('http')
+      ? book.image
+      : `http://localhost:5555${book.image}`
+    : null;
 
   return (
-    <div className="group relative rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between">
-      {/* Card Top: Year badge & Category */}
-      <div>
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <div className="flex gap-2">
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
+    <>
+      <div
+        onClick={() => navigate(`/books/details/${book._id}`)}
+        className="editorial-card p-4 flex flex-col justify-between group cursor-pointer hover:border-stone-300 hover:shadow-paper-hover transition-all duration-300"
+      >
+        <div>
+          {/* Top header */}
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <span className="text-[11px] font-mono font-medium text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">
               {book.publishYear}
             </span>
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-semibold text-blue-700">
-              {book.category || 'Uncategorized'}
-            </span>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleBook(book);
+                }}
+                className={`p-1.5 rounded-lg transition-colors ${
+                  isSaved
+                    ? 'text-burgundy bg-burgundy-faint'
+                    : 'text-stone-400 hover:text-burgundy hover:bg-stone-100'
+                }`}
+                title={isSaved ? 'Saved to shelf' : 'Save to shelf'}
+              >
+                {isSaved ? <PiBookmarkSimpleFill className="text-base" /> : <PiBookmarkSimpleBold className="text-base" />}
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowModal(true);
+                }}
+                className="p-1.5 rounded-lg text-stone-400 hover:text-stone-800 hover:bg-stone-100 transition-colors"
+                title="Quick preview"
+              >
+                <PiEyeBold className="text-base" />
+              </button>
+            </div>
           </div>
-          <button
-            onClick={() => setShowModal(true)}
-            className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-900 px-2 py-1 rounded-md hover:bg-slate-100 transition-colors"
-            title="Quick Preview"
-          >
-            <PiArticleMediumBold className="text-sm" />
-          </button>
-        </div>
 
-        {/* Image & Title */}
-        <div className="flex flex-col gap-3 my-2">
-          {imageUrl ? (
-            <div className="w-full h-48 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0 border border-slate-200">
-              <img src={imageUrl} alt={book.title} className="w-full h-full object-cover" />
-            </div>
-          ) : (
-            <div className="w-full h-48 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 flex-shrink-0 group-hover:bg-slate-100 transition-colors">
-              <PiBookOpenText className="text-4xl" />
-            </div>
-          )}
+          {/* Book Cover */}
+          <div className="book-cover-wrap w-full h-52 rounded-lg overflow-hidden mb-3 bg-stone-100">
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt={book.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            ) : (
+              <div className="w-full h-full fallback-jacket p-4 flex flex-col justify-between text-stone-100">
+                <span className="text-[10px] font-mono text-amber-200/60 uppercase">{book.category}</span>
+                <p className="font-serif text-sm font-bold text-amber-100">{book.title}</p>
+                <p className="text-[11px] text-stone-300 italic">{book.author}</p>
+              </div>
+            )}
+          </div>
 
+          {/* Info */}
           <div>
-            <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-slate-700 transition-colors line-clamp-2">
+            <span className="text-[10px] uppercase tracking-wider font-semibold text-stone-500">
+              {book.category || 'General'}
+            </span>
+            <h3 className="font-serif text-base font-bold text-stone-900 group-hover:text-burgundy leading-snug line-clamp-1 transition-colors">
               {book.title}
             </h3>
-            <div className="flex items-center justify-between mt-1">
-              <div className="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
-                <PiUserCircle className="text-sm text-slate-400" />
-                <span className="truncate">{book.author}</span>
-              </div>
-              {book.averageRating > 0 && (
-                <div className="flex items-center gap-1 text-yellow-500 text-xs font-bold">
-                  <PiStarFill />
-                  <span>{book.averageRating.toFixed(1)}</span>
-                </div>
-              )}
-            </div>
+            <p className="text-xs text-stone-600 truncate mt-0.5 font-medium">by {book.author}</p>
           </div>
         </div>
-      </div>
 
-      {/* Card Bottom: Actions */}
-      <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
-        <span className="text-[11px] font-mono text-slate-400">
-          ID: {book._id.slice(-6)}
-        </span>
+        {/* Footer info */}
+        <div className="mt-3 pt-2.5 border-t border-stone-100 flex items-center justify-between text-xs">
+          {book.averageRating > 0 ? (
+            <span className="flex items-center gap-1 font-semibold text-amber-900 bg-amber-50 px-2 py-0.5 rounded-md text-[11px]">
+              <PiStarFill className="text-amber-500 text-xs" />
+              {book.averageRating.toFixed(1)}
+            </span>
+          ) : (
+            <span className="text-stone-400 text-[11px]">No reviews</span>
+          )}
 
-        <div className="flex items-center gap-1">
-          <Link
-            to={`/books/details/${book._id}`}
-            title="View Details"
-            className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
-          >
-            <PiEyeBold className="text-base" />
-          </Link>
           {isAdmin && (
-            <>
+            <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
               <Link
                 to={`/books/edit/${book._id}`}
+                className="p-1 rounded text-stone-400 hover:text-stone-800"
                 title="Edit"
-                className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
               >
-                <PiPencilSimpleBold className="text-base" />
+                <PiPencilSimpleBold />
               </Link>
               <Link
                 to={`/books/delete/${book._id}`}
+                className="p-1 rounded text-stone-400 hover:text-red-600"
                 title="Delete"
-                className="p-2 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors"
               >
-                <PiTrashBold className="text-base" />
+                <PiTrashBold />
               </Link>
-            </>
+            </div>
           )}
         </div>
       </div>
 
-      {/* Modal View */}
-      {showModal && (
-        <BookModal book={book} onClose={() => setShowModal(false)} />
-      )}
-    </div>
+      {showModal && <BookModal book={book} onClose={() => setShowModal(false)} />}
+    </>
   );
 };
 

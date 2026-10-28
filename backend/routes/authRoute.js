@@ -3,11 +3,14 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/userModel.js';
 
+import { JWT_SECRET } from '../config.js';
+import { protect } from '../middleware/authMiddleware.js';
+
 const router = express.Router();
 
-// Generate JWT
+// Generate JWT (Lectures 57, 60: JWT Authentication & Storage)
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'fallback_secret_key_please_change', {
+  return jwt.sign({ id }, JWT_SECRET, {
     expiresIn: '30d',
   });
 };
@@ -86,6 +89,19 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// @route   GET /auth/me
+// @desc    Get current logged in user profile
+// @access  Private (Demonstrates Protected Route & JWT verification)
+router.get('/me', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error retrieving user profile' });
   }
 });
 

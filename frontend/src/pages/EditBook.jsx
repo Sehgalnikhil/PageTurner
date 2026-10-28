@@ -1,63 +1,88 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 import Navbar from '../components/Navbar';
-import axios from 'axios';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import Footer from '../components/layout/Footer';
+import { useNavigate, useParams } from 'react-router-dom';
+import { bookService } from '../services/api';
 import { useSnackbar } from 'notistack';
-import { PiBookOpenTextBold, PiUserBold, PiCalendarBold, PiFloppyDiskBackBold } from 'react-icons/pi';
-import { AuthContext } from '../context/AuthContext';
+import {
+  PiPencilSimpleBold,
+  PiCheckBold,
+} from 'react-icons/pi';
 
 const EditBook = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [publishYear, setPublishYear] = useState('');
-  const [category, setCategory] = useState('Uncategorized');
+  const [category, setCategory] = useState('Fiction');
   const [description, setDescription] = useState('');
   const [isbn, setIsbn] = useState('');
   const [pageCount, setPageCount] = useState('');
   const [language, setLanguage] = useState('English');
-  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [fetching, setFetching] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    setInitialLoading(true);
-    axios
-      .get(`http://localhost:5555/books/${id}`)
+    setFetching(true);
+    bookService
+      .getById(id)
       .then((response) => {
-        setAuthor(response.data.author || '');
-        setPublishYear(response.data.publishYear || '');
-        setTitle(response.data.title || '');
-        setCategory(response.data.category || 'Uncategorized');
-        setDescription(response.data.description || '');
-        setIsbn(response.data.isbn || '');
-        setPageCount(response.data.pageCount || '');
-        setLanguage(response.data.language || 'English');
-        setInitialLoading(false);
+        const b = response.data;
+        setTitle(b.title || '');
+        setAuthor(b.author || '');
+        setPublishYear(b.publishYear || '');
+        setCategory(b.category || 'Fiction');
+        setDescription(b.description || '');
+        setIsbn(b.isbn || '');
+        setPageCount(b.pageCount || '');
+        setLanguage(b.language || 'English');
+        if (b.image) {
+          const fullImg = b.image.startsWith('http') ? b.image : `http://localhost:5555${b.image}`;
+          setPreviewUrl(fullImg);
+          if (b.image.startsWith('http')) {
+            setImageUrl(b.image);
+          }
+        }
+        setFetching(false);
       })
       .catch((error) => {
-        setInitialLoading(false);
-        enqueueSnackbar('Failed to load book information', { variant: 'error' });
+        setFetching(false);
+        enqueueSnackbar('Failed to load book data.', { variant: 'error' });
         console.error(error);
       });
-  }, [id, enqueueSnackbar]);
+  }, [id]);
+
+  const handleImageFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setImageUrl('');
+    }
+  };
+
+  const handleImageUrlChange = (e) => {
+    const url = e.target.value;
+    setImageUrl(url);
+    if (url) {
+      setPreviewUrl(url);
+      setImageFile(null);
+    }
+  };
 
   const handleEditBook = (e) => {
     e?.preventDefault();
 
     if (!title.trim() || !author.trim() || !publishYear) {
-      enqueueSnackbar('Please fill out all required fields', { variant: 'warning' });
-      return;
-    }
-
-    if (!user || !user.token) {
-      enqueueSnackbar('Please log in as an Admin to edit a book', { variant: 'error' });
+      enqueueSnackbar('Please provide a title, author, and publication year.', { variant: 'warning' });
       return;
     }
 
@@ -66,136 +91,120 @@ const EditBook = () => {
     formData.append('author', author.trim());
     formData.append('publishYear', publishYear);
     formData.append('category', category);
-    formData.append('description', description);
-    formData.append('isbn', isbn);
+    formData.append('description', description.trim());
+    formData.append('isbn', isbn.trim());
     formData.append('pageCount', pageCount);
     formData.append('language', language);
-    if (image) {
-      formData.append('image', image);
+
+    if (imageFile) {
+      formData.append('image', imageFile);
+    } else if (imageUrl) {
+      formData.append('image', imageUrl);
     }
 
     setLoading(true);
-    axios
-      .put(`http://localhost:5555/books/${id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
+    bookService
+      .update(id, formData)
       .then(() => {
         setLoading(false);
-        enqueueSnackbar('Book updated successfully', { variant: 'success' });
-        navigate('/');
+        enqueueSnackbar('Book record updated successfully.', { variant: 'success' });
+        navigate(`/books/details/${id}`);
       })
       .catch((error) => {
         setLoading(false);
-        enqueueSnackbar(error.response?.data?.message || 'Failed to update book.', { variant: 'error' });
-        console.error(error);
+        enqueueSnackbar(
+          error.customMessage || error.response?.data?.message || 'Failed to update book record.',
+          { variant: 'error' }
+        );
       });
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8F9FA]">
+    <div className="min-h-screen flex flex-col bg-transparent text-[#1C1917]">
       <Navbar />
 
-      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-8">
+      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 relative z-10">
         <div className="mb-6">
-          <BackButton />
+          <BackButton destination={`/books/details/${id}`} label="Back to Book Details" />
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-card p-6 sm:p-8">
-          {/* Header */}
-          <div className="pb-6 border-b border-slate-100">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center border border-slate-200">
-                <PiBookOpenTextBold className="text-xl" />
-              </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-                  Edit Book Details
-                </h1>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Update the metadata and publication info for this entry.
-                </p>
-              </div>
-            </div>
+        {fetching ? (
+          <div className="py-24 flex justify-center items-center">
+            <Spinner />
           </div>
+        ) : (
+          <div className="editorial-sheet p-8 sm:p-10 bg-white">
+            <div className="mb-8 pb-4 border-b border-stone-200">
+              <span className="text-xs uppercase font-mono font-semibold text-burgundy tracking-wider block mb-1">
+                Edit Archival Record
+              </span>
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 leading-tight">
+                Update &ldquo;{title}&rdquo;
+              </h1>
+              <p className="text-xs text-stone-500 mt-1">
+                Revise bibliographic metadata, category taxonomy, or cover artwork.
+              </p>
+            </div>
 
-          {initialLoading || loading ? (
-            <Spinner message={initialLoading ? 'Retrieving book details...' : 'Updating record...'} />
-          ) : (
-            <form onSubmit={handleEditBook} className="mt-6 space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {/* Title Field */}
+            <form onSubmit={handleEditBook} className="space-y-6">
+              {/* Title & Author */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                    Book Title <span className="text-rose-500">*</span>
+                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                    Book Title <span className="text-burgundy">*</span>
                   </label>
-                  <div className="relative">
-                    <PiBookOpenTextBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base" />
-                    <input
-                      type="text"
-                      required
-                      placeholder="Book title"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50/60 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-800/10 focus:border-slate-800 transition-all"
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="editorial-input w-full p-2.5 rounded-xl text-xs"
+                  />
                 </div>
 
-                {/* Author Field */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                    Author Name <span className="text-rose-500">*</span>
+                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                    Author <span className="text-burgundy">*</span>
                   </label>
-                  <div className="relative">
-                    <PiUserBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base" />
-                    <input
-                      type="text"
-                      required
-                      placeholder="Author name"
-                      value={author}
-                      onChange={(e) => setAuthor(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50/60 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-800/10 focus:border-slate-800 transition-all"
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={author}
+                    onChange={(e) => setAuthor(e.target.value)}
+                    className="editorial-input w-full p-2.5 rounded-xl text-xs"
+                  />
+                </div>
+              </div>
+
+              {/* Year & Category */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                    Publication Year <span className="text-burgundy">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    value={publishYear}
+                    onChange={(e) => setPublishYear(e.target.value)}
+                    className="editorial-input w-full p-2.5 rounded-xl text-xs font-mono"
+                  />
                 </div>
 
-                {/* Publish Year Field */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                    Publication Year <span className="text-rose-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <PiCalendarBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base" />
-                    <input
-                      type="number"
-                      required
-                      placeholder="Year"
-                      min="1000"
-                      max={new Date().getFullYear() + 5}
-                      value={publishYear}
-                      onChange={(e) => setPublishYear(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50/60 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-800/10 focus:border-slate-800 transition-all"
-                    />
-                  </div>
-                </div>
-                
-                {/* Category Field */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                    Category
+                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                    Genre / Category
                   </label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50/60 border border-slate-200 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-800/10 focus:border-slate-800 transition-all"
+                    className="editorial-input w-full p-2.5 rounded-xl text-xs font-semibold cursor-pointer bg-white"
                   >
                     <option value="Fiction">Fiction</option>
                     <option value="Non-Fiction">Non-Fiction</option>
                     <option value="Sci-Fi">Sci-Fi</option>
                     <option value="Biography">Biography</option>
+                    <option value="Technology">Technology</option>
                     <option value="Uncategorized">Uncategorized</option>
                   </select>
                 </div>
@@ -203,93 +212,122 @@ const EditBook = () => {
 
               {/* Description */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                  Description
+                <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                  Synopsis &amp; Editorial Summary
                 </label>
                 <textarea
-                  placeholder="Synopsis or description..."
-                  rows="3"
+                  rows="4"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50/60 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-800/10 focus:border-slate-800 transition-all"
+                  className="editorial-input w-full p-3 rounded-xl text-xs leading-relaxed"
                 />
               </div>
 
-              {/* Extra Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {/* Cover Image Inputs & Preview */}
+              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-stone-200">
+                <label className="block text-xs font-semibold text-stone-700 mb-2">
+                  Cover Artwork
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                  <div className="sm:col-span-8 space-y-3">
+                    <input
+                      type="url"
+                      placeholder="Paste image URL..."
+                      value={imageUrl}
+                      onChange={handleImageUrlChange}
+                      className="editorial-input w-full p-2.5 rounded-xl text-xs bg-white"
+                    />
+
+                    <div className="flex items-center gap-2 text-xs text-stone-500">
+                      <span>or replace with image file:</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageFileChange}
+                        className="text-xs text-stone-600 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-stone-200 file:text-stone-800 hover:file:bg-stone-300 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="sm:col-span-4 flex justify-center">
+                    {previewUrl ? (
+                      <div className="w-20 h-28 rounded-md overflow-hidden border border-stone-300 shadow-sm">
+                        <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-20 h-28 rounded-md bg-stone-200 flex items-center justify-center text-stone-400 text-xs">
+                        No image
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Metadata */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
                     ISBN
                   </label>
                   <input
                     type="text"
-                    placeholder="ISBN number"
                     value={isbn}
                     onChange={(e) => setIsbn(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50/60 border border-slate-200 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 transition-all"
+                    className="editorial-input w-full p-2.5 rounded-xl text-xs font-mono"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
                     Page Count
                   </label>
                   <input
                     type="number"
-                    placeholder="e.g. 350"
                     value={pageCount}
                     onChange={(e) => setPageCount(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50/60 border border-slate-200 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 transition-all"
+                    className="editorial-input w-full p-2.5 rounded-xl text-xs font-mono"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
                     Language
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. English"
                     value={language}
                     onChange={(e) => setLanguage(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50/60 border border-slate-200 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 transition-all"
+                    className="editorial-input w-full p-2.5 rounded-xl text-xs"
                   />
                 </div>
               </div>
 
-              {/* Image Upload */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                  Update Cover Image
-                </label>
-                <div className="relative">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setImage(e.target.files[0])}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50/60 border border-slate-200 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Form Buttons */}
-              <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
-                <Link
-                  to="/"
-                  className="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors"
+              {/* Form Actions */}
+              <div className="pt-6 border-t border-stone-200 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => navigate(`/books/details/${id}`)}
+                  className="px-4 py-2 rounded-full btn-paper text-xs"
                 >
                   Cancel
-                </Link>
+                </button>
+
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all active:scale-[0.98]"
+                  disabled={loading}
+                  className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full btn-burgundy text-xs shadow-sm disabled:opacity-50"
                 >
-                  <PiFloppyDiskBackBold />
-                  <span>Update Book</span>
+                  <PiCheckBold className="text-xs" />
+                  <span>{loading ? 'Saving Changes...' : 'Save Revisions'}</span>
                 </button>
               </div>
             </form>
-          )}
-        </div>
+          </div>
+        )}
       </main>
+
+      <Footer />
     </div>
   );
 };

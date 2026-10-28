@@ -2,109 +2,127 @@ import React, { useState, useEffect } from 'react';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 import Navbar from '../components/Navbar';
-import axios from 'axios';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import Footer from '../components/layout/Footer';
+import { useNavigate, useParams } from 'react-router-dom';
+import { bookService } from '../services/api';
 import { useSnackbar } from 'notistack';
-import { PiWarningCircleBold, PiTrashBold, PiBookOpenTextBold } from 'react-icons/pi';
+import { PiWarningBold, PiTrashBold } from 'react-icons/pi';
 
 const DeleteBook = () => {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [fetchLoading, setFetchLoading] = useState(true);
+  const [fetching, setFetching] = useState(true);
   const navigate = useNavigate();
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    setFetchLoading(true);
-    axios
-      .get(`http://localhost:5555/books/${id}`)
-      .then((response) => {
-        setBook(response.data);
-        setFetchLoading(false);
+    bookService
+      .getById(id)
+      .then((res) => {
+        setBook(res.data);
+        setFetching(false);
       })
-      .catch((error) => {
-        setFetchLoading(false);
-        console.error(error);
+      .catch((err) => {
+        setFetching(false);
+        console.error(err);
       });
   }, [id]);
 
   const handleDeleteBook = () => {
     setLoading(true);
-    axios
-      .delete(`http://localhost:5555/books/${id}`)
+    bookService
+      .delete(id)
       .then(() => {
         setLoading(false);
-        enqueueSnackbar('Book removed from library', { variant: 'success' });
+        enqueueSnackbar('Book was permanently removed from the collection.', { variant: 'success' });
         navigate('/');
       })
       .catch((error) => {
         setLoading(false);
-        enqueueSnackbar('Failed to delete book record', { variant: 'error' });
-        console.error(error);
+        enqueueSnackbar(
+          error.customMessage || error.response?.data?.message || 'Failed to remove book.',
+          { variant: 'error' }
+        );
       });
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8F9FA]">
+    <div className="min-h-screen flex flex-col bg-transparent text-[#1C1917]">
       <Navbar />
 
-      <main className="flex-1 max-w-xl w-full mx-auto px-4 sm:px-6 py-12">
+      <main className="flex-1 max-w-xl w-full mx-auto px-4 sm:px-6 py-12 relative z-10 flex flex-col justify-center">
         <div className="mb-6">
-          <BackButton />
+          <BackButton destination={`/books/details/${id}`} label="Cancel & Return" />
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-card p-6 sm:p-8 text-center">
-          {/* Warning Icon */}
-          <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto mb-4">
-            <PiWarningCircleBold className="text-3xl" />
+        {fetching ? (
+          <div className="py-20 flex justify-center">
+            <Spinner />
           </div>
-
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight mb-2">
-            Delete Book Record
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto mb-6">
-            Are you sure you want to permanently remove this book from your collection? This action cannot be undone.
-          </p>
-
-          {/* Book Summary Card */}
-          {fetchLoading ? (
-            <Spinner message="Fetching record info..." />
-          ) : book ? (
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-left flex items-start gap-3 mb-6">
-              <div className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-700 flex-shrink-0">
-                <PiBookOpenTextBold className="text-base" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h4 className="text-sm font-bold text-slate-900 truncate">
-                  {book.title}
-                </h4>
-                <p className="text-xs text-slate-500">
-                  By {book.author} ({book.publishYear})
-                </p>
-              </div>
+        ) : (
+          <div className="editorial-sheet p-8 sm:p-10 bg-white border border-stone-200 shadow-paper-hover">
+            <div className="w-12 h-12 rounded-full bg-red-50 text-red-600 border border-red-200 flex items-center justify-center mx-auto mb-4">
+              <PiWarningBold className="text-2xl" />
             </div>
-          ) : null}
 
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              to="/"
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors"
-            >
-              Cancel
-            </Link>
-            <button
-              onClick={handleDeleteBook}
-              disabled={loading}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-semibold shadow-sm transition-all active:scale-[0.98]"
-            >
-              <PiTrashBold />
-              <span>{loading ? 'Deleting...' : 'Yes, Delete Record'}</span>
-            </button>
+            <h1 className="font-serif text-2xl font-bold text-stone-900 text-center mb-2">
+              Confirm Archival Removal
+            </h1>
+
+            <p className="text-xs text-stone-600 text-center max-w-sm mx-auto mb-6 leading-relaxed">
+              Are you certain you wish to delete this book record? This will permanently remove its catalog entry, reader ratings, and associated reviews.
+            </p>
+
+            {book && (
+              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-stone-200 mb-6 flex items-center gap-3">
+                <div className="w-12 h-16 rounded overflow-hidden bg-stone-200 flex-shrink-0">
+                  {book.image ? (
+                    <img
+                      src={book.image.startsWith('http') ? book.image : `http://localhost:5555${book.image}`}
+                      alt={book.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full fallback-jacket p-1 flex items-center justify-center text-[9px] text-amber-100 text-center font-serif">
+                      Cover
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <h3 className="font-serif text-sm font-bold text-stone-900 leading-snug">
+                    {book.title}
+                  </h3>
+                  <p className="text-xs text-stone-500">by {book.author}</p>
+                  <span className="text-[11px] font-mono text-stone-400">Published {book.publishYear}</span>
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200">
+              <button
+                type="button"
+                onClick={() => navigate(`/books/details/${id}`)}
+                className="px-4 py-2 rounded-full btn-paper text-xs"
+              >
+                Keep Book
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDeleteBook}
+                disabled={loading}
+                className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold shadow-xs disabled:opacity-50 transition-colors"
+              >
+                <PiTrashBold className="text-sm" />
+                <span>{loading ? 'Deleting...' : 'Delete Permanently'}</span>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </main>
+
+      <Footer />
     </div>
   );
 };

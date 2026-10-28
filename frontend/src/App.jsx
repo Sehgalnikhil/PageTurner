@@ -1,24 +1,57 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import CreateBook from './pages/CreateBooks';
 import ShowBook from './pages/ShowBook';
 import EditBook from './pages/EditBook';
 import DeleteBook from './pages/DeleteBook';
-import Login from './pages/Login';
+import Login from './pages/login';
 import Register from './pages/Register';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import ReadingListModal from './components/ReadingListModal';
 
 const App = () => {
   return (
-    <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/books/create' element={<CreateBook />} />
-      <Route path='/books/details/:id' element={<ShowBook />} />
-      <Route path='/books/edit/:id' element={<EditBook />} />
-      <Route path='/books/delete/:id' element={<DeleteBook />} />
-    </Routes>
+    <div className="relative min-h-screen paper-canvas selection:bg-[#7B1826] selection:text-[#FAF7F2] transition-colors duration-300">
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <ReadingListModal />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/books/details/:id" element={<ShowBook />} />
+
+          {/* Create Book Route */}
+          <Route
+            path="/books/create"
+            element={
+              <ProtectedRoute>
+                <CreateBook />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/books/edit/:id"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <EditBook />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/books/delete/:id"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <DeleteBook />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* 404 Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </div>
   );
 };
 

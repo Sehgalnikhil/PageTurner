@@ -1,289 +1,547 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 import Navbar from '../components/Navbar';
+import Footer from '../components/layout/Footer';
+import BookPinCard from '../components/home/BookPinCard';
 import {
-  PiBookOpenTextBold,
-  PiUserBold,
   PiCalendarBold,
   PiClockBold,
   PiIdentificationBadgeBold,
   PiPencilSimpleBold,
   PiTrashBold,
   PiStarFill,
-  PiTextAaBold
+  PiUserCircleBold,
+  PiBookmarkSimpleBold,
+  PiBookmarkSimpleFill,
+  PiPaperPlaneTiltBold,
+  PiBookOpenTextBold,
+  PiChatCircleTextBold,
+  PiNotePencilBold,
+  PiCheckBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
+import { ReadingListContext } from '../context/ReadingListContext';
+import { bookService } from '../services/api';
 import { useSnackbar } from 'notistack';
+import PageFlipPreview from '../components/home/PageFlipPreview';
 
 const ShowBook = () => {
   const [book, setBook] = useState({});
+  const [relatedBooks, setRelatedBooks] = useState([]);
   const [loading, setLoading] = useState(false);
-  
-  // Review states
+
+  // Review form state
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [reviewLoading, setReviewLoading] = useState(false);
 
+  // Personal reading journal note state
+  const [personalNotes, setPersonalNotes] = useState('');
+  const [noteSavedFeedback, setNoteSavedFeedback] = useState(false);
+  const [popping, setPopping] = useState(false);
+
   const { id } = useParams();
-  const { user } = useContext(AuthContext);
+  const { user, isAdmin } = useContext(AuthContext);
+  const { isBookSaved, toggleBook, getSavedBook, updateBookStatus } = useContext(ReadingListContext);
   const { enqueueSnackbar } = useSnackbar();
+
+  const isSaved = isBookSaved(id);
+  const savedEntry = getSavedBook(id);
+
+  // Sync personal notes when savedEntry changes
+  useEffect(() => {
+    if (savedEntry?.notes) {
+      setPersonalNotes(savedEntry.notes);
+    } else {
+      setPersonalNotes('');
+    }
+  }, [savedEntry]);
 
   const fetchBookDetails = () => {
     setLoading(true);
-    axios
-      .get(`http://localhost:5555/books/${id}`)
+    bookService
+      .getById(id)
       .then((response) => {
-        setBook(response.data);
+        const bookData = response.data;
+        setBook(bookData);
         setLoading(false);
+
+        // Fetch related books with same category
+        if (bookData.category) {
+          bookService
+            .getAll({ category: bookData.category, limit: 4 })
+            .then((res) => {
+              const related = (res.data.data || []).filter((b) => b._id !== id).slice(0, 3);
+              setRelatedBooks(related);
+            })
+            .catch(() => {});
+        }
       })
       .catch((error) => {
         console.error(error);
+        enqueueSnackbar('Failed to load book record', { variant: 'error' });
         setLoading(false);
       });
   };
 
   useEffect(() => {
     fetchBookDetails();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [id]);
-
-  const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
-    try {
-      return new Intl.DateTimeFormat('en-US', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-      }).format(new Date(dateString));
-    } catch {
-      return dateString;
-    }
-  };
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-    if (!user || !user.token) {
-      enqueueSnackbar('You must be logged in to leave a review', { variant: 'error' });
+    if (!user) {
+      enqueueSnackbar('Please log in to submit a review', { variant: 'warning' });
+      return;
+    }
+
+    if (!comment.trim()) {
+      enqueueSnackbar('Review comment cannot be empty', { variant: 'error' });
       return;
     }
 
     setReviewLoading(true);
     try {
-      await axios.post(
-        `http://localhost:5555/books/${id}/reviews`,
-        { rating, comment },
-        {
-          headers: { Authorization: `Bearer ${user.token}` },
-        }
-      );
-      enqueueSnackbar('Review submitted successfully', { variant: 'success' });
+      await bookService.addReview(id, { rating: Number(rating), comment: comment.trim() });
+      enqueueSnackbar('Your reflection has been published to the journal.', { variant: 'success' });
       setComment('');
       setRating(5);
-      fetchBookDetails(); // Refresh book details to get the new review
+      fetchBookDetails();
     } catch (error) {
-      enqueueSnackbar(error.response?.data?.message || 'Failed to submit review', { variant: 'error' });
+      enqueueSnackbar(
+        error.customMessage || error.response?.data?.message || 'Failed to submit review',
+        { variant: 'error' }
+      );
     } finally {
       setReviewLoading(false);
     }
   };
 
-  const isAdmin = user && user.role === 'admin';
-  const imageUrl = book.image ? `http://localhost:5555${book.image}` : null;
+  const handleSaveNotes = () => {
+    if (!isSaved) {
+      toggleBook(book);
+    }
+    updateBookStatus(id, savedEntry?.readingStatus || 'want-to-read', personalNotes);
+    setNoteSavedFeedback(true);
+    enqueueSnackbar('Personal journal notes saved to shelf.', { variant: 'success' });
+    setTimeout(() => setNoteSavedFeedback(false), 2500);
+  };
+
+  const handleStatusChange = (status) => {
+    if (!isSaved) {
+      toggleBook(book);
+    }
+    updateBookStatus(id, status, personalNotes);
+    enqueueSnackbar(`Reading status updated to "${status.replace(/-/g, ' ')}"`, { variant: 'info' });
+  };
+
+  const imageUrl = book.image
+    ? book.image.startsWith('http')
+      ? book.image
+      : `http://localhost:5555${book.image}`
+    : null;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8F9FA]">
+    <div className="min-h-screen flex flex-col bg-transparent text-[#1C1917]">
       <Navbar />
 
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8">
-        <div className="mb-6">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative z-10">
+        {/* Top Header Bar */}
+        <div className="flex items-center justify-between mb-8 pb-4 border-b border-stone-200">
           <BackButton />
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setPopping(true);
+                toggleBook(book);
+                setTimeout(() => setPopping(false), 450);
+              }}
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 active:scale-95 ${
+                isSaved
+                  ? 'bg-burgundy text-white shadow-xs hover:bg-[#63121E]'
+                  : 'btn-paper text-stone-800'
+              }`}
+            >
+              {isSaved ? (
+                <>
+                  <PiBookmarkSimpleFill
+                    className={`text-sm text-amber-300 ${popping ? 'animate-bookmark-pop' : ''}`}
+                  />
+                  <span>On Your Shelf</span>
+                </>
+              ) : (
+                <>
+                  <PiBookmarkSimpleBold className="text-sm text-burgundy" />
+                  <span>Save to Shelf</span>
+                </>
+              )}
+            </button>
+
+            {isAdmin && (
+              <div className="flex items-center gap-1 pl-2 border-l border-stone-300">
+                <Link
+                  to={`/books/edit/${book._id}`}
+                  className="px-3 py-2 rounded-full btn-paper text-xs text-stone-700"
+                >
+                  Edit
+                </Link>
+                <Link
+                  to={`/books/delete/${book._id}`}
+                  className="px-3 py-2 rounded-full bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-medium"
+                >
+                  Delete
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
 
         {loading ? (
-          <Spinner message="Loading book details..." />
+          <div className="py-32 flex justify-center items-center">
+            <Spinner />
+          </div>
         ) : (
-          <div className="flex flex-col md:flex-row gap-6">
-            
-            {/* Left Column: Image and Actions */}
-            <div className="w-full md:w-1/3 flex flex-col gap-4">
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col items-center">
-                {imageUrl ? (
-                  <img src={imageUrl} alt={book.title} className="w-full rounded-xl object-cover mb-4" />
-                ) : (
-                  <div className="w-full aspect-[2/3] bg-slate-100 rounded-xl flex items-center justify-center mb-4">
-                    <PiBookOpenTextBold className="text-6xl text-slate-300" />
-                  </div>
-                )}
-
-                {book.averageRating > 0 && (
-                  <div className="flex items-center gap-2 mb-2">
-                    <PiStarFill className="text-yellow-500 text-xl" />
-                    <span className="text-lg font-bold text-slate-800">{book.averageRating.toFixed(1)}</span>
-                    <span className="text-sm text-slate-500">({book.reviews?.length} reviews)</span>
-                  </div>
-                )}
-                
-                {/* Admin Actions */}
-                {isAdmin && (
-                  <div className="flex items-center gap-2 w-full mt-4">
-                    <Link
-                      to={`/books/edit/${book._id}`}
-                      className="flex-1 flex justify-center items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors"
-                    >
-                      <PiPencilSimpleBold className="text-sm" />
-                      <span>Edit</span>
-                    </Link>
-                    <Link
-                      to={`/books/delete/${book._id}`}
-                      className="flex-1 flex justify-center items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-200 bg-rose-50/50 hover:bg-rose-50 text-rose-700 text-xs font-semibold transition-colors"
-                    >
-                      <PiTrashBold className="text-sm" />
-                      <span>Delete</span>
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Right Column: Details and Reviews */}
-            <div className="w-full md:w-2/3 flex flex-col gap-6">
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-                <div className="mb-6">
-                  <span className="inline-block px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold tracking-wide mb-3">
-                    {book.category || 'Uncategorized'}
-                  </span>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-snug mb-2">
-                    {book.title}
-                  </h1>
-                  <p className="text-lg font-medium text-slate-600">
-                    By <span className="text-slate-900">{book.author}</span>
-                  </p>
-                </div>
-
-                {book.description && (
-                  <div className="mb-6">
-                    <h3 className="text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
-                      <PiTextAaBold /> Description
-                    </h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      {book.description}
-                    </p>
-                  </div>
-                )}
-
-                {/* Structured Info Grid */}
-                <div className="grid grid-cols-2 gap-4 my-6">
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-                    <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">
-                      <PiCalendarBold className="text-sm" />
-                      <span>Publish Year</span>
-                    </div>
-                    <span className="text-sm font-semibold text-slate-800">
-                      {book.publishYear}
-                    </span>
-                  </div>
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-                    <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">
-                      <PiBookOpenTextBold className="text-sm" />
-                      <span>Page Count</span>
-                    </div>
-                    <span className="text-sm font-semibold text-slate-800">
-                      {book.pageCount || 'N/A'}
-                    </span>
-                  </div>
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-                    <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">
-                      <PiIdentificationBadgeBold className="text-sm" />
-                      <span>ISBN</span>
-                    </div>
-                    <span className="text-sm font-semibold text-slate-800">
-                      {book.isbn || 'N/A'}
-                    </span>
-                  </div>
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-                    <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">
-                      <PiClockBold className="text-sm" />
-                      <span>Language</span>
-                    </div>
-                    <span className="text-sm font-semibold text-slate-800">
-                      {book.language || 'English'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Reviews Section */}
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-                <h2 className="text-xl font-bold text-slate-900 mb-6">Reviews</h2>
-
-                {/* Review Form */}
-                {user ? (
-                  <form onSubmit={handleReviewSubmit} className="mb-8 p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <h3 className="text-sm font-bold text-slate-800 mb-3">Write a Customer Review</h3>
-                    <div className="mb-3">
-                      <label className="block text-xs font-semibold text-slate-600 mb-1">Rating</label>
-                      <select 
-                        value={rating} 
-                        onChange={(e) => setRating(e.target.value)}
-                        className="p-2 border rounded text-sm w-32"
-                      >
-                        <option value="5">5 - Excellent</option>
-                        <option value="4">4 - Very Good</option>
-                        <option value="3">3 - Good</option>
-                        <option value="2">2 - Fair</option>
-                        <option value="1">1 - Poor</option>
-                      </select>
-                    </div>
-                    <div className="mb-3">
-                      <label className="block text-xs font-semibold text-slate-600 mb-1">Comment</label>
-                      <textarea
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        required
-                        rows="3"
-                        placeholder="What did you think about this book?"
-                        className="w-full p-2 border rounded text-sm"
+          <div className="space-y-12">
+            {/* Two-Column Editorial Spread */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
+              {/* Left Column (5 cols): Cover & Shelf Tracking Sheet */}
+              <div className="md:col-span-5 flex flex-col gap-6">
+                {/* Book Cover Artwork with Spine depth */}
+                <div className="editorial-sheet p-6 flex flex-col items-center bg-white">
+                  <div className="book-cover-wrap w-full max-w-[320px] rounded-lg overflow-hidden shadow-book border border-stone-200">
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt={`Cover of ${book.title}`}
+                        className="w-full h-auto max-h-[480px] object-cover block"
                       />
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={reviewLoading}
-                      className="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                    >
-                      {reviewLoading ? 'Submitting...' : 'Submit Review'}
-                    </button>
-                  </form>
-                ) : (
-                  <div className="mb-8 p-4 bg-blue-50 text-blue-800 rounded-xl border border-blue-200 text-sm">
-                    Please <Link to="/login" className="font-bold underline">log in</Link> to write a review.
-                  </div>
-                )}
-
-                {/* Reviews List */}
-                <div className="space-y-4">
-                  {book.reviews && book.reviews.length > 0 ? (
-                    book.reviews.map((review) => (
-                      <div key={review._id} className="pb-4 border-b border-slate-100 last:border-0 last:pb-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-bold text-sm text-slate-800">{review.username}</span>
-                          <div className="flex items-center text-yellow-500 text-xs">
-                            <PiStarFill />
-                            <span className="ml-1 font-bold">{review.rating}</span>
-                          </div>
-                        </div>
-                        <p className="text-sm text-slate-600">{review.comment}</p>
+                    ) : (
+                      <div className="w-full h-80 fallback-jacket p-6 flex flex-col justify-between text-stone-100">
+                        <span className="text-xs uppercase font-mono tracking-widest text-amber-200/60">{book.category}</span>
+                        <h2 className="font-serif text-2xl font-bold text-amber-50">{book.title}</h2>
+                        <p className="text-xs text-amber-100/70 italic">by {book.author}</p>
                       </div>
-                    ))
-                  ) : (
-                    <p className="text-sm text-slate-500">No reviews yet. Be the first to review this book!</p>
+                    )}
+                  </div>
+
+                  {/* Rating Score */}
+                  {book.averageRating > 0 && (
+                    <div className="mt-5 flex items-center gap-2 bg-[#F6F1E8] px-4 py-1.5 rounded-full border border-stone-200 text-xs">
+                      <div className="flex items-center text-amber-500">
+                        <PiStarFill />
+                      </div>
+                      <span className="font-bold text-stone-900">
+                        {book.averageRating.toFixed(1)} / 5.0
+                      </span>
+                      <span className="text-stone-500">
+                        ({book.reviews?.length || 0} reader reviews)
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Personal Reading Journal & Tracking Card */}
+                <div className="editorial-sheet p-6 bg-[#FAF7F2]">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-serif text-sm font-bold text-stone-900 flex items-center gap-1.5">
+                      <PiNotePencilBold className="text-burgundy" />
+                      <span>Reading Journal &amp; Notes</span>
+                    </h3>
+                    <span className="text-[10px] font-mono text-stone-500 bg-white px-2 py-0.5 rounded border border-stone-200">
+                      Saved to Device Shelf
+                    </span>
+                  </div>
+
+                  {/* Reading Status Selector */}
+                  <div className="mb-4">
+                    <label className="block text-[11px] font-semibold text-stone-600 mb-1.5">
+                      Your Reading Status
+                    </label>
+                    <div className="grid grid-cols-3 gap-1.5 text-xs">
+                      {[
+                        { id: 'want-to-read', label: 'Want to Read' },
+                        { id: 'currently-reading', label: 'Reading' },
+                        { id: 'finished', label: 'Finished' },
+                      ].map((st) => {
+                        const isCurrent = (savedEntry?.readingStatus || 'want-to-read') === st.id;
+                        return (
+                          <button
+                            key={st.id}
+                            type="button"
+                            onClick={() => handleStatusChange(st.id)}
+                            className={`py-1.5 px-2 rounded-lg text-center text-[11px] font-semibold transition-all border ${
+                              isCurrent
+                                ? 'bg-burgundy text-white border-burgundy shadow-xs'
+                                : 'bg-white text-stone-700 hover:bg-stone-50 border-stone-200'
+                            }`}
+                          >
+                            {st.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Personal Notes Textarea */}
+                  <div>
+                    <label className="block text-[11px] font-semibold text-stone-600 mb-1.5">
+                      Personal Reflections &amp; Annotations
+                    </label>
+                    <textarea
+                      rows="3"
+                      value={personalNotes}
+                      onChange={(e) => setPersonalNotes(e.target.value)}
+                      placeholder="Add key insights, quote bookmarks, or personal reflections..."
+                      className="editorial-input w-full p-2.5 rounded-xl text-xs text-stone-800 placeholder-stone-400 bg-white"
+                    />
+                    <div className="mt-2 flex justify-end">
+                      <button
+                        type="button"
+                        onClick={handleSaveNotes}
+                        className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                          noteSavedFeedback
+                            ? 'bg-emerald-600 text-white'
+                            : 'btn-burgundy'
+                        }`}
+                      >
+                        {noteSavedFeedback ? (
+                          <>
+                            <PiCheckBold className="text-xs" />
+                            <span>Saved</span>
+                          </>
+                        ) : (
+                          <span>Save Note</span>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bibliographic Metadata Sheet */}
+                <div className="editorial-sheet p-6 bg-white space-y-3 text-xs">
+                  <h4 className="font-serif text-xs font-bold text-stone-900 uppercase tracking-wider mb-2">
+                    Bibliographic Record
+                  </h4>
+
+                  <div className="flex justify-between py-1.5 border-b border-stone-100">
+                    <span className="text-stone-500">First Published</span>
+                    <span className="font-mono font-semibold text-stone-800">{book.publishYear}</span>
+                  </div>
+
+                  <div className="flex justify-between py-1.5 border-b border-stone-100">
+                    <span className="text-stone-500">Genre / Category</span>
+                    <span className="font-semibold text-burgundy">{book.category || 'General'}</span>
+                  </div>
+
+                  <div className="flex justify-between py-1.5 border-b border-stone-100">
+                    <span className="text-stone-500">Pages</span>
+                    <span className="font-mono text-stone-800">{book.pageCount || 'Unknown'}</span>
+                  </div>
+
+                  <div className="flex justify-between py-1.5 border-b border-stone-100">
+                    <span className="text-stone-500">ISBN</span>
+                    <span className="font-mono text-stone-800">{book.isbn || 'N/A'}</span>
+                  </div>
+
+                  <div className="flex justify-between py-1.5 border-b border-stone-100">
+                    <span className="text-stone-500">Language</span>
+                    <span className="text-stone-800">{book.language || 'English'}</span>
+                  </div>
+
+                  {book.createdBy?.username && (
+                    <div className="flex justify-between py-1.5">
+                      <span className="text-stone-500">Archived By</span>
+                      <span className="font-medium text-stone-800">{book.createdBy.username}</span>
+                    </div>
                   )}
                 </div>
               </div>
+
+              {/* Right Column (7 cols): Editorial Typography, Synopsis, Reviews */}
+              <div className="md:col-span-7 flex flex-col gap-8">
+                {/* Title & Author Header */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xs font-semibold text-burgundy bg-burgundy-faint px-3 py-1 rounded-full border border-burgundy/15">
+                      {book.category || 'Literary Classic'}
+                    </span>
+                    <span className="text-xs text-stone-400 font-mono">
+                      Published {book.publishYear}
+                    </span>
+                  </div>
+
+                  <h1 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight leading-[1.15] mb-3">
+                    {book.title}
+                  </h1>
+
+                  <p className="text-lg text-stone-600 font-serif italic">
+                    A work by <span className="font-semibold not-italic text-stone-900">{book.author}</span>
+                  </p>
+                </div>
+
+                {/* Editorial Synopsis */}
+                <div className="editorial-sheet p-6 sm:p-8 bg-white">
+                  <h3 className="font-serif text-sm font-bold text-stone-900 uppercase tracking-wider mb-4 pb-2 border-b border-stone-200">
+                    Editorial Overview &amp; Synopsis
+                  </h3>
+
+                  <div className="prose text-stone-700 text-sm leading-relaxed font-sans">
+                    <p className="literary-dropcap leading-relaxed">
+                      {book.description ||
+                        `"${book.title}" represents an enduring entry in the canon of ${book.category || 'world literature'}. Crafted with intentional precision by ${book.author}, the work continues to engage readers and prompt critical contemplation across generations.`}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Tactile Sample Chapter / First Lines Reader */}
+                <div>
+                  <div className="flex items-center justify-between mb-2 px-1">
+                    <h3 className="font-serif text-sm font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5">
+                      <PiBookOpenTextBold className="text-burgundy" />
+                      <span>Archival First Edition Reader</span>
+                    </h3>
+                    <span className="text-[10px] font-mono text-stone-500">
+                      Apple Books Engine
+                    </span>
+                  </div>
+                  <PageFlipPreview book={book} />
+                </div>
+
+                {/* Reader Reviews & Critical Reflections */}
+                <div className="editorial-sheet p-6 sm:p-8 bg-white">
+                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-stone-200">
+                    <div>
+                      <h3 className="font-serif text-lg font-bold text-stone-900 flex items-center gap-2">
+                        <PiChatCircleTextBold className="text-burgundy" />
+                        <span>Reader Reflections</span>
+                      </h3>
+                      <p className="text-xs text-stone-500 font-medium mt-0.5">
+                        Observations and community ratings
+                      </p>
+                    </div>
+
+                    {book.reviews && (
+                      <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-stone-100 text-stone-700">
+                        {book.reviews.length} {book.reviews.length === 1 ? 'reflection' : 'reflections'}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Submit Review Form */}
+                  {user ? (
+                    <form onSubmit={handleReviewSubmit} className="mb-8 p-5 bg-[#FAF7F2] rounded-xl border border-stone-200">
+                      <h4 className="font-serif text-xs font-bold text-stone-900 uppercase tracking-wider mb-3">
+                        Write a Reflection as <span className="text-burgundy">{user.username}</span>
+                      </h4>
+
+                      <div className="mb-3">
+                        <label className="block text-[11px] font-semibold text-stone-600 mb-1">
+                          Score (1 to 5 Stars)
+                        </label>
+                        <select
+                          value={rating}
+                          onChange={(e) => setRating(e.target.value)}
+                          className="editorial-input p-2 rounded-lg text-xs font-semibold text-stone-900 w-44 bg-white"
+                        >
+                          <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733; (5 - Exceptional)</option>
+                          <option value="4">&#9733;&#9733;&#9733;&#9733; (4 - Very Good)</option>
+                          <option value="3">&#9733;&#9733;&#9733; (3 - Good)</option>
+                          <option value="2">&#9733;&#9733; (2 - Fair)</option>
+                          <option value="1">&#9733; (1 - Poor)</option>
+                        </select>
+                      </div>
+
+                      <div className="mb-3">
+                        <label className="block text-[11px] font-semibold text-stone-600 mb-1">
+                          Your Critical Thoughts
+                        </label>
+                        <textarea
+                          rows="3"
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                          required
+                          placeholder="Share your perspective on the characters, writing, or lasting impressions..."
+                          className="editorial-input w-full p-3 rounded-xl text-xs text-stone-900 placeholder-stone-400 bg-white"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={reviewLoading}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 btn-burgundy text-xs rounded-full shadow-xs disabled:opacity-50"
+                      >
+                        <PiPaperPlaneTiltBold className="text-xs" />
+                        <span>{reviewLoading ? 'Publishing...' : 'Publish Reflection'}</span>
+                      </button>
+                    </form>
+                  ) : (
+                    <div className="mb-8 p-4 bg-[#F5F0E6] rounded-xl border border-stone-200 flex items-center justify-between text-xs text-stone-700">
+                      <span>Sign in to publish your critical notes on this book.</span>
+                      <Link to="/login" className="px-3 py-1.5 rounded-full btn-burgundy text-xs">
+                        Sign In
+                      </Link>
+                    </div>
+                  )}
+
+                  {/* Reviews List */}
+                  <div className="space-y-4">
+                    {book.reviews && book.reviews.length > 0 ? (
+                      book.reviews.map((rev) => (
+                        <div
+                          key={rev._id}
+                          className="p-4 rounded-xl border border-stone-100 bg-[#FAF7F2] text-xs space-y-1.5"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-stone-900">
+                              {rev.username}
+                            </span>
+                            <div className="flex items-center gap-1 text-amber-600 font-semibold text-[11px]">
+                              <PiStarFill className="text-amber-500" />
+                              <span>{rev.rating} / 5</span>
+                            </div>
+                          </div>
+                          <p className="text-stone-700 leading-relaxed font-sans">{rev.comment}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-stone-400 text-center py-6 font-serif italic">
+                        No reflections recorded yet. Be the first reader to record your notes.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
+
+            {/* Related Works in Same Genre */}
+            {relatedBooks.length > 0 && (
+              <section className="pt-8 border-t border-stone-200">
+                <div className="mb-6">
+                  <h3 className="font-serif text-2xl font-bold text-stone-900">
+                    Companion Discoveries
+                  </h3>
+                  <p className="text-xs text-stone-500">
+                    Other works curated in <span className="font-semibold text-burgundy">{book.category}</span>
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {relatedBooks.map((relBook) => (
+                    <BookPinCard key={relBook._id} book={relBook} />
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 };

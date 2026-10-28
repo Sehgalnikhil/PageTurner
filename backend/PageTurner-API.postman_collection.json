@@ -1,0 +1,213 @@
+{
+  "info": {
+    "_postman_id": "pageturner-mern-api-collection",
+    "name": "PageTurner — Book Management System API Collection",
+    "description": "Comprehensive Postman API collection for PageTurner Book Management System.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Register User",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"student_tester\",\n  \"email\": \"tester@chitkara.edu.in\",\n  \"password\": \"student123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Login User",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"tester@chitkara.edu.in\",\n  \"password\": \"student123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Get Current User Profile (Protected)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{jwtToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/me",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "me"]
+        }
+      }
+    },
+    {
+      "name": "Books - Get All Books (Pagination, Search, Filter, Populate)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books?page=1&limit=8&category=All&sortBy=createdAt",
+          "host": ["{{baseUrl}}"],
+          "path": ["books"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "8" },
+            { "key": "category", "value": "All" },
+            { "key": "sortBy", "value": "createdAt" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Books - Get Single Book by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books/{{sampleBookId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["books", "{{sampleBookId}}"]
+        }
+      }
+    },
+    {
+      "name": "Books - Create Book (Protected/Admin with Multer)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{jwtToken}}" }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Clean Code", "type": "text" },
+            { "key": "author", "value": "Robert C. Martin", "type": "text" },
+            { "key": "publishYear", "value": "2008", "type": "text" },
+            { "key": "category", "value": "Non-Fiction", "type": "text" },
+            { "key": "description", "value": "A handbook of agile software craftsmanship.", "type": "text" },
+            { "key": "isbn", "value": "9780132350884", "type": "text" },
+            { "key": "pageCount", "value": "464", "type": "text" },
+            { "key": "language", "value": "English", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": ["{{baseUrl}}"],
+          "path": ["books"]
+        }
+      }
+    },
+    {
+      "name": "Books - Export CSV (Node.js Streams & Buffers Demo)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books/export/csv",
+          "host": ["{{baseUrl}}"],
+          "path": ["books", "export", "csv"]
+        }
+      }
+    },
+    {
+      "name": "Books - Add Review (Protected)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{jwtToken}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Exceptional engineering design patterns and clarity.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books/{{sampleBookId}}/reviews",
+          "host": ["{{baseUrl}}"],
+          "path": ["books", "{{sampleBookId}}", "reviews"]
+        }
+      }
+    },
+    {
+      "name": "System - Runtime & V8 Engine Statistics (L49-50)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/system/info",
+          "host": ["{{baseUrl}}"],
+          "path": ["system", "info"]
+        }
+      }
+    },
+    {
+      "name": "System - EventEmitter Realtime Audit Log (L52)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/system/events",
+          "host": ["{{baseUrl}}"],
+          "path": ["system", "events"]
+        }
+      }
+    },
+    {
+      "name": "System - File System Module fs/promises Demo (L51)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/system/fs-demo",
+          "host": ["{{baseUrl}}"],
+          "path": ["system", "fs-demo"]
+        }
+      }
+    },
+    {
+      "name": "System - Node.js Chunked Stream Demo (L52)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/system/stream-demo",
+          "host": ["{{baseUrl}}"],
+          "path": ["system", "stream-demo"]
+        }
+      }
+    },
+    {
+      "name": "System - Health Check & Request Lifecycle (L53)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5555" },
+    { "key": "jwtToken", "value": "" },
+    { "key": "sampleBookId", "value": "" }
+  ]
+}

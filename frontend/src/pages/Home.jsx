@@ -1,41 +1,59 @@
-import React, { useEffect, useState, useMemo, useContext } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState, useContext, useMemo } from 'react';
 import Spinner from '../components/Spinner';
 import Navbar from '../components/Navbar';
+import Footer from '../components/layout/Footer';
 import BooksTable from '../components/home/BooksTable';
-import BooksCard from '../components/home/BooksCard';
+import BooksMasonry from '../components/home/BooksMasonry';
+import CuratedCollectionTiles from '../components/home/CuratedCollectionTiles';
+import BlindDateBanner from '../components/home/BlindDateBanner';
+import BlindDateModal from '../components/home/BlindDateModal';
 import { Link } from 'react-router-dom';
 import {
   PiMagnifyingGlassBold,
   PiListBulletsBold,
   PiSquaresFourBold,
-  PiBooks,
+  PiBooksBold,
   PiPlusBold,
-  PiBookBookmark
+  PiFunnelBold,
+  PiSortAscendingBold,
+  PiBookmarkSimpleFill,
+  PiXBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
+import { ReadingListContext } from '../context/ReadingListContext';
+import { bookService } from '../services/api';
 
 const Home = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showType, setShowType] = useState('card');
+  const [showType, setShowType] = useState('masonry'); // 'masonry' | 'table'
+  const [mainTab, setMainTab] = useState('discover'); // 'discover' | 'shelf'
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('All');
+  const [selectedMood, setSelectedMood] = useState(null);
+  const [sortBy, setSortBy] = useState('createdAt');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalBooks, setTotalBooks] = useState(0);
+  const [showBlindDate, setShowBlindDate] = useState(false);
 
   const { user } = useContext(AuthContext);
-  const limit = 8; // Number of items per page
+  const { readingList, count: savedCount } = useContext(ReadingListContext);
+
+  const limit = 20;
 
   const fetchBooks = () => {
     setLoading(true);
-    let url = `http://localhost:5555/books?page=${page}&limit=${limit}`;
-    if (searchQuery) url += `&search=${searchQuery}`;
-    if (category && category !== 'All') url += `&category=${category}`;
+    const params = {
+      page,
+      limit,
+      sortBy,
+    };
+    if (searchQuery) params.search = searchQuery;
+    if (category && category !== 'All') params.category = category;
 
-    axios
-      .get(url)
+    bookService
+      .getAll(params)
       .then((response) => {
         setBooks(response.data.data || []);
         setTotalPages(response.data.totalPages || 1);
@@ -50,12 +68,12 @@ const Home = () => {
 
   useEffect(() => {
     fetchBooks();
-  }, [page, category]);
+  }, [page, category, sortBy]);
 
-  // Trigger search when user presses Enter or clicks button, to avoid spamming the backend
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      setPage(1); // Reset to page 1 on new search
+      setPage(1);
+      setSelectedMood(null);
       fetchBooks();
     }
   };
@@ -63,169 +81,362 @@ const Home = () => {
   const handleClearSearch = () => {
     setSearchQuery('');
     setPage(1);
+    setSelectedMood(null);
     fetchBooks();
   };
 
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
+    setSelectedMood(null);
     setPage(1);
   };
 
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+    setPage(1);
+  };
+
+  const handleMoodSelect = (mood) => {
+    if (selectedMood?.id === mood.id) {
+      setSelectedMood(null);
+      setCategory('All');
+    } else {
+      setSelectedMood(mood);
+      setCategory(mood.fallbackCategory);
+      setPage(1);
+    }
+  };
+
+  const clearAllFilters = () => {
+    setSearchQuery('');
+    setCategory('All');
+    setSelectedMood(null);
+    setMainTab('discover');
+    setPage(1);
+    fetchBooks();
+  };
+
+  // Filter books locally if mood has specific keywords or saved tab is active
+  const displayedBooks = useMemo(() => {
+    if (mainTab === 'shelf') {
+      return readingList;
+    }
+
+    if (!selectedMood) {
+      return books;
+    }
+
+    // Prioritize books matching mood keywords
+    const keywords = selectedMood.keywords;
+    const moodMatches = books.filter((b) => {
+      const text = `${b.title} ${b.description || ''}`.toLowerCase();
+      return keywords.some((kw) => text.includes(kw));
+    });
+
+    return moodMatches.length > 0 ? moodMatches : books;
+  }, [books, selectedMood, mainTab, readingList]);
+
+  const handleOpenBlindDate = () => {
+    const el = document.getElementById('blind-date-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      setShowBlindDate(true);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8F9FA]">
-      <Navbar totalBooks={totalBooks} />
+    <div className="min-h-screen flex flex-col bg-transparent transition-colors duration-300">
+      <Navbar totalBooks={totalBooks} onOpenBlindDate={handleOpenBlindDate} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Hero Banner */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-200">
-          <div>
-            <div className="flex items-center gap-2 text-slate-500 text-xs font-semibold uppercase tracking-wider mb-2">
-              <PiBookBookmark className="text-slate-700 text-sm" />
-              <span>Library Management Overview</span>
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
+        {/* Compact Above-the-Fold Editorial Masthead (Reduced height by ~35-40%) */}
+        <header className="mb-6 pb-5 border-b border-stone-200">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-burgundy block mb-1">
+                Digital Reading Journal &bull; Issue No. 24
+              </span>
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 tracking-tight leading-none">
+                Fall into <span className="italic font-normal text-burgundy">another world.</span>
+              </h1>
+              <p className="text-xs sm:text-sm text-stone-600 font-serif italic mt-1.5">
+                Stories to keep. Ideas to collect. Worlds to get lost in.
+              </p>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Catalog & Collections
-            </h1>
-            <p className="text-sm text-slate-500 mt-1 max-w-xl">
-              Browse, search, edit, and organize all book records stored in your database.
-            </p>
-          </div>
 
-          {/* Quick Metrics */}
-          <div className="flex items-center gap-3">
-            <div className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col min-w-[110px]">
-              <span className="text-xs font-medium text-slate-400">Total Books</span>
-              <span className="text-lg font-bold text-slate-900">{totalBooks}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Search, Filter & View Controls */}
-        <div className="my-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          {/* Search Box */}
-          <div className="relative flex-1 max-w-md">
-            <PiMagnifyingGlassBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Search and hit enter..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleSearch}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-800/10 focus:border-slate-800 transition-all shadow-sm"
-            />
-            {searchQuery && (
-              <button
-                onClick={handleClearSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 px-1.5 py-0.5 rounded transition-colors"
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <Link
+                to={user ? "/books/create" : "/login"}
+                className="group inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full btn-burgundy text-xs shadow-xs"
               >
-                Clear
-              </button>
-            )}
-          </div>
+                <PiPlusBold className="text-xs group-hover:rotate-90 transition-transform duration-250 ease-out" />
+                <span>Add Story</span>
+              </Link>
 
-          {/* Controls: Category Filter + View Toggle */}
-          <div className="flex items-center gap-3 justify-between sm:justify-end flex-wrap">
-            {/* Category Select */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-slate-400 hidden lg:inline">Category:</span>
-              <select
-                value={category}
-                onChange={handleCategoryChange}
-                className="bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:border-slate-800 transition-all shadow-sm"
-              >
-                <option value="All">All Categories</option>
-                <option value="Fiction">Fiction</option>
-                <option value="Non-Fiction">Non-Fiction</option>
-                <option value="Sci-Fi">Sci-Fi</option>
-                <option value="Biography">Biography</option>
-                <option value="Uncategorized">Uncategorized</option>
-              </select>
+              <div className="text-[11px] font-mono text-stone-500 bg-white border border-stone-200 px-3 py-1.5 rounded-full shadow-xs">
+                <span className="font-bold text-stone-800">{totalBooks}</span> works cataloged
+              </div>
             </div>
+          </div>
+        </header>
 
-            {/* Segmented View Switcher */}
-            <div className="inline-flex rounded-xl bg-slate-200/70 p-1 border border-slate-200">
+        {/* Curated Atmospheric Collections: Sophisticated, Image-Led Tiles (No Emojis) */}
+        <CuratedCollectionTiles
+          selectedMood={selectedMood}
+          onSelectMood={handleMoodSelect}
+          onClearMood={() => setSelectedMood(null)}
+        />
+
+        {/* Blind Date with a Book Spotlight Invitation Banner */}
+        <BlindDateBanner books={books} />
+
+        {/* Streamlined Discovery Toolbar (Search, Filter, Tab toggles) */}
+        <section className="mb-6">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-4 border-b border-stone-200">
+            {/* View Tab Buttons */}
+            <div className="flex items-center gap-1.5">
               <button
-                onClick={() => setShowType('card')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  showType === 'card'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
+                type="button"
+                onClick={() => setMainTab('discover')}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 active:scale-95 ${
+                  mainTab === 'discover'
+                    ? 'bg-stone-900 text-white shadow-xs'
+                    : 'bg-white text-stone-700 hover:bg-stone-100 hover:text-stone-900 border border-stone-200'
                 }`}
               >
-                <PiSquaresFourBold className="text-sm" />
-                <span>Cards</span>
+                All Stories
               </button>
+
               <button
-                onClick={() => setShowType('table')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  showType === 'table'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
+                type="button"
+                onClick={() => setMainTab('shelf')}
+                className={`group px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 active:scale-95 flex items-center gap-1.5 ${
+                  mainTab === 'shelf'
+                    ? 'bg-burgundy text-white shadow-xs'
+                    : 'bg-white text-stone-700 hover:bg-stone-100 hover:text-stone-900 border border-stone-200'
                 }`}
               >
-                <PiListBulletsBold className="text-sm" />
-                <span>Table</span>
+                <PiBookmarkSimpleFill
+                  className={`${
+                    mainTab === 'shelf' ? 'text-amber-300' : 'text-burgundy'
+                  } group-hover:scale-110 transition-transform duration-200`}
+                />
+                <span>My Shelf</span>
+                {savedCount > 0 && (
+                  <span
+                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold transition-all duration-200 group-hover:scale-105 ${
+                      mainTab === 'shelf'
+                        ? 'bg-white text-burgundy'
+                        : 'bg-burgundy text-white'
+                    }`}
+                  >
+                    {savedCount}
+                  </span>
+                )}
               </button>
             </div>
-          </div>
-        </div>
 
-        {/* Main Content Area */}
+            {/* Filter and Search controls */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Search Bar with focus elevation & icon accent */}
+              <div className="relative flex-1 sm:w-56 group/search">
+                <PiMagnifyingGlassBold className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within/search:text-burgundy text-xs pointer-events-none transition-colors duration-200" />
+                <input
+                  type="text"
+                  placeholder="Search title, author..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearch}
+                  className="editorial-input w-full pl-8 pr-7 py-1.5 rounded-full text-xs placeholder-stone-400 bg-white hover:border-stone-400 focus:hover:border-burgundy"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={handleClearSearch}
+                    aria-label="Clear search"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 transition-colors p-0.5 rounded-full hover:bg-stone-100"
+                  >
+                    <PiXBold className="text-xs" />
+                  </button>
+                )}
+              </div>
+
+              {/* Genre Dropdown with hover border transition */}
+              <div className="relative group/genre">
+                <select
+                  value={category}
+                  onChange={handleCategoryChange}
+                  className="editorial-input text-stone-700 text-xs font-semibold rounded-full px-3 py-1.5 pr-6 cursor-pointer appearance-none bg-white hover:border-stone-400 transition-colors"
+                >
+                  <option value="All">All Genres</option>
+                  <option value="Fiction">Fiction</option>
+                  <option value="Non-Fiction">Non-Fiction</option>
+                  <option value="Sci-Fi">Sci-Fi</option>
+                  <option value="Biography">Biography</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Uncategorized">Uncategorized</option>
+                </select>
+                <PiFunnelBold className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-400 group-hover/genre:text-stone-700 text-[11px] pointer-events-none transition-colors" />
+              </div>
+
+              {/* Sort Dropdown */}
+              <div className="relative group/sort">
+                <select
+                  value={sortBy}
+                  onChange={handleSortChange}
+                  className="editorial-input text-stone-700 text-xs font-semibold rounded-full px-3 py-1.5 pr-6 cursor-pointer appearance-none bg-white hover:border-stone-400 transition-colors"
+                >
+                  <option value="createdAt">Recently Added</option>
+                  <option value="rating-desc">Highest Rated</option>
+                  <option value="title-asc">Title (A-Z)</option>
+                  <option value="title-desc">Title (Z-A)</option>
+                  <option value="year-newest">Year (Newest)</option>
+                  <option value="year-oldest">Year (Oldest)</option>
+                </select>
+                <PiSortAscendingBold className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-400 group-hover/sort:text-stone-700 text-[11px] pointer-events-none transition-colors" />
+              </div>
+
+              {/* Layout Switcher (Masonry vs Table) */}
+              <div className="inline-flex rounded-full bg-white p-0.5 border border-stone-200">
+                <button
+                  type="button"
+                  onClick={() => setShowType('masonry')}
+                  title="Organic Masonry Gallery"
+                  className={`p-1.5 rounded-full transition-all ${
+                    showType === 'masonry'
+                      ? 'bg-stone-900 text-white shadow-xs'
+                      : 'text-stone-500 hover:text-stone-900'
+                  }`}
+                >
+                  <PiSquaresFourBold className="text-xs" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowType('table')}
+                  title="Bibliographic Table View"
+                  className={`p-1.5 rounded-full transition-all ${
+                    showType === 'table'
+                      ? 'bg-stone-900 text-white shadow-xs'
+                      : 'text-stone-500 hover:text-stone-900'
+                  }`}
+                >
+                  <PiListBulletsBold className="text-xs" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Active Filter State Notice */}
+          {(selectedMood || (category && category !== 'All') || searchQuery || mainTab === 'shelf') && (
+            <div className="mt-3 flex items-center justify-between gap-2 p-2.5 rounded-xl bg-[#F6F1E8] border border-stone-200 text-xs">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="font-semibold text-stone-600 text-[11px]">Filtered view:</span>
+
+                {mainTab === 'shelf' && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-burgundy text-white text-[10px] font-semibold">
+                    <span>Personal Saved Shelf</span>
+                  </span>
+                )}
+
+                {selectedMood && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white text-stone-800 border border-stone-300 text-[10px] font-semibold">
+                    <span>Atmosphere: {selectedMood.title}</span>
+                  </span>
+                )}
+
+                {category && category !== 'All' && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white text-stone-800 border border-stone-300 text-[10px] font-semibold">
+                    <span>Genre: {category}</span>
+                  </span>
+                )}
+
+                {searchQuery && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white text-stone-800 border border-stone-300 text-[10px] font-semibold">
+                    <span>&ldquo;{searchQuery}&rdquo;</span>
+                  </span>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={clearAllFilters}
+                className="text-xs font-semibold text-burgundy hover:underline flex-shrink-0"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
+        </section>
+
+        {/* Pinterest-Inspired Organic Gallery */}
         {loading ? (
-          <Spinner />
-        ) : books.length > 0 ? (
+          <div className="py-24 flex justify-center items-center">
+            <Spinner />
+          </div>
+        ) : displayedBooks.length > 0 ? (
           <div>
             {showType === 'table' ? (
-              <BooksTable books={books} />
+              <BooksTable books={displayedBooks} />
             ) : (
-              <BooksCard books={books} />
+              <BooksMasonry books={displayedBooks} />
             )}
 
             {/* Pagination Controls */}
-            {totalPages > 1 && (
-              <div className="mt-8 flex justify-center items-center gap-4">
+            {totalPages > 1 && mainTab === 'discover' && (
+              <div className="mt-10 flex justify-center items-center gap-3">
                 <button
+                  type="button"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-4 py-2 border rounded-lg bg-white disabled:opacity-50"
+                  className="px-4 py-1.5 text-xs font-semibold rounded-full btn-paper disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  Previous
+                  &larr; Previous
                 </button>
-                <span className="text-sm">Page {page} of {totalPages}</span>
+                <span className="text-xs font-mono font-medium text-stone-600 px-3 py-1 rounded-full bg-white border border-stone-200">
+                  Page <strong className="text-burgundy font-bold">{page}</strong> of {totalPages}
+                </span>
                 <button
+                  type="button"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="px-4 py-2 border rounded-lg bg-white disabled:opacity-50"
+                  className="px-4 py-1.5 text-xs font-semibold rounded-full btn-paper disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  Next
+                  Next &rarr;
                 </button>
               </div>
             )}
           </div>
         ) : (
           /* Empty State */
-          <div className="py-16 px-4 text-center rounded-2xl bg-white border border-slate-200/80 shadow-sm max-w-lg mx-auto my-6">
-            <div className="w-14 h-14 rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center mx-auto mb-4">
-              <PiBooks className="text-3xl" />
+          <div className="py-20 px-6 text-center editorial-sheet max-w-md mx-auto my-6">
+            <div className="w-14 h-14 rounded-full bg-stone-100 border border-stone-200 text-stone-500 flex items-center justify-center mx-auto mb-3">
+              <PiBooksBold className="text-2xl text-burgundy" />
             </div>
-            <h3 className="text-base font-bold text-slate-900 mb-1">
-              No matching books found
+            <h3 className="font-serif text-lg font-bold text-stone-900 mb-1">
+              No matching stories found
             </h3>
-            <p className="text-xs text-slate-500 mb-5 max-w-xs mx-auto">
-              We couldn't find any results.
+            <p className="text-xs text-stone-600 mb-5 max-w-xs mx-auto leading-relaxed">
+              We couldn&apos;t find any books matching your active filters. Try adjusting your search query or selecting another atmosphere.
             </p>
-            {user?.role === 'admin' && (
-              <Link
-                to="/books/create"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all"
-              >
-                <PiPlusBold />
-                <span>Add Book</span>
-              </Link>
-            )}
+            <button
+              type="button"
+              onClick={clearAllFilters}
+              className="px-4 py-2 rounded-full btn-burgundy text-xs"
+            >
+              Reset All Filters
+            </button>
           </div>
         )}
+
+        {/* Blind Date with a Book Interactive Modal */}
+        <BlindDateModal
+          isOpen={showBlindDate}
+          onClose={() => setShowBlindDate(false)}
+          books={books}
+        />
       </main>
+
+      <Footer />
     </div>
   );
 };

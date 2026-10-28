@@ -5,24 +5,19 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import { AuthProvider } from './context/AuthContext.jsx';
+import { ReadingListProvider } from './context/ReadingListContext.jsx';
+import { ThemeProvider } from './context/ThemeContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
-      <SnackbarProvider>
-        <App />
-      </SnackbarProvider>
+      <ReadingListProvider>
+        <ThemeProvider>
+          <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+            <App />
+          </SnackbarProvider>
+        </ThemeProvider>
+      </ReadingListProvider>
     </AuthProvider>
   </BrowserRouter>
 );
-
-
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//   <React.StrictMode>
-//     <BrowserRouter>
-//       <SnackbarProvider>
-//         <App />
-//       </SnackbarProvider>
-//     </BrowserRouter>
-//   </React.StrictMode>
-// );

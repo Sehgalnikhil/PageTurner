@@ -4,25 +4,1022 @@
 
 @layer base {
   body {
-    @apply bg-[#F8F9FA] text-slate-800 antialiased font-sans selection:bg-slate-200 selection:text-slate-900;
+    @apply bg-[#FAF7F2] text-[#1C1917] antialiased font-sans selection:bg-[#7B1826] selection:text-[#FAF7F2] min-h-screen relative overflow-x-hidden;
+    background-color: #FAF7F2;
+    color: #1C1917;
+  }
+
+  h1, h2, h3, .font-serif {
+    font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
   }
 }
 
-/* Custom smooth scrollbar */
+/* Natural Editorial Canvas: subtle paper ambiance */
+.paper-canvas {
+  position: relative;
+  background-color: #FAF7F2;
+}
+
+.paper-canvas::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 10% 20%, rgba(200, 120, 40, 0.03) 0%, transparent 40%),
+                    radial-gradient(circle at 90% 80%, rgba(123, 24, 38, 0.03) 0%, transparent 45%),
+                    radial-gradient(circle at 50% 50%, rgba(85, 105, 82, 0.02) 0%, transparent 50%);
+  z-index: 0;
+}
+
+/* Editorial Book Card / Pin */
+.book-pin {
+  display: inline-block;
+  width: 100%;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 1.5rem;
+  background: #FFFFFF;
+  border: 1px solid #ECE5D9;
+  border-radius: 1rem;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 10px -2px rgba(28, 25, 23, 0.05), 0 1px 3px 0 rgba(28, 25, 23, 0.03);
+}
+
+.book-pin:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 42px -12px rgba(28, 25, 23, 0.16), 0 6px 18px -4px rgba(28, 25, 23, 0.08);
+  border-color: #D8CCBA;
+}
+
+/* Subtle, organic literary tilts (at most 0.4 degrees) */
+.book-pin-tilt-right:hover {
+  transform: translateY(-6px) rotate(0.38deg);
+}
+
+.book-pin-tilt-left:hover {
+  transform: translateY(-6px) rotate(-0.38deg);
+}
+
+/* Authentic Book Spine Shadow & Cover Edge */
+.book-cover-wrap {
+  position: relative;
+  overflow: hidden;
+  background-color: #F5F0E6;
+}
+
+.book-cover-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 12px;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.06) 40%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Shimmer placeholder for loading book covers */
+.cover-shimmer {
+  background: linear-gradient(90deg, #F5EFE6 0%, #EFE7DB 50%, #F5EFE6 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite ease-in-out;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Bookmark Spring Pop Animation */
+@keyframes bookmarkPop {
+  0% {
+    transform: scale(0.85);
+  }
+  45% {
+    transform: scale(1.28);
+  }
+  75% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-bookmark-pop {
+  animation: bookmarkPop 0.36s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Tooltip Fade In */
+@keyframes tooltipIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 4px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.animate-tooltip-in {
+  animation: tooltipIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Modal Smooth Pop */
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-in {
+  animation: modalScaleIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Drawer Slide In */
+@keyframes drawerSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-drawer-in {
+  animation: drawerSlideIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Editorial Sheet / Panel */
+.editorial-sheet {
+  background: #FFFFFF;
+  border: 1px solid #ECE5D9;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 20px -2px rgba(28, 25, 23, 0.04), 0 1px 3px 0 rgba(28, 25, 23, 0.02);
+}
+
+.editorial-card {
+  background: #FFFFFF;
+  border: 1px solid #EFEAE1;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px -2px rgba(28, 25, 23, 0.04);
+}
+
+/* Refined Editorial Buttons with tactile feedback */
+.btn-burgundy {
+  background-color: #7B1826;
+  color: #FAF7F2;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              background-color 0.2s ease, 
+              box-shadow 0.22s ease;
+  font-weight: 600;
+}
+
+.btn-burgundy:hover {
+  background-color: #63121E;
+  color: #FFFFFF;
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 18px -2px rgba(123, 24, 38, 0.35);
+}
+
+.btn-burgundy:active {
+  transform: translateY(0.5px) scale(0.98);
+  box-shadow: 0 2px 6px -1px rgba(123, 24, 38, 0.25);
+}
+
+.btn-burgundy:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(123, 24, 38, 0.3);
+}
+
+.btn-paper {
+  background-color: #FFFFFF;
+  color: #1C1917;
+  border: 1px solid #E2D9CC;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              background-color 0.2s ease, 
+              border-color 0.2s ease, 
+              box-shadow 0.22s ease;
+  font-weight: 600;
+}
+
+.btn-paper:hover {
+  background-color: #F8F4EC;
+  border-color: #C87828;
+  color: #1C1917;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px -2px rgba(28, 25, 23, 0.08);
+}
+
+.btn-paper:active {
+  transform: translateY(0.5px) scale(0.98);
+}
+
+.btn-paper:focus-visible {
+  outline: none;
+  border-color: #7B1826;
+  box-shadow: 0 0 0 3px rgba(123, 24, 38, 0.18);
+}
+
+.btn-ochre {
+  background-color: #C87828;
+  color: #FFFFFF;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              background-color 0.2s ease, 
+              box-shadow 0.22s ease;
+  font-weight: 600;
+}
+
+.btn-ochre:hover {
+  background-color: #A9621B;
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 18px -2px rgba(200, 120, 40, 0.35);
+}
+
+.btn-ochre:active {
+  transform: translateY(0.5px) scale(0.98);
+}
+
+/* Form Inputs with subtle focus lift */
+.editorial-input {
+  background: #FFFFFF;
+  border: 1px solid #DCD3C4;
+  color: #1C1917;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.editorial-input:focus {
+  background: #FFFFFF;
+  border-color: #7B1826;
+  box-shadow: 0 0 0 3px rgba(123, 24, 38, 0.12);
+  outline: none;
+}
+
+/* Pinterest Floating Actions on Book Pin: Accessible on touch & smooth on hover */
+@media (hover: hover) and (pointer: fine) {
+  .pin-actions-overlay {
+    opacity: 0;
+    transition: opacity 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    background: linear-gradient(to bottom, rgba(28, 25, 23, 0.45) 0%, transparent 35%, transparent 65%, rgba(28, 25, 23, 0.65) 100%);
+  }
+
+  .book-pin:hover .pin-actions-overlay,
+  .book-pin:focus-within .pin-actions-overlay {
+    opacity: 1;
+  }
+}
+
+@media (hover: none) or (pointer: coarse) {
+  .pin-actions-overlay {
+    opacity: 1;
+    background: linear-gradient(to bottom, rgba(28, 25, 23, 0.35) 0%, transparent 35%, transparent 65%, rgba(28, 25, 23, 0.55) 100%);
+  }
+}
+
+/* Fallback Book Jacket Pattern */
+.fallback-jacket {
+  background: linear-gradient(135deg, #2D231E 0%, #1A1513 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.fallback-jacket::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(255, 253, 249, 0.18);
+  pointer-events: none;
+}
+
+/* Paper / Burgundy Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F1F3F5;
+  background: #FAF7F2;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CED4DA;
+  background: #D8CEBE;
   border-radius: 9999px;
+  border: 2px solid #FAF7F2;
+  transition: background-color 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ADB5BD;
+  background: #7B1826;
+}
+
+/* Drop-cap for literary descriptions */
+.literary-dropcap::first-letter {
+  font-family: 'Playfair Display', Georgia, serif;
+  float: left;
+  font-size: 3.5rem;
+  line-height: 0.8;
+  padding-top: 4px;
+  padding-right: 10px;
+  padding-bottom: 2px;
+  color: #7B1826;
+  font-weight: 700;
+}
+
+/* Navigation Link Underline Effect */
+.nav-link-editorial {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link-editorial::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #7B1826;
+  transition: width 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), left 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border-radius: 9999px;
+}
+
+.nav-link-editorial:hover::after {
+  width: 70%;
+  left: 15%;
+}
+
+/* ==========================================================================
+   BLIND DATE WITH A BOOK — CINEMATIC WAX SEAL & UNWRAPPING SEQUENCE
+   ========================================================================== */
+
+/* Authentic Kraft Paper Parcel */
+.kraft-parcel {
+  background-color: #CDB79E;
+  background-image: 
+    radial-gradient(circle at 45% 35%, rgba(255, 255, 255, 0.18) 0%, transparent 65%),
+    linear-gradient(135deg, rgba(82, 51, 23, 0.08) 0%, rgba(30, 18, 8, 0.16) 100%);
+  box-shadow: 
+    inset 0 0 35px rgba(82, 51, 23, 0.22),
+    0 24px 48px -12px rgba(28, 25, 23, 0.35),
+    0 4px 12px rgba(28, 25, 23, 0.12);
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid #B89F82;
+}
+
+/* Idle Floating Animation (2-3px gentle levitation) */
+@keyframes parcelIdleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(0.35deg);
+  }
+}
+
+.animate-parcel-float {
+  animation: parcelIdleFloat 5s ease-in-out infinite;
+}
+
+/* Kraft Paper Shipping Tag / Luggage Label */
+.kraft-tag {
+  background: #FDF9F2;
+  border: 1px dashed #A68B6E;
+  box-shadow: 0 4px 12px -2px rgba(45, 28, 14, 0.18);
+  position: relative;
+}
+
+.kraft-tag::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #C4A482;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* Realistic Twisted Jute Twine */
+.twine-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 7px;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(45deg, #B5936E, #B5936E 4px, #8F6D48 4px, #8F6D48 8px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  z-index: 12;
+  transition: transform 0.4s ease, opacity 0.35s ease;
+}
+
+.twine-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 52%;
+  height: 7px;
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(45deg, #B5936E, #B5936E 4px, #8F6D48 4px, #8F6D48 8px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  z-index: 12;
+  transition: transform 0.4s ease, opacity 0.35s ease;
+}
+
+/* Dimensional Crimson Wax Seal Stamp Medallion */
+.wax-seal-btn {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 32%, #A82032 0%, #7B1826 60%, #4D0E17 100%);
+  box-shadow: 
+    0 10px 25px -4px rgba(77, 14, 23, 0.6),
+    0 3px 8px rgba(0, 0, 0, 0.35),
+    inset 0 2px 4px rgba(255, 255, 255, 0.32),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, filter 0.25s ease;
+  user-select: none;
+}
+
+.wax-seal-btn:hover {
+  transform: scale(1.07) rotate(2deg);
+  filter: brightness(1.1);
+  box-shadow: 
+    0 14px 32px -4px rgba(77, 14, 23, 0.75),
+    0 5px 12px rgba(0, 0, 0, 0.4),
+    inset 0 3px 6px rgba(255, 255, 255, 0.45);
+}
+
+.wax-seal-btn:active {
+  transform: scale(0.92);
+}
+
+/* Periodic subtle gleam across seal */
+@keyframes sealGleamSweep {
+  0%, 75%, 100% {
+    transform: translateX(-120%) translateY(-120%) rotate(35deg);
+    opacity: 0;
+  }
+  85% {
+    transform: translateX(120%) translateY(120%) rotate(35deg);
+    opacity: 0.65;
+  }
+}
+
+.seal-gleam-line {
+  position: absolute;
+  width: 70%;
+  height: 180%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: sealGleamSweep 6s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+/* Organic Melted Wax Edges Ring */
+.wax-seal-btn::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, transparent 65%, rgba(123, 24, 38, 0.45) 80%, transparent 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Step 1: Wax Compression */
+.seal-compressing {
+  transform: scale(0.92) !important;
+  transition: transform 0.12s ease-out !important;
+}
+
+/* Step 2: Wax Crack & Shatter */
+@keyframes waxCrackShatter {
+  0% {
+    transform: scale(0.95) rotate(0deg);
+    filter: brightness(1);
+    opacity: 1;
+  }
+  20% {
+    transform: scale(1.18) rotate(-4deg);
+    filter: brightness(1.35);
+  }
+  45% {
+    transform: scale(1.22) rotate(6deg);
+    filter: brightness(1.5);
+    opacity: 0.9;
+  }
+  75% {
+    transform: scale(0.85) rotate(-12deg);
+    filter: blur(1px);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(0.3) rotate(25deg);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.animate-wax-crack {
+  animation: waxCrackShatter 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* Step 3: Twine Loosening Keyframes */
+@keyframes twineLoosenV {
+  0% { transform: translateX(-50%) scaleY(1); opacity: 1; }
+  50% { transform: translateX(-50%) scaleY(0.9) scaleX(1.3); opacity: 0.8; }
+  100% { transform: translateX(-50%) scaleY(0); opacity: 0; }
+}
+
+@keyframes twineLoosenH {
+  0% { transform: translateY(-50%) scaleX(1); opacity: 1; }
+  50% { transform: translateY(-50%) scaleX(0.9) scaleY(1.3); opacity: 0.8; }
+  100% { transform: translateY(-50%) scaleX(0); opacity: 0; }
+}
+
+.animate-twine-loosen-v {
+  animation: twineLoosenV 0.4s ease-out forwards;
+}
+
+.animate-twine-loosen-h {
+  animation: twineLoosenH 0.4s ease-out forwards;
+}
+
+/* Step 4: 3D Paper Flaps Unwrapping */
+.paper-flap {
+  backface-visibility: hidden;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease, box-shadow 0.55s ease;
+}
+
+.paper-flap-top {
+  transform-origin: top center;
+}
+
+.paper-flap-bottom {
+  transform-origin: bottom center;
+}
+
+@keyframes flapPeelTop {
+  0% {
+    transform: perspective(1000px) rotateX(0deg);
+    opacity: 1;
+  }
+  60% {
+    transform: perspective(1000px) rotateX(75deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: perspective(1000px) rotateX(120deg);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@keyframes flapPeelBottom {
+  0% {
+    transform: perspective(1000px) rotateX(0deg);
+    opacity: 1;
+  }
+  60% {
+    transform: perspective(1000px) rotateX(-75deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: perspective(1000px) rotateX(-120deg);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.animate-flap-top {
+  animation: flapPeelTop 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-flap-bottom {
+  animation: flapPeelBottom 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Step 6: Book Emergence Radiance */
+@keyframes bookRevealPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(24px);
+    filter: blur(4px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.02) translateY(-4px);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-book-reveal {
+  animation: bookRevealPop 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Radiance halo around revealed book */
+.reveal-radiance {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle at 50% 50%, rgba(200, 120, 40, 0.28) 0%, rgba(123, 24, 38, 0.16) 45%, transparent 75%);
+  pointer-events: none;
+  border-radius: 2rem;
+  z-index: 0;
+  animation: pulseGlow 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes pulseGlow {
+  from { opacity: 0.6; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1.03); }
+}
+
+/* ==========================================================================
+   APPLE BOOKS DUO SKEUOMORPHIC 3D PAGE CURL ENGINE
+   ========================================================================== */
+.book-stage-3d {
+  perspective: 2000px;
+  perspective-origin: center center;
+  transform-style: preserve-3d;
+}
+
+.book-spread-container {
+  transform-style: preserve-3d;
+  box-shadow: 
+    0 1px 2px rgba(0,0,0,0.06),
+    0 4px 8px rgba(0,0,0,0.08),
+    0 12px 28px rgba(0,0,0,0.16),
+    0 24px 48px -8px rgba(0,0,0,0.22);
+}
+
+.book-turning-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  z-index: 30;
+  pointer-events: none;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.book-turning-leaf-single {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  z-index: 30;
+  pointer-events: none;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.book-turning-leaf-forward {
+  right: 0;
+  transform-origin: left center;
+  animation: appleBooksTurnForward 0.52s cubic-bezier(0.2, 1, 0.35, 1) forwards;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.16);
+}
+
+.book-turning-leaf-backward {
+  left: 0;
+  transform-origin: right center;
+  animation: appleBooksTurnBackward 0.52s cubic-bezier(0.2, 1, 0.35, 1) forwards;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.16);
+}
+
+.book-turning-leaf-single-forward {
+  left: 0;
+  right: 0;
+  transform-origin: left center;
+  animation: appleBooksTurnForward 0.52s cubic-bezier(0.2, 1, 0.35, 1) forwards;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.16);
+}
+
+.book-turning-leaf-single-backward {
+  left: 0;
+  right: 0;
+  transform-origin: right center;
+  animation: appleBooksTurnBackward 0.52s cubic-bezier(0.2, 1, 0.35, 1) forwards;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.16);
+}
+
+@keyframes appleBooksTurnForward {
+  0% {
+    transform: translateZ(0) rotateY(0deg);
+  }
+  35% {
+    transform: translateZ(16px) rotateY(-65deg) scaleY(0.99);
+  }
+  70% {
+    transform: translateZ(12px) rotateY(-130deg) scaleY(0.995);
+  }
+  100% {
+    transform: translateZ(0) rotateY(-180deg);
+  }
+}
+
+@keyframes appleBooksTurnBackward {
+  0% {
+    transform: translateZ(0) rotateY(0deg);
+  }
+  35% {
+    transform: translateZ(16px) rotateY(65deg) scaleY(0.99);
+  }
+  70% {
+    transform: translateZ(12px) rotateY(130deg) scaleY(0.995);
+  }
+  100% {
+    transform: translateZ(0) rotateY(180deg);
+  }
+}
+
+.book-page-face-front,
+.book-page-face-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.book-page-face-back {
+  transform: rotateY(180deg) translateZ(0);
+}
+
+/* Realistic Gutter Shadow (Spine curvature) */
+.book-gutter-shadow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 48px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0.06) 30%,
+    rgba(0,0,0,0.24) 50%,
+    rgba(0,0,0,0.06) 70%,
+    rgba(0,0,0,0) 100%
+  );
+  pointer-events: none;
+  z-index: 25;
+}
+
+/* Traveling Cylinder Highlight on Turning Sheet (Pure alpha, zero blend-mode repaints) */
+.cylinder-curl-shadow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.16) 0%,
+    rgba(0, 0, 0, 0.02) 20%,
+    rgba(255, 255, 255, 0.28) 45%,
+    rgba(0, 0, 0, 0.04) 70%,
+    rgba(0, 0, 0, 0.22) 100%
+  );
+}
+
+/* Realistic Stacked Page Rim / Fore-edge depth */
+.stacked-page-block-edges {
+  box-shadow: 
+    0 1px 0 rgba(0,0,0,0.06),
+    0 2px 0 #E8DFC8,
+    0 3px 0 rgba(0,0,0,0.04),
+    0 4px 0 #DFD3BA,
+    0 5px 0 rgba(0,0,0,0.04),
+    0 6px 0 #D3C4A8,
+    0 20px 45px -8px rgba(18, 12, 8, 0.45);
+}
+
+/* Apple Books Interactive Corner Peel Hover Hint */
+.apple-books-peel-corner {
+  transition: transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28), filter 0.3s ease;
+  transform-origin: bottom right;
+}
+.apple-books-peel-corner:hover,
+.book-stage-3d:hover .apple-books-peel-corner {
+  transform: scale(1.25) translate(-2px, -2px) rotate(-6deg);
+  filter: drop-shadow(-6px -6px 8px rgba(0,0,0,0.38));
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .book-pin:hover,
+  .book-pin-tilt-right:hover,
+  .book-pin-tilt-left:hover {
+    transform: none !important;
+  }
+  .parcel-unwrapped .paper-flap-top,
+  .parcel-unwrapped .paper-flap-bottom {
+    transform: none !important;
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   AMBIENT READING ATMOSPHERES (Ivory Vellum, Candlelight, Midnight Library)
+   ========================================================================== */
+html.theme-midnight {
+  color-scheme: dark;
+}
+
+html.theme-midnight body,
+html.theme-midnight .paper-canvas,
+html.theme-midnight .bg-\[\#FAF7F2\],
+html.theme-midnight .bg-\[\#FAF5ED\] {
+  background-color: #121014 !important;
+  color: #EDE4D8 !important;
+}
+
+html.theme-midnight .bg-white {
+  background-color: #1B181E !important;
+  border-color: #2E2734 !important;
+  color: #EDE4D8 !important;
+}
+
+html.theme-midnight .text-stone-900 {
+  color: #FAF5ED !important;
+}
+
+html.theme-midnight .text-stone-800 {
+  color: #EDE4D8 !important;
+}
+
+html.theme-midnight .text-stone-700,
+html.theme-midnight .text-stone-600 {
+  color: #C4B9A9 !important;
+}
+
+html.theme-midnight .border-stone-200,
+html.theme-midnight .border-stone-100,
+html.theme-midnight .border-\[\#ECE5D9\],
+html.theme-midnight .border-\[\#E8E2D8\],
+html.theme-midnight .border-\[\#E8E0D1\] {
+  border-color: #2E2734 !important;
+}
+
+html.theme-midnight .book-pin {
+  background-color: #1C1920 !important;
+  border-color: #332B38 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+html.theme-midnight .btn-paper {
+  background-color: #1E1B22 !important;
+  color: #EDE4D8 !important;
+  border-color: #352D3C !important;
+}
+
+html.theme-midnight .btn-paper:hover {
+  background-color: #28232D !important;
+  border-color: #4A3E54 !important;
+  color: #FFFFFF !important;
+}
+
+/* Candlelight Theme (Warm Sepia & Cognac Salon) */
+html.theme-candlelight {
+  color-scheme: dark;
+}
+
+html.theme-candlelight body,
+html.theme-candlelight .paper-canvas,
+html.theme-candlelight .bg-\[\#FAF7F2\],
+html.theme-candlelight .bg-\[\#FAF5ED\] {
+  background-color: #211914 !important;
+  color: #F8EFE4 !important;
+}
+
+html.theme-candlelight .bg-white {
+  background-color: #2C211B !important;
+  border-color: #42332A !important;
+  color: #F8EFE4 !important;
+}
+
+html.theme-candlelight .text-stone-900 {
+  color: #FAF2E8 !important;
+}
+
+html.theme-candlelight .text-stone-800 {
+  color: #F2E3D0 !important;
+}
+
+html.theme-candlelight .text-stone-700,
+html.theme-candlelight .text-stone-600 {
+  color: #D2C0AF !important;
+}
+
+html.theme-candlelight .border-stone-200,
+html.theme-candlelight .border-stone-100,
+html.theme-candlelight .border-\[\#ECE5D9\],
+html.theme-candlelight .border-\[\#E8E2D8\],
+html.theme-candlelight .border-\[\#E8E0D1\] {
+  border-color: #47372C !important;
+}
+
+html.theme-candlelight .book-pin {
+  background-color: #2D221C !important;
+  border-color: #47362C !important;
+  box-shadow: 0 4px 14px rgba(28, 17, 10, 0.4) !important;
+}
+
+html.theme-candlelight .btn-paper {
+  background-color: #2B211A !important;
+  color: #F8EFE4 !important;
+  border-color: #49392E !important;
+}
+
+html.theme-candlelight .btn-paper:hover {
+  background-color: #372A21 !important;
+  border-color: #614D3E !important;
+  color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   PROTECT PHYSICAL PAPER ELEMENTS (Clues Tag, Bookplates) FROM DARK INVERSIONS
+   ========================================================================== */
+.kraft-tag,
+.kraft-tag *,
+#printable-bookplate-sheet,
+#printable-bookplate-sheet * {
+  color: #1A120B !important;
+}
+
+.kraft-tag {
+  background-color: #FAF4EB !important;
+  border-color: #C2A383 !important;
+}
+
+.kraft-tag p {
+  color: #1A120B !important;
+}
+
+.kraft-tag .text-\[\#5A4535\],
+.kraft-tag .text-\[\#6B5342\],
+.kraft-tag .text-\[\#7A6453\] {
+  color: #5A4535 !important;
+}
+
+/* ==========================================================================
+   EX LIBRIS BOOKPLATE PRINT SHEET OPTIMIZATION
+   ========================================================================== */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-bookplate-sheet,
+  #printable-bookplate-sheet * {
+    visibility: visible !important;
+  }
+  #printable-bookplate-sheet {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 30px !important;
+    background: #FFFFFF !important;
+    z-index: 99999 !important;
+  }
 }

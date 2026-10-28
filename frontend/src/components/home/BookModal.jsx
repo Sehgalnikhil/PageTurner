@@ -1,9 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { PiXBold, PiBookOpenText, PiUserCircle, PiCalendarBlank, PiIdentificationBadge, PiPencilSimple, PiTrashSimple } from 'react-icons/pi';
+import {
+  PiXBold,
+  PiBookOpenTextBold,
+  PiCalendarBlankBold,
+  PiStarFill,
+  PiBookmarkSimpleBold,
+  PiBookmarkSimpleFill,
+  PiArrowRightBold,
+  PiSparkleBold,
+} from 'react-icons/pi';
+import { AuthContext } from '../../context/AuthContext';
+import { ReadingListContext } from '../../context/ReadingListContext';
+import PageFlipPreview from './PageFlipPreview';
 
 const BookModal = ({ book, onClose }) => {
-  // Close on Escape key press
+  const [popping, setPopping] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'first-lines'
+  const { isAdmin } = useContext(AuthContext);
+  const { isBookSaved, toggleBook } = useContext(ReadingListContext);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -14,103 +30,164 @@ const BookModal = ({ book, onClose }) => {
 
   if (!book) return null;
 
+  const isSaved = isBookSaved(book._id);
+  const imageUrl = book.image
+    ? book.image.startsWith('http')
+      ? book.image
+      : `http://localhost:5555${book.image}`
+    : null;
+
+  const handleToggle = () => {
+    setPopping(true);
+    toggleBook(book);
+    setTimeout(() => setPopping(false), 450);
+  };
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-stone-950/60 backdrop-blur-xs transition-opacity duration-200"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-book-title"
     >
       <div
-        onClick={(event) => event.stopPropagation()}
-        className="w-full max-w-lg bg-white rounded-2xl p-6 sm:p-7 shadow-modal border border-slate-200 relative flex flex-col gap-6"
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-2xl bg-[#FAF7F2] rounded-2xl shadow-2xl border border-stone-200 overflow-hidden relative flex flex-col md:flex-row max-h-[90vh] animate-modal-in"
       >
-        {/* Modal Header */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center flex-shrink-0 border border-slate-200">
-              <PiBookOpenText className="text-2xl" />
-            </div>
-            <div>
-              <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-semibold tracking-wide">
-                Published {book.publishYear}
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          aria-label="Close dialog"
+          className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-600 hover:text-stone-900 flex items-center justify-center shadow-xs transition-all duration-200 hover:rotate-90 active:scale-90"
+        >
+          <PiXBold className="text-base" />
+        </button>
+
+        {/* Cover Column */}
+        <div className="w-full md:w-5/12 bg-stone-100 flex items-center justify-center relative p-6 border-b md:border-b-0 md:border-r border-stone-200">
+          <div className="book-cover-wrap w-full max-w-[200px] aspect-[2/3] rounded-lg overflow-hidden shadow-book">
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt={book.title}
+                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full fallback-jacket p-4 flex flex-col justify-between text-stone-100">
+                <span className="text-[10px] font-mono text-amber-200/60 uppercase">{book.category}</span>
+                <p className="font-serif text-sm font-bold text-amber-100">{book.title}</p>
+                <p className="text-[11px] text-stone-300 italic">{book.author}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Details Column */}
+        <div className="w-full md:w-7/12 p-6 sm:p-7 flex flex-col justify-between overflow-y-auto">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-[11px] font-semibold text-burgundy bg-burgundy-faint px-2.5 py-0.5 rounded-full border border-burgundy/15">
+                {book.category || 'General'}
               </span>
-              <h2 className="text-xl font-bold text-slate-900 mt-1 leading-snug">
-                {book.title}
-              </h2>
+              <span className="text-xs text-stone-500 font-mono">
+                {book.publishYear}
+              </span>
+            </div>
+
+            <h2 id="modal-book-title" className="font-serif text-2xl font-bold text-stone-900 leading-snug">
+              {book.title}
+            </h2>
+
+            <p className="text-xs text-stone-600 font-medium mt-1">
+              by <span className="text-stone-900 font-semibold">{book.author}</span>
+            </p>
+
+            {/* Rating */}
+            {book.averageRating > 0 && (
+              <div className="flex items-center gap-1.5 mt-2.5">
+                <div className="flex items-center text-amber-500 text-xs">
+                  <PiStarFill />
+                </div>
+                <span className="text-xs font-bold text-stone-800">
+                  {book.averageRating.toFixed(1)} / 5.0
+                </span>
+                <span className="text-xs text-stone-400">
+                  ({book.reviews?.length || 0} reviews)
+                </span>
+              </div>
+            )}
+
+            {/* Tabs: Overview vs First Lines */}
+            <div className="mt-4 pt-3 border-t border-stone-200">
+              <div className="flex items-center gap-2 mb-3">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('overview')}
+                  className={`text-[11px] font-semibold pb-1 border-b-2 transition-all ${
+                    activeTab === 'overview'
+                      ? 'border-burgundy text-burgundy'
+                      : 'border-transparent text-stone-500 hover:text-stone-800'
+                  }`}
+                >
+                  Overview
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('first-lines')}
+                  className={`text-[11px] font-semibold pb-1 border-b-2 transition-all flex items-center gap-1 ${
+                    activeTab === 'first-lines'
+                      ? 'border-burgundy text-burgundy'
+                      : 'border-transparent text-stone-500 hover:text-stone-800'
+                  }`}
+                >
+                  <PiSparkleBold className="text-amber-500 text-xs" />
+                  <span>First Lines</span>
+                </button>
+              </div>
+
+              {activeTab === 'overview' ? (
+                <p className="text-xs text-stone-700 leading-relaxed max-h-36 overflow-y-auto pr-1">
+                  {book.description || `An essential title in the digital library collection. Explore full reader discussions and complete bibliographic metadata.`}
+                </p>
+              ) : (
+                <div className="w-full">
+                  <PageFlipPreview book={book} />
+                </div>
+              )}
             </div>
           </div>
-          <button
-            onClick={onClose}
-            aria-label="Close dialog"
-            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-          >
-            <PiXBold className="text-lg" />
-          </button>
-        </div>
 
-        {/* Metadata Details Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-sm">
-          <div className="flex items-center gap-2.5 text-slate-700">
-            <PiUserCircle className="text-lg text-slate-400 flex-shrink-0" />
-            <div>
-              <span className="text-xs text-slate-400 block">Author</span>
-              <span className="font-semibold text-slate-800">{book.author}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5 text-slate-700">
-            <PiCalendarBlank className="text-lg text-slate-400 flex-shrink-0" />
-            <div>
-              <span className="text-xs text-slate-400 block">Release Year</span>
-              <span className="font-semibold text-slate-800">{book.publishYear}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5 text-slate-700 sm:col-span-2">
-            <PiIdentificationBadge className="text-lg text-slate-400 flex-shrink-0" />
-            <div>
-              <span className="text-xs text-slate-400 block">Database Record ID</span>
-              <code className="text-xs font-mono text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
-                {book._id}
-              </code>
-            </div>
-          </div>
-        </div>
-
-        {/* Book Overview / Description */}
-        <div>
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-            Overview
-          </h4>
-          <p className="text-sm text-slate-600 leading-relaxed">
-            "{book.title}" is an authorized entry in the library catalog by {book.author}. Complete metadata and tracking details are stored and managed through the REST API database backend.
-          </p>
-        </div>
-
-        {/* Footer Actions */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-100 mt-1">
-          <div className="flex items-center gap-2">
-            <Link
-              to={`/books/edit/${book._id}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors"
+          {/* Actions */}
+          <div className="mt-6 pt-4 border-t border-stone-200 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={handleToggle}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 active:scale-95 shadow-xs ${
+                isSaved
+                  ? 'bg-burgundy text-white hover:bg-[#63121E]'
+                  : 'bg-white text-stone-800 border border-stone-300 hover:bg-stone-50 hover:border-burgundy/30'
+              }`}
             >
-              <PiPencilSimple className="text-sm" />
-              <span>Edit</span>
-            </Link>
+              {isSaved ? (
+                <PiBookmarkSimpleFill
+                  className={`text-sm text-amber-300 ${popping ? 'animate-bookmark-pop' : ''}`}
+                />
+              ) : (
+                <PiBookmarkSimpleBold className="text-sm" />
+              )}
+              <span>{isSaved ? 'Saved to Shelf' : 'Save Book'}</span>
+            </button>
+
             <Link
-              to={`/books/delete/${book._id}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-200 bg-rose-50/50 hover:bg-rose-50 text-rose-700 text-xs font-semibold transition-colors"
+              to={`/books/details/${book._id}`}
+              onClick={onClose}
+              className="group inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-stone-900 hover:bg-black text-white text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 active:scale-95 shadow-xs"
             >
-              <PiTrashSimple className="text-sm" />
-              <span>Delete</span>
+              <span>Full Experience</span>
+              <PiArrowRightBold className="text-xs transform group-hover:translate-x-1 transition-transform duration-200" />
             </Link>
           </div>
-
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors"
-          >
-            Close
-          </button>
         </div>
       </div>
     </div>

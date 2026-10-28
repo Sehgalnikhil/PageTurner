@@ -8,8 +8,41 @@ export default {
     extend: {
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'Cambria', '"Times New Roman"', 'serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       colors: {
+        paper: {
+          DEFAULT: '#FAF7F2',
+          light: '#FFFDFB',
+          warm: '#F5F0E6',
+          card: '#FFFFFF',
+          border: '#E8E2D8',
+        },
+        ink: {
+          DEFAULT: '#1C1917',
+          soft: '#292524',
+          muted: '#57534E',
+          faint: '#78716C',
+        },
+        burgundy: {
+          DEFAULT: '#7B1826',
+          dark: '#5C101B',
+          light: '#962334',
+          faint: '#FBECEE',
+        },
+        ochre: {
+          DEFAULT: '#C87828',
+          dark: '#9E5B19',
+          light: '#E2913D',
+          faint: '#FDF4EB',
+        },
+        sage: {
+          DEFAULT: '#556952',
+          dark: '#40503E',
+          light: '#6E856A',
+          faint: '#F1F4F0',
+        },
         matte: {
           50: '#F8F9FA',
           100: '#F1F3F5',
@@ -22,15 +55,12 @@ export default {
           800: '#343A40',
           900: '#212529',
         },
-        slate: {
-          850: '#151E2E',
-          950: '#0B0F19',
-        }
       },
       boxShadow: {
-        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02)',
-        'card-hover': '0 4px 12px 0 rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04)',
-        'modal': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)',
+        'book': '0 10px 30px -5px rgba(28, 25, 23, 0.12), 0 4px 10px -2px rgba(28, 25, 23, 0.05)',
+        'book-hover': '0 20px 40px -10px rgba(28, 25, 23, 0.18), 0 8px 16px -4px rgba(28, 25, 23, 0.08)',
+        'paper': '0 2px 12px 0 rgba(28, 25, 23, 0.04), 0 1px 3px 0 rgba(28, 25, 23, 0.03)',
+        'paper-hover': '0 12px 32px -4px rgba(28, 25, 23, 0.09), 0 4px 12px -2px rgba(28, 25, 23, 0.04)',
       }
     },
   },
