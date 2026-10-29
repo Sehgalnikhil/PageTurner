@@ -1,0 +1,14 @@
+# Netlify configuration for PageTurner
+# Frontend is located in frontend/ subdirectory (Vite + React)
+
+[build]
+  base = "frontend"
+  publish = "dist"
+  command = "npm run build"
+
+# SPA Fallback: Direct all routes to index.html for React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+

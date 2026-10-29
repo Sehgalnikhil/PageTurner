@@ -22,11 +22,13 @@ import { ReadingListContext } from '../context/ReadingListContext';
 import { startAmbientSound, stopAmbientSound } from '../utils/soundEffects';
 import CommandKModal from './common/CommandKModal';
 import BookplateModal from './home/BookplateModal';
+import ReaderPassportModal from './ReaderPassportModal';
 
 const Navbar = ({ totalBooks = 0 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showCommandK, setShowCommandK] = useState(false);
   const [showBookplate, setShowBookplate] = useState(false);
+  const [showPassport, setShowPassport] = useState(false);
   const [ambientSound, setAmbientSound] = useState('off'); // 'off' | 'rain' | 'fireplace' | 'clock'
 
   const { user, logout, isAdmin } = useContext(AuthContext);
@@ -141,7 +143,7 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 type="button"
                 onClick={() => setShowBookplate(true)}
-                className="h-9 px-3.5 rounded-full text-xs sm:text-[13px] font-medium text-[#292522] hover:text-[#861D2D] hover:bg-[#F4E8E6]/60 transition-colors flex items-center gap-1.5"
+                className="h-9 px-3.5 rounded-full text-xs sm:text-[13px] font-medium text-[#292522] hover:text-[#861D2D] hover:bg-[#F4E8E6]/60 transition-colors flex items-center gap-1.5 cursor-pointer"
               >
                 <PiTagBold className="text-sm text-[#292522]" />
                 <span>Bookplates</span>
@@ -211,24 +213,32 @@ const Navbar = ({ totalBooks = 0 }) => {
 
               {/* User Profile & Logout */}
               {user ? (
-                <div className="hidden sm:flex items-center gap-2 pl-1.5">
-                  <div className="w-8 h-8 rounded-full bg-[#FCEAD2] border border-[#F3D7B5] text-[#B45309] font-serif font-bold text-xs flex items-center justify-center flex-shrink-0">
-                    {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
-                  </div>
+                <div className="hidden sm:flex items-center gap-1.5 pl-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setShowPassport(true)}
+                    title="View Reader Passport & Welcome Package"
+                    className="flex items-center gap-2 p-1 pl-1.5 pr-2.5 rounded-full hover:bg-[#F4E8E6]/80 border border-transparent hover:border-[#E8DED2] transition-all group cursor-pointer text-left"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-[#FCEAD2] border border-[#F3D7B5] text-[#B45309] font-serif font-bold text-xs flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
+                      {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
+                    </div>
 
-                  <div className="flex flex-col text-left leading-none min-w-0">
-                    <span className="text-xs font-bold text-[#292522] truncate max-w-[100px]">
-                      {user.username}
-                    </span>
-                    <span className="text-[9px] uppercase font-mono font-bold tracking-wider text-[#C99A48] mt-0.5">
-                      {isAdmin ? 'ADMIN' : 'READER'}
-                    </span>
-                  </div>
+                    <div className="flex flex-col text-left leading-none min-w-0">
+                      <span className="text-xs font-bold text-[#292522] truncate max-w-[100px] group-hover:text-[#861D2D] transition-colors">
+                        {user.username}
+                      </span>
+                      <span className="text-[9px] uppercase font-mono font-bold tracking-wider text-[#861D2D] mt-0.5 flex items-center gap-1">
+                        <span>PASSPORT</span>
+                        <span className="text-[8px]">✉</span>
+                      </span>
+                    </div>
+                  </button>
 
                   <button
                     onClick={logout}
                     title="Sign out"
-                    className="p-1 rounded-md text-[#827870] hover:text-[#861D2D] hover:bg-[#F4E8E6] transition-colors ml-0.5"
+                    className="p-1.5 rounded-full text-[#827870] hover:text-[#861D2D] hover:bg-[#F4E8E6] transition-colors ml-0.5"
                   >
                     <PiSignOutBold className="text-sm" />
                   </button>
@@ -325,7 +335,7 @@ const Navbar = ({ totalBooks = 0 }) => {
                   setMobileMenuOpen(false);
                   setShowBookplate(true);
                 }}
-                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 text-left flex items-center gap-2.5"
+                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 text-left flex items-center gap-2.5 cursor-pointer"
               >
                 <PiTagBold className="text-base text-[#292522]" />
                 <span>Bookplates</span>
@@ -356,30 +366,43 @@ const Navbar = ({ totalBooks = 0 }) => {
               </a>
 
               {user ? (
-                <div className="pt-3 mt-2 border-t border-[#E8DED2] flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#FCEAD2] border border-[#F3D7B5] text-[#B45309] font-serif font-bold text-xs flex items-center justify-center">
-                      {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-[#292522] block leading-none">
-                        {user.username}
-                      </span>
-                      <span className="text-[9px] uppercase font-mono font-bold tracking-wider text-[#C99A48] mt-0.5 block">
-                        {isAdmin ? 'ADMIN' : 'READER'}
-                      </span>
-                    </div>
-                  </div>
-
+                <div className="pt-3 mt-2 border-t border-[#E8DED2]">
                   <button
                     onClick={() => {
                       setMobileMenuOpen(false);
-                      logout();
+                      setShowPassport(true);
                     }}
-                    className="px-3 py-1.5 text-xs font-semibold text-[#861D2D] hover:bg-[#F4E8E6] rounded-full"
+                    className="w-full text-left px-3.5 py-2 rounded-full text-xs font-semibold text-[#861D2D] hover:bg-[#F4E8E6]/60 flex items-center gap-2 mb-2.5 border border-[#861D2D]/20 bg-[#FBF5F2]"
                   >
-                    Sign Out
+                    <span>✉️</span>
+                    <span>Reader Passport &amp; Welcome Email</span>
                   </button>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#FCEAD2] border border-[#F3D7B5] text-[#B45309] font-serif font-bold text-xs flex items-center justify-center">
+                        {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
+                      </div>
+                      <div>
+                        <span className="text-xs font-bold text-[#292522] block leading-none">
+                          {user.username}
+                        </span>
+                        <span className="text-[9px] uppercase font-mono font-bold tracking-wider text-[#C99A48] mt-0.5 block">
+                          {isAdmin ? 'ADMIN' : 'READER'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        logout();
+                      }}
+                      className="px-3 py-1.5 text-xs font-semibold text-[#861D2D] hover:bg-[#F4E8E6] rounded-full"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="pt-3 mt-2 border-t border-[#E8DED2] grid grid-cols-2 gap-2">
@@ -413,6 +436,9 @@ const Navbar = ({ totalBooks = 0 }) => {
 
       {/* Custom Vintage Ex Libris Bookplate Generator Modal */}
       <BookplateModal isOpen={showBookplate} onClose={() => setShowBookplate(false)} />
+
+      {/* Official Reader Passport & Welcome Package Modal */}
+      <ReaderPassportModal isOpen={showPassport} onClose={() => setShowPassport(false)} user={user} />
     </>
   );
 };

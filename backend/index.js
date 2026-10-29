@@ -36,8 +36,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// Static File Serving (Multer upload destination)
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+// Static File Serving (Multer upload destination & fast cover cache with 30-day browser caching)
+app.use(
+  '/uploads',
+  express.static(path.join(__dirname, 'public/uploads'), {
+    maxAge: '30d',
+    immutable: true,
+  })
+);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

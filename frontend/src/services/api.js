@@ -66,6 +66,8 @@ export const bookService = {
     }),
   delete: (id) => api.delete(`/books/${id}`),
   addReview: (id, reviewData) => api.post(`/books/${id}/reviews`, reviewData),
+  updateReview: (id, reviewId, reviewData) => api.put(`/books/${id}/reviews/${reviewId}`, reviewData),
+  deleteReview: (id, reviewId) => api.delete(`/books/${id}/reviews/${reviewId}`),
   getExportCsvUrl: () => `${API_BASE_URL}/books/export/csv`,
 };
 
@@ -73,6 +75,16 @@ export const authService = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
   getProfile: () => api.get('/auth/me'),
+  sendWelcomeEmail: (data) => api.post('/auth/send-welcome-email', data),
+  sendLoginAlert: (data) => api.post('/auth/send-login-alert', data),
+  forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
+  resetPassword: (data) => api.post('/auth/reset-password', data),
+  getEmailPreviewUrl: (username, email) =>
+    `${API_BASE_URL}/auth/email/preview?username=${encodeURIComponent(username || '')}&email=${encodeURIComponent(email || '')}`,
+  getLoginEmailPreviewUrl: (username, email) =>
+    `${API_BASE_URL}/auth/email/login-preview?username=${encodeURIComponent(username || '')}&email=${encodeURIComponent(email || '')}`,
+  getResetEmailPreviewUrl: (username, email) =>
+    `${API_BASE_URL}/auth/email/reset-preview?username=${encodeURIComponent(username || '')}&email=${encodeURIComponent(email || '')}`,
 };
 
 export const systemService = {

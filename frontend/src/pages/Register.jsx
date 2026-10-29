@@ -54,8 +54,9 @@ const Register = () => {
         password,
       });
       login(data);
-      enqueueSnackbar(`Welcome to the community, ${data.username}!`, {
+      enqueueSnackbar(`Welcome to the library, ${data.username}! Your Reader Passport & Starter Pack email has been dispatched to ${email.trim()} ✉️`, {
         variant: 'success',
+        autoHideDuration: 6000,
       });
       navigate('/');
     } catch (error) {
@@ -146,6 +147,13 @@ const Register = () => {
               <PiUserPlusBold className="text-sm" />
               <span>{loading ? 'Creating Member Account...' : 'Create Account'}</span>
             </button>
+
+            <div className="mt-3 p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8DED2] text-center">
+              <p className="text-[11px] font-serif text-[#786C62] italic flex items-center justify-center gap-1.5">
+                <span>✉️</span>
+                <span>Includes an <strong>Official Reader Passport</strong> &amp; 3 Starter Books delivered to your inbox.</span>
+              </p>
+            </div>
           </form>
 
           <p className="text-center text-xs text-stone-500 mt-6 pt-4 border-t border-stone-100">

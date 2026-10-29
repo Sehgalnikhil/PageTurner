@@ -16,6 +16,7 @@ import {
 import { ThemeContext } from '../../context/ThemeContext';
 import { ReadingListContext } from '../../context/ReadingListContext';
 import { bookService } from '../../services/api';
+import { getBookCoverUrl } from '../../utils/imageHelper';
 
 const CommandKModal = ({ isOpen, onClose, books = [], onOpenBookplate }) => {
   const [query, setQuery] = useState('');
@@ -229,8 +230,10 @@ const CommandKModal = ({ isOpen, onClose, books = [], onOpenBookplate }) => {
                       <div className="flex items-center gap-3 min-w-0">
                         {book.image ? (
                           <img
-                            src={book.image}
+                            src={getBookCoverUrl(book.image, book.title, book.isbn)}
                             alt={book.title}
+                            loading="lazy"
+                            decoding="async"
                             className="w-8 h-11 object-cover rounded-md flex-shrink-0 shadow-2xs border border-stone-200/50"
                           />
                         ) : (

@@ -53,7 +53,10 @@ const Login = () => {
     try {
       const { data } = await authService.login({ email, password });
       login(data);
-      enqueueSnackbar(`Welcome back to the Reading Journal, ${data.username}!`, { variant: 'success' });
+      enqueueSnackbar(`Welcome back, ${data.username}! Session security email sent to ${data.email} ✉️`, {
+        variant: 'success',
+        autoHideDuration: 5000,
+      });
       navigate(from, { replace: true });
     } catch (error) {
       enqueueSnackbar(error.customMessage || error.response?.data?.message || 'Invalid credentials', {
@@ -72,7 +75,10 @@ const Login = () => {
     try {
       const { data } = await authService.login({ email: demoEmail, password: demoPassword });
       login(data);
-      enqueueSnackbar(`Signed in as ${data.username} (${data.role.toUpperCase()})`, { variant: 'success' });
+      enqueueSnackbar(`Signed in as ${data.username}! Session security email dispatched to ${data.email} ✉️`, {
+        variant: 'success',
+        autoHideDuration: 5000,
+      });
       navigate(from, { replace: true });
     } catch (error) {
       enqueueSnackbar(error.customMessage || error.response?.data?.message || 'Login failed', {
@@ -148,9 +154,17 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-semibold text-stone-700">
+                  Password
+                </label>
+                <Link
+                  to="/forgot-password"
+                  className="text-[11px] font-medium text-burgundy hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <div className="relative">
                 <PiLockKeyBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm" />
                 <input
@@ -172,6 +186,13 @@ const Login = () => {
               <PiSignInBold className="text-sm" />
               <span>{loading ? 'Authenticating...' : 'Sign In'}</span>
             </button>
+
+            <div className="mt-3 p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8DED2] text-center">
+              <p className="text-[11px] font-serif text-[#786C62] italic flex items-center justify-center gap-1.5">
+                <span>🔒</span>
+                <span>A session verification email is automatically sent to your inbox upon sign-in.</span>
+              </p>
+            </div>
           </form>
 
           <p className="text-center text-xs text-stone-500 mt-6 pt-4 border-t border-stone-100">

@@ -13,6 +13,7 @@ import {
 import { AuthContext } from '../../context/AuthContext';
 import { ReadingListContext } from '../../context/ReadingListContext';
 import PageFlipPreview from './PageFlipPreview';
+import { getBookCoverUrl } from '../../utils/imageHelper';
 
 const BookModal = ({ book, onClose }) => {
   const [popping, setPopping] = useState(false);
@@ -31,11 +32,7 @@ const BookModal = ({ book, onClose }) => {
   if (!book) return null;
 
   const isSaved = isBookSaved(book._id);
-  const imageUrl = book.image
-    ? book.image.startsWith('http')
-      ? book.image
-      : `http://localhost:5555${book.image}`
-    : null;
+  const imageUrl = getBookCoverUrl(book.image, book.title, book.isbn);
 
   const handleToggle = () => {
     setPopping(true);

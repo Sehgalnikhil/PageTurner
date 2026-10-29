@@ -15,7 +15,7 @@ const famousBooks = [
     isbn: '9780061120084',
     pageCount: 336,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg',
+    image: "/uploads/covers/to-kill-a-mockingbird.jpg",
     reviews: [
       {
         rating: 5,
@@ -36,7 +36,7 @@ const famousBooks = [
     isbn: '9780451524935',
     pageCount: 328,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg',
+    image: "/uploads/covers/1984.jpg",
     reviews: [
       {
         rating: 5,
@@ -53,7 +53,7 @@ const famousBooks = [
     isbn: '9780743273565',
     pageCount: 180,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg',
+    image: "/uploads/covers/the-great-gatsby.jpg",
     reviews: [
       {
         rating: 4,
@@ -70,7 +70,7 @@ const famousBooks = [
     isbn: '9780141439518',
     pageCount: 432,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg',
+    image: "/uploads/covers/pride-and-prejudice.jpg",
     reviews: [
       {
         rating: 5,
@@ -87,7 +87,7 @@ const famousBooks = [
     isbn: '9780316769488',
     pageCount: 277,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780316769488-L.jpg',
+    image: "/uploads/covers/the-catcher-in-the-rye.jpg",
     reviews: [
       {
         rating: 4,
@@ -104,7 +104,7 @@ const famousBooks = [
     isbn: '9780547928227',
     pageCount: 310,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg',
+    image: "/uploads/covers/the-hobbit.jpg",
     reviews: [
       {
         rating: 5,
@@ -121,7 +121,7 @@ const famousBooks = [
     isbn: '9780062316097',
     pageCount: 443,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg',
+    image: "/uploads/covers/sapiens.jpg",
     reviews: [
       {
         rating: 5,
@@ -138,7 +138,7 @@ const famousBooks = [
     isbn: '9780441172719',
     pageCount: 688,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg',
+    image: "/uploads/covers/dune.jpg",
     reviews: [
       {
         rating: 5,
@@ -155,7 +155,7 @@ const famousBooks = [
     isbn: '9781451648539',
     pageCount: 656,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9781451648539-L.jpg',
+    image: "/uploads/covers/steve-jobs.jpg",
     reviews: [
       {
         rating: 5,
@@ -172,7 +172,7 @@ const famousBooks = [
     isbn: '9780062315007',
     pageCount: 208,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg',
+    image: "/uploads/covers/the-alchemist.jpg",
     reviews: [
       {
         rating: 5,
@@ -189,7 +189,7 @@ const famousBooks = [
     isbn: '9780060850524',
     pageCount: 288,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780060850524-L.jpg',
+    image: "/uploads/covers/brave-new-world.jpg",
     reviews: [
       {
         rating: 4,
@@ -206,7 +206,7 @@ const famousBooks = [
     isbn: '9780735211292',
     pageCount: 320,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg',
+    image: "/uploads/covers/atomic-habits.jpg",
     reviews: [
       {
         rating: 5,
@@ -223,7 +223,7 @@ const famousBooks = [
     isbn: '9780140449136',
     pageCount: 671,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780140449136-L.jpg',
+    image: "/uploads/covers/crime-and-punishment.jpg",
     reviews: [
       {
         rating: 5,
@@ -240,7 +240,7 @@ const famousBooks = [
     isbn: '9780547928210',
     pageCount: 423,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780547928210-L.jpg',
+    image: "/uploads/covers/the-fellowship-of-the-ring.jpg",
     reviews: [
       {
         rating: 5,
@@ -257,7 +257,7 @@ const famousBooks = [
     isbn: '9780399590504',
     pageCount: 334,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780399590504-L.jpg',
+    image: "/uploads/covers/educated.jpg",
     reviews: [
       {
         rating: 5,
@@ -274,7 +274,7 @@ const famousBooks = [
     isbn: '9781451673319',
     pageCount: 249,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9781451673319-L.jpg',
+    image: "/uploads/covers/fahrenheit-451.jpg",
     reviews: [
       {
         rating: 4,
@@ -291,7 +291,7 @@ const famousBooks = [
     isbn: '9780374533557',
     pageCount: 499,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780374533557-L.jpg',
+    image: "/uploads/covers/thinking-fast-and-slow.jpg",
     reviews: [
       {
         rating: 5,
@@ -308,7 +308,7 @@ const famousBooks = [
     isbn: '9780553296983',
     pageCount: 283,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780553296983-L.jpg',
+    image: "/uploads/covers/the-diary-of-a-young-girl.jpg",
     reviews: [
       {
         rating: 5,
@@ -325,7 +325,7 @@ const famousBooks = [
     isbn: '9780141439570',
     pageCount: 254,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780141439570-L.jpg',
+    image: "/uploads/covers/the-picture-of-dorian-gray.jpg",
     reviews: [
       {
         rating: 5,
@@ -342,7 +342,7 @@ const famousBooks = [
     isbn: '9780807014295',
     pageCount: 165,
     language: 'English',
-    image: 'https://covers.openlibrary.org/b/isbn/9780807014295-L.jpg',
+    image: "/uploads/covers/mans-search-for-meaning.jpg",
     reviews: [
       {
         rating: 5,

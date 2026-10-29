@@ -33,7 +33,7 @@ const EditorialQuoteTile = ({ quoteIndex = 0 }) => {
 
   return (
     <div
-      className={`group break-inside-avoid mb-6 rounded-2xl p-6 sm:p-7 border ${item.tone} text-stone-900 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 ease-out relative overflow-hidden flex flex-col justify-between`}
+      className={`group w-full rounded-2xl p-6 sm:p-7 border ${item.tone} text-stone-900 shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-220 ease-out relative overflow-hidden flex flex-col justify-between`}
     >
       {/* Decorative quote mark with micro-rotation & scale on hover */}
       <PiQuotesBold className="text-3xl sm:text-4xl text-burgundy/25 group-hover:text-burgundy/45 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-300 ease-out mb-3 origin-top-left" />

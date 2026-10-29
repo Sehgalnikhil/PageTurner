@@ -7,6 +7,8 @@ import EditBook from './pages/EditBook';
 import DeleteBook from './pages/DeleteBook';
 import Login from './pages/login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import ReadingListModal from './components/ReadingListModal';
 
@@ -19,6 +21,8 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/books/details/:id" element={<ShowBook />} />
 
           {/* Create Book Route */}

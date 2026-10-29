@@ -12,6 +12,7 @@ import {
 import BookModal from './BookModal';
 import { AuthContext } from '../../context/AuthContext';
 import { ReadingListContext } from '../../context/ReadingListContext';
+import { getBookCoverUrl } from '../../utils/imageHelper';
 
 const BookSingleCard = ({ book }) => {
   const [showModal, setShowModal] = useState(false);
@@ -20,11 +21,7 @@ const BookSingleCard = ({ book }) => {
   const { isBookSaved, toggleBook } = useContext(ReadingListContext);
 
   const isSaved = isBookSaved(book._id);
-  const imageUrl = book.image
-    ? book.image.startsWith('http')
-      ? book.image
-      : `http://localhost:5555${book.image}`
-    : null;
+  const imageUrl = getBookCoverUrl(book.image, book.title, book.isbn);
 
   return (
     <>

@@ -114,6 +114,37 @@ export const playPaperUnwrap = () => {
   }
 };
 
+/**
+ * Smooth wooden / cloth friction when pulling a volume off the oak shelf
+ */
+export const playBookSpineSlide = () => {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    // Resonant woody friction tone
+    const osc = ctx.createOscillator();
+    const oscGain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.exponentialRampToValueAtTime(70, now + 0.16);
+
+    oscGain.gain.setValueAtTime(0.06, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+
+    osc.connect(oscGain);
+    oscGain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.16);
+
+    // Subtle paper/leather brush
+    playPaperUnwrap();
+  } catch (err) {
+    console.debug('Audio error:', err);
+  }
+};
+
 let cachedFlipBuffer = null;
 
 /**

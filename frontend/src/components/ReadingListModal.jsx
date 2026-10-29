@@ -20,6 +20,7 @@ import {
 import { ReadingListContext } from '../context/ReadingListContext';
 import BookplateModal from './home/BookplateModal';
 import BookSpineShelf from './home/BookSpineShelf';
+import { getBookCoverUrl } from '../utils/imageHelper';
 
 const getStatusBadgeStyle = (status = 'want-to-read') => {
   switch (status) {
@@ -492,11 +493,7 @@ const ReadingListModal = () => {
                   </div>
                 ) : (
                   sortedList.map((book) => {
-                    const imageUrl = book.image
-                      ? book.image.startsWith('http')
-                        ? book.image
-                        : `http://localhost:5555${book.image}`
-                      : null;
+                    const imageUrl = getBookCoverUrl(book.image, book.title, book.isbn);
 
                     const isMenuOpen = activeMenuId === book._id;
                     const progressValue =

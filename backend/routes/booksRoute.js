@@ -375,4 +375,97 @@ router.post('/:id/reviews', protect, async (req, res, next) => {
   }
 });
 
+// @route   PUT /books/:id/reviews/:reviewId
+// @desc    Update an existing review
+// @access  Private (Owner only)
+router.put('/:id/reviews/:reviewId', protect, async (req, res, next) => {
+  try {
+    const { rating, comment } = req.body;
+    const book = await Book.findById(req.params.id);
+
+    if (!book) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+
+    const review = book.reviews.id(req.params.reviewId);
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    if (review.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized to edit this reflection' });
+    }
+
+    if (rating !== undefined) review.rating = Number(rating);
+    if (comment !== undefined) review.comment = comment.trim();
+
+    book.averageRating =
+      book.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      book.reviews.length;
+
+    await book.save();
+
+    auditEmitter.logEvent('review:updated', {
+      bookId: book._id,
+      reviewId: req.params.reviewId,
+      user: req.user.username,
+    });
+
+    res.status(200).json({
+      message: 'Review updated successfully',
+      averageRating: book.averageRating,
+      review,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   DELETE /books/:id/reviews/:reviewId
+// @desc    Delete a review
+// @access  Private (Owner or Admin)
+router.delete('/:id/reviews/:reviewId', protect, async (req, res, next) => {
+  try {
+    const book = await Book.findById(req.params.id);
+
+    if (!book) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+
+    const review = book.reviews.id(req.params.reviewId);
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    const isOwner = review.userId.toString() === req.user._id.toString();
+    const isAdmin = req.user.role === 'admin';
+
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({ message: 'Not authorized to remove this reflection' });
+    }
+
+    book.reviews.pull(req.params.reviewId);
+
+    book.averageRating = book.reviews.length > 0
+      ? book.reviews.reduce((acc, item) => item.rating + acc, 0) / book.reviews.length
+      : 0;
+
+    await book.save();
+
+    auditEmitter.logEvent('review:deleted', {
+      bookId: book._id,
+      reviewId: req.params.reviewId,
+      user: req.user.username,
+    });
+
+    res.status(200).json({
+      message: 'Review deleted successfully',
+      averageRating: book.averageRating,
+      reviewsCount: book.reviews.length,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

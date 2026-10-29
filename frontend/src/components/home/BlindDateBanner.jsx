@@ -427,16 +427,16 @@ const BlindDateBanner = ({ books = [] }) => {
   };
 
   return (
-    <section id="blind-date-section" className="mb-12 scroll-mt-24">
-      {/* Immersive Studio Environment Container */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#24171D] via-[#1E1418] to-[#160E12] text-[#FAF5ED] p-6 sm:p-8 md:p-10 lg:p-12 border border-[#442D38] shadow-2xl">
+    <section id="blind-date-section" className="mb-8 sm:mb-10 scroll-mt-24">
+      {/* Immersive Studio Environment Container - Editorial Noir */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#23151B] via-[#1A1015] to-[#120A0E] text-[#FAF5ED] p-6 sm:p-8 lg:p-10 xl:p-12 border border-[#482D3A] shadow-2xl">
         {/* Soft Art-Directed Studio Lighting & Depth Vignettes */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-rose-900/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 -left-16 w-80 h-80 bg-amber-900/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_40%,rgba(195,145,100,0.06)_0%,transparent_60%)] pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-rose-950/30 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-amber-950/25 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_65%_45%,rgba(215,160,110,0.08)_0%,transparent_65%)] pointer-events-none" />
 
         {/* Two-Column Responsive Layout */}
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-center">
           
           {/* =========================================================================
               LEFT COLUMN: Editorial Hierarchy, Legible Clues & Actions
@@ -444,86 +444,88 @@ const BlindDateBanner = ({ books = [] }) => {
           <div className="lg:col-span-7 flex flex-col justify-center text-left order-2 lg:order-1">
             
             {/* Eyebrow Label */}
-            <div className="flex items-center gap-2 mb-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-burgundy/90 text-amber-200 border border-amber-300/20 text-[10px] font-mono uppercase tracking-widest font-bold shadow-xs">
+            <div className="flex items-center gap-2.5 mb-2.5">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#7B1826]/85 text-amber-200 border border-amber-300/25 text-[10px] font-mono uppercase tracking-[0.2em] font-bold shadow-xs">
                 <PiHeartFill className="text-xs text-rose-300" />
                 <span>Literary Serendipity</span>
               </span>
               <span className="text-[11px] font-mono text-stone-400">
-                &bull; Independent Bookstore Edition
+                &bull; Blind Date Edition
               </span>
             </div>
 
             {/* Main Headline */}
-            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#FAF5ED] leading-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl lg:text-[32px] font-bold tracking-tight text-[#FAF5ED] leading-tight">
               A story chosen by fate.
             </h2>
 
             {/* Supporting Copy */}
-            <p className="text-sm sm:text-base text-stone-300/90 font-serif italic mt-2 mb-6 leading-relaxed max-w-xl">
-              Wrapped in tactile brown kraft paper, tied with natural jute twine, and sealed in crimson wax. Read the mystery clues, break the seal, and let curiosity introduce your next beloved author.
+            <p className="text-xs sm:text-sm text-stone-300/85 font-serif italic mt-1.5 mb-5 leading-relaxed max-w-xl">
+              Wrapped in tactile kraft paper and sealed in crimson wax. Read the mystery clues, break the seal, and let curiosity introduce your next beloved read.
             </p>
 
             {/* Dynamic Content: Sealed Clues vs. Unwrapped Book Details */}
             {unwrappingStage !== 'revealed' ? (
               /* ================= THE 3 CLEAR, READABLE CLUES ================= */
               <div className="space-y-4">
-                {/* Parchment Clues Plaque */}
-                <div className="kraft-tag rounded-2xl p-5 sm:p-6 bg-[#FAF4EB] text-[#1A120B] border border-[#C2A383] shadow-md relative overflow-hidden">
+                {/* Archival Parchment Clues Plaque */}
+                <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-[#FAF4EC] to-[#F1E5D5] text-[#1A120B] border border-[#CBB39C] shadow-[0_10px_30px_-5px_rgba(0,0,0,0.45)] relative overflow-hidden">
                   <div className="flex items-center justify-between border-b border-[#D8C4AE] pb-2.5 mb-3.5">
                     <div className="flex items-center gap-2">
-                      <PiFeatherBold className="text-burgundy text-sm" />
-                      <span className="font-mono text-[11px] uppercase tracking-wider font-bold text-[#5A4535]">
-                        Three Anonymous Clues
+                      <div className="w-5 h-5 rounded-md bg-[#861D2D]/10 text-[#861D2D] flex items-center justify-center">
+                        <PiFeatherBold className="text-xs" />
+                      </div>
+                      <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.16em] font-bold text-[#5A4535]">
+                        Archival Mystery Clues
                       </span>
                     </div>
-                    <span className="text-[10px] font-mono text-[#7A6453] uppercase tracking-widest font-semibold">
+                    <span className="text-[9px] sm:text-[10px] font-mono text-[#7A6453] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full bg-[#E8D9C7]/60 border border-[#D0BFAF]/60">
                       Unopened Volume
                     </span>
                   </div>
 
-                  {/* 3 Distinct Lines with Subtle Decorative Markers */}
-                  <ul className="space-y-3.5 font-serif text-sm sm:text-[15px] leading-snug">
+                  {/* 3 Distinct Lines with Refined Decorative Markers */}
+                  <ul className="space-y-3 font-serif">
                     {/* Clue 1: Atmosphere / Setting */}
                     <li className="flex items-start gap-3">
-                      <span className="flex-shrink-0 mt-0.5 text-burgundy font-serif font-bold text-sm select-none">
-                        ◈
-                      </span>
-                      <div>
-                        <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-[#6B5342] block">
+                      <div className="w-5 h-5 rounded-full bg-[#861D2D]/10 text-[#861D2D] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <PiCompassBold className="text-[11px]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#735A47] block">
                           Atmosphere &amp; Setting
                         </span>
-                        <p className="text-[#1A120B] italic font-semibold text-sm sm:text-[15px] mt-0.5">
+                        <p className="text-[#1A120B] italic font-semibold text-xs sm:text-[13px] leading-relaxed mt-0.5">
                           &ldquo;{clues.atmosphere}&rdquo;
                         </p>
                       </div>
                     </li>
 
                     {/* Clue 2: Genre / Narrative Style */}
-                    <li className="flex items-start gap-3">
-                      <span className="flex-shrink-0 mt-0.5 text-amber-800 font-serif font-bold text-sm select-none">
-                        ✦
-                      </span>
-                      <div>
-                        <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-[#6B5342] block">
+                    <li className="flex items-start gap-3 pt-2.5 border-t border-[#E6D6C4]/80">
+                      <div className="w-5 h-5 rounded-full bg-[#B26E2B]/10 text-[#B26E2B] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <PiBookOpenBold className="text-[11px]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#735A47] block">
                           Narrative Style &amp; Form
                         </span>
-                        <p className="text-[#1A120B] italic font-semibold text-sm sm:text-[15px] mt-0.5">
+                        <p className="text-[#1A120B] italic font-semibold text-xs sm:text-[13px] leading-relaxed mt-0.5">
                           &ldquo;{clues.genre}&rdquo;
                         </p>
                       </div>
                     </li>
 
                     {/* Clue 3: Theme / Reading Mood */}
-                    <li className="flex items-start gap-3">
-                      <span className="flex-shrink-0 mt-0.5 text-rose-900 font-serif font-bold text-sm select-none">
-                        ❧
-                      </span>
-                      <div>
-                        <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-[#6B5342] block">
+                    <li className="flex items-start gap-3 pt-2.5 border-t border-[#E6D6C4]/80">
+                      <div className="w-5 h-5 rounded-full bg-[#5A6E55]/10 text-[#4E6349] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <PiSparkleBold className="text-[11px]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#735A47] block">
                           Core Theme &amp; Resonance
                         </span>
-                        <p className="text-[#1A120B] italic font-semibold text-sm sm:text-[15px] mt-0.5">
+                        <p className="text-[#1A120B] italic font-semibold text-xs sm:text-[13px] leading-relaxed mt-0.5">
                           &ldquo;{clues.theme}&rdquo;
                         </p>
                       </div>
@@ -532,21 +534,33 @@ const BlindDateBanner = ({ books = [] }) => {
                 </div>
 
                 {/* Primary Action Button: Break The Seal */}
-                <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="pt-2 flex items-center gap-4 flex-wrap">
                   <button
                     type="button"
                     onClick={handleBreakSeal}
                     disabled={isAnimating}
                     aria-label="Break the wax seal to reveal the mystery book"
-                    className="inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#8C1B2B] via-[#7B1826] to-[#5C101B] hover:from-[#9E1F32] hover:to-[#6E1320] text-amber-100 font-serif font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-300/60 focus:ring-offset-2 focus:ring-offset-[#1E1418] border border-amber-300/25 group"
+                    className="group relative inline-flex items-center gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-[#9E1F32] via-[#861D2D] to-[#681420] text-[#FFF8F0] font-sans text-xs sm:text-[13px] font-semibold tracking-wide shadow-[0_4px_20px_rgba(158,31,50,0.45)] hover:shadow-[0_8px_28px_rgba(158,31,50,0.6)] border border-[#C23B4E]/40 ring-1 ring-white/15 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 cursor-pointer overflow-hidden"
                   >
-                    <PiSparkleBold className="text-amber-300 text-lg group-hover:rotate-12 transition-transform duration-200" />
-                    <span>Break the Wax Seal</span>
-                    <PiArrowRightBold className="text-xs transform group-hover:translate-x-1 transition-transform duration-200" />
+                    {/* Subtle ambient shine overlay on hover */}
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
+
+                    <span className="w-6 h-6 rounded-full bg-white/15 backdrop-blur-xs border border-white/20 flex items-center justify-center text-amber-200 relative z-10 shadow-xs">
+                      <PiSparkleBold className="text-xs group-hover:rotate-45 transition-transform duration-300" />
+                    </span>
+
+                    <span className="relative z-10 font-medium">Break the Wax Seal</span>
+
+                    <span className="relative z-10 text-white/90 group-hover:translate-x-1 transition-transform duration-200">
+                      <PiArrowRightBold className="text-xs" />
+                    </span>
                   </button>
 
-                  <div className="flex items-center gap-2 text-stone-400 text-xs font-mono">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  <div className="flex items-center gap-2 text-[#C9B6A8] text-xs font-mono">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                    </span>
                     <span>Or tap the wax medallion directly</span>
                   </div>
                 </div>
@@ -665,7 +679,7 @@ const BlindDateBanner = ({ books = [] }) => {
           {/* =========================================================================
               RIGHT COLUMN: The Large Physical Kraft Parcel & Real Reveal Sequence
               ========================================================================= */}
-          <div className="lg:col-span-5 flex items-center justify-center order-1 lg:order-2">
+          <div className="lg:col-span-5 flex items-center justify-center lg:justify-end order-1 lg:order-2">
             
             {/* 3D Tilt Container for Parcel */}
             <div
@@ -676,7 +690,7 @@ const BlindDateBanner = ({ books = [] }) => {
                 transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
                 transition: isAnimating ? 'none' : 'transform 0.25s ease-out',
               }}
-              className="relative w-full max-w-[310px] sm:max-w-[340px] md:max-w-[360px] h-[440px] sm:h-[470px] select-none flex items-center justify-center"
+              className="relative w-full max-w-[270px] sm:max-w-[290px] lg:max-w-[310px] h-[360px] sm:h-[390px] lg:h-[415px] select-none flex items-center justify-center"
             >
               {/* Idle Floating Levitation Wrapper */}
               <div
@@ -686,12 +700,12 @@ const BlindDateBanner = ({ books = [] }) => {
               >
                 {/* Real Book Revealed View */}
                 {unwrappingStage === 'revealed' ? (
-                  <div className="w-full h-full relative flex flex-col items-center justify-center p-4">
+                  <div className="w-full h-full relative flex flex-col items-center justify-center p-2">
                     {/* Soft halo radiance behind revealed book */}
                     <div className="reveal-radiance" />
 
                     {/* Book Cover Presentation */}
-                    <div className="relative z-10 w-[240px] sm:w-[260px] h-[360px] sm:h-[390px] rounded-xl overflow-hidden shadow-2xl border border-amber-900/40 animate-book-reveal bg-stone-900 flex flex-col">
+                    <div className="relative z-10 w-[210px] sm:w-[230px] lg:w-[250px] h-[310px] sm:h-[340px] lg:h-[370px] rounded-2xl overflow-hidden shadow-2xl border border-amber-900/40 animate-book-reveal bg-stone-900 flex flex-col">
                       {/* Realistic book spine gradient on left */}
                       <div className="absolute top-0 bottom-0 left-0 w-4 bg-gradient-to-r from-black/50 via-white/10 to-transparent z-20 pointer-events-none" />
 
@@ -709,17 +723,17 @@ const BlindDateBanner = ({ books = [] }) => {
 
                       {/* Graceful Fallback if image fails or missing */}
                       <div
-                        className="w-full h-full bg-gradient-to-b from-[#3D1E26] to-[#1F1015] p-6 flex flex-col justify-between text-center border-l-4 border-amber-500/40"
+                        className="w-full h-full bg-gradient-to-b from-[#3D1E26] to-[#1F1015] p-4 flex flex-col justify-between text-center border-l-4 border-amber-500/40"
                         style={{ display: currentBook.image ? 'none' : 'flex' }}
                       >
                         <div className="flex items-center justify-center text-amber-200/80">
-                          <PiBookOpenBold className="text-3xl" />
+                          <PiBookOpenBold className="text-2xl" />
                         </div>
                         <div>
-                          <h4 className="font-serif text-lg font-bold text-amber-100 leading-snug">
+                          <h4 className="font-serif text-base font-bold text-amber-100 leading-snug">
                             {currentBook.title}
                           </h4>
-                          <p className="font-serif text-xs text-stone-300 mt-2 italic">
+                          <p className="font-serif text-xs text-stone-300 mt-1 italic">
                             {currentBook.author}
                           </p>
                         </div>
@@ -732,7 +746,7 @@ const BlindDateBanner = ({ books = [] }) => {
                 ) : (
                   /* Physical Wrapped Kraft Mystery Parcel */
                   <div
-                    className="kraft-parcel w-full h-full relative p-6 flex flex-col justify-between text-left overflow-hidden"
+                    className="kraft-parcel w-full h-full relative p-5 flex flex-col justify-between text-left overflow-hidden shadow-2xl rounded-2xl"
                     role="region"
                     aria-label="Wrapped mystery book parcel"
                   >
@@ -798,10 +812,10 @@ const BlindDateBanner = ({ books = [] }) => {
                         <div className="seal-gleam-line" />
 
                         {/* Embossed Literary Monogram Emblem */}
-                        <div className="relative z-10 flex flex-col items-center justify-center text-center">
+                        <div className="relative z-10 flex flex-col items-center justify-center text-center select-none pointer-events-none">
                           <PiBookOpenBold className="text-xl sm:text-2xl drop-shadow-[0_1px_1px_rgba(0,0,0,0.6)] text-amber-200" />
-                          <span className="font-serif font-black text-[9px] tracking-widest text-amber-300 uppercase mt-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)]">
-                            SEAL
+                          <span className="font-mono font-bold text-[8px] tracking-[0.22em] text-amber-300 uppercase mt-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)]">
+                            REVEAL
                           </span>
                         </div>
 
@@ -817,7 +831,7 @@ const BlindDateBanner = ({ books = [] }) => {
 
                     {/* Bottom Luggage Stamp */}
                     <div className="relative z-20 self-end text-right">
-                      <div className="inline-block bg-[#FAF5ED]/80 px-2.5 py-1 rounded border border-[#B5987A]/60 text-stone-700 text-[10px] font-mono uppercase tracking-wider rotate-[1.5deg]">
+                      <div className="inline-block bg-[#FAF5ED]/90 px-3 py-1.5 rounded-lg border border-[#B5987A]/70 text-stone-700 text-[10px] font-mono uppercase tracking-wider shadow-xs rotate-[1deg]">
                         Handle With Care &bull; PageTurner
                       </div>
                     </div>
