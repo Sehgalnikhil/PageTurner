@@ -150,32 +150,36 @@ const Home = () => {
       <Navbar totalBooks={totalBooks} />
 
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
-        {/* Editorial Masthead Banner matching reference screenshot */}
-        <header className="mb-8 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] overflow-hidden shadow-2xs">
-          <div className="flex flex-col lg:flex-row items-center justify-between min-h-[180px] lg:min-h-[210px]">
-            {/* Left Headline */}
-            <div className="p-6 sm:p-8 lg:p-10 max-w-xl">
-              <div className="flex items-center gap-2.5 mb-2">
-                <span className="h-[1px] w-6 bg-[#A38E80]"></span>
-                <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.22em] text-[#7E1A27]/85">
+        {/* Editorial Masthead Banner matching reference screenshot & magazine cover layout */}
+        <header className="mb-10 rounded-2xl bg-[#FFFDF9] border border-[#E8DED2] overflow-hidden shadow-2xs relative">
+          <div className="flex flex-col lg:flex-row items-stretch justify-between min-h-[220px] lg:min-h-[250px]">
+            {/* Left Headline Column */}
+            <div className="p-8 sm:p-10 lg:p-12 max-w-2xl flex flex-col justify-center">
+              <div className="flex items-center gap-2.5 mb-3">
+                <span className="h-[1px] w-6 bg-[#C99A48]"></span>
+                <span className="text-[10px] font-mono font-bold uppercase tracking-[0.24em] text-[#861D2D]">
                   Digital Reading Journal &bull; Issue No. 24
                 </span>
               </div>
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-[48px] font-bold text-[#1C1917] tracking-tight leading-[1.08]">
-                Fall into <span className="italic font-normal text-[#7E1A27]">another world.</span>
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-[46px] font-bold text-[#292522] tracking-tight leading-[1.1]">
+                Fall into <span className="italic font-normal text-[#861D2D]">another world.</span>
               </h1>
-              <p className="text-xs sm:text-sm text-stone-600 font-serif italic mt-2.5">
+              <p className="text-sm sm:text-[15px] text-[#827870] font-serif italic mt-3 leading-relaxed">
                 Stories to keep. Ideas to collect. Worlds to get lost in.
               </p>
             </div>
 
-            {/* Right Aesthetic Moodboard Photo Collage matching the screenshot */}
-            <div className="w-full lg:w-auto lg:h-[210px] flex-shrink-0 flex items-center justify-end overflow-hidden">
+            {/* Right Aesthetic Moodboard Photo Collage */}
+            <div className="w-full lg:w-[480px] xl:w-[540px] flex-shrink-0 relative overflow-hidden bg-[#FAF7F2]">
               <img
                 src="/images/hero-moodboard.jpg"
                 alt="Literary Moodboard - A quieter brighter you"
-                className="h-44 sm:h-48 lg:h-[210px] w-full lg:w-[480px] xl:w-[540px] object-cover object-center"
+                className="w-full h-52 sm:h-60 lg:h-full object-cover object-center"
               />
+              {/* Subtle blend gradient on the left edge for desktop */}
+              <div className="hidden lg:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#FFFDF9] via-[#FFFDF9]/60 to-transparent pointer-events-none" />
+              {/* Subtle top blend for mobile */}
+              <div className="lg:hidden absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#FFFDF9] to-transparent pointer-events-none" />
             </div>
           </div>
         </header>
@@ -193,16 +197,16 @@ const Home = () => {
 
         {/* Streamlined Discovery Toolbar (Search, Filter, Tab toggles) */}
         <section className="mb-6">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-4 border-b border-stone-200">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-4 border-b border-[#E8DED2]">
             {/* View Tab Buttons */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => setMainTab('discover')}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 active:scale-95 ${
+                className={`px-4 py-2 rounded-xl text-xs sm:text-[13px] font-semibold transition-all duration-180 active:scale-95 ${
                   mainTab === 'discover'
-                    ? 'bg-stone-900 text-white shadow-xs'
-                    : 'bg-white text-stone-700 hover:bg-stone-100 hover:text-stone-900 border border-stone-200'
+                    ? 'bg-[#292522] text-white shadow-2xs'
+                    : 'bg-[#FFFDF9] text-[#292522] hover:bg-white hover:text-[#861D2D] border border-[#E8DED2]'
                 }`}
               >
                 All Stories
@@ -211,24 +215,24 @@ const Home = () => {
               <button
                 type="button"
                 onClick={() => setMainTab('shelf')}
-                className={`group px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 active:scale-95 flex items-center gap-1.5 ${
+                className={`group px-4 py-2 rounded-xl text-xs sm:text-[13px] font-semibold transition-all duration-180 active:scale-95 flex items-center gap-2 ${
                   mainTab === 'shelf'
-                    ? 'bg-burgundy text-white shadow-xs'
-                    : 'bg-white text-stone-700 hover:bg-stone-100 hover:text-stone-900 border border-stone-200'
+                    ? 'bg-[#861D2D] text-white shadow-2xs'
+                    : 'bg-[#FFFDF9] text-[#292522] hover:bg-white hover:text-[#861D2D] border border-[#E8DED2]'
                 }`}
               >
                 <PiBookmarkSimpleFill
                   className={`${
-                    mainTab === 'shelf' ? 'text-amber-300' : 'text-burgundy'
-                  } group-hover:scale-110 transition-transform duration-200`}
+                    mainTab === 'shelf' ? 'text-amber-300' : 'text-[#861D2D]'
+                  } group-hover:scale-105 transition-transform duration-200 text-sm`}
                 />
                 <span>My Shelf</span>
                 {savedCount > 0 && (
                   <span
-                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold transition-all duration-200 group-hover:scale-105 ${
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold transition-all duration-200 ${
                       mainTab === 'shelf'
-                        ? 'bg-white text-burgundy'
-                        : 'bg-burgundy text-white'
+                        ? 'bg-white text-[#861D2D]'
+                        : 'bg-[#861D2D] text-white'
                     }`}
                   >
                     {savedCount}
@@ -240,15 +244,15 @@ const Home = () => {
             {/* Filter and Search controls */}
             <div className="flex items-center gap-2 flex-wrap">
               {/* Search Bar with focus elevation & icon accent */}
-              <div className="relative flex-1 sm:w-56 group/search">
-                <PiMagnifyingGlassBold className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within/search:text-burgundy text-xs pointer-events-none transition-colors duration-200" />
+              <div className="relative flex-1 sm:w-60 group/search">
+                <PiMagnifyingGlassBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#827870] group-focus-within/search:text-[#861D2D] text-xs pointer-events-none transition-colors duration-200" />
                 <input
                   type="text"
                   placeholder="Search title, author..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleSearch}
-                  className="editorial-input w-full pl-8 pr-7 py-1.5 rounded-full text-xs placeholder-stone-400 bg-white hover:border-stone-400 focus:hover:border-burgundy"
+                  className="w-full pl-9 pr-8 py-2 rounded-xl text-xs text-[#292522] placeholder-[#827870]/70 bg-white border border-[#E8DED2] hover:border-[#861D2D]/40 focus:outline-none focus:border-[#861D2D] shadow-2xs transition-colors"
                 />
                 {searchQuery && (
                   <button
@@ -266,7 +270,7 @@ const Home = () => {
                 <select
                   value={category}
                   onChange={handleCategoryChange}
-                  className="editorial-input text-stone-700 text-xs font-semibold rounded-full px-3 py-1.5 pr-6 cursor-pointer appearance-none bg-white hover:border-stone-400 transition-colors"
+                  className="text-[#292522] text-xs font-semibold rounded-xl px-3 py-2 pr-7 cursor-pointer appearance-none bg-white border border-[#E8DED2] hover:border-[#861D2D]/40 focus:outline-none focus:border-[#861D2D] shadow-2xs transition-colors"
                 >
                   <option value="All">All Genres</option>
                   <option value="Fiction">Fiction</option>
@@ -276,7 +280,7 @@ const Home = () => {
                   <option value="Technology">Technology</option>
                   <option value="Uncategorized">Uncategorized</option>
                 </select>
-                <PiFunnelBold className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-400 group-hover/genre:text-stone-700 text-[11px] pointer-events-none transition-colors" />
+                <PiFunnelBold className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#827870] group-hover/genre:text-[#861D2D] text-[11px] pointer-events-none transition-colors" />
               </div>
 
               {/* Sort Dropdown */}
@@ -284,7 +288,7 @@ const Home = () => {
                 <select
                   value={sortBy}
                   onChange={handleSortChange}
-                  className="editorial-input text-stone-700 text-xs font-semibold rounded-full px-3 py-1.5 pr-6 cursor-pointer appearance-none bg-white hover:border-stone-400 transition-colors"
+                  className="text-[#292522] text-xs font-semibold rounded-xl px-3 py-2 pr-7 cursor-pointer appearance-none bg-white border border-[#E8DED2] hover:border-[#861D2D]/40 focus:outline-none focus:border-[#861D2D] shadow-2xs transition-colors"
                 >
                   <option value="createdAt">Recently Added</option>
                   <option value="rating-desc">Highest Rated</option>
@@ -293,34 +297,34 @@ const Home = () => {
                   <option value="year-newest">Year (Newest)</option>
                   <option value="year-oldest">Year (Oldest)</option>
                 </select>
-                <PiSortAscendingBold className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-400 group-hover/sort:text-stone-700 text-[11px] pointer-events-none transition-colors" />
+                <PiSortAscendingBold className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#827870] group-hover/sort:text-[#861D2D] text-[11px] pointer-events-none transition-colors" />
               </div>
 
               {/* Layout Switcher (Masonry vs Table) */}
-              <div className="inline-flex rounded-full bg-white p-0.5 border border-stone-200">
+              <div className="inline-flex rounded-xl bg-white p-0.5 border border-[#E8DED2] shadow-2xs">
                 <button
                   type="button"
                   onClick={() => setShowType('masonry')}
                   title="Organic Masonry Gallery"
-                  className={`p-1.5 rounded-full transition-all ${
+                  className={`p-1.5 rounded-lg transition-all ${
                     showType === 'masonry'
-                      ? 'bg-stone-900 text-white shadow-xs'
-                      : 'text-stone-500 hover:text-stone-900'
+                      ? 'bg-[#292522] text-white shadow-2xs'
+                      : 'text-[#827870] hover:text-[#292522]'
                   }`}
                 >
-                  <PiSquaresFourBold className="text-xs" />
+                  <PiSquaresFourBold className="text-sm" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowType('table')}
                   title="Bibliographic Table View"
-                  className={`p-1.5 rounded-full transition-all ${
+                  className={`p-1.5 rounded-lg transition-all ${
                     showType === 'table'
-                      ? 'bg-stone-900 text-white shadow-xs'
-                      : 'text-stone-500 hover:text-stone-900'
+                      ? 'bg-[#292522] text-white shadow-2xs'
+                      : 'text-[#827870] hover:text-[#292522]'
                   }`}
                 >
-                  <PiListBulletsBold className="text-xs" />
+                  <PiListBulletsBold className="text-sm" />
                 </button>
               </div>
             </div>

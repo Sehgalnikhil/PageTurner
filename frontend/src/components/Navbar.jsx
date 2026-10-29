@@ -9,7 +9,6 @@ import {
   PiXBold,
   PiMagnifyingGlassBold,
   PiSpeakerHighBold,
-  PiSpeakerSlashBold,
   PiCloudRainBold,
   PiFlameBold,
   PiClockBold,
@@ -66,71 +65,61 @@ const Navbar = ({ totalBooks = 0 }) => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-[#FAF7F2] border-b border-[#E8E2D8] transition-colors duration-150">
+      <header className="sticky top-0 z-40 bg-[#FAF7F2] border-b border-[#E8DED2] transition-colors duration-150">
         <div className="w-full max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[82px] sm:h-[88px] gap-2 lg:gap-4">
+          <div className="flex items-center justify-between h-[90px] sm:h-[96px] gap-3 lg:gap-6">
             
             {/* 1. BRAND SECTION (LEFT) */}
             <div className="flex items-center flex-shrink-0">
-              <Link to="/" className="group flex items-center gap-3">
-                {/* Burgundy brand emblem with amber corner dot */}
+              <Link to="/" className="group flex items-center gap-3.5">
+                {/* Burgundy brand emblem with warm gold corner dot */}
                 <div className="relative">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-[10px] bg-[#7E1A27] text-white flex items-center justify-center flex-shrink-0 transition-colors duration-150 group-hover:bg-[#68141F]">
-                    <PiBooksBold className="text-xl sm:text-2xl" />
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#861D2D] text-white flex items-center justify-center flex-shrink-0 transition-colors duration-200 group-hover:bg-[#701826] shadow-2xs">
+                    <PiBooksBold className="text-2xl sm:text-[26px]" />
                   </div>
-                  {/* Distinct warm amber corner dot */}
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#E58929] ring-2 ring-[#FAF7F2]"></span>
+                  {/* Amber/Gold corner seal dot */}
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#C99A48] ring-2 ring-[#FAF7F2]" />
                 </div>
 
                 <div className="flex flex-col">
-                  <span className="font-serif text-[22px] sm:text-[25px] font-bold text-[#1C1917] tracking-tight leading-none">
+                  <span className="font-serif text-[24px] sm:text-[27px] font-bold text-[#292522] tracking-tight leading-none group-hover:text-[#861D2D] transition-colors">
                     PageTurner
                   </span>
-                  <span className="text-[9px] sm:text-[9.5px] uppercase font-mono tracking-[0.24em] text-[#7E1A27] font-semibold block mt-1 leading-none">
+                  <span className="text-[9.5px] uppercase font-mono tracking-[0.24em] text-[#861D2D] font-bold block mt-1 leading-none">
                     Literary Journal &amp; Discovery
                   </span>
                 </div>
               </Link>
 
-              {/* Vertical divider line */}
-              <div className="hidden md:block h-8 w-[1px] bg-[#E2DBD0] ml-5 mr-3 flex-shrink-0"></div>
+              {/* Vertical divider */}
+              <div className="hidden lg:block h-8 w-[1px] bg-[#E8DED2] ml-6 mr-4 flex-shrink-0" />
             </div>
 
-            {/* 2. NAVIGATION ROW (Discover with flourish underline, My Shelf with badge, Collections, Bookplates) */}
-            <nav className="hidden md:flex items-center gap-1 lg:gap-2 flex-shrink-0">
+            {/* 2. NAVIGATION ROW (Discover, My Shelf, Collections, Bookplates) */}
+            <nav className="hidden md:flex items-center gap-1.5 lg:gap-2.5 flex-shrink-0" aria-label="Main Navigation">
               {/* Discover */}
               <Link
                 to="/"
-                className={`relative px-3.5 py-1.5 rounded-lg text-xs sm:text-[13px] font-medium transition-all duration-150 flex flex-col items-center justify-center ${
+                className={`relative px-4 py-2 rounded-xl text-[14px] font-medium transition-all duration-150 flex items-center gap-2 ${
                   isDiscoverActive
-                    ? 'text-[#7E1A27] bg-[#F5EBE8]'
-                    : 'text-[#292522] hover:text-[#7E1A27] hover:bg-[#F5EBE8]/60'
+                    ? 'text-[#861D2D] bg-[#F4E8E6] font-semibold'
+                    : 'text-[#292522] hover:text-[#861D2D] hover:bg-[#F4E8E6]/60'
                 }`}
               >
-                <div className="flex items-center gap-1.5">
-                  <PiCompassBold className="text-sm text-[#7E1A27]" />
-                  <span>Discover</span>
-                </div>
-                {/* Vintage literary flourish underline: ―◆― */}
-                {isDiscoverActive && (
-                  <div className="flex items-center justify-center w-full mt-0.5 text-[#7E1A27] leading-none">
-                    <span className="h-[1px] w-4 bg-[#7E1A27]/60"></span>
-                    <span className="w-1.5 h-1.5 rotate-45 bg-[#7E1A27] mx-0.5"></span>
-                    <span className="h-[1px] w-4 bg-[#7E1A27]/60"></span>
-                  </div>
-                )}
+                <PiCompassBold className="text-base text-[#861D2D]" />
+                <span>Discover</span>
               </Link>
 
-              {/* My Shelf */}
+              {/* My Shelf with saved count badge */}
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(true)}
-                className="px-3 py-1.5 rounded-lg text-xs sm:text-[13px] font-medium text-[#292522] hover:text-[#7E1A27] hover:bg-[#F5EBE8]/60 transition-colors flex items-center gap-1.5"
+                className="px-3.5 py-2 rounded-xl text-[14px] font-medium text-[#292522] hover:text-[#861D2D] hover:bg-[#F4E8E6]/60 transition-colors flex items-center gap-2"
               >
-                <PiBookOpenBold className="text-sm text-[#292522]" />
+                <PiBookOpenBold className="text-base text-[#292522]" />
                 <span>My Shelf</span>
                 {bookmarkCount > 0 && (
-                  <span className="ml-0.5 w-4 h-4 rounded-full bg-[#7E1A27] text-white text-[10px] font-mono font-bold flex items-center justify-center leading-none">
+                  <span className="ml-0.5 px-2 py-0.5 rounded-full bg-[#861D2D] text-white text-[11px] font-mono font-bold leading-none shadow-2xs">
                     {bookmarkCount}
                   </span>
                 )}
@@ -139,9 +128,9 @@ const Navbar = ({ totalBooks = 0 }) => {
               {/* Collections */}
               <a
                 href="#curated-collections"
-                className="px-3 py-1.5 rounded-lg text-xs sm:text-[13px] font-medium text-[#292522] hover:text-[#7E1A27] hover:bg-[#F5EBE8]/60 transition-colors flex items-center gap-1.5"
+                className="px-3.5 py-2 rounded-xl text-[14px] font-medium text-[#292522] hover:text-[#861D2D] hover:bg-[#F4E8E6]/60 transition-colors flex items-center gap-2"
               >
-                <PiStackBold className="text-sm text-[#292522]" />
+                <PiStackBold className="text-base text-[#292522]" />
                 <span>Collections</span>
               </a>
 
@@ -149,28 +138,28 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 type="button"
                 onClick={() => setShowBookplate(true)}
-                className="px-3 py-1.5 rounded-lg text-xs sm:text-[13px] font-medium text-[#292522] hover:text-[#7E1A27] hover:bg-[#F5EBE8]/60 transition-colors flex items-center gap-1.5"
+                className="px-3.5 py-2 rounded-xl text-[14px] font-medium text-[#292522] hover:text-[#861D2D] hover:bg-[#F4E8E6]/60 transition-colors flex items-center gap-2"
               >
-                <PiTagBold className="text-sm text-[#292522]" />
+                <PiTagBold className="text-base text-[#292522]" />
                 <span>Bookplates</span>
               </button>
             </nav>
 
-            {/* 3. SEARCH FIELD (CENTER) */}
-            <div className="hidden lg:flex items-center flex-1 max-w-[340px] xl:max-w-[380px] mx-2">
+            {/* 3. INTEGRATED SEARCH UTILITY (CENTER) */}
+            <div className="hidden lg:flex items-center flex-1 max-w-[320px] xl:max-w-[380px] mx-1">
               <button
                 type="button"
                 onClick={() => setShowCommandK(true)}
                 title="Omnisearch (⌘K)"
-                className="w-full h-[38px] rounded-lg border border-[#E5DFD5] bg-white hover:border-[#D6CCC0] hover:bg-[#FCFAF7] px-3 flex items-center justify-between text-left transition-colors duration-150 cursor-pointer shadow-2xs"
+                className="w-full h-[42px] rounded-xl border border-[#E8DED2] bg-white hover:border-[#861D2D]/40 hover:bg-[#FFFDF9] px-3.5 flex items-center justify-between text-left transition-colors duration-150 cursor-pointer shadow-2xs"
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <PiMagnifyingGlassBold className="text-[#9E948B] text-sm flex-shrink-0" />
-                  <span className="text-xs text-[#9E948B] font-normal truncate">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <PiMagnifyingGlassBold className="text-[#827870] text-sm flex-shrink-0" />
+                  <span className="text-xs text-[#827870] font-normal truncate">
                     Search books, authors, ideas...
                   </span>
                 </div>
-                <kbd className="px-1.5 py-0.5 rounded bg-[#FAF7F2] border border-[#E5DFD5] text-[10px] font-mono text-[#9E948B] font-medium leading-none flex-shrink-0 ml-2">
+                <kbd className="px-2 py-0.5 rounded-md bg-[#FAF7F2] border border-[#E8DED2] text-[10px] font-mono text-[#827870] font-semibold leading-none flex-shrink-0 ml-2">
                   ⌘K
                 </kbd>
               </button>
@@ -182,17 +171,17 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 type="button"
                 onClick={handleCycleAmbient}
-                title={`Ambient Sound: ${ambientSound.toUpperCase()}`}
-                className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#292522] hover:text-[#7E1A27] hover:bg-[#F5EBE8]/60 transition-colors"
+                title={`Ambient Soundscape: ${ambientSound.toUpperCase()}`}
+                className="hidden xl:flex items-center gap-1.5 h-[42px] px-3.5 rounded-xl border border-[#E8DED2] bg-white hover:bg-[#FAF7F2] text-xs font-medium text-[#292522] hover:text-[#861D2D] transition-colors shadow-2xs"
               >
                 {ambientSound === 'rain' ? (
-                  <PiCloudRainBold className="text-sm text-[#7E1A27]" />
+                  <PiCloudRainBold className="text-sm text-[#861D2D]" />
                 ) : ambientSound === 'fireplace' ? (
-                  <PiFlameBold className="text-sm text-[#7E1A27]" />
+                  <PiFlameBold className="text-sm text-[#861D2D]" />
                 ) : ambientSound === 'clock' ? (
-                  <PiClockBold className="text-sm text-[#7E1A27]" />
+                  <PiClockBold className="text-sm text-[#861D2D]" />
                 ) : (
-                  <PiSpeakerHighBold className="text-sm" />
+                  <PiSpeakerHighBold className="text-sm text-[#827870]" />
                 )}
                 <span>Sound</span>
               </button>
@@ -201,17 +190,17 @@ const Navbar = ({ totalBooks = 0 }) => {
               <a
                 href="http://localhost:5555/books/export/csv"
                 download
-                title="Export catalog (CSV)"
-                className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#292522] hover:text-[#7E1A27] hover:bg-[#F5EBE8]/60 transition-colors"
+                title="Export library catalog (CSV)"
+                className="hidden xl:flex items-center gap-1.5 h-[42px] px-3.5 rounded-xl border border-[#E8DED2] bg-white hover:bg-[#FAF7F2] text-xs font-medium text-[#292522] hover:text-[#861D2D] transition-colors shadow-2xs"
               >
-                <PiFileArrowDownBold className="text-sm" />
+                <PiFileArrowDownBold className="text-sm text-[#827870]" />
                 <span>Export</span>
               </a>
 
-              {/* + Add Book CTA */}
+              {/* + Add Book Primary CTA */}
               <Link
                 to={user ? '/books/create' : '/login'}
-                className="flex items-center gap-1.5 h-[38px] px-3.5 sm:px-4 rounded-lg bg-[#7E1A27] hover:bg-[#68141F] text-white text-xs font-medium transition-colors duration-150 flex-shrink-0 shadow-2xs"
+                className="flex items-center gap-2 h-[42px] px-4 sm:px-5 rounded-xl bg-[#861D2D] hover:bg-[#701826] text-white text-xs sm:text-[13px] font-semibold transition-colors duration-150 flex-shrink-0 shadow-2xs active:scale-95"
               >
                 <PiPlusBold className="text-xs stroke-[3]" />
                 <span>Add Book</span>
@@ -219,26 +208,24 @@ const Navbar = ({ totalBooks = 0 }) => {
 
               {/* User Profile & Logout */}
               {user ? (
-                <div className="hidden sm:flex items-center gap-2 pl-2">
-                  {/* Circular Avatar */}
+                <div className="hidden sm:flex items-center gap-2.5 pl-2">
                   <div className="w-8 h-8 rounded-full bg-[#FCEAD2] border border-[#F3D7B5] text-[#B45309] font-serif font-bold text-xs flex items-center justify-center flex-shrink-0">
                     {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
                   </div>
 
                   <div className="flex flex-col text-left leading-none min-w-0">
-                    <span className="text-xs font-bold text-[#1C1917] truncate max-w-[100px]">
+                    <span className="text-xs font-bold text-[#292522] truncate max-w-[100px]">
                       {user.username}
                     </span>
-                    <span className="text-[9px] uppercase font-mono font-bold tracking-wider text-[#C98A2C] mt-1">
+                    <span className="text-[9px] uppercase font-mono font-bold tracking-wider text-[#C99A48] mt-1">
                       {isAdmin ? 'ADMIN' : 'READER'}
                     </span>
                   </div>
 
-                  {/* Logout Button */}
                   <button
                     onClick={logout}
                     title="Sign out"
-                    className="p-1 rounded-md text-[#1C1917] hover:text-[#7E1A27] hover:bg-[#F5EBE8] transition-colors ml-1"
+                    className="p-1.5 rounded-lg text-[#292522] hover:text-[#861D2D] hover:bg-[#F4E8E6] transition-colors ml-0.5"
                   >
                     <PiSignOutBold className="text-base" />
                   </button>
@@ -247,13 +234,13 @@ const Navbar = ({ totalBooks = 0 }) => {
                 <div className="hidden sm:flex items-center gap-2 pl-2">
                   <Link
                     to="/login"
-                    className="px-2.5 py-1.5 text-xs font-medium text-[#292522] hover:text-[#7E1A27] transition-colors"
+                    className="px-3 py-2 text-xs font-medium text-[#292522] hover:text-[#861D2D] transition-colors"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
-                    className="h-[36px] px-3.5 flex items-center rounded-lg bg-[#1C1917] hover:bg-black text-white text-xs font-medium transition-colors"
+                    className="h-[38px] px-4 flex items-center rounded-xl bg-[#292522] hover:bg-black text-white text-xs font-medium transition-colors shadow-2xs"
                   >
                     Join
                   </Link>
@@ -264,8 +251,8 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 type="button"
                 onClick={() => setShowCommandK(true)}
-                className="lg:hidden p-2 rounded-lg text-[#292522] hover:bg-[#F5EBE8] transition-colors"
-                aria-label="Search"
+                className="lg:hidden p-2 rounded-xl text-[#292522] hover:bg-[#F4E8E6] transition-colors"
+                aria-label="Search catalog"
               >
                 <PiMagnifyingGlassBold className="text-lg" />
               </button>
@@ -273,7 +260,7 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 onClick={() => setMobileMenuOpen((prev) => !prev)}
                 aria-label="Toggle navigation menu"
-                className="md:hidden p-2 rounded-lg text-[#292522] hover:bg-[#F5EBE8] transition-colors"
+                className="md:hidden p-2 rounded-xl text-[#292522] hover:bg-[#F4E8E6] transition-colors"
               >
                 {mobileMenuOpen ? <PiXBold className="text-xl" /> : <PiListBold className="text-xl" />}
               </button>
@@ -283,22 +270,22 @@ const Navbar = ({ totalBooks = 0 }) => {
 
         {/* MOBILE SLIDE-DOWN DRAWER */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-[#E8E2D8] bg-[#FAF7F2] px-5 py-4 transition-all">
+          <div className="md:hidden border-t border-[#E8DED2] bg-[#FAF7F2] px-5 py-4 transition-all">
             <nav className="flex flex-col gap-1.5">
               <Link
                 to="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-3.5 py-2.5 rounded-lg text-xs font-medium flex items-center justify-between ${
+                className={`px-4 py-3 rounded-xl text-xs font-medium flex items-center justify-between ${
                   isDiscoverActive
-                    ? 'text-[#7E1A27] bg-[#F5EBE8]'
-                    : 'text-[#292522] hover:bg-[#F5EBE8]/60'
+                    ? 'text-[#861D2D] bg-[#F4E8E6] font-semibold'
+                    : 'text-[#292522] hover:bg-[#F4E8E6]/60'
                 }`}
               >
-                <div className="flex items-center gap-2">
-                  <PiCompassBold className="text-sm text-[#7E1A27]" />
+                <div className="flex items-center gap-2.5">
+                  <PiCompassBold className="text-base text-[#861D2D]" />
                   <span>Discover</span>
                 </div>
-                {isDiscoverActive && <span className="w-1.5 h-1.5 rounded-full bg-[#7E1A27]"></span>}
+                {isDiscoverActive && <span className="w-1.5 h-1.5 rounded-full bg-[#861D2D]" />}
               </Link>
 
               <button
@@ -307,14 +294,14 @@ const Navbar = ({ totalBooks = 0 }) => {
                   setMobileMenuOpen(false);
                   setIsDrawerOpen(true);
                 }}
-                className="px-3.5 py-2.5 rounded-lg text-xs font-medium text-[#292522] hover:bg-[#F5EBE8]/60 text-left flex items-center justify-between"
+                className="px-4 py-3 rounded-xl text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 text-left flex items-center justify-between"
               >
-                <div className="flex items-center gap-2">
-                  <PiBookOpenBold className="text-sm text-[#292522]" />
+                <div className="flex items-center gap-2.5">
+                  <PiBookOpenBold className="text-base text-[#292522]" />
                   <span>My Shelf</span>
                 </div>
                 {bookmarkCount > 0 && (
-                  <span className="w-4 h-4 rounded-full bg-[#7E1A27] text-white text-[10px] font-mono font-bold flex items-center justify-center">
+                  <span className="px-2 py-0.5 rounded-full bg-[#861D2D] text-white text-[10px] font-mono font-bold">
                     {bookmarkCount}
                   </span>
                 )}
@@ -323,9 +310,9 @@ const Navbar = ({ totalBooks = 0 }) => {
               <a
                 href="#curated-collections"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3.5 py-2.5 rounded-lg text-xs font-medium text-[#292522] hover:bg-[#F5EBE8]/60 flex items-center gap-2"
+                className="px-4 py-3 rounded-xl text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 flex items-center gap-2.5"
               >
-                <PiStackBold className="text-sm text-[#292522]" />
+                <PiStackBold className="text-base text-[#292522]" />
                 <span>Collections</span>
               </a>
 
@@ -335,22 +322,22 @@ const Navbar = ({ totalBooks = 0 }) => {
                   setMobileMenuOpen(false);
                   setShowBookplate(true);
                 }}
-                className="px-3.5 py-2.5 rounded-lg text-xs font-medium text-[#292522] hover:bg-[#F5EBE8]/60 text-left flex items-center gap-2"
+                className="px-4 py-3 rounded-xl text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 text-left flex items-center gap-2.5"
               >
-                <PiTagBold className="text-sm text-[#292522]" />
+                <PiTagBold className="text-base text-[#292522]" />
                 <span>Bookplates</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleCycleAmbient}
-                className="px-3.5 py-2.5 rounded-lg text-xs font-medium text-[#292522] hover:bg-[#F5EBE8]/60 text-left flex items-center justify-between"
+                className="px-4 py-3 rounded-xl text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 text-left flex items-center justify-between"
               >
-                <div className="flex items-center gap-2">
-                  <PiSpeakerHighBold className="text-sm text-[#292522]" />
+                <div className="flex items-center gap-2.5">
+                  <PiSpeakerHighBold className="text-base text-[#292522]" />
                   <span>Soundscape</span>
                 </div>
-                <span className="capitalize font-mono text-[11px] text-[#7E1A27]">
+                <span className="capitalize font-mono text-[11px] text-[#861D2D] font-bold">
                   {ambientSound}
                 </span>
               </button>
@@ -359,23 +346,23 @@ const Navbar = ({ totalBooks = 0 }) => {
                 href="http://localhost:5555/books/export/csv"
                 download
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3.5 py-2.5 rounded-lg text-xs font-medium text-[#292522] hover:bg-[#F5EBE8]/60 flex items-center gap-2"
+                className="px-4 py-3 rounded-xl text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 flex items-center gap-2.5"
               >
-                <PiFileArrowDownBold className="text-sm" />
+                <PiFileArrowDownBold className="text-base text-[#827870]" />
                 <span>Export Catalog (CSV)</span>
               </a>
 
               {user ? (
-                <div className="pt-3 mt-2 border-t border-[#E8E2D8] flex items-center justify-between">
+                <div className="pt-3.5 mt-2 border-t border-[#E8DED2] flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-full bg-[#FCEAD2] border border-[#F3D7B5] text-[#B45309] font-serif font-bold text-xs flex items-center justify-center">
                       {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
                     </div>
                     <div>
-                      <span className="text-xs font-bold text-[#1C1917] block leading-none">
+                      <span className="text-xs font-bold text-[#292522] block leading-none">
                         {user.username}
                       </span>
-                      <span className="text-[9px] uppercase font-mono font-bold tracking-wider text-[#C98A2C] mt-1 block">
+                      <span className="text-[9px] uppercase font-mono font-bold tracking-wider text-[#C99A48] mt-1 block">
                         {isAdmin ? 'ADMIN' : 'READER'}
                       </span>
                     </div>
@@ -386,24 +373,24 @@ const Navbar = ({ totalBooks = 0 }) => {
                       setMobileMenuOpen(false);
                       logout();
                     }}
-                    className="px-2.5 py-1 text-xs font-medium text-[#7E1A27] hover:bg-[#F5EBE8] rounded-md"
+                    className="px-3 py-1.5 text-xs font-semibold text-[#861D2D] hover:bg-[#F4E8E6] rounded-lg"
                   >
                     Sign Out
                   </button>
                 </div>
               ) : (
-                <div className="pt-3 mt-2 border-t border-[#E8E2D8] grid grid-cols-2 gap-2">
+                <div className="pt-3.5 mt-2 border-t border-[#E8DED2] grid grid-cols-2 gap-2">
                   <Link
                     to="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="py-2 text-center text-xs font-medium rounded-lg border border-[#E8E2D8] bg-white text-[#1C1917]"
+                    className="py-2.5 text-center text-xs font-medium rounded-xl border border-[#E8DED2] bg-white text-[#292522]"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="py-2 text-center text-xs font-medium rounded-lg bg-[#7E1A27] text-white"
+                    className="py-2.5 text-center text-xs font-semibold rounded-xl bg-[#861D2D] text-white"
                   >
                     Join
                   </Link>

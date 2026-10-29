@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { PiXBold, PiArrowRightBold, PiCaretLeftBold, PiCaretRightBold, PiPlusBold, PiCaretRight } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 
-// Curated collections with photographic backgrounds matching the editorial aesthetic
+// 6 Rich, image-led Pinterest-style curated atmospheric collections
 const COLLECTIONS_DATA = [
   {
     id: 'dark-academia',
@@ -10,14 +10,8 @@ const COLLECTIONS_DATA = [
     subtitle: 'Gothic obsession & intellectual desire.',
     keywords: ['dorian', 'crime', 'gatsby', 'catcher'],
     fallbackCategory: 'Fiction',
-    accentBg: 'bg-[#1C1714]',
-    textColor: 'text-white',
-    subColor: 'text-[#D5C9B8]',
-    borderStyle: 'border-[#3D352E]',
-    bgImage: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
-    coverThumbnails: [
-      'https://covers.openlibrary.org/b/isbn/9780141439570-M.jpg', // Dorian Gray
-    ],
+    accentTag: 'Scholarly Classic',
+    bgImage: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'mind-bending',
@@ -25,14 +19,8 @@ const COLLECTIONS_DATA = [
     subtitle: 'Dystopias & cosmic curiosity.',
     keywords: ['dune', '1984', 'brave new world', 'fahrenheit'],
     fallbackCategory: 'Sci-Fi',
-    accentBg: 'bg-[#151D24]',
-    textColor: 'text-white',
-    subColor: 'text-[#B0C3D4]',
-    borderStyle: 'border-[#323D48]',
-    bgImage: 'https://images.unsplash.com/photo-1532012164546-f432f2e3edd4?auto=format&fit=crop&w=600&q=80',
-    coverThumbnails: [
-      'https://covers.openlibrary.org/b/isbn/9780441172719-M.jpg', // Dune
-    ],
+    accentTag: 'Speculative',
+    bgImage: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'comforting-stories',
@@ -40,14 +28,8 @@ const COLLECTIONS_DATA = [
     subtitle: 'Solace, warmth & gentle worlds.',
     keywords: ['pride', 'hobbit', 'alchemist', 'fellowship'],
     fallbackCategory: 'Fiction',
-    accentBg: 'bg-[#EDE4D5]',
-    textColor: 'text-[#2C241E]',
-    subColor: 'text-[#6D5E51]',
-    borderStyle: 'border-[#E2D5C3]',
-    bgImage: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80',
-    coverThumbnails: [
-      'https://covers.openlibrary.org/b/isbn/9780141439518-M.jpg', // Pride and Prejudice
-    ],
+    accentTag: 'Comfort Reads',
+    bgImage: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'perspective-shifts',
@@ -55,14 +37,8 @@ const COLLECTIONS_DATA = [
     subtitle: 'Philosophy & human experience.',
     keywords: ['sapiens', 'meaning', 'mockingbird', 'thinking'],
     fallbackCategory: 'Non-Fiction',
-    accentBg: 'bg-[#241F1A]',
-    textColor: 'text-white',
-    subColor: 'text-[#C9BBAA]',
-    borderStyle: 'border-[#423932]',
-    bgImage: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
-    coverThumbnails: [
-      'https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg', // Sapiens
-    ],
+    accentTag: 'Philosophy',
+    bgImage: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'late-night',
@@ -70,14 +46,8 @@ const COLLECTIONS_DATA = [
     subtitle: 'Page-turners read past midnight.',
     keywords: ['gatsby', 'alchemist', 'dorian', 'dune'],
     fallbackCategory: 'Fiction',
-    accentBg: 'bg-[#26171E]',
-    textColor: 'text-white',
-    subColor: 'text-[#CCA8B5]',
-    borderStyle: 'border-[#44303B]',
-    bgImage: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=600&q=80',
-    coverThumbnails: [
-      'https://covers.openlibrary.org/b/isbn/9780743273565-M.jpg', // The Great Gatsby
-    ],
+    accentTag: 'Suspense',
+    bgImage: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'personal-growth',
@@ -85,69 +55,84 @@ const COLLECTIONS_DATA = [
     subtitle: 'Habits, mastery & clearer thinking.',
     keywords: ['atomic habits', 'thinking, fast', 'educated', 'steve jobs'],
     fallbackCategory: 'Non-Fiction',
-    accentBg: 'bg-[#18241B]',
-    textColor: 'text-white',
-    subColor: 'text-[#A9C4B0]',
-    borderStyle: 'border-[#334437]',
-    bgImage: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80',
-    coverThumbnails: [
-      'https://covers.openlibrary.org/b/isbn/9780735211292-M.jpg', // Atomic Habits
-    ],
+    accentTag: 'Mindset & Craft',
+    bgImage: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80',
   },
 ];
 
-const CuratedCollectionTiles = ({ selectedMood, onSelectMood, onClearMood, totalBooks = 21 }) => {
+const CuratedCollectionTiles = ({
+  selectedMood,
+  onSelectMood,
+  onClearMood,
+  totalBooks = 21,
+}) => {
+  const carouselRef = useRef(null);
+
+  const scrollLeft = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -320, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="mb-10">
-      {/* Section Header Row matching the user reference screenshot */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-        <div className="flex items-center gap-2">
-          <h2 className="font-serif text-lg sm:text-[21px] font-bold text-[#1C1917] tracking-tight">
+    <section id="curated-collections" className="mb-12 scroll-mt-28">
+      {/* 1. SECTION HEADER ROW: Title, Metadata, Actions, & Carousel Controls */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+        <div className="flex items-center gap-2.5">
+          <h2 className="font-serif text-xl sm:text-[23px] font-bold text-[#292522] tracking-tight">
             Curated Atmospheres
           </h2>
-          <span className="text-xs sm:text-sm text-[#8C827A] font-sans">
+          <span className="text-xs sm:text-sm text-[#827870] font-sans">
             &bull; Image-led collections
           </span>
         </div>
 
-        {/* Right action group matching screenshot: + Add Story, 21 works cataloged, < > navigation */}
+        {/* Action Controls Group: Reset Filter, + Add Story, Works Count, & Carousel Arrows */}
         <div className="flex items-center gap-2.5 flex-wrap">
           {selectedMood && (
             <button
               type="button"
               onClick={onClearMood}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-[#7E1A27] hover:underline mr-1"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4E8E6] text-[#861D2D] hover:bg-[#ebd8d5] text-xs font-semibold transition-colors shadow-2xs mr-1"
             >
-              <span>Reset filter</span>
+              <span>Reset &ldquo;{selectedMood.title}&rdquo;</span>
               <PiXBold className="text-xs" />
             </button>
           )}
 
           <Link
             to="/books/create"
-            className="h-8 px-4 rounded-full bg-[#7E1A27] hover:bg-[#68141F] text-white text-xs font-medium flex items-center gap-1.5 transition-colors shadow-2xs"
+            className="h-8 sm:h-9 px-4 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs active:scale-95"
           >
             <PiPlusBold className="text-xs stroke-[3]" />
             <span>Add Story</span>
           </Link>
 
-          <div className="h-8 px-3 rounded-full bg-white border border-[#E5DFD5] text-xs font-mono text-[#1C1917] flex items-center gap-1 shadow-2xs">
-            <span className="font-bold">{totalBooks}</span> works cataloged
-            <PiCaretRight className="text-xs text-[#8C827A]" />
+          <div className="h-8 sm:h-9 px-3.5 rounded-full bg-[#FFFDF9] border border-[#E8DED2] text-xs font-mono text-[#292522] flex items-center gap-1.5 shadow-2xs">
+            <span className="font-bold text-[#861D2D]">{totalBooks}</span> works cataloged
+            <PiCaretRight className="text-xs text-[#827870]" />
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 ml-1">
             <button
               type="button"
-              aria-label="Previous collections"
-              className="w-8 h-8 rounded-full bg-[#EAE3DA]/50 hover:bg-[#EAE3DA] flex items-center justify-center text-xs text-[#1C1917] transition-colors"
+              onClick={scrollLeft}
+              aria-label="Previous atmospheric collections"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E8DED2] flex items-center justify-center text-xs text-[#292522] hover:text-[#861D2D] shadow-2xs transition-colors active:scale-95"
             >
               <PiCaretLeftBold />
             </button>
             <button
               type="button"
-              aria-label="Next collections"
-              className="w-8 h-8 rounded-full bg-[#EAE3DA]/50 hover:bg-[#EAE3DA] flex items-center justify-center text-xs text-[#1C1917] transition-colors"
+              onClick={scrollRight}
+              aria-label="Next atmospheric collections"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E8DED2] flex items-center justify-center text-xs text-[#292522] hover:text-[#861D2D] shadow-2xs transition-colors active:scale-95"
             >
               <PiCaretRightBold />
             </button>
@@ -155,8 +140,12 @@ const CuratedCollectionTiles = ({ selectedMood, onSelectMood, onClearMood, total
         </div>
       </div>
 
-      {/* 6 Atmospheric Collection Cards matching the reference screenshot */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-3.5">
+      {/* 2. GALLERY CARDS: Responsive Horizontal Carousel on Mobile/Tablet & 6-Col Grid on Desktop */}
+      <div
+        ref={carouselRef}
+        className="flex lg:grid lg:grid-cols-6 gap-3.5 sm:gap-4 overflow-x-auto lg:overflow-x-visible pb-3 lg:pb-0 scroll-smooth snap-x snap-mandatory"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
         {COLLECTIONS_DATA.map((col) => {
           const isSelected = selectedMood?.id === col.id;
 
@@ -165,60 +154,61 @@ const CuratedCollectionTiles = ({ selectedMood, onSelectMood, onClearMood, total
               key={col.id}
               type="button"
               onClick={() => onSelectMood(col)}
-              className={`group relative overflow-hidden rounded-xl text-left h-36 sm:h-40 p-3.5 flex flex-col justify-between transition-all duration-200 ease-out border shadow-2xs ${
-                col.borderStyle
-              } ${
+              className={`group relative overflow-hidden rounded-2xl text-left h-48 sm:h-52 p-4 flex flex-col justify-between transition-all duration-300 ease-out border shadow-2xs w-[250px] sm:w-[270px] lg:w-auto flex-shrink-0 snap-start ${
                 isSelected
-                  ? 'ring-2 ring-[#7E1A27] shadow-md -translate-y-0.5'
-                  : 'hover:-translate-y-1 hover:shadow-md active:translate-y-0'
+                  ? 'ring-2 ring-[#861D2D] ring-offset-2 ring-offset-[#FAF7F2] border-[#861D2D] -translate-y-1 shadow-md'
+                  : 'border-[#E8DED2] hover:-translate-y-1 hover:border-[#861D2D]/40 hover:shadow-md active:translate-y-0'
               }`}
             >
-              {/* Rich Background Image with Soft Contrast Overlay */}
+              {/* High-Resolution Background Imagery */}
               <div
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-105"
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-108"
                 style={{ backgroundImage: `url(${col.bgImage})` }}
               />
 
-              {/* Tint overlay gradient for readability */}
-              <div
-                className={`absolute inset-0 ${
-                  col.id === 'comforting-stories'
-                    ? 'bg-gradient-to-t from-black/85 via-black/40 to-black/20'
-                    : 'bg-gradient-to-t from-black/90 via-black/55 to-black/35'
-                }`}
-              />
+              {/* Dual Directional Dark Vignette Gradient for 100% Readable Text (No Washed-Out Gray) */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/45 to-black/35 pointer-events-none" />
 
-              {/* Top Typography: COLLECTION tag & Title */}
+              {/* Subtle top subtle sheen on hover */}
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
+
+              {/* Top Typography: Eyebrow Tag & Prominent Serif Title */}
               <div className="relative z-10">
-                <span className="text-[9px] uppercase font-mono tracking-[0.2em] block font-semibold text-white/70 mb-1">
+                <span className="text-[9.5px] uppercase font-mono tracking-[0.22em] block font-bold text-[#C99A48] drop-shadow-xs mb-1.5">
                   Collection
                 </span>
-                <h3 className="font-serif text-[15px] sm:text-[16px] font-bold leading-tight text-white group-hover:text-amber-100 transition-colors">
+                <h3 className="font-serif text-[17px] sm:text-[18px] font-bold leading-tight text-white drop-shadow-sm group-hover:text-amber-100 transition-colors line-clamp-2">
                   {col.title}
                 </h3>
               </div>
 
-              {/* Bottom: Subtitle & Circular Arrow button */}
-              <div className="relative z-10 flex items-end justify-between gap-1.5 pt-2">
-                <p className="text-[11px] leading-snug line-clamp-2 text-white/85 font-normal">
+              {/* Bottom Row: Subtitle Description & Discreet Circular Arrow */}
+              <div className="relative z-10 flex items-end justify-between gap-2 pt-2">
+                <p className="text-[11.5px] leading-snug line-clamp-2 text-[#FAF7F2]/90 font-normal drop-shadow-xs">
                   {col.subtitle}
                 </p>
 
-                {/* Circular arrow button matching the screenshot */}
-                <div className="w-6 h-6 rounded-full bg-black/40 border border-white/20 text-white flex items-center justify-center text-[10px] flex-shrink-0 group-hover:bg-[#7E1A27] group-hover:border-[#7E1A27] transition-colors">
+                {/* Circular Arrow Button with Burgundy Fill on Hover */}
+                <div
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 transition-all duration-200 border ${
+                    isSelected
+                      ? 'bg-[#861D2D] text-white border-[#861D2D]'
+                      : 'bg-black/40 border-white/25 text-white group-hover:bg-[#861D2D] group-hover:border-[#861D2D]'
+                  }`}
+                >
                   <PiArrowRightBold />
                 </div>
               </div>
 
-              {/* Active selection dot */}
+              {/* Active Selection Indicator Dot */}
               {isSelected && (
-                <div className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#E58929] ring-2 ring-white z-20" />
+                <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-[#C99A48] ring-2 ring-white z-20 shadow-sm" />
               )}
             </button>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 };
 
