@@ -18,6 +18,7 @@ import {
   PiSortAscendingBold,
   PiBookmarkSimpleFill,
   PiXBold,
+  PiArrowRightBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { ReadingListContext } from '../context/ReadingListContext';
@@ -151,10 +152,10 @@ const Home = () => {
 
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
         {/* Editorial Masthead Banner matching reference screenshot & magazine cover layout */}
-        <header className="mb-10 rounded-2xl bg-[#FFFDF9] border border-[#E8DED2] overflow-hidden shadow-2xs relative">
+        <header className="mb-10 rounded-3xl bg-[#FFFDF9] border border-[#E8DED2] overflow-hidden shadow-2xs relative">
           <div className="flex flex-col lg:flex-row items-stretch justify-between min-h-[220px] lg:min-h-[250px]">
             {/* Left Headline Column */}
-            <div className="p-8 sm:p-10 lg:p-12 max-w-2xl flex flex-col justify-center">
+            <div className="p-8 sm:p-10 lg:p-12 max-w-xl xl:max-w-2xl flex flex-col justify-center">
               <div className="flex items-center gap-2.5 mb-3">
                 <span className="h-[1px] w-6 bg-[#C99A48]"></span>
                 <span className="text-[10px] font-mono font-bold uppercase tracking-[0.24em] text-[#861D2D]">
@@ -164,20 +165,38 @@ const Home = () => {
               <h1 className="font-serif text-3xl sm:text-4xl lg:text-[46px] font-bold text-[#292522] tracking-tight leading-[1.1]">
                 Fall into <span className="italic font-normal text-[#861D2D]">another world.</span>
               </h1>
-              <p className="text-sm sm:text-[15px] text-[#827870] font-serif italic mt-3 leading-relaxed">
+              <p className="text-sm sm:text-[15px] text-[#827870] font-serif italic mt-3 mb-6 leading-relaxed">
                 Stories to keep. Ideas to collect. Worlds to get lost in.
               </p>
+
+              {/* Start Exploring Button & Curated Universe Subtext matching screenshot */}
+              <div className="flex items-center gap-4 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById('curated-collections');
+                    el?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="h-10 px-5 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold flex items-center gap-2 shadow-2xs transition-colors active:scale-95"
+                >
+                  <span>Start Exploring</span>
+                  <PiArrowRightBold className="text-xs" />
+                </button>
+                <span className="text-[10px] font-mono text-[#827870] uppercase tracking-wider max-w-[210px] leading-tight">
+                  A curated universe of books, ideas and quieter days.
+                </span>
+              </div>
             </div>
 
             {/* Right Aesthetic Moodboard Photo Collage */}
-            <div className="w-full lg:w-[480px] xl:w-[540px] flex-shrink-0 relative overflow-hidden bg-[#FAF7F2]">
+            <div className="w-full lg:w-[480px] xl:w-[560px] flex-shrink-0 relative overflow-hidden bg-[#FAF7F2]">
               <img
                 src="/images/hero-moodboard.jpg"
                 alt="Literary Moodboard - A quieter brighter you"
-                className="w-full h-52 sm:h-60 lg:h-full object-cover object-center"
+                className="w-full h-56 sm:h-64 lg:h-full object-cover object-center"
               />
               {/* Subtle blend gradient on the left edge for desktop */}
-              <div className="hidden lg:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#FFFDF9] via-[#FFFDF9]/60 to-transparent pointer-events-none" />
+              <div className="hidden lg:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#FFFDF9] to-transparent pointer-events-none" />
               {/* Subtle top blend for mobile */}
               <div className="lg:hidden absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#FFFDF9] to-transparent pointer-events-none" />
             </div>

@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { PiXBold, PiArrowRightBold, PiCaretLeftBold, PiCaretRightBold, PiPlusBold, PiCaretRight } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 
-// 6 Rich, image-led Pinterest-style curated atmospheric collections
+// 6 Distinct, high-quality, relevant curated atmospheric collections
 const COLLECTIONS_DATA = [
   {
     id: 'dark-academia',
@@ -10,7 +10,7 @@ const COLLECTIONS_DATA = [
     subtitle: 'Gothic obsession & intellectual desire.',
     keywords: ['dorian', 'crime', 'gatsby', 'catcher'],
     fallbackCategory: 'Fiction',
-    accentTag: 'Scholarly Classic',
+    theme: 'dark',
     bgImage: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80',
   },
   {
@@ -19,7 +19,7 @@ const COLLECTIONS_DATA = [
     subtitle: 'Dystopias & cosmic curiosity.',
     keywords: ['dune', '1984', 'brave new world', 'fahrenheit'],
     fallbackCategory: 'Sci-Fi',
-    accentTag: 'Speculative',
+    theme: 'dark',
     bgImage: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=800&q=80',
   },
   {
@@ -28,7 +28,7 @@ const COLLECTIONS_DATA = [
     subtitle: 'Solace, warmth & gentle worlds.',
     keywords: ['pride', 'hobbit', 'alchemist', 'fellowship'],
     fallbackCategory: 'Fiction',
-    accentTag: 'Comfort Reads',
+    theme: 'light', // Deliberate dark-text treatment on intentionally warm light aesthetic
     bgImage: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80',
   },
   {
@@ -37,7 +37,7 @@ const COLLECTIONS_DATA = [
     subtitle: 'Philosophy & human experience.',
     keywords: ['sapiens', 'meaning', 'mockingbird', 'thinking'],
     fallbackCategory: 'Non-Fiction',
-    accentTag: 'Philosophy',
+    theme: 'dark',
     bgImage: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80',
   },
   {
@@ -46,7 +46,7 @@ const COLLECTIONS_DATA = [
     subtitle: 'Page-turners read past midnight.',
     keywords: ['gatsby', 'alchemist', 'dorian', 'dune'],
     fallbackCategory: 'Fiction',
-    accentTag: 'Suspense',
+    theme: 'dark',
     bgImage: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80',
   },
   {
@@ -55,7 +55,7 @@ const COLLECTIONS_DATA = [
     subtitle: 'Habits, mastery & clearer thinking.',
     keywords: ['atomic habits', 'thinking, fast', 'educated', 'steve jobs'],
     fallbackCategory: 'Non-Fiction',
-    accentTag: 'Mindset & Craft',
+    theme: 'dark',
     bgImage: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80',
   },
 ];
@@ -81,9 +81,9 @@ const CuratedCollectionTiles = ({
   };
 
   return (
-    <section id="curated-collections" className="mb-12 scroll-mt-28">
-      {/* 1. SECTION HEADER ROW: Title, Metadata, Actions, & Carousel Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+    <section id="curated-collections" className="mb-12 scroll-mt-24">
+      {/* 1. SECTION HEADER: Title, Metadata, Actions, & Carousel Controls */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
         <div className="flex items-center gap-2.5">
           <h2 className="font-serif text-xl sm:text-[23px] font-bold text-[#292522] tracking-tight">
             Curated Atmospheres
@@ -108,13 +108,13 @@ const CuratedCollectionTiles = ({
 
           <Link
             to="/books/create"
-            className="h-8 sm:h-9 px-4 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs active:scale-95"
+            className="h-9 px-4 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs active:scale-95"
           >
             <PiPlusBold className="text-xs stroke-[3]" />
             <span>Add Story</span>
           </Link>
 
-          <div className="h-8 sm:h-9 px-3.5 rounded-full bg-[#FFFDF9] border border-[#E8DED2] text-xs font-mono text-[#292522] flex items-center gap-1.5 shadow-2xs">
+          <div className="h-9 px-3.5 rounded-full bg-[#FFFDF9] border border-[#E8DED2] text-xs font-mono text-[#292522] flex items-center gap-1.5 shadow-2xs">
             <span className="font-bold text-[#861D2D]">{totalBooks}</span> works cataloged
             <PiCaretRight className="text-xs text-[#827870]" />
           </div>
@@ -124,7 +124,7 @@ const CuratedCollectionTiles = ({
               type="button"
               onClick={scrollLeft}
               aria-label="Previous atmospheric collections"
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E8DED2] flex items-center justify-center text-xs text-[#292522] hover:text-[#861D2D] shadow-2xs transition-colors active:scale-95"
+              className="w-9 h-9 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E8DED2] flex items-center justify-center text-xs text-[#292522] hover:text-[#861D2D] shadow-2xs transition-colors active:scale-95"
             >
               <PiCaretLeftBold />
             </button>
@@ -132,7 +132,7 @@ const CuratedCollectionTiles = ({
               type="button"
               onClick={scrollRight}
               aria-label="Next atmospheric collections"
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E8DED2] flex items-center justify-center text-xs text-[#292522] hover:text-[#861D2D] shadow-2xs transition-colors active:scale-95"
+              className="w-9 h-9 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E8DED2] flex items-center justify-center text-xs text-[#292522] hover:text-[#861D2D] shadow-2xs transition-colors active:scale-95"
             >
               <PiCaretRightBold />
             </button>
@@ -148,52 +148,70 @@ const CuratedCollectionTiles = ({
       >
         {COLLECTIONS_DATA.map((col) => {
           const isSelected = selectedMood?.id === col.id;
+          const isLight = col.theme === 'light';
 
           return (
             <button
               key={col.id}
               type="button"
               onClick={() => onSelectMood(col)}
-              className={`group relative overflow-hidden rounded-2xl text-left h-48 sm:h-52 p-4 flex flex-col justify-between transition-all duration-300 ease-out border shadow-2xs w-[250px] sm:w-[270px] lg:w-auto flex-shrink-0 snap-start ${
+              className={`group relative overflow-hidden rounded-2xl text-left h-[210px] sm:h-[220px] p-4 sm:p-4.5 flex flex-col justify-between transition-all duration-300 ease-out border shadow-2xs w-[250px] sm:w-[270px] lg:w-auto flex-shrink-0 snap-start ${
                 isSelected
                   ? 'ring-2 ring-[#861D2D] ring-offset-2 ring-offset-[#FAF7F2] border-[#861D2D] -translate-y-1 shadow-md'
                   : 'border-[#E8DED2] hover:-translate-y-1 hover:border-[#861D2D]/40 hover:shadow-md active:translate-y-0'
               }`}
             >
-              {/* High-Resolution Background Imagery */}
+              {/* Background Imagery */}
               <div
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-108"
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-106"
                 style={{ backgroundImage: `url(${col.bgImage})` }}
               />
 
-              {/* Dual Directional Dark Vignette Gradient for 100% Readable Text (No Washed-Out Gray) */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/45 to-black/35 pointer-events-none" />
-
-              {/* Subtle top subtle sheen on hover */}
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
+              {/* Contrast Overlays: Warm paper gradient for light theme; Deep dark gradient for dark theme */}
+              {isLight ? (
+                <div className="absolute inset-0 bg-gradient-to-t from-[#F5EFE6]/98 via-[#F5EFE6]/75 to-[#F5EFE6]/50 pointer-events-none" />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/35 pointer-events-none" />
+              )}
 
               {/* Top Typography: Eyebrow Tag & Prominent Serif Title */}
               <div className="relative z-10">
-                <span className="text-[9.5px] uppercase font-mono tracking-[0.22em] block font-bold text-[#C99A48] drop-shadow-xs mb-1.5">
+                <span
+                  className={`text-[9.5px] uppercase font-mono tracking-[0.22em] block font-bold mb-1.5 ${
+                    isLight ? 'text-[#861D2D]' : 'text-[#C99A48] drop-shadow-xs'
+                  }`}
+                >
                   Collection
                 </span>
-                <h3 className="font-serif text-[17px] sm:text-[18px] font-bold leading-tight text-white drop-shadow-sm group-hover:text-amber-100 transition-colors line-clamp-2">
+                <h3
+                  className={`font-serif text-[17px] sm:text-[18px] font-bold leading-snug line-clamp-2 transition-colors ${
+                    isLight
+                      ? 'text-[#292522] group-hover:text-[#861D2D]'
+                      : 'text-white drop-shadow-sm group-hover:text-amber-100'
+                  }`}
+                >
                   {col.title}
                 </h3>
               </div>
 
               {/* Bottom Row: Subtitle Description & Discreet Circular Arrow */}
               <div className="relative z-10 flex items-end justify-between gap-2 pt-2">
-                <p className="text-[11.5px] leading-snug line-clamp-2 text-[#FAF7F2]/90 font-normal drop-shadow-xs">
+                <p
+                  className={`text-[11.5px] leading-snug line-clamp-2 font-normal ${
+                    isLight ? 'text-[#5A4D41]' : 'text-[#FAF7F2]/90 drop-shadow-xs'
+                  }`}
+                >
                   {col.subtitle}
                 </p>
 
-                {/* Circular Arrow Button with Burgundy Fill on Hover */}
+                {/* Circular Arrow Button */}
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 transition-all duration-200 border ${
                     isSelected
                       ? 'bg-[#861D2D] text-white border-[#861D2D]'
-                      : 'bg-black/40 border-white/25 text-white group-hover:bg-[#861D2D] group-hover:border-[#861D2D]'
+                      : isLight
+                      ? 'bg-[#292522] border-[#292522] text-white group-hover:bg-[#861D2D] group-hover:border-[#861D2D]'
+                      : 'bg-black/50 border-white/25 text-white group-hover:bg-[#861D2D] group-hover:border-[#861D2D]'
                   }`}
                 >
                   <PiArrowRightBold />
