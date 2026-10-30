@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   PiLockKeyBold,
@@ -9,6 +9,7 @@ import {
   PiWarningCircleBold,
   PiSpinnerGapBold,
   PiArrowRightBold,
+  PiSparkleBold,
 } from 'react-icons/pi';
 import Navbar from '../components/Navbar';
 import Footer from '../components/layout/Footer';
@@ -32,15 +33,15 @@ const ResetPassword = () => {
   // Evaluate password strength
   const getStrength = (pwd) => {
     if (!pwd) return { score: 0, text: '', color: 'bg-stone-200' };
-    if (pwd.length < 5) return { score: 1, text: 'Too short (min 5 chars)', color: 'bg-rose-500' };
+    if (pwd.length < 5) return { score: 1, text: 'Too short (min 5 chars)', color: 'bg-rose-400' };
     let score = 1;
     if (pwd.length >= 8) score++;
     if (/[0-9]/.test(pwd) && /[a-zA-Z]/.test(pwd)) score++;
     if (/[^A-Za-z0-9]/.test(pwd)) score++;
 
-    if (score === 2) return { score: 2, text: 'Fair', color: 'bg-amber-500' };
-    if (score === 3) return { score: 3, text: 'Good', color: 'bg-blue-500' };
-    return { score: 4, text: 'Strong', color: 'bg-emerald-500' };
+    if (score === 2) return { score: 2, text: 'Fair', color: 'bg-amber-400' };
+    if (score === 3) return { score: 3, text: 'Good', color: 'bg-[#C6A16B]' };
+    return { score: 4, text: 'Strong & secure', color: 'bg-[#879783]' };
   };
 
   const strength = getStrength(newPassword);
@@ -87,51 +88,64 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-transparent text-[#1C1917]">
+    <div className="min-h-screen flex flex-col bg-[#F7F3EC] text-[#302A27] selection:bg-[#8D263B]/15">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center p-4 sm:p-6 my-10">
-        <div className="w-full max-w-md editorial-sheet p-8 sm:p-10 bg-white border border-[#E8DED1] shadow-xl rounded-3xl relative overflow-hidden">
-          {/* Decorative Washi Tape Bar */}
-          <div className="w-24 h-3.5 bg-[#8D263B]/20 mx-auto -mt-6 mb-6 rounded-xs transform rotate-1 border-x-2 border-dashed border-white/60 pointer-events-none" />
+      <main className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-12 my-6">
+        <div className="w-full max-w-lg bg-[#FFFDFA] border border-[#E8DED1] rounded-2xl sm:rounded-3xl shadow-[0_20px_60px_-15px_rgba(48,42,39,0.07)] p-8 sm:p-10 relative overflow-hidden transition-all">
+          
+          {/* Top Decorative Indicator */}
+          <div className="flex items-center justify-between pb-5 mb-6 border-b border-[#E8DED1]">
+            <Link
+              to="/login"
+              className="text-xs font-medium text-[#81766D] hover:text-[#8D263B] transition-colors"
+            >
+              &larr; Back to Sign In
+            </Link>
+
+            <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-[#81766D]">
+              <PiSparkleBold className="text-[#C6A16B] text-xs" />
+              <span>Passphrase Inscription</span>
+            </span>
+          </div>
 
           {!token ? (
             <div className="text-center py-6 space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto shadow-2xs">
                 <PiWarningCircleBold className="text-2xl" />
               </div>
-              <h2 className="font-serif text-2xl font-bold text-[#302A27]">
+              <h2 className="font-serif text-2xl font-medium text-[#302A27]">
                 Missing Reset Token
               </h2>
-              <p className="text-xs sm:text-sm text-[#81766D] font-serif italic leading-relaxed">
-                The password reset link appears incomplete or missing the required token.
+              <p className="text-xs sm:text-[13px] text-[#81766D] font-serif italic leading-relaxed">
+                The password reset link appears incomplete or missing the required cryptographic token.
               </p>
               <Link
                 to="/forgot-password"
-                className="inline-block px-5 py-2.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-xs hover:bg-[#67202F] transition-colors"
+                className="inline-block px-5 py-2.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium shadow-xs transition-colors"
               >
-                Request a New Reset Link
+                Request New Recovery Dispatch
               </Link>
             </div>
           ) : !success ? (
             <>
               <div className="text-center mb-8">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#7B1826] to-[#5C101B] text-amber-200 flex items-center justify-center mx-auto mb-3 shadow-md">
-                  <PiLockKeyBold className="text-2xl" />
+                <div className="w-12 h-12 rounded-xl bg-[#8D263B]/10 text-[#8D263B] border border-[#8D263B]/20 flex items-center justify-center mx-auto mb-3 shadow-2xs">
+                  <PiLockKeyBold className="text-xl" />
                 </div>
-                <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#302A27]">
+                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#302A27] tracking-tight">
                   Choose New Key
                 </h1>
-                <p className="text-xs sm:text-sm text-[#81766D] font-serif italic mt-1.5 leading-relaxed">
-                  Enter your new password below to restore access to your private reading shelf.
+                <p className="font-serif italic text-xs sm:text-[13px] text-[#81766D] mt-1.5 leading-relaxed">
+                  Inscribe your new passphrase below to restore access to your private reading shelf.
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4.5">
                 {/* New Password */}
                 <div>
-                  <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#786C62] mb-1.5">
-                    New Password
+                  <label className="block text-xs font-medium text-[#302A27] mb-1.5">
+                    New Passphrase
                   </label>
                   <div className="relative">
                     <input
@@ -140,12 +154,12 @@ const ResetPassword = () => {
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="At least 5 characters"
                       autoFocus
-                      className="w-full pl-4 pr-11 py-3 rounded-xl text-xs sm:text-sm bg-[#F7F3EC] border border-[#E8DED1] text-[#302A27] focus:outline-none focus:border-[#8D263B] focus:ring-1 focus:ring-[#8D263B] shadow-2xs transition-colors"
+                      className="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-[#E8DED1] bg-[#FFFDFA] text-xs text-[#302A27] placeholder:text-[#81766D]/50 focus:outline-none focus:border-[#8D263B] focus:ring-2 focus:ring-[#8D263B]/10 transition-all shadow-2xs"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#81766D] hover:text-[#302A27] p-1"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#81766D] hover:text-[#302A27] p-1 cursor-pointer"
                     >
                       {showPassword ? <PiEyeSlashBold className="text-sm" /> : <PiEyeBold className="text-sm" />}
                     </button>
@@ -157,91 +171,84 @@ const ResetPassword = () => {
                       <div className="flex gap-1 h-1">
                         <div
                           className={`flex-1 rounded-full ${
-                            strength.score >= 1 ? strength.color : 'bg-stone-200'
+                            strength.score >= 1 ? strength.color : 'bg-[#E8DED1]'
                           }`}
                         />
                         <div
                           className={`flex-1 rounded-full ${
-                            strength.score >= 2 ? strength.color : 'bg-stone-200'
+                            strength.score >= 2 ? strength.color : 'bg-[#E8DED1]'
                           }`}
                         />
                         <div
                           className={`flex-1 rounded-full ${
-                            strength.score >= 3 ? strength.color : 'bg-stone-200'
+                            strength.score >= 3 ? strength.color : 'bg-[#E8DED1]'
                           }`}
                         />
                         <div
                           className={`flex-1 rounded-full ${
-                            strength.score >= 4 ? strength.color : 'bg-stone-200'
+                            strength.score >= 4 ? strength.color : 'bg-[#E8DED1]'
                           }`}
                         />
                       </div>
-                      <span className="text-[10px] font-mono text-[#81766D]">
-                        Strength: <strong>{strength.text}</strong>
+                      <span className="text-[10px] font-mono text-[#81766D] block">
+                        Strength: {strength.text}
                       </span>
                     </div>
                   )}
                 </div>
 
-                {/* Confirm New Password */}
+                {/* Confirm Password */}
                 <div>
-                  <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#786C62] mb-1.5">
-                    Confirm New Password
+                  <label className="block text-xs font-medium text-[#302A27] mb-1.5">
+                    Confirm Passphrase
                   </label>
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Repeat your password"
-                    className="w-full px-4 py-3 rounded-xl text-xs sm:text-sm bg-[#F7F3EC] border border-[#E8DED1] text-[#302A27] focus:outline-none focus:border-[#8D263B] focus:ring-1 focus:ring-[#8D263B] shadow-2xs transition-colors"
+                    placeholder="Repeat passphrase"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DED1] bg-[#FFFDFA] text-xs text-[#302A27] placeholder:text-[#81766D]/50 focus:outline-none focus:border-[#8D263B] focus:ring-2 focus:ring-[#8D263B]/10 transition-all shadow-2xs"
                   />
                 </div>
 
-                {error && (
-                  <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
-                    {error}
-                  </div>
-                )}
+                {error && <p className="text-[11px] text-[#8D263B] font-medium">{error}</p>}
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-full bg-gradient-to-r from-[#7B1826] via-[#8D263B] to-[#6E1421] text-white text-xs sm:text-sm font-semibold shadow-md hover:brightness-105 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer mt-2"
+                  className="w-full h-11 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium tracking-wide flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-2"
                 >
                   {loading ? (
-                    <>
+                    <span className="flex items-center gap-2">
                       <PiSpinnerGapBold className="text-base animate-spin" />
-                      <span>Updating Password...</span>
-                    </>
+                      <span>Updating Key...</span>
+                    </span>
                   ) : (
                     <>
-                      <PiLockKeyOpenBold className="text-sm" />
-                      <span>Save New Password</span>
+                      <span>Inscribe New Password</span>
+                      <PiArrowRightBold className="text-xs text-[#C6A16B]" />
                     </>
                   )}
                 </button>
               </form>
             </>
           ) : (
-            <div className="text-center py-6 animate-fade-in space-y-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto shadow-xs">
-                <PiCheckCircleFill className="text-3xl" />
+            <div className="text-center py-4 space-y-4 animate-in fade-in duration-300">
+              <div className="w-14 h-14 rounded-full bg-[#879783]/15 text-[#879783] border border-[#879783]/30 flex items-center justify-center mx-auto shadow-2xs">
+                <PiCheckCircleFill className="text-2xl" />
               </div>
-              <h2 className="font-serif text-2xl font-bold text-[#302A27]">
-                Key Updated
+              <h2 className="font-serif text-2xl font-medium text-[#302A27]">
+                Key Updated Successfully
               </h2>
-              <p className="text-xs sm:text-sm text-[#786C62] font-serif italic leading-relaxed max-w-xs mx-auto">
-                Your password has been changed successfully. Redirecting you to sign in...
+              <p className="text-xs sm:text-[13px] text-[#81766D] font-serif italic leading-relaxed">
+                Your passphrase has been updated in the sanctuary ledger. Redirecting you to sign in...
               </p>
-              <div className="pt-2">
-                <Link
-                  to="/login"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-xs hover:bg-[#67202F] transition-colors"
-                >
-                  <span>Sign In Now</span>
-                  <PiArrowRightBold className="text-xs" />
-                </Link>
-              </div>
+              <Link
+                to="/login"
+                className="inline-block px-5 py-2 rounded-full bg-[#8D263B] text-white text-xs font-medium shadow-xs"
+              >
+                Sign In Immediately &rarr;
+              </Link>
             </div>
           )}
         </div>
@@ -253,4 +260,3 @@ const ResetPassword = () => {
 };
 
 export default ResetPassword;
-
