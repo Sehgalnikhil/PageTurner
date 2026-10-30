@@ -3,7 +3,7 @@
 
 [build]
   base = "frontend"
-  publish = "dist"
+  publish = "frontend/dist"
   command = "npm run build"
 
 # SPA Fallback: Direct all routes to index.html for React Router

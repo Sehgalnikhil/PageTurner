@@ -1,0 +1,12 @@
+# Netlify configuration inside frontend directory
+# Used if Netlify Base Directory is set to "frontend" in the dashboard
+
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# SPA Fallback: Direct all routes to index.html for React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

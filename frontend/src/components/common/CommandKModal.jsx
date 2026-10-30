@@ -12,6 +12,7 @@ import {
   PiSpeakerHighBold,
   PiMoonBold,
   PiSunDimBold,
+  PiCrownBold,
 } from 'react-icons/pi';
 import { ThemeContext } from '../../context/ThemeContext';
 import { ReadingListContext } from '../../context/ReadingListContext';
@@ -97,6 +98,17 @@ const CommandKModal = ({ isOpen, onClose, books = [], onOpenBookplate }) => {
       badge: 'Theme',
       perform: () => {
         cycleTheme();
+      },
+    },
+    {
+      id: 'action-admin-desk',
+      title: "Curator's Grand Studio (Admin Dashboard)",
+      subtitle: 'Manage library stacks, readers, marginalia reviews, and system health',
+      icon: PiCrownBold,
+      badge: 'Curator',
+      perform: () => {
+        onClose();
+        navigate('/admin');
       },
     },
     {

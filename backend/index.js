@@ -8,6 +8,7 @@ import { PORT, mongoDBURL, NODE_ENV } from './config.js';
 import booksRoute from './routes/booksRoute.js';
 import authRoute from './routes/authRoute.js';
 import systemRoute from './routes/systemRoute.js';
+import adminRoute from './routes/adminRoute.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import { seedDemoUsers } from './utils/seedDemoUsers.js';
 import { seed20Books } from './utils/seed20Books.js';
@@ -76,6 +77,7 @@ app.get('/', (request, response) => {
 app.use('/books', booksRoute);
 app.use('/auth', authRoute);
 app.use('/system', systemRoute);
+app.use('/admin', adminRoute);
 
 // Centralized error handling
 app.use(notFound);

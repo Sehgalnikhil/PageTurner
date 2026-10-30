@@ -16,9 +16,11 @@ import {
   PiCompassBold,
   PiStackBold,
   PiBookOpenBold,
+  PiCrownBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { ReadingListContext } from '../context/ReadingListContext';
+import { adminService } from '../services/api';
 import { startAmbientSound, stopAmbientSound } from '../utils/soundEffects';
 import CommandKModal from './common/CommandKModal';
 import BookplateModal from './home/BookplateModal';
@@ -30,10 +32,24 @@ const Navbar = ({ totalBooks = 0 }) => {
   const [showBookplate, setShowBookplate] = useState(false);
   const [showPassport, setShowPassport] = useState(false);
   const [ambientSound, setAmbientSound] = useState('off'); // 'off' | 'rain' | 'fireplace' | 'clock'
+  const [announcement, setAnnouncement] = useState(null);
+  const [announcementDismissed, setAnnouncementDismissed] = useState(false);
 
   const { user, logout, isAdmin } = useContext(AuthContext);
   const { count: bookmarkCount, setIsDrawerOpen } = useContext(ReadingListContext);
   const location = useLocation();
+
+  // Load public broadcast banner
+  useEffect(() => {
+    adminService
+      .getPublicAnnouncement()
+      .then((res) => {
+        if (res?.data?.announcement?.active) {
+          setAnnouncement(res.data.announcement);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Global Command-K keyboard shortcut
   useEffect(() => {
@@ -67,6 +83,49 @@ const Navbar = ({ totalBooks = 0 }) => {
 
   return (
     <>
+      {/* 0. SITE-WIDE BROADCAST BANNER (CURATOR ANNOUNCEMENTS) */}
+      {announcement?.active && !announcementDismissed && (
+        <div
+          className={`w-full py-1.5 px-4 text-xs flex items-center justify-between transition-colors z-50 ${
+            announcement.tone === 'burgundy'
+              ? 'bg-[#861D2D] text-white'
+              : announcement.tone === 'amber'
+              ? 'bg-[#FCEAD2] text-[#B45309] border-b border-[#F3D7B5]'
+              : 'bg-[#1C1A19] text-[#F8E7B9] border-b border-stone-800'
+          }`}
+        >
+          <div className="flex-1 flex items-center justify-center gap-2.5 text-center truncate px-2">
+            <span
+              className={`px-2 py-0.2 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider ${
+                announcement.tone === 'burgundy'
+                  ? 'bg-white/20 text-white'
+                  : announcement.tone === 'amber'
+                  ? 'bg-[#B45309]/15 text-[#B45309]'
+                  : 'bg-[#C99A48]/20 text-[#F8E7B9]'
+              }`}
+            >
+              {announcement.badge || 'Curator Dispatch'}
+            </span>
+            <span className="font-serif font-semibold text-xs sm:text-[13px] truncate">
+              {announcement.text}
+            </span>
+            {announcement.subtext && (
+              <span className="hidden md:inline text-[11px] font-serif italic opacity-85">
+                &bull; {announcement.subtext}
+              </span>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => setAnnouncementDismissed(true)}
+            className="p-1 rounded hover:bg-black/10 transition-colors opacity-75 hover:opacity-100 flex-shrink-0 cursor-pointer"
+            title="Dismiss notification"
+          >
+            <PiXBold className="text-xs" />
+          </button>
+        </div>
+      )}
+
       <header className="sticky top-0 z-40 bg-[#FAF7F2] border-b border-[#E8DED2] transition-colors duration-150">
         <div className="w-full max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-[76px] sm:h-[80px] gap-2 lg:gap-4">
@@ -148,6 +207,22 @@ const Navbar = ({ totalBooks = 0 }) => {
                 <PiTagBold className="text-sm text-[#292522]" />
                 <span>Bookplates</span>
               </button>
+
+              {/* Admin Curator Desk Link */}
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  className={`h-9 px-3.5 rounded-full text-xs sm:text-[13px] font-semibold transition-all duration-150 flex items-center gap-1.5 shadow-2xs ${
+                    location.pathname === '/admin'
+                      ? 'text-[#861D2D] bg-[#F4E8E6] border border-[#861D2D]/30'
+                      : 'text-[#B45309] bg-[#FCEAD2]/70 hover:bg-[#FCEAD2] border border-[#F3D7B5]'
+                  }`}
+                  title="Curator Grand Studio & Admin Dashboard"
+                >
+                  <PiCrownBold className="text-sm text-[#C99A48]" />
+                  <span>Curator Desk</span>
+                </Link>
+              )}
             </nav>
 
             {/* 3. INTEGRATED SEARCH UTILITY (CENTER) */}
@@ -367,6 +442,22 @@ const Navbar = ({ totalBooks = 0 }) => {
 
               {user ? (
                 <div className="pt-3 mt-2 border-t border-[#E8DED2]">
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="w-full text-left px-3.5 py-2.5 rounded-full text-xs font-bold text-[#B45309] hover:bg-[#FCEAD2] flex items-center justify-between mb-2 border border-[#F3D7B5] bg-[#FFF9F2] shadow-2xs"
+                    >
+                      <div className="flex items-center gap-2">
+                        <PiCrownBold className="text-base text-[#C99A48]" />
+                        <span>Curator Desk &amp; Admin Studio</span>
+                      </div>
+                      <span className="text-[10px] font-mono uppercase bg-[#C99A48]/20 px-2 py-0.5 rounded-full font-bold">
+                        ADMIN
+                      </span>
+                    </Link>
+                  )}
+
                   <button
                     onClick={() => {
                       setMobileMenuOpen(false);

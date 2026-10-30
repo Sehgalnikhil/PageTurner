@@ -9,6 +9,7 @@ import Login from './pages/login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import ReadingListModal from './components/ReadingListModal';
 
@@ -47,6 +48,16 @@ const App = () => {
             element={
               <ProtectedRoute adminOnly={true}>
                 <DeleteBook />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Grand Curator Admin Dashboard */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />

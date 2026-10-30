@@ -93,3 +93,25 @@ export const systemService = {
   getFsDemo: () => api.get('/system/fs-demo'),
   getHealth: () => api.get('/health'),
 };
+
+export const adminService = {
+  getStats: () => api.get('/admin/stats'),
+  getUsers: (params) => api.get('/admin/users', { params }),
+  updateUserRole: (id, role) => api.put(`/admin/users/${id}/role`, { role }),
+  deleteUser: (id) => api.delete(`/admin/users/${id}`),
+  getReviews: () => api.get('/admin/reviews'),
+  deleteReview: (bookId, reviewId) => api.delete(`/admin/reviews/${bookId}/${reviewId}`),
+  bulkDeleteReviews: (items) => api.post('/admin/reviews/bulk-delete', { items }),
+  sendWelcomeEmail: (id) => api.post(`/admin/users/${id}/welcome-email`),
+  toggleFeatureBook: (id) => api.put(`/admin/books/${id}/toggle-feature`),
+  quickEditBook: (id, data) => api.put(`/admin/books/${id}/quick-edit`, data),
+  bulkDeleteBooks: (ids) => api.post('/admin/books/bulk-delete', { ids }),
+  bulkUpdateCategory: (ids, category) => api.post('/admin/books/bulk-category', { ids, category }),
+  getAuditLogs: () => api.get('/admin/audit-logs'),
+  getAnnouncement: () => api.get('/admin/announcement'),
+  getPublicAnnouncement: () => api.get('/admin/announcement/public'),
+  updateAnnouncement: (data) => api.put('/admin/announcement', data),
+  reseedCatalog: () => api.post('/admin/reseed'),
+  getBackupJsonUrl: () => `${API_BASE_URL}/admin/backup/json`,
+  getExportCsvUrl: () => `${API_BASE_URL}/books/export/csv`,
+};

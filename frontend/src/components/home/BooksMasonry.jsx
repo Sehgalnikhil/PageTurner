@@ -56,7 +56,7 @@ const BooksMasonry = ({ books = [], isCollectionActive = false }) => {
         type: 'book',
         book,
         key: book._id || idx,
-        isFeatured: idx % 6 === 2,
+        isFeatured: typeof book.isFeatured === 'boolean' ? book.isFeatured : idx % 6 === 2,
         index: idx,
       }));
     }
@@ -77,7 +77,7 @@ const BooksMasonry = ({ books = [], isCollectionActive = false }) => {
         type: 'book',
         book,
         key: book._id || idx,
-        isFeatured: idx % 6 === 2,
+        isFeatured: typeof book.isFeatured === 'boolean' ? book.isFeatured : idx % 6 === 2,
         index: idx,
       });
     });
