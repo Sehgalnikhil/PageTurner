@@ -472,7 +472,7 @@ const BlindDateBanner = ({ books = [] }) => {
                 <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-[#FAF4EC] to-[#F1E5D5] text-[#1A120B] border border-[#CBB39C] shadow-[0_10px_30px_-5px_rgba(0,0,0,0.45)] relative overflow-hidden">
                   <div className="flex items-center justify-between border-b border-[#D8C4AE] pb-2.5 mb-3.5">
                     <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-md bg-[#861D2D]/10 text-[#861D2D] flex items-center justify-center">
+                      <div className="w-5 h-5 rounded-md bg-[#8D263B]/10 text-[#8D263B] flex items-center justify-center">
                         <PiFeatherBold className="text-xs" />
                       </div>
                       <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.16em] font-bold text-[#5A4535]">
@@ -488,7 +488,7 @@ const BlindDateBanner = ({ books = [] }) => {
                   <ul className="space-y-3 font-serif">
                     {/* Clue 1: Atmosphere / Setting */}
                     <li className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-[#861D2D]/10 text-[#861D2D] flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <div className="w-5 h-5 rounded-full bg-[#8D263B]/10 text-[#8D263B] flex items-center justify-center flex-shrink-0 mt-0.5">
                         <PiCompassBold className="text-[11px]" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -540,7 +540,7 @@ const BlindDateBanner = ({ books = [] }) => {
                     onClick={handleBreakSeal}
                     disabled={isAnimating}
                     aria-label="Break the wax seal to reveal the mystery book"
-                    className="group relative inline-flex items-center gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-[#9E1F32] via-[#861D2D] to-[#681420] text-[#FFF8F0] font-sans text-xs sm:text-[13px] font-semibold tracking-wide shadow-[0_4px_20px_rgba(158,31,50,0.45)] hover:shadow-[0_8px_28px_rgba(158,31,50,0.6)] border border-[#C23B4E]/40 ring-1 ring-white/15 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 cursor-pointer overflow-hidden"
+                    className="group relative inline-flex items-center gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-[#9E1F32] via-[#8D263B] to-[#681420] text-[#FFF8F0] font-sans text-xs sm:text-[13px] font-semibold tracking-wide shadow-[0_4px_20px_rgba(158,31,50,0.45)] hover:shadow-[0_8px_28px_rgba(158,31,50,0.6)] border border-[#C23B4E]/40 ring-1 ring-white/15 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 cursor-pointer overflow-hidden"
                   >
                     {/* Subtle ambient shine overlay on hover */}
                     <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />

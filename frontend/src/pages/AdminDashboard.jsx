@@ -477,16 +477,16 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAF6EE] flex flex-col justify-between">
+      <div className="min-h-screen bg-[#F7F3EC] flex flex-col justify-between">
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-          <div className="w-16 h-16 rounded-3xl bg-[#FFF9ED] border-2 border-[#EADFC9] text-[#861D2D] flex items-center justify-center mb-4 shadow-sm animate-bounce">
+          <div className="w-16 h-16 rounded-xl bg-[#FFF9ED] border-2 border-[#EADFC9] text-[#8D263B] flex items-center justify-center mb-4 shadow-sm animate-bounce">
             <span className="text-3xl">☕</span>
           </div>
-          <h2 className="font-serif text-2xl font-bold text-[#2C2723]">
+          <h2 className="font-serif text-2xl font-bold text-[#302A27]">
             Brewing tea &amp; opening the desk...
           </h2>
-          <p className="text-xs text-[#8C827A] font-mono mt-1">
+          <p className="text-xs text-[#81766D] font-mono mt-1">
             pulling the book stacks and reader ledger onto the board ✨
           </p>
           <div className="mt-5">
@@ -503,27 +503,22 @@ const AdminDashboard = () => {
   const totalHistogramReviews = Object.values(histogram).reduce((a, b) => a + b, 0) || 1;
 
   return (
-    <div className="min-h-screen bg-[#FBF8F2] text-[#2C2723] selection:bg-[#F2D7D9] selection:text-[#7A1D28] flex flex-col relative font-sans">
+    <div className="min-h-screen bg-[#F7F3EC] text-[#302A27] selection:bg-[#8D263B] selection:text-[#FFFDFA] flex flex-col relative font-sans">
       <Navbar />
 
-      {/* CUTE PINTEREST SCRAPBOOK HEADER */}
-      <section className="relative pt-7 pb-6 px-4 sm:px-6 lg:px-8 border-b border-[#EADBCC]/70 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6EE] to-[#FBF8F2]">
-        
-        {/* Subtle washi tape accent strips in background */}
-        <div className="absolute top-2 left-10 w-20 h-4 bg-[#F2DDD9]/80 rounded-xs shadow-2xs -rotate-2 pointer-events-none hidden md:block" />
-        <div className="absolute top-3 right-16 w-24 h-4 bg-[#E2EBDC]/80 rounded-xs shadow-2xs rotate-1 pointer-events-none hidden md:block" />
-
+      {/* MODERN LITERARY EDITORIAL HEADER */}
+      <section className="relative pt-7 pb-6 px-4 sm:px-6 lg:px-8 border-b border-[#E8DED1] bg-[#FFFDFA]">
         <div className="max-w-7xl mx-auto">
           {/* Top greeting pill & quick badges */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 text-xs">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 border border-[#EADBCC] shadow-2xs">
-              <span className="text-sm">🌸</span>
-              <span className="font-serif font-bold text-[#7A1D28]">
-                Good day, {user?.username || 'Librarian'}!
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7F3EC] border border-[#E8DED1] shadow-subtle">
+              <span className="w-2 h-2 rounded-full bg-[#8D263B]" />
+              <span className="font-serif font-medium text-[#302A27]">
+                Curator Station &bull; {user?.username || 'Librarian'}
               </span>
-              <span className="text-[#A89F95]">&bull;</span>
-              <span className="text-[11px] font-mono text-[#8C827A]">
-                The cozy reading room is quiet today
+              <span className="text-[#81766D]/50">&bull;</span>
+              <span className="text-[11px] font-mono text-[#81766D]">
+                Catalog Engine Active
               </span>
             </div>
 
@@ -532,11 +527,11 @@ const AdminDashboard = () => {
               <a
                 href={adminService.getBackupJsonUrl()}
                 download
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white hover:bg-[#FAF4EB] border border-[#EADBCC] text-[#2C2723] hover:text-[#7A1D28] text-xs font-semibold shadow-2xs transition-all active:scale-95 cursor-pointer"
-                title="Download cute JSON backup of all stories & reviews"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFFDFA] hover:bg-[#F7F3EC] border border-[#E8DED1] text-[#302A27] hover:text-[#8D263B] text-xs font-medium shadow-subtle transition-all cursor-pointer"
+                title="Download JSON backup snapshot"
               >
-                <span>📦</span>
-                <span>Backup Archive</span>
+                <PiDownloadSimpleBold className="text-xs" />
+                <span>Backup JSON</span>
               </a>
 
               {/* Refresh Desk */}
@@ -544,43 +539,32 @@ const AdminDashboard = () => {
                 type="button"
                 onClick={() => loadDashboardData(false)}
                 disabled={refreshing}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white hover:bg-[#FAF4EB] border border-[#EADBCC] text-[#2C2723] hover:text-[#7A1D28] text-xs font-semibold shadow-2xs transition-all active:scale-95 cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFFDFA] hover:bg-[#F7F3EC] border border-[#E8DED1] text-[#302A27] hover:text-[#8D263B] text-xs font-medium shadow-subtle transition-all cursor-pointer"
               >
-                <PiArrowClockwiseBold className={`text-xs ${refreshing ? 'animate-spin text-[#7A1D28]' : ''}`} />
-                <span>{refreshing ? 'Tidying desk...' : 'Tidy Desk ✨'}</span>
+                <PiArrowClockwiseBold className={`text-xs ${refreshing ? 'animate-spin text-[#8D263B]' : ''}`} />
+                <span>{refreshing ? 'Updating...' : 'Refresh'}</span>
               </button>
             </div>
           </div>
 
-          {/* Hero Collage Row */}
+          {/* Hero Row */}
           <div className="mt-4 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-start gap-4">
-              {/* Cute Polaroid Avatar with tape */}
-              <div className="relative group flex-shrink-0">
-                <div className="w-16 h-18 p-1.5 pb-3 bg-white rounded-xl shadow-sm border border-[#EADBCC] -rotate-2 group-hover:rotate-0 transition-transform">
-                  <div className="w-full h-11 rounded-lg bg-[#FCEEEB] text-[#7A1D28] flex items-center justify-center font-serif text-2xl font-bold">
-                    ☕
-                  </div>
-                  <span className="text-[9px] font-mono font-bold text-center block text-[#8C827A] mt-0.5">
-                    HEAD DESK
-                  </span>
-                </div>
-                {/* Gold washi tape sticker */}
-                <div className="absolute -top-2 left-3 w-10 h-3.5 bg-[#F6E5B8]/90 rounded-xs shadow-2xs -rotate-6 pointer-events-none" />
+              <div className="w-12 h-12 rounded-xl bg-[#8D263B] text-[#FFFDFA] flex items-center justify-center flex-shrink-0 shadow-subtle">
+                <PiCrownBold className="text-2xl text-[#C6A16B]" />
               </div>
 
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#2C2723] tracking-tight">
-                    The Head Librarian&apos;s Desk
+                  <h1 className="font-serif text-3xl sm:text-4xl font-medium text-[#302A27] tracking-tight">
+                    Curator Studio &amp; Archive
                   </h1>
-                  <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-[#FCEEEB] text-[#861D2D] border border-[#F3D3CC] text-[11px] font-mono font-bold">
-                    <span>🎀</span>
-                    <span>COZY CURATOR</span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#8D263B]/10 text-[#8D263B] border border-[#8D263B]/20 text-[10px] font-mono font-medium">
+                    ADMIN DESK
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-[#7D736A] font-serif italic mt-1 max-w-2xl leading-relaxed">
-                  Pin stories to the front window, welcome fellow bookworms, manage reading shelves, and keep the library lovely.
+                <p className="text-xs sm:text-sm text-[#81766D] font-serif italic mt-1 max-w-2xl leading-relaxed">
+                  Pin stories to the front window, oversee the reader community, moderate literary reviews, and manage library archives.
                 </p>
               </div>
             </div>
@@ -589,64 +573,64 @@ const AdminDashboard = () => {
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 to="/books/create"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold shadow-xs hover:shadow active:scale-95 transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium shadow-subtle hover:shadow-card active:scale-95 transition-all cursor-pointer"
               >
-                <span>➕</span>
-                <span>Pin New Story</span>
+                <PiPlusBold className="text-xs" />
+                <span>Add New Story</span>
               </Link>
 
               <a
                 href={adminService.getExportCsvUrl()}
                 download
-                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-full bg-white hover:bg-[#FAF4EB] text-[#2C2723] border border-[#EADBCC] text-xs font-semibold shadow-2xs hover:border-[#861D2D]/40 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#FFFDFA] hover:bg-[#F7F3EC] text-[#302A27] border border-[#E8DED1] text-xs font-medium shadow-subtle hover:border-[#8D263B]/40 transition-colors cursor-pointer"
               >
-                <span>📑</span>
+                <PiFileArrowDownBold className="text-xs text-[#81766D]" />
                 <span>Export CSV</span>
               </a>
 
               <Link
                 to="/"
-                className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-full bg-transparent hover:bg-black/5 text-[#7D736A] hover:text-[#2C2723] text-xs font-medium transition-colors"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-transparent hover:bg-black/5 text-[#81766D] hover:text-[#302A27] text-xs font-medium transition-colors"
               >
-                <span>📖</span>
-                <span>Public Shelves</span>
+                <span>Public Shelves &rarr;</span>
               </Link>
             </div>
           </div>
 
-          {/* CUTE SCRAPBOOK PINNED TABS */}
-          <div className="mt-6 flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none">
+          {/* EDITORIAL REFINED TABS */}
+          <div className="mt-6 flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-none border-t border-[#E8DED1] pt-3">
             {[
-              { id: 'overview', emoji: '📌', label: 'The Pinboard', badge: null, color: 'bg-[#FFF9EE]' },
-              { id: 'books', emoji: '📚', label: 'Book Stacks', badge: booksList.length, color: 'bg-[#FCEEEB]' },
-              { id: 'readers', emoji: '💌', label: 'Book Club', badge: usersList.length, color: 'bg-[#EBF3EA]' },
-              { id: 'reviews', emoji: '💭', label: 'Little Critiques', badge: reviewsList.length, color: 'bg-[#F2EEF9]' },
-              { id: 'announcement', emoji: '📢', label: 'Bulletin Board', badge: announcementData?.active ? 'Active' : null, color: 'bg-[#FEF8E3]' },
-              { id: 'audit', emoji: '📓', label: "Curator's Diary", badge: auditLogsList.length, color: 'bg-[#FAF2EB]' },
-              { id: 'system', emoji: '🗄️', label: 'The Vault', badge: null, color: 'bg-[#EDF4F5]' },
+              { id: 'overview', icon: PiSquaresFourBold, label: 'Overview', badge: null },
+              { id: 'books', icon: PiBooksBold, label: 'Book Archive', badge: booksList.length },
+              { id: 'readers', icon: PiUsersThreeBold, label: 'Reader Directory', badge: usersList.length },
+              { id: 'reviews', icon: PiChatCircleDotsBold, label: 'Review Moderation', badge: reviewsList.length },
+              { id: 'announcement', icon: PiMegaphoneBold, label: 'Public Dispatch', badge: announcementData?.active ? 'Active' : null },
+              { id: 'audit', icon: PiClockCounterClockwiseBold, label: 'Activity Ledger', badge: auditLogsList.length },
+              { id: 'system', icon: PiCpuBold, label: 'System Diagnostics', badge: null },
             ].map((tab) => {
               const isActive = activeTab === tab.id;
+              const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-3.5 sm:px-4 py-2 rounded-2xl text-xs sm:text-[13px] font-semibold transition-all flex items-center gap-1.5 cursor-pointer flex-shrink-0 border ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer flex-shrink-0 ${
                     isActive
-                      ? 'bg-[#861D2D] text-white border-[#701826] shadow-xs -translate-y-0.5'
-                      : 'bg-white/80 hover:bg-white text-[#4A423C] border-[#EADBCC] hover:-translate-y-0.5 shadow-2xs'
+                      ? 'bg-[#302A27] text-[#FFFDFA] shadow-subtle'
+                      : 'bg-[#FFFDFA] hover:bg-[#F7F3EC] text-[#81766D] hover:text-[#302A27] border border-[#E8DED1]'
                   }`}
                 >
-                  <span className="text-sm">{tab.emoji}</span>
-                  <span className="font-serif">{tab.label}</span>
+                  <Icon className="text-sm" />
+                  <span>{tab.label}</span>
                   {tab.badge !== null && (
                     <span
-                      className={`px-2 py-0.2 rounded-full text-[10px] font-mono font-bold leading-tight ${
+                      className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-medium leading-tight ${
                         isActive
                           ? 'bg-white/20 text-white'
                           : tab.badge === 'Active'
                           ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-[#F0E6D8] text-[#7D736A]'
+                          : 'bg-[#F0E9DE] text-[#81766D]'
                       }`}
                     >
                       {tab.badge}
@@ -668,126 +652,118 @@ const AdminDashboard = () => {
         {activeTab === 'overview' && (
           <div className="space-y-8 animate-fade-in">
             
-            {/* 4 Cute Tilted Sticky Notes Metrics */}
+            {/* 4 Editorial Metric Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
               
-              {/* Sticky Note 1: Buttercream Story Stack */}
-              <div className="relative bg-[#FEF9E7] rounded-3xl p-5 border border-[#EFE3B8] shadow-xs -rotate-1 hover:rotate-0 hover:-translate-y-1 transition-all">
-                {/* Mint washi tape on top */}
-                <div className="absolute -top-2.5 left-10 w-16 h-4 bg-[#DCE7D3]/90 rounded-xs shadow-2xs rotate-2 pointer-events-none" />
-                <div className="flex items-center justify-between mt-1">
-                  <span className="text-[11px] font-mono uppercase font-bold tracking-wider text-[#8A793A]">
-                    📚 The Shelves
+              {/* Metric 1: Total Cataloged Works */}
+              <div className="bg-[#FFFDFA] rounded-xl p-5 border border-[#E8DED1] shadow-subtle hover:shadow-card transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono uppercase font-medium tracking-wider text-[#81766D]">
+                    Cataloged Works
                   </span>
-                  <span className="text-base">✨</span>
+                  <PiBooksBold className="text-base text-[#8D263B]" />
                 </div>
-                <div className="mt-2.5">
-                  <span className="font-serif text-3xl sm:text-4xl font-bold text-[#42340F]">
+                <div className="mt-3">
+                  <span className="font-serif text-3xl sm:text-4xl font-medium text-[#302A27]">
                     {stats?.totalBooks || booksList.length || 0}
                   </span>
-                  <p className="text-xs text-[#7A6A32] font-serif italic mt-0.5">
-                    stories lovingly bound &amp; cataloged
+                  <p className="text-xs text-[#81766D] font-serif italic mt-0.5">
+                    bound volumes in active circulation
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-[#F0E1AE] flex items-center justify-between text-xs">
-                  <span className="text-[11px] font-mono text-[#8A793A]">
-                    {stats?.featuredBooksCount || 0} Staff Picks 🍒
+                <div className="mt-4 pt-3 border-t border-[#E8DED1] flex items-center justify-between text-xs">
+                  <span className="text-[11px] font-mono text-[#81766D]">
+                    {stats?.featuredBooksCount || 0} Staff Picks
                   </span>
                   <button
                     type="button"
                     onClick={() => setActiveTab('books')}
-                    className="font-bold text-[#861D2D] hover:underline"
+                    className="font-medium text-[#8D263B] hover:text-[#67202F] cursor-pointer"
                   >
-                    browse &rarr;
+                    View Archive &rarr;
                   </button>
                 </div>
               </div>
 
-              {/* Sticky Note 2: Blush Pink Book Club */}
-              <div className="relative bg-[#FDF0ED] rounded-3xl p-5 border border-[#F5D5CE] shadow-xs rotate-1 hover:rotate-0 hover:-translate-y-1 transition-all">
-                {/* Kraft washi tape */}
-                <div className="absolute -top-2.5 right-10 w-16 h-4 bg-[#EADCC8]/90 rounded-xs shadow-2xs -rotate-1 pointer-events-none" />
-                <div className="flex items-center justify-between mt-1">
-                  <span className="text-[11px] font-mono uppercase font-bold tracking-wider text-[#A25042]">
-                    💌 Book Club
+              {/* Metric 2: Registered Readers */}
+              <div className="bg-[#FFFDFA] rounded-xl p-5 border border-[#E8DED1] shadow-subtle hover:shadow-card transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono uppercase font-medium tracking-wider text-[#81766D]">
+                    Reader Passports
                   </span>
-                  <span className="text-base">🌸</span>
+                  <PiUsersThreeBold className="text-base text-[#C6A16B]" />
                 </div>
-                <div className="mt-2.5">
-                  <span className="font-serif text-3xl sm:text-4xl font-bold text-[#56221A]">
+                <div className="mt-3">
+                  <span className="font-serif text-3xl sm:text-4xl font-medium text-[#302A27]">
                     {stats?.totalUsers || usersList.length || 0}
                   </span>
-                  <p className="text-xs text-[#904437] font-serif italic mt-0.5">
-                    fellow bookworms with passports
+                  <p className="text-xs text-[#81766D] font-serif italic mt-0.5">
+                    registered member readers
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-[#F5C7BD] flex items-center justify-between text-xs">
-                  <span className="text-[11px] font-mono text-[#A25042]">Active Readers</span>
+                <div className="mt-4 pt-3 border-t border-[#E8DED1] flex items-center justify-between text-xs">
+                  <span className="text-[11px] font-mono text-[#81766D]">Active Directory</span>
                   <button
                     type="button"
                     onClick={() => setActiveTab('readers')}
-                    className="font-bold text-[#861D2D] hover:underline"
+                    className="font-medium text-[#8D263B] hover:text-[#67202F] cursor-pointer"
                   >
-                    meet &rarr;
+                    Directory &rarr;
                   </button>
                 </div>
               </div>
 
-              {/* Sticky Note 3: Sage Mint Critiques */}
-              <div className="relative bg-[#EDF4EB] rounded-3xl p-5 border border-[#D5E6D1] shadow-xs -rotate-0.5 hover:rotate-0 hover:-translate-y-1 transition-all">
-                {/* Pastel pink tape */}
-                <div className="absolute -top-2.5 left-8 w-16 h-4 bg-[#F5DCD7]/90 rounded-xs shadow-2xs rotate-1 pointer-events-none" />
-                <div className="flex items-center justify-between mt-1">
-                  <span className="text-[11px] font-mono uppercase font-bold tracking-wider text-[#4D754B]">
-                    💭 Little Notes
+              {/* Metric 3: Reader Critiques */}
+              <div className="bg-[#FFFDFA] rounded-xl p-5 border border-[#E8DED1] shadow-subtle hover:shadow-card transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono uppercase font-medium tracking-wider text-[#81766D]">
+                    Reflections &amp; Reviews
                   </span>
-                  <span className="text-base">📎</span>
+                  <PiChatCircleDotsBold className="text-base text-[#879783]" />
                 </div>
-                <div className="mt-2.5">
-                  <span className="font-serif text-3xl sm:text-4xl font-bold text-[#20401E]">
+                <div className="mt-3">
+                  <span className="font-serif text-3xl sm:text-4xl font-medium text-[#302A27]">
                     {stats?.totalReviews || reviewsList.length || 0}
                   </span>
-                  <p className="text-xs text-[#40683E] font-serif italic mt-0.5">
-                    penned margin notes &amp; reviews
+                  <p className="text-xs text-[#81766D] font-serif italic mt-0.5">
+                    published literary reflections
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-[#CCE2C7] flex items-center justify-between text-xs">
-                  <span className="text-[11px] font-mono text-[#4D754B]">Centralized</span>
+                <div className="mt-4 pt-3 border-t border-[#E8DED1] flex items-center justify-between text-xs">
+                  <span className="text-[11px] font-mono text-[#81766D]">Moderated Feed</span>
                   <button
                     type="button"
                     onClick={() => setActiveTab('reviews')}
-                    className="font-bold text-[#861D2D] hover:underline"
+                    className="font-medium text-[#8D263B] hover:text-[#67202F] cursor-pointer"
                   >
-                    moderate &rarr;
+                    Moderate &rarr;
                   </button>
                 </div>
               </div>
 
-              {/* Sticky Note 4: Lavender Glow Rating */}
-              <div className="relative bg-[#F3EEF9] rounded-3xl p-5 border border-[#E0D4EF] shadow-xs rotate-1 hover:rotate-0 hover:-translate-y-1 transition-all">
-                {/* Yellow tape */}
-                <div className="absolute -top-2.5 right-8 w-16 h-4 bg-[#FCECB5]/90 rounded-xs shadow-2xs -rotate-2 pointer-events-none" />
-                <div className="flex items-center justify-between mt-1">
-                  <span className="text-[11px] font-mono uppercase font-bold tracking-wider text-[#684C8A]">
-                    ⭐ Library Glow
+              {/* Metric 4: Library Community Rating */}
+              <div className="bg-[#FFFDFA] rounded-xl p-5 border border-[#E8DED1] shadow-subtle hover:shadow-card transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono uppercase font-medium tracking-wider text-[#81766D]">
+                    Average Rating
                   </span>
-                  <span className="text-base">🌙</span>
+                  <PiStarFill className="text-base text-[#C6A16B]" />
                 </div>
-                <div className="mt-2.5">
-                  <span className="font-serif text-3xl sm:text-4xl font-bold text-[#351E52]">
+                <div className="mt-3">
+                  <span className="font-serif text-3xl sm:text-4xl font-medium text-[#302A27]">
                     {stats?.averageRating ? stats.averageRating.toFixed(1) : '4.8'}
                   </span>
-                  <p className="text-xs text-[#5D427D] font-serif italic mt-0.5">
-                    out of 5.0 stars community acclaim
+                  <p className="text-xs text-[#81766D] font-serif italic mt-0.5">
+                    out of 5.0 community acclaim
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-[#DACBEB] flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-0.5 text-amber-500">
+                <div className="mt-4 pt-3 border-t border-[#E8DED1] flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-0.5 text-[#C6A16B]">
                     {[1, 2, 3, 4, 5].map((i) => (
                       <PiStarFill key={i} className="text-xs" />
                     ))}
                   </div>
-                  <span className="text-[11px] font-mono text-[#684C8A] font-bold">Pure Love</span>
+                  <span className="text-[11px] font-mono text-[#81766D]">5-Star Scale</span>
                 </div>
               </div>
             </div>
@@ -796,20 +772,20 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
               {/* Genre Atmosphere Swatches */}
-              <div className="bg-white rounded-3xl p-6 border border-[#EADBCC] shadow-xs relative">
+              <div className="bg-white rounded-xl p-6 border border-[#E8DED1] shadow-xs relative">
                 <div className="flex items-center justify-between pb-3.5 border-b border-[#FAF3E8]">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">🎨</span>
                     <div>
-                      <h3 className="font-serif text-base sm:text-lg font-bold text-[#2C2723]">
+                      <h3 className="font-serif text-base sm:text-lg font-bold text-[#302A27]">
                         Genre Atmosphere &amp; Colorways
                       </h3>
-                      <p className="text-xs text-[#8C827A] font-serif italic">
+                      <p className="text-xs text-[#81766D] font-serif italic">
                         The palette of stories filling our quiet room
                       </p>
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full bg-[#FAF4EB] border border-[#EADBCC] text-[10px] font-mono font-bold text-[#861D2D]">
+                  <span className="px-2.5 py-1 rounded-full bg-[#F7F3EC] border border-[#E8DED1] text-[10px] font-mono font-bold text-[#8D263B]">
                     {stats?.categoryDistribution?.length || 0} GENRES
                   </span>
                 </div>
@@ -821,19 +797,19 @@ const AdminDashboard = () => {
                     return (
                       <div key={item.category} className="space-y-1">
                         <div className="flex items-center justify-between text-xs">
-                          <span className="font-serif font-bold text-[#2C2723] flex items-center gap-2">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#861D2D]" />
+                          <span className="font-serif font-bold text-[#302A27] flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#8D263B]" />
                             <span>{item.category}</span>
                           </span>
-                          <span className="font-mono text-[#8C827A] text-[11px]">
+                          <span className="font-mono text-[#81766D] text-[11px]">
                             {item.count} stories ({pct}%)
                           </span>
                         </div>
-                        <div className="w-full h-2 rounded-full bg-[#FAF6EE] overflow-hidden border border-[#EADBCC]/50">
+                        <div className="w-full h-2 rounded-full bg-[#F7F3EC] overflow-hidden border border-[#E8DED1]/50">
                           <div
                             className={`h-full rounded-full transition-all duration-500 ${
                               idx % 4 === 0
-                                ? 'bg-[#861D2D]'
+                                ? 'bg-[#8D263B]'
                                 : idx % 4 === 1
                                 ? 'bg-[#C99A48]'
                                 : idx % 4 === 2
@@ -850,15 +826,15 @@ const AdminDashboard = () => {
               </div>
 
               {/* Reader Sentiment & Star Review Jars */}
-              <div className="bg-white rounded-3xl p-6 border border-[#EADBCC] shadow-xs relative">
+              <div className="bg-white rounded-xl p-6 border border-[#E8DED1] shadow-xs relative">
                 <div className="flex items-center justify-between pb-3.5 border-b border-[#FAF3E8]">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">⭐</span>
                     <div>
-                      <h3 className="font-serif text-base sm:text-lg font-bold text-[#2C2723]">
+                      <h3 className="font-serif text-base sm:text-lg font-bold text-[#302A27]">
                         Reader Love &amp; Star Jars
                       </h3>
-                      <p className="text-xs text-[#8C827A] font-serif italic">
+                      <p className="text-xs text-[#81766D] font-serif italic">
                         Heartfelt ratings penned across our volumes
                       </p>
                     </div>
@@ -874,12 +850,12 @@ const AdminDashboard = () => {
                     const pct = Math.round((count / totalHistogramReviews) * 100);
                     return (
                       <div key={star} className="flex items-center gap-3 text-xs">
-                        <span className="w-12 font-mono font-bold text-[#2C2723] flex items-center gap-1 flex-shrink-0">
+                        <span className="w-12 font-mono font-bold text-[#302A27] flex items-center gap-1 flex-shrink-0">
                           <span>{star}</span>
                           <PiStarFill className="text-amber-400 text-xs" />
                         </span>
 
-                        <div className="flex-1 h-3 rounded-full bg-[#FAF6EE] overflow-hidden border border-[#EADBCC]/60">
+                        <div className="flex-1 h-3 rounded-full bg-[#F7F3EC] overflow-hidden border border-[#E8DED1]/60">
                           <div
                             className={`h-full rounded-full transition-all duration-500 ${
                               star >= 4 ? 'bg-amber-400' : star === 3 ? 'bg-amber-300' : 'bg-stone-300'
@@ -888,7 +864,7 @@ const AdminDashboard = () => {
                           />
                         </div>
 
-                        <span className="w-16 text-right font-mono text-[11px] text-[#8C827A] font-semibold flex-shrink-0">
+                        <span className="w-16 text-right font-mono text-[11px] text-[#81766D] font-semibold flex-shrink-0">
                           {count} ({pct}%)
                         </span>
                       </div>
@@ -897,10 +873,10 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Cozy Sentiment Pill */}
-                <div className="mt-5 p-3 rounded-2xl bg-[#FBF6EE] border border-[#EADBCC] flex items-center justify-between">
+                <div className="mt-5 p-3 rounded-xl bg-[#FBF6EE] border border-[#E8DED1] flex items-center justify-between">
                   <div className="flex items-center gap-2 text-xs">
                     <span className="text-base">🌸</span>
-                    <span className="font-serif font-bold text-[#2C2723]">
+                    <span className="font-serif font-bold text-[#302A27]">
                       Community Glow Index:
                     </span>
                   </div>
@@ -915,18 +891,18 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
               {/* Recently Shelved Stories */}
-              <div className="bg-white rounded-3xl p-6 border border-[#EADBCC] shadow-xs">
+              <div className="bg-white rounded-xl p-6 border border-[#E8DED1] shadow-xs">
                 <div className="flex items-center justify-between pb-3.5 border-b border-[#FAF3E8]">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">📖</span>
-                    <h3 className="font-serif text-base font-bold text-[#2C2723]">
+                    <h3 className="font-serif text-base font-bold text-[#302A27]">
                       Fresh Volumes on the Table
                     </h3>
                   </div>
                   <button
                     type="button"
                     onClick={() => setActiveTab('books')}
-                    className="text-xs text-[#861D2D] hover:underline font-bold"
+                    className="text-xs text-[#8D263B] hover:underline font-bold"
                   >
                     view all &rarr;
                   </button>
@@ -938,18 +914,18 @@ const AdminDashboard = () => {
                     return (
                       <div key={book._id} className="py-3 flex items-center justify-between gap-3 group">
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-10 h-14 rounded-lg bg-[#FAF6EE] border border-[#EADBCC] overflow-hidden flex-shrink-0 shadow-2xs">
+                          <div className="w-10 h-14 rounded-lg bg-[#F7F3EC] border border-[#E8DED1] overflow-hidden flex-shrink-0 shadow-2xs">
                             {cover ? (
                               <img src={cover} alt={book.title} className="w-full h-full object-cover" />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center font-serif text-[11px] text-[#861D2D] font-bold">
+                              <div className="w-full h-full flex items-center justify-center font-serif text-[11px] text-[#8D263B] font-bold">
                                 {book.title?.charAt(0)}
                               </div>
                             )}
                           </div>
                           <div className="min-w-0">
                             <div className="flex items-center gap-1.5">
-                              <h4 className="font-serif text-xs sm:text-sm font-bold text-[#2C2723] truncate group-hover:text-[#861D2D] transition-colors">
+                              <h4 className="font-serif text-xs sm:text-sm font-bold text-[#302A27] truncate group-hover:text-[#8D263B] transition-colors">
                                 {book.title}
                               </h4>
                               {book.isFeatured && (
@@ -958,10 +934,10 @@ const AdminDashboard = () => {
                                 </span>
                               )}
                             </div>
-                            <p className="text-[11px] text-[#8C827A] font-serif italic truncate">
+                            <p className="text-[11px] text-[#81766D] font-serif italic truncate">
                               by {book.author}
                             </p>
-                            <span className="inline-block text-[9px] font-mono text-[#861D2D] bg-[#FCEEEB] px-2 py-0.2 rounded-full mt-1 font-bold">
+                            <span className="inline-block text-[9px] font-mono text-[#8D263B] bg-[#FAF0F2] px-2 py-0.2 rounded-full mt-1 font-bold">
                               {book.category}
                             </span>
                           </div>
@@ -971,14 +947,14 @@ const AdminDashboard = () => {
                           <button
                             type="button"
                             onClick={() => setEditDrawerBook(book)}
-                            className="p-2 rounded-full hover:bg-[#FCEEEB] text-[#7D736A] hover:text-[#861D2D] transition-colors cursor-pointer"
+                            className="p-2 rounded-full hover:bg-[#FAF0F2] text-[#81766D] hover:text-[#8D263B] transition-colors cursor-pointer"
                             title="Quick Edit in slide drawer"
                           >
                             <PiPencilSimpleBold className="text-xs" />
                           </button>
                           <Link
                             to={`/books/details/${book._id}`}
-                            className="p-2 rounded-full hover:bg-[#FAF4EB] text-[#7D736A] hover:text-[#2C2723] transition-colors"
+                            className="p-2 rounded-full hover:bg-[#F7F3EC] text-[#81766D] hover:text-[#302A27] transition-colors"
                             title="View Public Details"
                           >
                             <PiEyeBold className="text-xs" />
@@ -991,18 +967,18 @@ const AdminDashboard = () => {
               </div>
 
               {/* Newly Welcomed Readers */}
-              <div className="bg-white rounded-3xl p-6 border border-[#EADBCC] shadow-xs">
+              <div className="bg-white rounded-xl p-6 border border-[#E8DED1] shadow-xs">
                 <div className="flex items-center justify-between pb-3.5 border-b border-[#FAF3E8]">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">💌</span>
-                    <h3 className="font-serif text-base font-bold text-[#2C2723]">
+                    <h3 className="font-serif text-base font-bold text-[#302A27]">
                       New Book Club Bookworms
                     </h3>
                   </div>
                   <button
                     type="button"
                     onClick={() => setActiveTab('readers')}
-                    className="text-xs text-[#861D2D] hover:underline font-bold"
+                    className="text-xs text-[#8D263B] hover:underline font-bold"
                   >
                     view all &rarr;
                   </button>
@@ -1012,12 +988,12 @@ const AdminDashboard = () => {
                   {recentUsers.slice(0, 4).map((member) => (
                     <div key={member._id} className="py-3 flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-full bg-[#FCEEEB] border border-[#F3D3CC] text-[#861D2D] font-serif font-bold text-sm flex items-center justify-center flex-shrink-0 shadow-2xs">
+                        <div className="w-10 h-10 rounded-full bg-[#FAF0F2] border border-[#F3D3CC] text-[#8D263B] font-serif font-bold text-sm flex items-center justify-center flex-shrink-0 shadow-2xs">
                           {member.username?.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <h4 className="font-serif text-xs sm:text-sm font-bold text-[#2C2723] truncate">
+                            <h4 className="font-serif text-xs sm:text-sm font-bold text-[#302A27] truncate">
                               {member.username}
                             </h4>
                             {member.role === 'admin' && (
@@ -1026,7 +1002,7 @@ const AdminDashboard = () => {
                               </span>
                             )}
                           </div>
-                          <p className="text-[11px] text-[#8C827A] font-mono truncate">
+                          <p className="text-[11px] text-[#81766D] font-mono truncate">
                             {member.email}
                           </p>
                         </div>
@@ -1050,7 +1026,7 @@ const AdminDashboard = () => {
           <div className="space-y-6 animate-fade-in">
             
             {/* Cute Filter Toolbar */}
-            <div className="bg-white rounded-3xl border border-[#EADBCC] p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="bg-white rounded-xl border border-[#E8DED1] p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
               
               {/* Cozy Search */}
               <div className="relative w-full md:w-80">
@@ -1060,7 +1036,7 @@ const AdminDashboard = () => {
                   placeholder="find a cozy story, author, or ISBN..."
                   value={bookSearch}
                   onChange={(e) => setBookSearch(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 rounded-full border border-[#EADBCC] bg-[#FAF6EE] text-xs focus:outline-none focus:border-[#861D2D] focus:bg-white transition-colors placeholder-[#A89F95]"
+                  className="w-full pl-9 pr-4 py-2 rounded-full border border-[#E8DED1] bg-[#F7F3EC] text-xs focus:outline-none focus:border-[#8D263B] focus:bg-white transition-colors placeholder-[#A89F95]"
                 />
                 {bookSearch && (
                   <button
@@ -1077,7 +1053,7 @@ const AdminDashboard = () => {
                 <select
                   value={featuredFilter}
                   onChange={(e) => setFeaturedFilter(e.target.value)}
-                  className="px-3.5 py-2 rounded-full border border-[#EADBCC] bg-white text-xs font-semibold text-[#2C2723] focus:outline-none focus:border-[#861D2D] cursor-pointer shadow-2xs"
+                  className="px-3.5 py-2 rounded-full border border-[#E8DED1] bg-white text-xs font-semibold text-[#302A27] focus:outline-none focus:border-[#8D263B] cursor-pointer shadow-2xs"
                 >
                   <option value="all">All Stories</option>
                   <option value="featured">✨ Staff Picks Only</option>
@@ -1087,7 +1063,7 @@ const AdminDashboard = () => {
                 <select
                   value={bookCategoryFilter}
                   onChange={(e) => setBookCategoryFilter(e.target.value)}
-                  className="px-3.5 py-2 rounded-full border border-[#EADBCC] bg-white text-xs font-semibold text-[#2C2723] focus:outline-none focus:border-[#861D2D] cursor-pointer shadow-2xs"
+                  className="px-3.5 py-2 rounded-full border border-[#E8DED1] bg-white text-xs font-semibold text-[#302A27] focus:outline-none focus:border-[#8D263B] cursor-pointer shadow-2xs"
                 >
                   {allCategories.map((cat) => (
                     <option key={cat} value={cat}>
@@ -1099,7 +1075,7 @@ const AdminDashboard = () => {
                 <select
                   value={bookSortBy}
                   onChange={(e) => setBookSortBy(e.target.value)}
-                  className="px-3.5 py-2 rounded-full border border-[#EADBCC] bg-white text-xs font-semibold text-[#2C2723] focus:outline-none focus:border-[#861D2D] cursor-pointer shadow-2xs"
+                  className="px-3.5 py-2 rounded-full border border-[#E8DED1] bg-white text-xs font-semibold text-[#302A27] focus:outline-none focus:border-[#8D263B] cursor-pointer shadow-2xs"
                 >
                   <option value="latest">Latest Added</option>
                   <option value="title">Title (A-Z)</option>
@@ -1109,7 +1085,7 @@ const AdminDashboard = () => {
 
                 <Link
                   to="/books/create"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold transition-all shadow-xs active:scale-95 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-semibold transition-all shadow-xs active:scale-95 cursor-pointer"
                 >
                   <span>➕</span>
                   <span>Pin Story</span>
@@ -1123,10 +1099,10 @@ const AdminDashboard = () => {
                 <button
                   type="button"
                   onClick={handleSelectAllBooks}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#EADBCC] text-xs font-semibold text-[#2C2723] hover:bg-[#FAF4EB] transition-colors shadow-2xs cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#E8DED1] text-xs font-semibold text-[#302A27] hover:bg-[#F7F3EC] transition-colors shadow-2xs cursor-pointer"
                 >
                   {selectedBookIds.size === filteredBooks.length && filteredBooks.length > 0 ? (
-                    <PiCheckSquareFill className="text-base text-[#861D2D]" />
+                    <PiCheckSquareFill className="text-base text-[#8D263B]" />
                   ) : (
                     <PiSquareBold className="text-base text-stone-400" />
                   )}
@@ -1137,15 +1113,15 @@ const AdminDashboard = () => {
                   </span>
                 </button>
 
-                <span className="font-mono text-[#8C827A] text-[11px]">
+                <span className="font-mono text-[#81766D] text-[11px]">
                   {selectedBookIds.size} of {filteredBooks.length} picked
                 </span>
               </div>
 
               {/* Cute Floating Washi-Tape Bulk Action Bar */}
               {selectedBookIds.size > 0 && (
-                <div className="flex items-center gap-2 p-1.5 px-3.5 rounded-full bg-[#2C2723] text-white shadow-md animate-fade-in flex-wrap">
-                  <span className="text-[11px] font-mono text-[#FCEEEB] font-bold pr-1">
+                <div className="flex items-center gap-2 p-1.5 px-3.5 rounded-full bg-[#302A27] text-white shadow-md animate-fade-in flex-wrap">
+                  <span className="text-[11px] font-mono text-[#FAF0F2] font-bold pr-1">
                     ✨ {selectedBookIds.size} PICKED:
                   </span>
 
@@ -1155,13 +1131,13 @@ const AdminDashboard = () => {
                       placeholder="New genre..."
                       value={bulkCategoryTarget}
                       onChange={(e) => setBulkCategoryTarget(e.target.value)}
-                      className="px-2.5 py-1 rounded-full bg-white/10 text-white text-[11px] border border-white/20 placeholder-stone-400 focus:outline-none focus:bg-white focus:text-[#2C2723] w-24"
+                      className="px-2.5 py-1 rounded-full bg-white/10 text-white text-[11px] border border-white/20 placeholder-stone-400 focus:outline-none focus:bg-white focus:text-[#302A27] w-24"
                     />
                     <button
                       type="button"
                       onClick={handleExecuteBulkCategory}
                       disabled={!bulkCategoryTarget.trim() || actionLoading}
-                      className="px-2.5 py-1 rounded-full bg-[#FCEEEB] text-[#7A1D28] font-bold text-[11px] hover:bg-white transition-colors disabled:opacity-50"
+                      className="px-2.5 py-1 rounded-full bg-[#FAF0F2] text-[#8D263B] font-bold text-[11px] hover:bg-white transition-colors disabled:opacity-50"
                     >
                       Apply
                     </button>
@@ -1206,10 +1182,10 @@ const AdminDashboard = () => {
                 return (
                   <div
                     key={book._id}
-                    className={`group bg-white rounded-3xl p-3 pb-4 border transition-all flex flex-col justify-between relative shadow-xs hover:shadow-md hover:-translate-y-1.5 hover:rotate-0 ${tilt} ${
+                    className={`group bg-white rounded-xl p-3 pb-4 border transition-all flex flex-col justify-between relative shadow-xs hover:shadow-md hover:-translate-y-1.5 hover:rotate-0 ${tilt} ${
                       isSelected
-                        ? 'border-[#861D2D] ring-2 ring-[#861D2D]/30'
-                        : 'border-[#EADBCC]'
+                        ? 'border-[#8D263B] ring-2 ring-[#8D263B]/30'
+                        : 'border-[#E8DED1]'
                     }`}
                   >
                     {/* Cute washi tape on top of polaroid */}
@@ -1233,7 +1209,7 @@ const AdminDashboard = () => {
                       title={isSelected ? 'Deselect story' : 'Select story'}
                     >
                       {isSelected ? (
-                        <PiCheckSquareFill className="text-lg text-[#861D2D]" />
+                        <PiCheckSquareFill className="text-lg text-[#8D263B]" />
                       ) : (
                         <PiSquareBold className="text-base text-stone-400 group-hover:text-stone-700" />
                       )}
@@ -1256,7 +1232,7 @@ const AdminDashboard = () => {
 
                     <div>
                       {/* Polaroid Cover Window */}
-                      <div className="relative aspect-[3/4] rounded-2xl bg-[#FAF6EE] overflow-hidden border border-[#EADBCC]/60 mt-1">
+                      <div className="relative aspect-[3/4] rounded-xl bg-[#F7F3EC] overflow-hidden border border-[#E8DED1]/60 mt-1">
                         {cover ? (
                           <img
                             src={cover}
@@ -1266,7 +1242,7 @@ const AdminDashboard = () => {
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
                             <span className="text-4xl mb-1">📖</span>
-                            <span className="font-serif font-bold text-xs text-[#2C2723]">
+                            <span className="font-serif font-bold text-xs text-[#302A27]">
                               {book.title}
                             </span>
                           </div>
@@ -1279,7 +1255,7 @@ const AdminDashboard = () => {
 
                         {/* Rating Badge */}
                         {book.averageRating > 0 && (
-                          <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full bg-white/95 backdrop-blur-xs text-[#2C2723] text-[10px] font-mono font-bold shadow-xs flex items-center gap-1">
+                          <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full bg-white/95 backdrop-blur-xs text-[#302A27] text-[10px] font-mono font-bold shadow-xs flex items-center gap-1">
                             <PiStarFill className="text-amber-400 text-xs" />
                             <span>{book.averageRating.toFixed(1)}</span>
                           </span>
@@ -1288,14 +1264,14 @@ const AdminDashboard = () => {
 
                       {/* Handwritten-Style Book Info */}
                       <div className="pt-3 px-1">
-                        <h4 className="font-serif text-sm sm:text-base font-bold text-[#2C2723] leading-snug group-hover:text-[#861D2D] transition-colors line-clamp-2">
+                        <h4 className="font-serif text-sm sm:text-base font-bold text-[#302A27] leading-snug group-hover:text-[#8D263B] transition-colors line-clamp-2">
                           {book.title}
                         </h4>
-                        <p className="text-xs text-[#7D736A] font-serif italic mt-0.5 truncate">
+                        <p className="text-xs text-[#81766D] font-serif italic mt-0.5 truncate">
                           by <span className="text-[#3F3731] font-medium not-italic">{book.author}</span>
                         </p>
 
-                        <div className="mt-2.5 pt-2 border-t border-[#FAF3E8] flex items-center justify-between text-[11px] font-mono text-[#8C827A]">
+                        <div className="mt-2.5 pt-2 border-t border-[#FAF3E8] flex items-center justify-between text-[11px] font-mono text-[#81766D]">
                           <span>{book.publishYear}</span>
                           {book.pageCount > 0 && <span>{book.pageCount} pages</span>}
                         </div>
@@ -1308,7 +1284,7 @@ const AdminDashboard = () => {
                         <button
                           type="button"
                           onClick={() => setPreviewBook(book)}
-                          className="p-1.5 rounded-full bg-[#FAF6EE] hover:bg-[#FCEEEB] text-[#7D736A] hover:text-[#861D2D] text-xs transition-colors cursor-pointer"
+                          className="p-1.5 rounded-full bg-[#F7F3EC] hover:bg-[#FAF0F2] text-[#81766D] hover:text-[#8D263B] text-xs transition-colors cursor-pointer"
                           title="Peek inside"
                         >
                           <PiEyeBold />
@@ -1316,7 +1292,7 @@ const AdminDashboard = () => {
 
                         <Link
                           to={`/books/details/${book._id}`}
-                          className="px-2.5 py-0.5 rounded-full bg-[#FAF6EE] hover:bg-[#FCEEEB] text-[#7D736A] hover:text-[#861D2D] text-[11px] font-semibold transition-colors"
+                          className="px-2.5 py-0.5 rounded-full bg-[#F7F3EC] hover:bg-[#FAF0F2] text-[#81766D] hover:text-[#8D263B] text-[11px] font-semibold transition-colors"
                         >
                           Details
                         </Link>
@@ -1326,7 +1302,7 @@ const AdminDashboard = () => {
                         <button
                           type="button"
                           onClick={() => setEditDrawerBook(book)}
-                          className="p-1.5 rounded-full bg-[#FAF6EE] hover:bg-[#FCEEEB] text-[#7D736A] hover:text-[#861D2D] text-xs transition-colors cursor-pointer"
+                          className="p-1.5 rounded-full bg-[#F7F3EC] hover:bg-[#FAF0F2] text-[#81766D] hover:text-[#8D263B] text-xs transition-colors cursor-pointer"
                           title="Quick Edit in slide drawer"
                         >
                           <PiPencilSimpleBold />
@@ -1342,7 +1318,7 @@ const AdminDashboard = () => {
                               title: book.title,
                             })
                           }
-                          className="p-1.5 rounded-full bg-[#FAF6EE] hover:bg-red-50 text-[#7D736A] hover:text-red-700 text-xs transition-colors cursor-pointer"
+                          className="p-1.5 rounded-full bg-[#F7F3EC] hover:bg-red-50 text-[#81766D] hover:text-red-700 text-xs transition-colors cursor-pointer"
                           title="Remove from stacks"
                         >
                           <PiTrashBold />
@@ -1355,10 +1331,10 @@ const AdminDashboard = () => {
             </div>
 
             {filteredBooks.length === 0 && (
-              <div className="text-center py-16 bg-white rounded-3xl border border-[#EADBCC] p-8">
+              <div className="text-center py-16 bg-white rounded-xl border border-[#E8DED1] p-8">
                 <span className="text-5xl block mb-2">🍂</span>
-                <h4 className="font-serif text-lg font-bold text-[#2C2723]">No Stories Found in This Stack</h4>
-                <p className="text-xs text-[#8C827A] font-serif italic mt-1">
+                <h4 className="font-serif text-lg font-bold text-[#302A27]">No Stories Found in This Stack</h4>
+                <p className="text-xs text-[#81766D] font-serif italic mt-1">
                   Try clearing the search or category filter to reveal more lovely reads.
                 </p>
                 <button
@@ -1368,7 +1344,7 @@ const AdminDashboard = () => {
                     setBookCategoryFilter('All');
                     setFeaturedFilter('all');
                   }}
-                  className="mt-4 px-4 py-2 rounded-full bg-[#861D2D] text-white text-xs font-semibold"
+                  className="mt-4 px-4 py-2 rounded-full bg-[#8D263B] text-white text-xs font-semibold"
                 >
                   Clear Filters 🌸
                 </button>
@@ -1382,7 +1358,7 @@ const AdminDashboard = () => {
         {/* ========================================================= */}
         {activeTab === 'readers' && (
           <div className="space-y-6 animate-fade-in">
-            <div className="bg-white rounded-3xl border border-[#EADBCC] p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="bg-white rounded-xl border border-[#E8DED1] p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="relative w-full md:w-80">
                 <PiMagnifyingGlassBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm" />
                 <input
@@ -1390,14 +1366,14 @@ const AdminDashboard = () => {
                   placeholder="search bookworms by moniker or email..."
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 rounded-full border border-[#EADBCC] bg-[#FAF6EE] text-xs focus:outline-none focus:border-[#861D2D] focus:bg-white transition-colors placeholder-[#A89F95]"
+                  className="w-full pl-9 pr-4 py-2 rounded-full border border-[#E8DED1] bg-[#F7F3EC] text-xs focus:outline-none focus:border-[#8D263B] focus:bg-white transition-colors placeholder-[#A89F95]"
                 />
               </div>
 
               <select
                 value={userRoleFilter}
                 onChange={(e) => setUserRoleFilter(e.target.value)}
-                className="px-3.5 py-2 rounded-full border border-[#EADBCC] bg-white text-xs font-semibold text-[#2C2723] focus:outline-none focus:border-[#861D2D] cursor-pointer shadow-2xs"
+                className="px-3.5 py-2 rounded-full border border-[#E8DED1] bg-white text-xs font-semibold text-[#302A27] focus:outline-none focus:border-[#8D263B] cursor-pointer shadow-2xs"
               >
                 <option value="All">All Bookworms ({usersList.length})</option>
                 <option value="admin">Librarians Only 🎀</option>
@@ -1413,54 +1389,54 @@ const AdminDashboard = () => {
                 return (
                   <div
                     key={member._id}
-                    className="relative bg-white rounded-3xl p-5 border border-[#EADBCC] shadow-xs flex flex-col justify-between hover:shadow-sm transition-all"
+                    className="relative bg-white rounded-xl p-5 border border-[#E8DED1] shadow-xs flex flex-col justify-between hover:shadow-sm transition-all"
                   >
                     {/* Washi tape header */}
-                    <div className="absolute top-0 right-8 w-14 h-3 bg-[#EADBCC]/80 rounded-b -rotate-1 pointer-events-none" />
+                    <div className="absolute top-0 right-8 w-14 h-3 bg-[#E8DED1]/80 rounded-b -rotate-1 pointer-events-none" />
 
                     <div>
                       {/* Avatar & Header */}
                       <div className="flex items-center gap-3">
                         <div
-                          className={`w-12 h-12 rounded-2xl flex items-center justify-center font-serif font-bold text-lg flex-shrink-0 shadow-2xs ${
+                          className={`w-12 h-12 rounded-xl flex items-center justify-center font-serif font-bold text-lg flex-shrink-0 shadow-2xs ${
                             isMemberAdmin
                               ? 'bg-[#FEF8E3] border border-[#EFE3B8] text-[#8A793A]'
-                              : 'bg-[#FCEEEB] border border-[#F3D3CC] text-[#861D2D]'
+                              : 'bg-[#FAF0F2] border border-[#F3D3CC] text-[#8D263B]'
                           }`}
                         >
                           {member.username?.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <h4 className="font-serif text-sm font-bold text-[#2C2723] truncate">
+                            <h4 className="font-serif text-sm font-bold text-[#302A27] truncate">
                               {member.username}
                             </h4>
                             {isSelf && (
-                              <span className="text-[9px] font-mono text-[#861D2D] bg-[#FCEEEB] px-1.5 py-0.2 rounded-full font-bold">
+                              <span className="text-[9px] font-mono text-[#8D263B] bg-[#FAF0F2] px-1.5 py-0.2 rounded-full font-bold">
                                 You
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-[#8C827A] font-mono truncate mt-0.5">
+                          <p className="text-xs text-[#81766D] font-mono truncate mt-0.5">
                             {member.email}
                           </p>
                         </div>
                       </div>
 
                       {/* Borrower card tag details */}
-                      <div className="mt-4 p-3 rounded-2xl bg-[#FAF6EE] border border-[#EADBCC]/60 text-[11px] font-mono space-y-1.5">
+                      <div className="mt-4 p-3 rounded-xl bg-[#F7F3EC] border border-[#E8DED1]/60 text-[11px] font-mono space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <span className="text-[#8C827A]">Rank:</span>
+                          <span className="text-[#81766D]">Rank:</span>
                           <span
                             className={`font-bold uppercase ${
-                              isMemberAdmin ? 'text-[#8A793A]' : 'text-[#861D2D]'
+                              isMemberAdmin ? 'text-[#8A793A]' : 'text-[#8D263B]'
                             }`}
                           >
                             {isMemberAdmin ? '👑 Librarian' : '📖 Reader'}
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-[#8C827A]">Enrolled:</span>
+                          <span className="text-[#81766D]">Enrolled:</span>
                           <span className="text-[#4A423C]">
                             {member.createdAt
                               ? new Date(member.createdAt).toLocaleDateString('en-US', {
@@ -1482,7 +1458,7 @@ const AdminDashboard = () => {
                         onClick={() => handleSendWelcomeEmail(member)}
                         disabled={actionLoading}
                         title="Send reader passport welcome email"
-                        className="p-1.5 px-2.5 rounded-full bg-[#FAF6EE] hover:bg-[#FCEEEB] text-[#7D736A] hover:text-[#861D2D] font-semibold text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
+                        className="p-1.5 px-2.5 rounded-full bg-[#F7F3EC] hover:bg-[#FAF0F2] text-[#81766D] hover:text-[#8D263B] font-semibold text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
                       >
                         <span>💌</span>
                         <span>Passport</span>
@@ -1499,7 +1475,7 @@ const AdminDashboard = () => {
                               ? 'opacity-40 cursor-not-allowed bg-stone-100 text-stone-400'
                               : isMemberAdmin
                               ? 'bg-[#FEF8E3] hover:bg-[#FDF0CE] text-[#8A793A] cursor-pointer'
-                              : 'bg-[#FAF6EE] hover:bg-[#FCEEEB] text-[#861D2D] cursor-pointer'
+                              : 'bg-[#F7F3EC] hover:bg-[#FAF0F2] text-[#8D263B] cursor-pointer'
                           }`}
                         >
                           {isMemberAdmin ? 'Revoke Admin' : 'Make Admin 👑'}
@@ -1536,7 +1512,7 @@ const AdminDashboard = () => {
         {/* ========================================================= */}
         {activeTab === 'reviews' && (
           <div className="space-y-6 animate-fade-in">
-            <div className="bg-white rounded-3xl border border-[#EADBCC] p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="bg-white rounded-xl border border-[#E8DED1] p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="relative w-full sm:w-80">
                 <PiMagnifyingGlassBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm" />
                 <input
@@ -1544,7 +1520,7 @@ const AdminDashboard = () => {
                   placeholder="search reviews by reader, book, or thoughts..."
                   value={reviewSearch}
                   onChange={(e) => setReviewSearch(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 rounded-full border border-[#EADBCC] bg-[#FAF6EE] text-xs focus:outline-none focus:border-[#861D2D] focus:bg-white transition-colors placeholder-[#A89F95]"
+                  className="w-full pl-9 pr-4 py-2 rounded-full border border-[#E8DED1] bg-[#F7F3EC] text-xs focus:outline-none focus:border-[#8D263B] focus:bg-white transition-colors placeholder-[#A89F95]"
                 />
               </div>
 
@@ -1552,10 +1528,10 @@ const AdminDashboard = () => {
                 <button
                   type="button"
                   onClick={handleSelectAllReviews}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#EADBCC] text-xs font-semibold text-[#2C2723] hover:bg-[#FAF4EB] transition-colors shadow-2xs cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#E8DED1] text-xs font-semibold text-[#302A27] hover:bg-[#F7F3EC] transition-colors shadow-2xs cursor-pointer"
                 >
                   {selectedReviewItems.length === filteredReviews.length && filteredReviews.length > 0 ? (
-                    <PiCheckSquareFill className="text-base text-[#861D2D]" />
+                    <PiCheckSquareFill className="text-base text-[#8D263B]" />
                   ) : (
                     <PiSquareBold className="text-base text-stone-400" />
                   )}
@@ -1594,8 +1570,8 @@ const AdminDashboard = () => {
                 return (
                   <div
                     key={rev.reviewId}
-                    className={`relative rounded-3xl p-5 border shadow-xs hover:shadow-md hover:rotate-0 transition-all flex flex-col justify-between ${stickyTone} ${tilt} ${
-                      isSelected ? 'ring-2 ring-[#861D2D]' : ''
+                    className={`relative rounded-xl p-5 border shadow-xs hover:shadow-md hover:rotate-0 transition-all flex flex-col justify-between ${stickyTone} ${tilt} ${
+                      isSelected ? 'ring-2 ring-[#8D263B]' : ''
                     }`}
                   >
                     {/* Cute paperclip at top right */}
@@ -1611,7 +1587,7 @@ const AdminDashboard = () => {
                         className="text-stone-400 hover:text-stone-700 mb-2 block"
                       >
                         {isSelected ? (
-                          <PiCheckSquareFill className="text-lg text-[#861D2D]" />
+                          <PiCheckSquareFill className="text-lg text-[#8D263B]" />
                         ) : (
                           <PiSquareBold className="text-lg text-stone-300 hover:text-stone-600" />
                         )}
@@ -1622,20 +1598,20 @@ const AdminDashboard = () => {
                         to={`/books/details/${rev.bookId}`}
                         className="flex items-center gap-3 pb-3 mb-3 border-b border-black/5 group"
                       >
-                        <div className="w-9 h-12 rounded-lg bg-white border border-[#EADBCC] overflow-hidden flex-shrink-0 shadow-2xs">
+                        <div className="w-9 h-12 rounded-lg bg-white border border-[#E8DED1] overflow-hidden flex-shrink-0 shadow-2xs">
                           {cover ? (
                             <img src={cover} alt={rev.bookTitle} className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center font-serif text-[10px] text-[#861D2D] font-bold">
+                            <div className="w-full h-full flex items-center justify-center font-serif text-[10px] text-[#8D263B] font-bold">
                               {rev.bookTitle?.charAt(0)}
                             </div>
                           )}
                         </div>
                         <div className="min-w-0">
-                          <h4 className="font-serif text-xs font-bold text-[#2C2723] truncate group-hover:text-[#861D2D] transition-colors">
+                          <h4 className="font-serif text-xs font-bold text-[#302A27] truncate group-hover:text-[#8D263B] transition-colors">
                             {rev.bookTitle}
                           </h4>
-                          <span className="text-[10px] text-[#8C827A] font-serif italic block">
+                          <span className="text-[10px] text-[#81766D] font-serif italic block">
                             by {rev.bookAuthor}
                           </span>
                         </div>
@@ -1643,8 +1619,8 @@ const AdminDashboard = () => {
 
                       {/* Review author & rating */}
                       <div className="flex items-center justify-between gap-2 mb-2">
-                        <span className="font-serif font-bold text-xs text-[#2C2723] flex items-center gap-1.5">
-                          <span className="w-4 h-4 rounded-full bg-white text-[#861D2D] flex items-center justify-center text-[10px] font-mono shadow-2xs">
+                        <span className="font-serif font-bold text-xs text-[#302A27] flex items-center gap-1.5">
+                          <span className="w-4 h-4 rounded-full bg-white text-[#8D263B] flex items-center justify-center text-[10px] font-mono shadow-2xs">
                             {rev.username?.charAt(0).toUpperCase()}
                           </span>
                           <span>{rev.username}</span>
@@ -1663,13 +1639,13 @@ const AdminDashboard = () => {
                       </div>
 
                       {/* Review text */}
-                      <p className="font-serif italic text-xs text-[#3D352F] leading-relaxed bg-white/70 p-3 rounded-2xl border border-black/5 line-clamp-4">
+                      <p className="font-serif italic text-xs text-[#3D352F] leading-relaxed bg-white/70 p-3 rounded-xl border border-black/5 line-clamp-4">
                         &ldquo;{rev.comment}&rdquo;
                       </p>
                     </div>
 
                     {/* Bottom toolbar */}
-                    <div className="mt-4 pt-2.5 border-t border-black/5 flex items-center justify-between text-[10px] font-mono text-[#8C827A]">
+                    <div className="mt-4 pt-2.5 border-t border-black/5 flex items-center justify-between text-[10px] font-mono text-[#81766D]">
                       <span>{rev.createdAt ? new Date(rev.createdAt).toLocaleDateString() : 'Recent'}</span>
                       <button
                         type="button"
@@ -1694,10 +1670,10 @@ const AdminDashboard = () => {
             </div>
 
             {filteredReviews.length === 0 && (
-              <div className="text-center py-16 bg-white rounded-3xl border border-[#EADBCC] p-8">
+              <div className="text-center py-16 bg-white rounded-xl border border-[#E8DED1] p-8">
                 <span className="text-5xl block mb-2">💭</span>
-                <h4 className="font-serif text-lg font-bold text-[#2C2723]">No Marginalia Found</h4>
-                <p className="text-xs text-[#8C827A] font-serif italic mt-1">
+                <h4 className="font-serif text-lg font-bold text-[#302A27]">No Marginalia Found</h4>
+                <p className="text-xs text-[#81766D] font-serif italic mt-1">
                   Reader reviews will appear here for centralized curator moderation.
                 </p>
               </div>
@@ -1712,17 +1688,17 @@ const AdminDashboard = () => {
           <div className="max-w-3xl mx-auto space-y-6 animate-fade-in">
             
             {/* Live Preview Sticky Note */}
-            <div className="bg-white rounded-3xl border border-[#EADBCC] p-6 shadow-xs relative">
-              <span className="text-[10px] font-mono uppercase font-bold tracking-wider text-[#8C827A] block mb-3 flex items-center gap-1">
+            <div className="bg-white rounded-xl border border-[#E8DED1] p-6 shadow-xs relative">
+              <span className="text-[10px] font-mono uppercase font-bold tracking-wider text-[#81766D] block mb-3 flex items-center gap-1">
                 <span>📌</span>
                 <span>Live Public Notice Preview</span>
               </span>
 
               {announcementData.active ? (
                 <div
-                  className={`p-3.5 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left transition-all ${
+                  className={`p-3.5 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left transition-all ${
                     announcementData.tone === 'burgundy'
-                      ? 'bg-[#861D2D] text-white border-[#701826]'
+                      ? 'bg-[#8D263B] text-white border-[#67202F]'
                       : announcementData.tone === 'amber'
                       ? 'bg-[#FEF8E3] text-[#8A793A] border-[#EFE3B8]'
                       : 'bg-[#1C1A19] text-[#F8E7B9] border-stone-800'
@@ -1752,27 +1728,27 @@ const AdminDashboard = () => {
                   )}
                 </div>
               ) : (
-                <div className="p-4 rounded-2xl bg-[#FAF6EE] border border-[#EADBCC] text-[#8C827A] text-xs text-center font-serif italic">
+                <div className="p-4 rounded-xl bg-[#F7F3EC] border border-[#E8DED1] text-[#81766D] text-xs text-center font-serif italic">
                   Notice is currently quiet (hidden from all readers).
                 </div>
               )}
             </div>
 
             {/* Editor Form */}
-            <form onSubmit={handleSaveAnnouncement} className="bg-white rounded-3xl border border-[#EADBCC] p-6 shadow-xs space-y-5">
+            <form onSubmit={handleSaveAnnouncement} className="bg-white rounded-xl border border-[#E8DED1] p-6 shadow-xs space-y-5">
               <div className="flex items-center justify-between pb-3 border-b border-[#FAF3E8]">
                 <div>
-                  <h3 className="font-serif text-lg font-bold text-[#2C2723]">
+                  <h3 className="font-serif text-lg font-bold text-[#302A27]">
                     Pin a Bulletin Announcement
                   </h3>
-                  <p className="text-xs text-[#8C827A] font-serif italic">
+                  <p className="text-xs text-[#81766D] font-serif italic">
                     Broadcast reading salon updates, weekend events, or book club prompts
                   </p>
                 </div>
 
                 {/* Active Toggle Switch */}
                 <label className="flex items-center gap-2 cursor-pointer">
-                  <span className="text-xs font-mono font-bold text-[#2C2723]">
+                  <span className="text-xs font-mono font-bold text-[#302A27]">
                     {announcementData.active ? 'Notice Live ✨' : 'Sleeping 💤'}
                   </span>
                   <input
@@ -1783,7 +1759,7 @@ const AdminDashboard = () => {
                   />
                   <div
                     className={`w-11 h-6 rounded-full transition-colors relative ${
-                      announcementData.active ? 'bg-[#861D2D]' : 'bg-stone-300'
+                      announcementData.active ? 'bg-[#8D263B]' : 'bg-stone-300'
                     }`}
                   >
                     <span
@@ -1797,12 +1773,12 @@ const AdminDashboard = () => {
 
               {/* Tone / Color selector */}
               <div>
-                <label className="block text-xs font-mono uppercase font-bold text-[#8C827A] mb-2">
+                <label className="block text-xs font-mono uppercase font-bold text-[#81766D] mb-2">
                   Paper Vibe Tone
                 </label>
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { id: 'burgundy', label: 'Vintage Cherry 🍒', bg: 'bg-[#861D2D] text-white' },
+                    { id: 'burgundy', label: 'Vintage Cherry 🍒', bg: 'bg-[#8D263B] text-white' },
                     { id: 'amber', label: 'Buttercup Honey 🍯', bg: 'bg-[#FEF8E3] text-[#8A793A] border border-[#EFE3B8]' },
                     { id: 'midnight', label: 'Midnight Library 🌙', bg: 'bg-[#1C1A19] text-[#F8E7B9]' },
                   ].map((t) => (
@@ -1810,9 +1786,9 @@ const AdminDashboard = () => {
                       key={t.id}
                       type="button"
                       onClick={() => setAnnouncementData({ ...announcementData, tone: t.id })}
-                      className={`p-3 rounded-2xl text-xs font-semibold text-center transition-all cursor-pointer ${t.bg} ${
+                      className={`p-3 rounded-xl text-xs font-semibold text-center transition-all cursor-pointer ${t.bg} ${
                         announcementData.tone === t.id
-                          ? 'ring-2 ring-offset-2 ring-[#861D2D]'
+                          ? 'ring-2 ring-offset-2 ring-[#8D263B]'
                           : 'opacity-70 hover:opacity-100'
                       }`}
                     >
@@ -1824,7 +1800,7 @@ const AdminDashboard = () => {
 
               {/* Badge Label */}
               <div>
-                <label className="block text-xs font-mono uppercase font-bold text-[#8C827A] mb-1">
+                <label className="block text-xs font-mono uppercase font-bold text-[#81766D] mb-1">
                   Sticker Badge
                 </label>
                 <input
@@ -1832,13 +1808,13 @@ const AdminDashboard = () => {
                   value={announcementData.badge}
                   onChange={(e) => setAnnouncementData({ ...announcementData, badge: e.target.value })}
                   placeholder="e.g. Curator Dispatch 🌸, Reading Salon ☕, Weekend Pick ✨"
-                  className="w-full px-4 py-2 rounded-2xl border border-[#EADBCC] bg-[#FAF6EE] text-xs focus:outline-none focus:border-[#861D2D] focus:bg-white"
+                  className="w-full px-4 py-2 rounded-xl border border-[#E8DED1] bg-[#F7F3EC] text-xs focus:outline-none focus:border-[#8D263B] focus:bg-white"
                 />
               </div>
 
               {/* Headline */}
               <div>
-                <label className="block text-xs font-mono uppercase font-bold text-[#8C827A] mb-1">
+                <label className="block text-xs font-mono uppercase font-bold text-[#81766D] mb-1">
                   Main Headline
                 </label>
                 <input
@@ -1847,13 +1823,13 @@ const AdminDashboard = () => {
                   value={announcementData.text}
                   onChange={(e) => setAnnouncementData({ ...announcementData, text: e.target.value })}
                   placeholder="e.g. Autumn Reading Salon: Gothic & Classic Volumes spotlighted."
-                  className="w-full px-4 py-2 rounded-2xl border border-[#EADBCC] bg-[#FAF6EE] text-xs focus:outline-none focus:border-[#861D2D] focus:bg-white"
+                  className="w-full px-4 py-2 rounded-xl border border-[#E8DED1] bg-[#F7F3EC] text-xs focus:outline-none focus:border-[#8D263B] focus:bg-white"
                 />
               </div>
 
               {/* Subtext */}
               <div>
-                <label className="block text-xs font-mono uppercase font-bold text-[#8C827A] mb-1">
+                <label className="block text-xs font-mono uppercase font-bold text-[#81766D] mb-1">
                   Sweet Secondary Note (Optional)
                 </label>
                 <input
@@ -1861,7 +1837,7 @@ const AdminDashboard = () => {
                   value={announcementData.subtext}
                   onChange={(e) => setAnnouncementData({ ...announcementData, subtext: e.target.value })}
                   placeholder="e.g. Gather by the fireplace and discover something timeless."
-                  className="w-full px-4 py-2 rounded-2xl border border-[#EADBCC] bg-[#FAF6EE] text-xs focus:outline-none focus:border-[#861D2D] focus:bg-white"
+                  className="w-full px-4 py-2 rounded-xl border border-[#E8DED1] bg-[#F7F3EC] text-xs focus:outline-none focus:border-[#8D263B] focus:bg-white"
                 />
               </div>
 
@@ -1869,7 +1845,7 @@ const AdminDashboard = () => {
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="px-6 py-2.5 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold shadow-xs active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-6 py-2.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-semibold shadow-xs active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
                 >
                   {actionLoading && <PiArrowClockwiseBold className="text-xs animate-spin" />}
                   <span>Pin Notice to Board ✨</span>
@@ -1884,14 +1860,14 @@ const AdminDashboard = () => {
         {/* ========================================================= */}
         {activeTab === 'audit' && (
           <div className="space-y-6 animate-fade-in">
-            <div className="bg-white rounded-3xl border border-[#EADBCC] p-4 sm:p-5 shadow-xs flex flex-wrap items-center justify-between gap-4">
+            <div className="bg-white rounded-xl border border-[#E8DED1] p-4 sm:p-5 shadow-xs flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-2">
                 <span className="text-lg">📓</span>
                 <div>
-                  <h3 className="font-serif text-base font-bold text-[#2C2723]">
+                  <h3 className="font-serif text-base font-bold text-[#302A27]">
                     The Curator&apos;s Reading Desk Diary
                   </h3>
-                  <p className="text-xs text-[#8C827A] font-serif italic">
+                  <p className="text-xs text-[#81766D] font-serif italic">
                     Chronological ledger of stack updates, promotions, and notes
                   </p>
                 </div>
@@ -1906,8 +1882,8 @@ const AdminDashboard = () => {
                     onClick={() => setAuditCategoryFilter(cat)}
                     className={`px-3 py-1 rounded-full text-[11px] font-mono uppercase font-bold transition-all cursor-pointer ${
                       auditCategoryFilter === cat
-                        ? 'bg-[#861D2D] text-white'
-                        : 'bg-[#FAF6EE] text-[#8C827A] hover:bg-[#FCEEEB]'
+                        ? 'bg-[#8D263B] text-white'
+                        : 'bg-[#F7F3EC] text-[#81766D] hover:bg-[#FAF0F2]'
                     }`}
                   >
                     {cat}
@@ -1917,23 +1893,23 @@ const AdminDashboard = () => {
             </div>
 
             {/* Diary Timeline Feed */}
-            <div className="bg-white rounded-3xl border border-[#EADBCC] p-6 shadow-xs divide-y divide-[#FAF3E8]">
+            <div className="bg-white rounded-xl border border-[#E8DED1] p-6 shadow-xs divide-y divide-[#FAF3E8]">
               {filteredAuditLogs.map((log) => (
                 <div key={log._id} className="py-3.5 flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#FAF6EE] border border-[#EADBCC] text-[#861D2D] flex items-center justify-center flex-shrink-0 mt-0.5 text-xs">
+                    <div className="w-8 h-8 rounded-full bg-[#F7F3EC] border border-[#E8DED1] text-[#8D263B] flex items-center justify-center flex-shrink-0 mt-0.5 text-xs">
                       ✍️
                     </div>
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-mono text-xs font-bold text-[#861D2D]">
+                        <span className="font-mono text-xs font-bold text-[#8D263B]">
                           {log.action}
                         </span>
-                        <span className="px-2 py-0.2 rounded-full text-[9px] font-mono uppercase tracking-wider bg-[#FAF6EE] text-[#8C827A] font-bold">
+                        <span className="px-2 py-0.2 rounded-full text-[9px] font-mono uppercase tracking-wider bg-[#F7F3EC] text-[#81766D] font-bold">
                           {log.category}
                         </span>
                       </div>
-                      <p className="text-xs text-[#2C2723] font-serif mt-1">
+                      <p className="text-xs text-[#302A27] font-serif mt-1">
                         {log.details}
                       </p>
                       <span className="text-[10px] font-mono text-[#A89F95] block mt-1">
@@ -1965,13 +1941,13 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               
               {/* Vault 1: MongoDB Database */}
-              <div className="bg-white rounded-3xl border border-[#EADBCC] p-6 shadow-xs">
+              <div className="bg-white rounded-xl border border-[#E8DED1] p-6 shadow-xs">
                 <div className="flex items-center gap-3 pb-3 border-b border-[#FAF3E8]">
-                  <div className="w-10 h-10 rounded-2xl bg-[#EBF3EA] text-emerald-800 flex items-center justify-center text-xl">
+                  <div className="w-10 h-10 rounded-xl bg-[#EBF3EA] text-emerald-800 flex items-center justify-center text-xl">
                     🗄️
                   </div>
                   <div>
-                    <h3 className="font-serif text-base font-bold text-[#2C2723]">
+                    <h3 className="font-serif text-base font-bold text-[#302A27]">
                       Database Vault
                     </h3>
                     <span className="text-[10px] font-mono uppercase text-emerald-800 font-bold">
@@ -1982,31 +1958,31 @@ const AdminDashboard = () => {
 
                 <div className="mt-4 space-y-2 text-xs font-mono">
                   <div className="flex items-center justify-between py-1 border-b border-[#FAF3E8]">
-                    <span className="text-[#8C827A]">Database:</span>
-                    <strong className="text-[#2C2723]">{system?.dbName || 'books-collection'}</strong>
+                    <span className="text-[#81766D]">Database:</span>
+                    <strong className="text-[#302A27]">{system?.dbName || 'books-collection'}</strong>
                   </div>
                   <div className="flex items-center justify-between py-1 border-b border-[#FAF3E8]">
-                    <span className="text-[#8C827A]">Host:</span>
-                    <strong className="text-[#2C2723]">{system?.dbHost || '127.0.0.1'}</strong>
+                    <span className="text-[#81766D]">Host:</span>
+                    <strong className="text-[#302A27]">{system?.dbHost || '127.0.0.1'}</strong>
                   </div>
                   <div className="flex items-center justify-between py-1">
-                    <span className="text-[#8C827A]">Collections:</span>
-                    <strong className="text-[#2C2723]">Books, Users, Notes, Logs</strong>
+                    <span className="text-[#81766D]">Collections:</span>
+                    <strong className="text-[#302A27]">Books, Users, Notes, Logs</strong>
                   </div>
                 </div>
               </div>
 
               {/* Vault 2: Engine Runtime */}
-              <div className="bg-white rounded-3xl border border-[#EADBCC] p-6 shadow-xs">
+              <div className="bg-white rounded-xl border border-[#E8DED1] p-6 shadow-xs">
                 <div className="flex items-center gap-3 pb-3 border-b border-[#FAF3E8]">
-                  <div className="w-10 h-10 rounded-2xl bg-[#FCEEEB] text-[#861D2D] flex items-center justify-center text-xl">
+                  <div className="w-10 h-10 rounded-xl bg-[#FAF0F2] text-[#8D263B] flex items-center justify-center text-xl">
                     ⚙️
                   </div>
                   <div>
-                    <h3 className="font-serif text-base font-bold text-[#2C2723]">
+                    <h3 className="font-serif text-base font-bold text-[#302A27]">
                       Runtime Engine
                     </h3>
-                    <span className="text-[10px] font-mono uppercase text-[#861D2D] font-bold">
+                    <span className="text-[10px] font-mono uppercase text-[#8D263B] font-bold">
                       ● Node.js {system?.nodeVersion}
                     </span>
                   </div>
@@ -2014,32 +1990,32 @@ const AdminDashboard = () => {
 
                 <div className="mt-4 space-y-2 text-xs font-mono">
                   <div className="flex items-center justify-between py-1 border-b border-[#FAF3E8]">
-                    <span className="text-[#8C827A]">Heap Used:</span>
-                    <strong className="text-[#2C2723]">
+                    <span className="text-[#81766D]">Heap Used:</span>
+                    <strong className="text-[#302A27]">
                       {system?.memoryHeapUsedMB} MB / {system?.memoryHeapTotalMB} MB
                     </strong>
                   </div>
                   <div className="flex items-center justify-between py-1 border-b border-[#FAF3E8]">
-                    <span className="text-[#8C827A]">Desk Uptime:</span>
-                    <strong className="text-[#2C2723]">
+                    <span className="text-[#81766D]">Desk Uptime:</span>
+                    <strong className="text-[#302A27]">
                       {Math.floor((system?.uptimeSeconds || 0) / 60)} minutes
                     </strong>
                   </div>
                   <div className="flex items-center justify-between py-1">
-                    <span className="text-[#8C827A]">Environment:</span>
-                    <strong className="text-[#2C2723] uppercase">{system?.environment}</strong>
+                    <span className="text-[#81766D]">Environment:</span>
+                    <strong className="text-[#302A27] uppercase">{system?.environment}</strong>
                   </div>
                 </div>
               </div>
 
               {/* Vault 3: Postal Courier */}
-              <div className="bg-white rounded-3xl border border-[#EADBCC] p-6 shadow-xs">
+              <div className="bg-white rounded-xl border border-[#E8DED1] p-6 shadow-xs">
                 <div className="flex items-center gap-3 pb-3 border-b border-[#FAF3E8]">
-                  <div className="w-10 h-10 rounded-2xl bg-[#FEF8E3] text-[#8A793A] flex items-center justify-center text-xl">
+                  <div className="w-10 h-10 rounded-xl bg-[#FEF8E3] text-[#8A793A] flex items-center justify-center text-xl">
                     📮
                   </div>
                   <div>
-                    <h3 className="font-serif text-base font-bold text-[#2C2723]">
+                    <h3 className="font-serif text-base font-bold text-[#302A27]">
                       Postal Courier
                     </h3>
                     <span className="text-[10px] font-mono uppercase text-[#8A793A] font-bold">
@@ -2050,19 +2026,19 @@ const AdminDashboard = () => {
 
                 <div className="mt-4 space-y-2 text-xs font-mono">
                   <div className="flex items-center justify-between py-1 border-b border-[#FAF3E8]">
-                    <span className="text-[#8C827A]">Dispatcher:</span>
-                    <strong className="text-[#2C2723]">Nodemailer SMTP</strong>
+                    <span className="text-[#81766D]">Dispatcher:</span>
+                    <strong className="text-[#302A27]">Nodemailer SMTP</strong>
                   </div>
                   <div className="flex items-center justify-between py-1 border-b border-[#FAF3E8]">
-                    <span className="text-[#8C827A]">Free Tier:</span>
-                    <strong className="text-[#2C2723]">500 letters / day</strong>
+                    <span className="text-[#81766D]">Free Tier:</span>
+                    <strong className="text-[#302A27]">500 letters / day</strong>
                   </div>
                   <div className="pt-2 flex items-center justify-between">
                     <a
                       href="http://localhost:5555/auth/email/preview"
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[#861D2D] hover:underline font-semibold text-[11px]"
+                      className="text-[#8D263B] hover:underline font-semibold text-[11px]"
                     >
                       Peek at Letter Template &rarr;
                     </a>
@@ -2072,13 +2048,13 @@ const AdminDashboard = () => {
             </div>
 
             {/* Emergency Reseed Card */}
-            <div className="bg-gradient-to-r from-[#FFFDF9] via-[#FAF6EE] to-[#FFFDF9] rounded-3xl border border-[#EADBCC] p-6 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="bg-gradient-to-r from-[#FFFDFA] via-[#F7F3EC] to-[#FFFDFA] rounded-xl border border-[#E8DED1] p-6 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
-                <h3 className="font-serif text-base font-bold text-[#2C2723] flex items-center gap-2">
+                <h3 className="font-serif text-base font-bold text-[#302A27] flex items-center gap-2">
                   <span>🌸</span>
                   <span>Emergency Archival Restore</span>
                 </h3>
-                <p className="text-xs text-[#8C827A] font-serif italic mt-0.5">
+                <p className="text-xs text-[#81766D] font-serif italic mt-0.5">
                   Download offline JSON snapshots or verify the 20 famous canonical library books.
                 </p>
               </div>
@@ -2087,7 +2063,7 @@ const AdminDashboard = () => {
                 <a
                   href={adminService.getBackupJsonUrl()}
                   download
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold shadow-xs transition-all active:scale-95"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-semibold shadow-xs transition-all active:scale-95"
                 >
                   <span>📦</span>
                   <span>JSON Snapshot</span>
@@ -2102,7 +2078,7 @@ const AdminDashboard = () => {
                       title: 'Verify & Reseed 20 Canonical Stories',
                     })
                   }
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-[#FAF4EB] border border-[#EADBCC] text-[#2C2723] text-xs font-semibold shadow-2xs transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-[#F7F3EC] border border-[#E8DED1] text-[#302A27] text-xs font-semibold shadow-2xs transition-all cursor-pointer"
                 >
                   <span>🔄</span>
                   <span>Reseed Stacks</span>
@@ -2118,18 +2094,18 @@ const AdminDashboard = () => {
         <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs animate-fade-in">
           <div className="flex-1" onClick={() => setEditDrawerBook(null)} />
 
-          <div className="w-full max-w-lg bg-[#FAF6EE] border-l border-[#EADBCC] shadow-2xl flex flex-col justify-between h-full overflow-y-auto animate-slide-left p-6 sm:p-7">
+          <div className="w-full max-w-lg bg-[#F7F3EC] border-l border-[#E8DED1] shadow-2xl flex flex-col justify-between h-full overflow-y-auto animate-slide-left p-6 sm:p-7">
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-[#EADBCC]">
+              <div className="flex items-center justify-between pb-4 border-b border-[#E8DED1]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-2xl bg-[#FCEEEB] text-[#861D2D] flex items-center justify-center text-lg">
+                  <div className="w-9 h-9 rounded-xl bg-[#FAF0F2] text-[#8D263B] flex items-center justify-center text-lg">
                     📖
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg font-bold text-[#2C2723]">
+                    <h3 className="font-serif text-lg font-bold text-[#302A27]">
                       Librarian&apos;s Quick Edit
                     </h3>
-                    <span className="text-[10px] font-mono text-[#8C827A] uppercase">
+                    <span className="text-[10px] font-mono text-[#81766D] uppercase">
                       In-Place Story Journal
                     </span>
                   </div>
@@ -2138,15 +2114,15 @@ const AdminDashboard = () => {
                 <button
                   type="button"
                   onClick={() => setEditDrawerBook(null)}
-                  className="p-1.5 rounded-full hover:bg-black/5 text-[#8C827A] hover:text-[#2C2723] cursor-pointer"
+                  className="p-1.5 rounded-full hover:bg-black/5 text-[#81766D] hover:text-[#302A27] cursor-pointer"
                 >
                   <PiXBold className="text-base" />
                 </button>
               </div>
 
               {/* Mini Polaroid Preview */}
-              <div className="my-5 p-4 rounded-3xl bg-white border border-[#EADBCC] flex items-center gap-4 shadow-2xs relative">
-                <div className="w-14 h-20 rounded-xl bg-[#FAF6EE] border border-[#EADBCC] overflow-hidden flex-shrink-0 shadow-2xs">
+              <div className="my-5 p-4 rounded-xl bg-white border border-[#E8DED1] flex items-center gap-4 shadow-2xs relative">
+                <div className="w-14 h-20 rounded-xl bg-[#F7F3EC] border border-[#E8DED1] overflow-hidden flex-shrink-0 shadow-2xs">
                   {getBookCoverUrl(editDrawerBook.image, editDrawerBook.title, editDrawerBook.isbn) ? (
                     <img
                       src={getBookCoverUrl(editDrawerBook.image, editDrawerBook.title, editDrawerBook.isbn)}
@@ -2154,20 +2130,20 @@ const AdminDashboard = () => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center font-serif text-xs font-bold text-[#861D2D]">
+                    <div className="w-full h-full flex items-center justify-center font-serif text-xs font-bold text-[#8D263B]">
                       {editDrawerBook.title?.charAt(0)}
                     </div>
                   )}
                 </div>
                 <div className="min-w-0">
-                  <h4 className="font-serif text-sm font-bold text-[#2C2723] truncate">
+                  <h4 className="font-serif text-sm font-bold text-[#302A27] truncate">
                     {editDrawerBook.title || 'Untitled Story'}
                   </h4>
-                  <p className="text-xs text-[#8C827A] font-serif italic truncate">
+                  <p className="text-xs text-[#81766D] font-serif italic truncate">
                     by {editDrawerBook.author || 'Unknown Author'}
                   </p>
                   <div className="flex items-center gap-1.5 mt-1.5">
-                    <span className="text-[9px] font-mono uppercase bg-[#FCEEEB] text-[#861D2D] px-2 py-0.2 rounded-full font-bold">
+                    <span className="text-[9px] font-mono uppercase bg-[#FAF0F2] text-[#8D263B] px-2 py-0.2 rounded-full font-bold">
                       {editDrawerBook.category}
                     </span>
                     {editDrawerBook.isFeatured && (
@@ -2182,7 +2158,7 @@ const AdminDashboard = () => {
               {/* Form */}
               <form id="quick-edit-form" onSubmit={handleSaveQuickEdit} className="space-y-4 text-xs font-sans">
                 <div>
-                  <label className="block font-mono uppercase font-bold text-[#8C827A] mb-1 text-[11px]">
+                  <label className="block font-mono uppercase font-bold text-[#81766D] mb-1 text-[11px]">
                     Story Title
                   </label>
                   <input
@@ -2190,13 +2166,13 @@ const AdminDashboard = () => {
                     required
                     value={editDrawerBook.title || ''}
                     onChange={(e) => setEditDrawerBook({ ...editDrawerBook, title: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-[#EADBCC] bg-white focus:outline-none focus:border-[#861D2D]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DED1] bg-white focus:outline-none focus:border-[#8D263B]"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-mono uppercase font-bold text-[#8C827A] mb-1 text-[11px]">
+                    <label className="block font-mono uppercase font-bold text-[#81766D] mb-1 text-[11px]">
                       Author
                     </label>
                     <input
@@ -2204,11 +2180,11 @@ const AdminDashboard = () => {
                       required
                       value={editDrawerBook.author || ''}
                       onChange={(e) => setEditDrawerBook({ ...editDrawerBook, author: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#EADBCC] bg-white focus:outline-none focus:border-[#861D2D]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DED1] bg-white focus:outline-none focus:border-[#8D263B]"
                     />
                   </div>
                   <div>
-                    <label className="block font-mono uppercase font-bold text-[#8C827A] mb-1 text-[11px]">
+                    <label className="block font-mono uppercase font-bold text-[#81766D] mb-1 text-[11px]">
                       Publish Year
                     </label>
                     <input
@@ -2216,14 +2192,14 @@ const AdminDashboard = () => {
                       required
                       value={editDrawerBook.publishYear || ''}
                       onChange={(e) => setEditDrawerBook({ ...editDrawerBook, publishYear: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#EADBCC] bg-white focus:outline-none focus:border-[#861D2D]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DED1] bg-white focus:outline-none focus:border-[#8D263B]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-mono uppercase font-bold text-[#8C827A] mb-1 text-[11px]">
+                    <label className="block font-mono uppercase font-bold text-[#81766D] mb-1 text-[11px]">
                       Genre / Category
                     </label>
                     <input
@@ -2231,36 +2207,36 @@ const AdminDashboard = () => {
                       required
                       value={editDrawerBook.category || ''}
                       onChange={(e) => setEditDrawerBook({ ...editDrawerBook, category: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#EADBCC] bg-white focus:outline-none focus:border-[#861D2D]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DED1] bg-white focus:outline-none focus:border-[#8D263B]"
                     />
                   </div>
                   <div>
-                    <label className="block font-mono uppercase font-bold text-[#8C827A] mb-1 text-[11px]">
+                    <label className="block font-mono uppercase font-bold text-[#81766D] mb-1 text-[11px]">
                       Page Count
                     </label>
                     <input
                       type="number"
                       value={editDrawerBook.pageCount || ''}
                       onChange={(e) => setEditDrawerBook({ ...editDrawerBook, pageCount: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#EADBCC] bg-white focus:outline-none focus:border-[#861D2D]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DED1] bg-white focus:outline-none focus:border-[#8D263B]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-mono uppercase font-bold text-[#8C827A] mb-1 text-[11px]">
+                  <label className="block font-mono uppercase font-bold text-[#81766D] mb-1 text-[11px]">
                     ISBN Identifier
                   </label>
                   <input
                     type="text"
                     value={editDrawerBook.isbn || ''}
                     onChange={(e) => setEditDrawerBook({ ...editDrawerBook, isbn: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-[#EADBCC] bg-white focus:outline-none focus:border-[#861D2D]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DED1] bg-white focus:outline-none focus:border-[#8D263B]"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-mono uppercase font-bold text-[#8C827A] mb-1 text-[11px]">
+                  <label className="block font-mono uppercase font-bold text-[#81766D] mb-1 text-[11px]">
                     Cover Artwork URL / Path
                   </label>
                   <input
@@ -2268,37 +2244,37 @@ const AdminDashboard = () => {
                     value={editDrawerBook.image || ''}
                     onChange={(e) => setEditDrawerBook({ ...editDrawerBook, image: e.target.value })}
                     placeholder="/uploads/covers/... or https://..."
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-[#EADBCC] bg-white focus:outline-none focus:border-[#861D2D]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DED1] bg-white focus:outline-none focus:border-[#8D263B]"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-mono uppercase font-bold text-[#8C827A] mb-1 text-[11px]">
+                  <label className="block font-mono uppercase font-bold text-[#81766D] mb-1 text-[11px]">
                     Story Synopsis
                   </label>
                   <textarea
                     rows={3}
                     value={editDrawerBook.description || ''}
                     onChange={(e) => setEditDrawerBook({ ...editDrawerBook, description: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-[#EADBCC] bg-white focus:outline-none focus:border-[#861D2D]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DED1] bg-white focus:outline-none focus:border-[#8D263B]"
                   />
                 </div>
 
                 {/* Staff Pick Toggle */}
                 <div className="pt-1">
-                  <label className="flex items-center gap-2.5 p-3.5 rounded-2xl bg-white border border-[#EADBCC] cursor-pointer">
+                  <label className="flex items-center gap-2.5 p-3.5 rounded-xl bg-white border border-[#E8DED1] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={!!editDrawerBook.isFeatured}
                       onChange={(e) => setEditDrawerBook({ ...editDrawerBook, isFeatured: e.target.checked })}
-                      className="rounded text-[#861D2D] focus:ring-[#861D2D]"
+                      className="rounded text-[#8D263B] focus:ring-[#8D263B]"
                     />
                     <div>
-                      <span className="font-serif font-bold text-xs text-[#2C2723] block flex items-center gap-1">
+                      <span className="font-serif font-bold text-xs text-[#302A27] block flex items-center gap-1">
                         <span>✨</span>
                         <span>Feature as Staff Pick on Front Page</span>
                       </span>
-                      <span className="text-[10px] text-[#8C827A] font-serif italic block">
+                      <span className="text-[10px] text-[#81766D] font-serif italic block">
                         Places volume under the spotlight banner on the homepage
                       </span>
                     </div>
@@ -2308,11 +2284,11 @@ const AdminDashboard = () => {
             </div>
 
             {/* Bottom Actions */}
-            <div className="pt-4 border-t border-[#EADBCC] flex items-center justify-end gap-2.5">
+            <div className="pt-4 border-t border-[#E8DED1] flex items-center justify-end gap-2.5">
               <button
                 type="button"
                 onClick={() => setEditDrawerBook(null)}
-                className="px-4 py-2 rounded-full border border-[#EADBCC] bg-white hover:bg-[#FAF4EB] text-xs font-semibold text-[#2C2723] transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-full border border-[#E8DED1] bg-white hover:bg-[#F7F3EC] text-xs font-semibold text-[#302A27] transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -2320,7 +2296,7 @@ const AdminDashboard = () => {
                 type="submit"
                 form="quick-edit-form"
                 disabled={actionLoading}
-                className="px-6 py-2 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold shadow-xs active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
+                className="px-6 py-2 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-semibold shadow-xs active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
               >
                 {actionLoading && <PiArrowClockwiseBold className="text-xs animate-spin" />}
                 <span>Save to Stacks 🌸</span>
@@ -2333,24 +2309,24 @@ const AdminDashboard = () => {
       {/* CONFIRMATION MODAL */}
       {deleteModal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fade-in">
-          <div className="bg-white rounded-3xl border border-[#EADBCC] max-w-md w-full p-6 sm:p-7 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-3.5 bg-[#FCEEEB] rounded-b shadow-2xs" />
+          <div className="bg-white rounded-xl border border-[#E8DED1] max-w-md w-full p-6 sm:p-7 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-3.5 bg-[#FAF0F2] rounded-b shadow-2xs" />
 
             <div className="flex items-center gap-3 mt-2">
-              <div className="w-10 h-10 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center text-lg flex-shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-red-100 text-red-700 flex items-center justify-center text-lg flex-shrink-0">
                 🍂
               </div>
               <div>
-                <h3 className="font-serif text-lg font-bold text-[#2C2723]">
+                <h3 className="font-serif text-lg font-bold text-[#302A27]">
                   {deleteModal.type === 'reseed' ? 'Restore Canonical Stories?' : 'Confirm Archival Removal'}
                 </h3>
-                <span className="text-[10px] font-mono text-[#8C827A] uppercase">
+                <span className="text-[10px] font-mono text-[#81766D] uppercase">
                   {deleteModal.type === 'reseed' ? 'Library Verification' : 'Action Cannot Be Undone'}
                 </span>
               </div>
             </div>
 
-            <p className="mt-4 text-xs sm:text-sm text-[#7D736A] font-serif leading-relaxed">
+            <p className="mt-4 text-xs sm:text-sm text-[#81766D] font-serif leading-relaxed">
               {deleteModal.type === 'reseed'
                 ? 'Are you certain you wish to verify and re-seed the 20 famous canonical library volumes?'
                 : deleteModal.type === 'bulk-books'
@@ -2360,14 +2336,14 @@ const AdminDashboard = () => {
                 : `Are you certain you wish to remove "${deleteModal.title}" from the PageTurner shelves?`}
             </p>
 
-            <div className="mt-6 pt-4 border-t border-[#EADBCC] flex items-center justify-end gap-2.5">
+            <div className="mt-6 pt-4 border-t border-[#E8DED1] flex items-center justify-end gap-2.5">
               <button
                 type="button"
                 onClick={() =>
                   setDeleteModal({ isOpen: false, type: null, id: null, secondaryId: null, title: '', count: 0 })
                 }
                 disabled={actionLoading}
-                className="px-4 py-2 rounded-full border border-[#EADBCC] bg-[#FAF6EE] hover:bg-stone-100 text-xs font-semibold text-[#2C2723] transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-full border border-[#E8DED1] bg-[#F7F3EC] hover:bg-stone-100 text-xs font-semibold text-[#302A27] transition-colors cursor-pointer"
               >
                 Keep
               </button>
@@ -2376,7 +2352,7 @@ const AdminDashboard = () => {
                 onClick={handleExecuteDelete}
                 disabled={actionLoading}
                 className={`px-5 py-2 rounded-full text-white text-xs font-semibold shadow-xs active:scale-95 transition-all cursor-pointer flex items-center gap-1.5 ${
-                  deleteModal.type === 'reseed' ? 'bg-[#861D2D] hover:bg-[#701826]' : 'bg-red-700 hover:bg-red-800'
+                  deleteModal.type === 'reseed' ? 'bg-[#8D263B] hover:bg-[#67202F]' : 'bg-red-700 hover:bg-red-800'
                 }`}
               >
                 {actionLoading && <PiArrowClockwiseBold className="text-xs animate-spin" />}

@@ -120,7 +120,7 @@ const EditBook = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-transparent text-[#1C1917]">
+    <div className="min-h-screen flex flex-col bg-transparent text-[#302A27]">
       <Navbar />
 
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 relative z-10">
@@ -134,14 +134,14 @@ const EditBook = () => {
           </div>
         ) : (
           <div className="editorial-sheet p-8 sm:p-10 bg-white">
-            <div className="mb-8 pb-4 border-b border-stone-200">
+            <div className="mb-8 pb-4 border-b border-[#E8DED1]">
               <span className="text-xs uppercase font-mono font-semibold text-burgundy tracking-wider block mb-1">
                 Edit Archival Record
               </span>
-              <h1 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 leading-tight">
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#302A27] leading-tight">
                 Update &ldquo;{title}&rdquo;
               </h1>
-              <p className="text-xs text-stone-500 mt-1">
+              <p className="text-xs text-[#81766D] mt-1">
                 Revise bibliographic metadata, category taxonomy, or cover artwork.
               </p>
             </div>
@@ -150,7 +150,7 @@ const EditBook = () => {
               {/* Title & Author */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-[#302A27] mb-1.5">
                     Book Title <span className="text-burgundy">*</span>
                   </label>
                   <input
@@ -163,7 +163,7 @@ const EditBook = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-[#302A27] mb-1.5">
                     Author <span className="text-burgundy">*</span>
                   </label>
                   <input
@@ -179,7 +179,7 @@ const EditBook = () => {
               {/* Year & Category */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-[#302A27] mb-1.5">
                     Publication Year <span className="text-burgundy">*</span>
                   </label>
                   <input
@@ -192,7 +192,7 @@ const EditBook = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-[#302A27] mb-1.5">
                     Genre / Category
                   </label>
                   <select
@@ -212,7 +212,7 @@ const EditBook = () => {
 
               {/* Description */}
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                <label className="block text-xs font-semibold text-[#302A27] mb-1.5">
                   Synopsis &amp; Editorial Summary
                 </label>
                 <textarea
@@ -224,8 +224,8 @@ const EditBook = () => {
               </div>
 
               {/* Cover Image Inputs & Preview */}
-              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-stone-200">
-                <label className="block text-xs font-semibold text-stone-700 mb-2">
+              <div className="p-4 rounded-xl bg-[#F7F3EC] border border-[#E8DED1]">
+                <label className="block text-xs font-semibold text-[#302A27] mb-2">
                   Cover Artwork
                 </label>
 
@@ -239,13 +239,13 @@ const EditBook = () => {
                       className="editorial-input w-full p-2.5 rounded-xl text-xs bg-white"
                     />
 
-                    <div className="flex items-center gap-2 text-xs text-stone-500">
+                    <div className="flex items-center gap-2 text-xs text-[#81766D]">
                       <span>or replace with image file:</span>
                       <input
                         type="file"
                         accept="image/*"
                         onChange={handleImageFileChange}
-                        className="text-xs text-stone-600 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-stone-200 file:text-stone-800 hover:file:bg-stone-300 cursor-pointer"
+                        className="text-xs text-[#81766D] file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-stone-200 file:text-stone-800 hover:file:bg-stone-300 cursor-pointer"
                       />
                     </div>
                   </div>
@@ -267,7 +267,7 @@ const EditBook = () => {
               {/* Additional Metadata */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-[#302A27] mb-1.5">
                     ISBN
                   </label>
                   <input
@@ -279,7 +279,7 @@ const EditBook = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-[#302A27] mb-1.5">
                     Page Count
                   </label>
                   <input
@@ -291,7 +291,7 @@ const EditBook = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-[#302A27] mb-1.5">
                     Language
                   </label>
                   <input
@@ -304,7 +304,7 @@ const EditBook = () => {
               </div>
 
               {/* Form Actions */}
-              <div className="pt-6 border-t border-stone-200 flex items-center justify-end gap-3">
+              <div className="pt-6 border-t border-[#E8DED1] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => navigate(`/books/details/${id}`)}

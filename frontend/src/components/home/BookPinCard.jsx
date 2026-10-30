@@ -68,25 +68,25 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
         tabIndex={0}
         role="button"
         aria-label={`View details for ${book.title} by ${book.author}`}
-        className={`book-pin group cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#861D2D] focus-visible:ring-offset-2 ${
+        className={`book-pin group cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8D263B] focus-visible:ring-offset-2 ${
           isFeatured
-            ? 'bg-[#FFFDF9] border-[#D8C7B0] shadow-sm hover:border-[#861D2D]/40'
-            : 'bg-white border-[#ECE5D9] shadow-2xs hover:border-[#D8CCBA]'
+            ? 'bg-[#FFFDFA] border-[#D9A9A6]/60 shadow-card hover:border-[#8D263B]'
+            : 'bg-[#FFFDFA] border-[#E8DED1] shadow-subtle hover:border-[#D9A9A6]'
         }`}
       >
         {/* Curated Spotlight Banner: Fixed initial height, never expands on hover */}
         {isFeatured && (
-          <div className="px-3.5 py-1.5 bg-[#861D2D] text-white flex items-center justify-between text-[10px] font-mono uppercase tracking-wider font-semibold rounded-t-[1.125rem]">
+          <div className="px-3.5 py-1 bg-[#8D263B] text-[#FFFDFA] flex items-center justify-between text-[10px] font-mono uppercase tracking-wider font-medium rounded-t-[0.875rem]">
             <span className="flex items-center gap-1.5">
-              <PiSparkleBold className="text-amber-300 text-xs" />
-              <span>Curator&apos;s Choice</span>
+              <PiSparkleBold className="text-[#C6A16B] text-xs" />
+              <span>Curator&apos;s Pick</span>
             </span>
-            <span className="opacity-80 text-[9px] font-normal">{book.category || 'Featured'}</span>
+            <span className="opacity-85 text-[9px] font-normal">{book.category || 'Featured'}</span>
           </div>
         )}
 
         {/* Cover Artwork Container with natural aspect ratio & authentic spine depth */}
-        <div className={`book-cover-wrap relative w-full overflow-hidden bg-[#F5F0E6] ${!isFeatured ? 'rounded-t-[1.125rem]' : ''}`}>
+        <div className={`book-cover-wrap relative w-full overflow-hidden bg-[#F0E9DE] ${!isFeatured ? 'rounded-t-[0.875rem]' : ''}`}>
           {imageUrl && !imgError ? (
             <img
               src={imageUrl}
@@ -94,23 +94,23 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
               onError={() => setImgError(true)}
               loading={index < 4 ? 'eager' : 'lazy'}
               decoding="async"
-              className="w-full h-auto block object-cover max-h-[420px] transition-transform duration-250 ease-out group-hover:scale-[1.025]"
+              className="w-full h-auto block object-cover max-h-[420px] transition-transform duration-300 ease-out group-hover:scale-[1.02]"
             />
           ) : (
             /* Fallback Cloth Book Jacket with varied natural proportions */
             <div className={`w-full ${fallbackHeight} fallback-jacket p-5 flex flex-col justify-between text-stone-100`}>
-              <div className="border border-amber-200/20 p-4 h-full flex flex-col justify-between rounded-sm">
+              <div className="border border-[#C6A16B]/30 p-4 h-full flex flex-col justify-between rounded-sm">
                 <div>
-                  <span className="text-[10px] uppercase tracking-widest text-amber-200/70 block mb-2 font-mono">
+                  <span className="text-[10px] uppercase tracking-widest text-[#C6A16B]/80 block mb-2 font-mono">
                     {book.category || 'Literary Work'}
                   </span>
-                  <h4 className="font-serif text-lg font-bold text-amber-50 leading-tight">
+                  <h4 className="font-serif text-lg font-medium text-[#FFFDFA] leading-tight">
                     {book.title}
                   </h4>
                 </div>
                 <div>
-                  <p className="text-xs text-amber-100/80 italic">by {book.author}</p>
-                  <span className="text-[10px] text-amber-200/50 font-mono mt-1 block">
+                  <p className="text-xs text-[#E8DED1] italic font-serif">by {book.author}</p>
+                  <span className="text-[10px] text-[#C6A16B]/60 font-mono mt-1 block">
                     {book.publishYear}
                   </span>
                 </div>
@@ -120,8 +120,8 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
 
           {/* Restrained Description Overlay: Revealed smoothly on hover WITHOUT changing layout height */}
           {book.description && (
-            <div className="absolute inset-x-0 bottom-0 p-3.5 pt-10 bg-gradient-to-t from-stone-950/92 via-stone-950/65 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out pointer-events-none z-10">
-              <p className="text-[11px] font-serif italic text-stone-200 line-clamp-3 leading-relaxed">
+            <div className="absolute inset-x-0 bottom-0 p-3.5 pt-10 bg-gradient-to-t from-[#18151B]/95 via-[#18151B]/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out pointer-events-none z-10">
+              <p className="text-[11px] font-serif italic text-[#EDE4D8] line-clamp-3 leading-relaxed">
                 &ldquo;{book.description}&rdquo;
               </p>
             </div>
@@ -129,7 +129,7 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
 
           {/* Pinterest-Inspired Overlay with tactile microactions */}
           <div className="pin-actions-overlay absolute inset-0 p-3 flex flex-col justify-between pointer-events-none z-20 transition-opacity duration-200">
-            {/* Top Bar: Quick Preview & Pin Studio on Left, Signature Pinterest "Save" Pill on Right */}
+            {/* Top Bar: Quick Preview & Save Pill */}
             <div className="flex items-center justify-between w-full pointer-events-auto">
               <div className="flex items-center gap-1.5">
                 <div className="relative group/preview">
@@ -138,11 +138,11 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
                     onClick={handleQuickPreview}
                     title="Quick preview"
                     aria-label="Quick preview"
-                    className="w-8 h-8 rounded-full bg-white/95 hover:bg-white text-stone-800 hover:text-stone-950 shadow-md flex items-center justify-center transition-all duration-180 hover:scale-108 active:scale-92 border border-stone-200/80 backdrop-blur-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#861D2D] cursor-pointer"
+                    className="w-8 h-8 rounded-full bg-[#FFFDFA]/95 hover:bg-[#FFFDFA] text-[#302A27] shadow-sm flex items-center justify-center transition-all duration-150 hover:scale-105 active:scale-95 border border-[#E8DED1] backdrop-blur-xs cursor-pointer"
                   >
                     <PiEyeBold className="text-sm" />
                   </button>
-                  <span className="pointer-events-none absolute -bottom-7 left-0 whitespace-nowrap rounded-md bg-stone-900/90 backdrop-blur-xs px-2 py-0.5 text-[10px] font-medium text-stone-100 opacity-0 transition-opacity duration-150 group-hover/preview:opacity-100 z-30 shadow-xs">
+                  <span className="pointer-events-none absolute -bottom-7 left-0 whitespace-nowrap rounded-md bg-[#302A27] px-2 py-0.5 text-[10px] font-medium text-[#FFFDFA] opacity-0 transition-opacity duration-150 group-hover/preview:opacity-100 z-30 shadow-xs">
                     Quick preview
                   </span>
                 </div>
@@ -155,41 +155,41 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
                   onClick={handleBookmarkClick}
                   title={isSaved ? 'Remove from shelf' : 'Save to shelf'}
                   aria-label={isSaved ? 'Saved to shelf' : 'Save to shelf'}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold shadow-md flex items-center gap-1.5 transition-all duration-180 hover:scale-105 active:scale-95 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#861D2D] ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium shadow-sm flex items-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 border cursor-pointer ${
                     isSaved
-                      ? 'bg-[#292522] text-amber-300 border-amber-300/30'
-                      : 'bg-[#861D2D] hover:bg-[#701826] text-white border-transparent'
+                      ? 'bg-[#302A27] text-[#C6A16B] border-[#C6A16B]/30'
+                      : 'bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] border-transparent'
                   }`}
                 >
                   {isSaved ? (
                     <>
                       <PiBookmarkSimpleFill
-                        className={`text-xs text-amber-300 ${popping ? 'animate-spring-pop' : ''}`}
+                        className={`text-xs text-[#C6A16B] ${popping ? 'animate-bookmark-pop' : ''}`}
                       />
-                      <span className="font-sans text-[11px] font-bold">Saved</span>
+                      <span className="font-sans text-[11px] font-medium">Saved</span>
                     </>
                   ) : (
                     <>
                       <PiBookmarkSimpleBold className="text-xs" />
-                      <span className="font-sans text-[11px] font-bold">Save</span>
+                      <span className="font-sans text-[11px] font-medium">Save</span>
                     </>
                   )}
                 </button>
-                <span className="pointer-events-none absolute -bottom-7 right-0 whitespace-nowrap rounded-md bg-stone-900/90 backdrop-blur-xs px-2 py-0.5 text-[10px] font-medium text-stone-100 opacity-0 transition-opacity duration-150 group-hover/bookmark:opacity-100 z-30 shadow-xs">
+                <span className="pointer-events-none absolute -bottom-7 right-0 whitespace-nowrap rounded-md bg-[#302A27] px-2 py-0.5 text-[10px] font-medium text-[#FFFDFA] opacity-0 transition-opacity duration-150 group-hover/bookmark:opacity-100 z-30 shadow-xs">
                   {isSaved ? 'On your shelf' : 'Save to shelf'}
                 </span>
               </div>
             </div>
 
-            {/* Bottom Bar: Ambient tag pills (Category & Rating) */}
+            {/* Bottom Bar: Category & Rating */}
             <div className="flex items-center justify-between w-full pointer-events-auto">
-              <span className="px-2.5 py-0.5 rounded-full bg-black/65 backdrop-blur-md text-stone-100 text-[10px] font-mono font-medium shadow-xs border border-white/10 tracking-wide">
+              <span className="px-2.5 py-0.5 rounded-full bg-black/65 backdrop-blur-md text-[#FFFDFA] text-[10px] font-mono font-medium shadow-xs border border-white/10 tracking-wide">
                 {book.category || 'Classic'}
               </span>
 
               {book.averageRating > 0 && (
-                <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/65 backdrop-blur-md text-amber-300 text-[10px] font-mono font-bold shadow-xs border border-white/10">
-                  <PiStarFill className="text-amber-400 text-xs" />
+                <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/65 backdrop-blur-md text-[#C6A16B] text-[10px] font-mono font-medium shadow-xs border border-white/10">
+                  <PiStarFill className="text-[#C6A16B] text-xs" />
                   <span>{book.averageRating.toFixed(1)}</span>
                 </span>
               )}
@@ -197,11 +197,11 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
           </div>
         </div>
 
-        {/* Editorial Book Typography Information: Statically structured, ZERO layout shift on hover */}
+        {/* Editorial Book Typography Information */}
         <div className="p-4 sm:p-4.5 flex flex-col justify-between">
           <div>
             <div className="flex items-start justify-between gap-2">
-              <h3 className="font-serif text-[15px] sm:text-base font-bold text-[#292522] leading-snug tracking-tight group-hover:text-[#861D2D] transition-colors duration-200 line-clamp-2">
+              <h3 className="font-serif text-[16px] sm:text-[17px] font-medium text-[#302A27] leading-snug tracking-tight group-hover:text-[#8D263B] transition-colors duration-200 line-clamp-2">
                 {book.title}
               </h3>
 
@@ -210,7 +210,7 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
                   <button
                     type="button"
                     onClick={handleMenuClick}
-                    className="p-1 -mr-1 text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-md transition-colors"
+                    className="p-1 -mr-1 text-[#81766D] hover:text-[#302A27] hover:bg-[#F0E9DE] rounded-md transition-colors cursor-pointer"
                     title="Admin options"
                     aria-label="Admin options"
                   >
@@ -221,18 +221,18 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
                   {showMenu && (
                     <div
                       onClick={(e) => e.stopPropagation()}
-                      className="absolute right-0 top-full mt-1 w-32 bg-white rounded-xl shadow-lg border border-stone-200 py-1.5 z-40 animate-fade-in"
+                      className="absolute right-0 top-full mt-1 w-32 bg-[#FFFDFA] rounded-xl shadow-card border border-[#E8DED1] py-1.5 z-40 animate-modal-in"
                     >
                       <Link
                         to={`/books/edit/${book._id}`}
-                        className="flex items-center gap-2 px-3 py-1.5 text-xs text-stone-700 hover:bg-stone-100 transition-colors"
+                        className="flex items-center gap-2 px-3 py-1.5 text-xs text-[#302A27] hover:bg-[#F7F3EC] transition-colors"
                       >
                         <PiPencilSimpleBold className="text-sm" />
                         <span>Edit</span>
                       </Link>
                       <Link
                         to={`/books/delete/${book._id}`}
-                        className="flex items-center gap-2 px-3 py-1.5 text-xs text-rose-700 hover:bg-rose-50 transition-colors"
+                        className="flex items-center gap-2 px-3 py-1.5 text-xs text-[#8D263B] hover:bg-[#8D263B]/10 transition-colors"
                       >
                         <PiTrashBold className="text-sm" />
                         <span>Delete</span>
@@ -243,32 +243,32 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
               )}
             </div>
 
-            {/* Pinterest-Style Author Attribution with Monogram Avatar */}
+            {/* Author Attribution */}
             <div className="flex items-center gap-2 mt-2">
-              <div className="w-5 h-5 rounded-full bg-[#861D2D]/10 text-[#861D2D] font-serif text-[10px] font-bold flex items-center justify-center flex-shrink-0 border border-[#861D2D]/20">
+              <div className="w-5 h-5 rounded-full bg-[#8D263B]/10 text-[#8D263B] font-serif text-[10px] font-medium flex items-center justify-center flex-shrink-0 border border-[#8D263B]/20">
                 {authorInitial}
               </div>
-              <p className="text-xs text-stone-600 font-serif italic truncate">
-                by <span className="text-stone-800 font-medium not-italic">{book.author}</span>
+              <p className="text-xs text-[#81766D] font-serif italic truncate">
+                by <span className="text-[#302A27] font-medium not-italic">{book.author}</span>
               </p>
             </div>
           </div>
 
-          {/* Footer Metadata: Consistent, fixed placement */}
-          <div className="mt-3 pt-2.5 border-t border-[#ECE5D9]/80 flex items-center justify-between text-[11px] font-mono text-stone-500">
+          {/* Footer Metadata */}
+          <div className="mt-3 pt-2.5 border-t border-[#E8DED1] flex items-center justify-between text-[11px] font-mono text-[#81766D]">
             <span className="flex items-center gap-1.5">
               <span>{book.publishYear}</span>
               {book.pageCount && (
                 <>
-                  <span className="text-stone-300">&bull;</span>
+                  <span className="text-[#81766D]/40">&bull;</span>
                   <span>{book.pageCount}p</span>
                 </>
               )}
             </span>
 
             {book.averageRating > 0 && (
-              <span className="flex items-center gap-1 font-semibold text-stone-700">
-                <PiStarFill className="text-amber-500 text-xs" />
+              <span className="flex items-center gap-1 font-medium text-[#302A27]">
+                <PiStarFill className="text-[#C6A16B] text-xs" />
                 <span>{book.averageRating.toFixed(1)}</span>
               </span>
             )}

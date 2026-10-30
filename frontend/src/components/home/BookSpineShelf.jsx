@@ -73,7 +73,7 @@ const getSpineStyle = (category = '', idx = 0) => {
       foil: 'text-[#FDECC8]',
       rib: 'rgba(255, 255, 255, 0.14)',
       shadow: 'rgba(80, 22, 34, 0.65)',
-      ribbon: 'bg-[#861D2D]',
+      ribbon: 'bg-[#8D263B]',
       tag: 'Classic',
     },
     {
@@ -122,10 +122,10 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
 
   if (!books.length) {
     return (
-      <div className="py-20 text-center rounded-3xl bg-[#FAF7F2] border border-[#E8DED2] text-[#827870] font-serif p-8">
+      <div className="py-20 text-center rounded-3xl bg-[#F7F3EC] border border-[#E8DED1] text-[#81766D] font-serif p-8">
         <PiBookOpenBold className="text-5xl mx-auto mb-3 text-[#CBB499] opacity-70" />
-        <h3 className="font-serif text-xl font-bold text-[#292522]">No Volumes on This Shelf</h3>
-        <p className="text-xs text-[#827870] mt-1 italic max-w-sm mx-auto">
+        <h3 className="font-serif text-xl font-bold text-[#302A27]">No Volumes on This Shelf</h3>
+        <p className="text-xs text-[#81766D] mt-1 italic max-w-sm mx-auto">
           Try clearing your active filters or explore our Curated Atmospheres above.
         </p>
       </div>
@@ -167,20 +167,20 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
   return (
     <div className="space-y-6">
       {/* Telemetry Header Bar with Layout Toggle */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DED2] shadow-2xs font-mono">
-        <div className="flex items-center gap-6 divide-x divide-[#E8DED2] text-xs">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-4 rounded-2xl bg-[#F7F3EC] border border-[#E8DED1] shadow-2xs font-mono">
+        <div className="flex items-center gap-6 divide-x divide-[#E8DED1] text-xs">
           <div className="pr-4">
             <span className="text-[10px] uppercase text-[#786C62] block tracking-wider">
               Volumes Shelved
             </span>
-            <span className="font-serif text-lg font-bold text-[#292522]">{books.length}</span>
+            <span className="font-serif text-lg font-bold text-[#302A27]">{books.length}</span>
           </div>
 
           <div className="px-4">
             <span className="text-[10px] uppercase text-[#786C62] block tracking-wider">
               Total Pages
             </span>
-            <span className="font-serif text-lg font-bold text-[#861D2D]">
+            <span className="font-serif text-lg font-bold text-[#8D263B]">
               {totalPages.toLocaleString()}
             </span>
           </div>
@@ -189,7 +189,7 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
             <span className="text-[10px] uppercase text-[#786C62] block tracking-wider">
               Est. Library Time
             </span>
-            <span className="font-serif text-lg font-bold text-[#292522]">~{totalHours} hrs</span>
+            <span className="font-serif text-lg font-bold text-[#302A27]">~{totalHours} hrs</span>
           </div>
 
           <div className="hidden md:block pl-4">
@@ -207,15 +207,15 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
           <span className="text-[10px] uppercase tracking-wider text-[#786C62] hidden lg:inline">
             Shelf Stack:
           </span>
-          <div className="inline-flex rounded-xl bg-white p-0.5 border border-[#E8DED2] shadow-2xs">
+          <div className="inline-flex rounded-xl bg-white p-0.5 border border-[#E8DED1] shadow-2xs">
             <button
               type="button"
               onClick={() => setShelfLayout('double')}
               title="Two-Tier Bookcase"
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 shelfLayout === 'double'
-                  ? 'bg-[#292522] text-white shadow-2xs'
-                  : 'text-[#786C62] hover:text-[#292522]'
+                  ? 'bg-[#302A27] text-white shadow-2xs'
+                  : 'text-[#786C62] hover:text-[#302A27]'
               }`}
             >
               <PiColumnsBold className="text-sm" />
@@ -227,8 +227,8 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
               title="Single Horizontal Shelf"
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 shelfLayout === 'single'
-                  ? 'bg-[#292522] text-white shadow-2xs'
-                  : 'text-[#786C62] hover:text-[#292522]'
+                  ? 'bg-[#302A27] text-white shadow-2xs'
+                  : 'text-[#786C62] hover:text-[#302A27]'
               }`}
             >
               <PiSquaresFourBold className="text-sm" />
@@ -360,7 +360,7 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
 
                       {/* Pinned Bookmark Icon Pill if already in Reading Shelf */}
                       {isBookSaved(book._id) && (
-                        <div className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-[#861D2D] text-amber-200 flex items-center justify-center text-[8px] shadow-xs">
+                        <div className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-[#8D263B] text-amber-200 flex items-center justify-center text-[8px] shadow-xs">
                           ★
                         </div>
                       )}
@@ -422,7 +422,7 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
 
       {/* Floating Hover Card Summary Callout */}
       {hoveredBook && !selectedBook && (
-        <div className="p-4 rounded-2xl bg-[#FFFDF9] border border-[#E8DED2] shadow-xl flex items-center justify-between gap-4 animate-fade-in transition-all">
+        <div className="p-4 rounded-2xl bg-[#FFFDFA] border border-[#E8DED1] shadow-xl flex items-center justify-between gap-4 animate-fade-in transition-all">
           <div className="flex items-center gap-3.5 min-w-0">
             {hoveredBook.image ? (
               <img
@@ -430,23 +430,23 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
                 alt={hoveredBook.title}
                 loading="lazy"
                 decoding="async"
-                className="w-12 h-16 object-cover rounded-md shadow-sm border border-[#E8DED2] flex-shrink-0"
+                className="w-12 h-16 object-cover rounded-md shadow-sm border border-[#E8DED1] flex-shrink-0"
               />
             ) : (
-              <div className="w-12 h-16 bg-[#FAF7F2] rounded-md flex items-center justify-center flex-shrink-0 border border-[#E8DED2]">
-                <PiBookOpenBold className="text-[#827870] text-xl" />
+              <div className="w-12 h-16 bg-[#F7F3EC] rounded-md flex items-center justify-center flex-shrink-0 border border-[#E8DED1]">
+                <PiBookOpenBold className="text-[#81766D] text-xl" />
               </div>
             )}
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-[#861D2D] font-bold">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[#8D263B] font-bold">
                   {hoveredBook.category || 'Curated Volume'} &bull; {hoveredBook.publishYear}
                 </span>
-                <span className="text-[10px] font-mono text-[#827870]">
+                <span className="text-[10px] font-mono text-[#81766D]">
                   &bull; {hoveredBook.pageCount || 280} pages
                 </span>
               </div>
-              <h4 className="font-serif text-base font-bold text-[#292522] truncate mt-0.5">
+              <h4 className="font-serif text-base font-bold text-[#302A27] truncate mt-0.5">
                 {hoveredBook.title}
               </h4>
               <p className="text-xs text-[#695D53] font-serif italic truncate">
@@ -459,7 +459,7 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
             <button
               type="button"
               onClick={(e) => handleToggleShelfBookmark(e, hoveredBook)}
-              className="p-2 rounded-xl border border-[#E8DED2] hover:bg-[#FAF7F2] text-[#861D2D] transition-colors cursor-pointer"
+              className="p-2 rounded-xl border border-[#E8DED1] hover:bg-[#F7F3EC] text-[#8D263B] transition-colors cursor-pointer"
               title={isBookSaved(hoveredBook._id) ? 'Remove from Shelf' : 'Add to Shelf'}
             >
               {isBookSaved(hoveredBook._id) ? (
@@ -472,7 +472,7 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
             <button
               type="button"
               onClick={() => handleSpineClick(hoveredBook)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold shadow-xs transition-transform active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-semibold shadow-xs transition-transform active:scale-95 cursor-pointer"
             >
               <span>Pull From Shelf</span>
               <PiArrowRightBold className="text-xs" />
@@ -490,20 +490,20 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
           onClick={() => setSelectedBook(null)}
         >
           <div
-            className="relative w-full max-w-xl bg-[#FFFDF9] rounded-3xl border border-[#E8DED2] shadow-2xl overflow-hidden text-[#292522] my-auto animate-scale-up"
+            className="relative w-full max-w-xl bg-[#FFFDFA] rounded-3xl border border-[#E8DED1] shadow-2xl overflow-hidden text-[#302A27] my-auto animate-scale-up"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Washi Tape Ribbon at Top */}
             <div className="w-28 h-4 bg-[#C99A48]/30 mx-auto -mt-2 mb-2 rounded-xs transform -rotate-1 border-x border-dashed border-white/60 pointer-events-none" />
 
             {/* Header Ribbon */}
-            <div className="px-6 py-4 bg-[#FAF7F2] border-b border-[#E8DED2] flex items-center justify-between">
+            <div className="px-6 py-4 bg-[#F7F3EC] border-b border-[#E8DED1] flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-full bg-[#861D2D]/10 text-[#861D2D] flex items-center justify-center text-sm font-bold">
+                <span className="w-7 h-7 rounded-full bg-[#8D263B]/10 text-[#8D263B] flex items-center justify-center text-sm font-bold">
                   📖
                 </span>
                 <div>
-                  <h3 className="font-serif text-base font-bold text-[#292522] leading-none">
+                  <h3 className="font-serif text-base font-bold text-[#302A27] leading-none">
                     Volume Pulled From Shelf
                   </h3>
                   <p className="font-mono text-[10px] uppercase text-[#786C62] tracking-wider mt-1">
@@ -515,7 +515,7 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
               <button
                 type="button"
                 onClick={() => setSelectedBook(null)}
-                className="w-8 h-8 rounded-full hover:bg-[#EFE8DD] flex items-center justify-center text-[#786C62] hover:text-[#292522] transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full hover:bg-[#EFE8DD] flex items-center justify-center text-[#786C62] hover:text-[#302A27] transition-colors cursor-pointer"
               >
                 <PiXBold className="text-base" />
               </button>
@@ -531,25 +531,25 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
                       alt={selectedBook.title}
                       loading="eager"
                       decoding="async"
-                      className="w-32 h-48 sm:w-36 sm:h-52 object-cover rounded-xl shadow-xl border border-[#E8DED2] transform group-hover:scale-102 transition-transform"
+                      className="w-32 h-48 sm:w-36 sm:h-52 object-cover rounded-xl shadow-xl border border-[#E8DED1] transform group-hover:scale-102 transition-transform"
                     />
                   ) : (
-                    <div className="w-32 h-48 sm:w-36 sm:h-52 bg-[#FAF7F2] rounded-xl flex items-center justify-center border border-[#E8DED2]">
-                      <PiBookOpenBold className="text-3xl text-[#827870]" />
+                    <div className="w-32 h-48 sm:w-36 sm:h-52 bg-[#F7F3EC] rounded-xl flex items-center justify-center border border-[#E8DED1]">
+                      <PiBookOpenBold className="text-3xl text-[#81766D]" />
                     </div>
                   )}
 
                   {/* Bookmark Silk Ribbon Tag */}
-                  <div className="absolute -top-1.5 left-4 w-3.5 h-6 bg-[#861D2D] rounded-b-xs shadow-xs pointer-events-none" />
+                  <div className="absolute -top-1.5 left-4 w-3.5 h-6 bg-[#8D263B] rounded-b-xs shadow-xs pointer-events-none" />
                 </div>
 
                 {/* Details Column */}
                 <div className="flex-1 text-center sm:text-left space-y-3 min-w-0">
                   <div>
-                    <span className="font-mono text-[10px] uppercase tracking-widest font-bold text-[#861D2D] block">
+                    <span className="font-mono text-[10px] uppercase tracking-widest font-bold text-[#8D263B] block">
                       Published in {selectedBook.publishYear}
                     </span>
-                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#292522] leading-snug mt-0.5">
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#302A27] leading-snug mt-0.5">
                       {selectedBook.title}
                     </h2>
                     <p className="text-xs sm:text-sm text-[#695D53] font-serif italic mt-0.5">
@@ -559,10 +559,10 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
 
                   {/* Metadata Chips */}
                   <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
-                    <span className="px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#E8DED2] text-[10px] font-mono font-semibold text-[#786C62]">
+                    <span className="px-2.5 py-1 rounded-full bg-[#F7F3EC] border border-[#E8DED1] text-[10px] font-mono font-semibold text-[#786C62]">
                       📄 {selectedBook.pageCount || 280} Pages
                     </span>
-                    <span className="px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#E8DED2] text-[10px] font-mono font-semibold text-[#786C62]">
+                    <span className="px-2.5 py-1 rounded-full bg-[#F7F3EC] border border-[#E8DED1] text-[10px] font-mono font-semibold text-[#786C62]">
                       ⏳ ~{Math.round((selectedBook.pageCount || 280) / 50)} hrs read
                     </span>
                     {selectedBook.rating && (
@@ -585,17 +585,17 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
 
               {/* Embedded Interactive Page Flip Preview when toggled */}
               {showPageFlip && (
-                <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DED2] animate-fade-in">
+                <div className="p-4 rounded-2xl bg-[#F7F3EC] border border-[#E8DED1] animate-fade-in">
                   <PageFlipPreview book={selectedBook} />
                 </div>
               )}
 
               {/* Action Buttons Row */}
-              <div className="pt-3 border-t border-[#E8DED2] flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+              <div className="pt-3 border-t border-[#E8DED1] flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
                 <button
                   type="button"
                   onClick={() => navigate(`/books/details/${selectedBook._id}`)}
-                  className="flex-1 py-2.5 px-5 rounded-full bg-gradient-to-r from-[#7B1826] via-[#861D2D] to-[#6E1421] text-white text-xs font-semibold shadow-md hover:brightness-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="flex-1 py-2.5 px-5 rounded-full bg-gradient-to-r from-[#7B1826] via-[#8D263B] to-[#6E1421] text-white text-xs font-semibold shadow-md hover:brightness-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <PiBookOpenTextBold className="text-sm" />
                   <span>Open Full Volume</span>
@@ -604,9 +604,9 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
                 <button
                   type="button"
                   onClick={() => setShowPageFlip(!showPageFlip)}
-                  className="py-2.5 px-4 rounded-full bg-[#FAF7F2] hover:bg-[#F0EAE0] text-[#292522] text-xs font-semibold border border-[#E8DED2] transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="py-2.5 px-4 rounded-full bg-[#F7F3EC] hover:bg-[#F0EAE0] text-[#302A27] text-xs font-semibold border border-[#E8DED1] transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
-                  <PiSparkleBold className="text-xs text-[#861D2D]" />
+                  <PiSparkleBold className="text-xs text-[#8D263B]" />
                   <span>{showPageFlip ? 'Hide Sample Pages' : 'Flip Pages'}</span>
                 </button>
 
@@ -615,8 +615,8 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
                   onClick={(e) => handleToggleShelfBookmark(e, selectedBook)}
                   className={`py-2.5 px-4 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
                     isBookSaved(selectedBook._id)
-                      ? 'bg-[#861D2D] text-white'
-                      : 'bg-[#FAF7F2] hover:bg-[#F0EAE0] text-[#292522] border border-[#E8DED2]'
+                      ? 'bg-[#8D263B] text-white'
+                      : 'bg-[#F7F3EC] hover:bg-[#F0EAE0] text-[#302A27] border border-[#E8DED1]'
                   }`}
                 >
                   {isBookSaved(selectedBook._id) ? (
@@ -626,7 +626,7 @@ const BookSpineShelf = ({ books = [], onSelectBook }) => {
                     </>
                   ) : (
                     <>
-                      <PiBookmarkSimpleBold className="text-xs text-[#861D2D]" />
+                      <PiBookmarkSimpleBold className="text-xs text-[#8D263B]" />
                       <span>Pin to Shelf</span>
                     </>
                   )}

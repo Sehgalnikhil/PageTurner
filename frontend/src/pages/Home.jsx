@@ -154,7 +154,7 @@ const Home = () => {
 
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
         {/* Seamlessly Integrated Editorial Masthead Banner */}
-        <header className="mb-8 rounded-3xl bg-[#FAF7F2] border border-[#E8DED2] overflow-hidden shadow-2xs relative">
+        <header className="mb-8 rounded-2xl bg-[#FFFDFA] border border-[#E8DED1] overflow-hidden shadow-card relative">
           {/* Seamlessly Embedded Moodboard Artwork with Feathered Editorial Blend */}
           <div className="absolute inset-y-0 right-0 w-full sm:w-[65%] md:w-[58%] lg:w-[52%] xl:w-[48%] overflow-hidden pointer-events-none select-none">
             <img
@@ -162,26 +162,25 @@ const Home = () => {
               alt="Literary Moodboard - A quieter brighter you"
               className="w-full h-full object-cover object-right sm:object-center"
             />
-            {/* Seamless feathering gradient from paper canvas background to transparent */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FAF7F2] via-[#FAF7F2]/85 sm:via-[#FAF7F2]/45 to-transparent pointer-events-none" />
-            {/* Top and bottom subtle edge softening */}
-            <div className="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-[#FAF7F2]/60 to-transparent pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-[#FAF7F2]/60 to-transparent pointer-events-none" />
+            {/* Seamless feathering gradient from surface background to transparent */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FFFDFA] via-[#FFFDFA]/90 sm:via-[#FFFDFA]/50 to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-[#FFFDFA]/60 to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-[#FFFDFA]/60 to-transparent pointer-events-none" />
           </div>
 
           {/* Left Content Column */}
           <div className="relative z-10 p-6 sm:p-8 lg:p-10 max-w-xl xl:max-w-2xl min-h-[200px] sm:min-h-[210px] lg:min-h-[230px] flex flex-col justify-center">
             <div className="flex items-center gap-2 mb-2.5">
-              <span className="h-[1px] w-5 bg-[#C99A48]"></span>
-              <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-[#861D2D]">
+              <span className="h-[1px] w-5 bg-[#C6A16B]"></span>
+              <span className="text-[9px] sm:text-[10px] font-mono font-medium uppercase tracking-[0.22em] text-[#8D263B]">
                 Digital Reading Journal &bull; Issue No. 24
               </span>
             </div>
-            <h1 className="font-serif text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#292522] tracking-tight leading-tight">
-              Fall into <span className="italic font-normal text-[#861D2D]">another world.</span>
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[42px] font-medium text-[#302A27] tracking-tight leading-tight">
+              Fall into <span className="italic font-normal text-[#8D263B]">another world.</span>
             </h1>
-            <p className="text-xs sm:text-[13px] text-[#827870] font-serif italic mt-2 mb-5 leading-relaxed max-w-lg">
-              Stories to keep. Ideas to collect. Worlds to get lost in.
+            <p className="text-xs sm:text-[13px] text-[#81766D] font-serif italic mt-2 mb-5 leading-relaxed max-w-lg">
+              Stories to cherish. Ideas to collect. Worlds to get lost in.
             </p>
 
             {/* Start Exploring Button & Curated Universe Subtext */}
@@ -192,23 +191,20 @@ const Home = () => {
                   const el = document.getElementById('curated-collections');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="group relative inline-flex items-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-gradient-to-r from-[#7B1826] via-[#861D2D] to-[#6E1421] text-[#FAF7F2] font-sans text-xs sm:text-[13px] font-semibold tracking-wide shadow-[0_4px_16px_-2px_rgba(123,24,38,0.38),0_2px_4px_-1px_rgba(123,24,38,0.2)] hover:shadow-[0_8px_24px_-4px_rgba(123,24,38,0.5),0_4px_8px_-2px_rgba(123,24,38,0.25)] border border-[#A83242]/40 ring-1 ring-inset ring-white/15 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 cursor-pointer overflow-hidden"
+                className="group relative inline-flex items-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] font-sans text-xs sm:text-[13px] font-medium tracking-wide shadow-subtle hover:shadow-card hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer overflow-hidden"
               >
-                {/* Subtle ambient shine overlay on hover */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
-
-                <PiCompassBold className="text-[#F1CFA0] text-sm sm:text-base group-hover:rotate-45 transition-transform duration-300 relative z-10" />
+                <PiCompassBold className="text-[#C6A16B] text-sm sm:text-base group-hover:rotate-45 transition-transform duration-300 relative z-10" />
                 <span className="relative z-10 font-medium">Start Exploring</span>
 
                 {/* Circular badge with gliding arrow */}
-                <span className="relative z-10 w-6 h-6 rounded-full bg-white/15 backdrop-blur-xs border border-white/20 flex items-center justify-center text-white transition-all duration-200 group-hover:bg-white group-hover:text-[#7B1826] group-hover:translate-x-0.5 shadow-xs">
-                  <PiArrowRightBold className="text-[11px]" />
+                <span className="relative z-10 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-white transition-all duration-200 group-hover:bg-white group-hover:text-[#8D263B] group-hover:translate-x-0.5">
+                  <PiArrowRightBold className="text-[10px]" />
                 </span>
               </button>
 
               <div className="hidden sm:flex items-center gap-3 pl-1">
-                <span className="h-6 w-[1px] bg-[#E8DED2]" aria-hidden="true" />
-                <span className="text-[10px] sm:text-[11px] font-mono text-[#827870] uppercase tracking-wider max-w-[240px] leading-relaxed">
+                <span className="h-6 w-[1px] bg-[#E8DED1]" aria-hidden="true" />
+                <span className="text-[10px] sm:text-[11px] font-mono text-[#81766D] uppercase tracking-wider max-w-[240px] leading-relaxed">
                   A curated universe of books, ideas &amp; quieter days.
                 </span>
               </div>
@@ -229,16 +225,16 @@ const Home = () => {
 
         {/* Streamlined Discovery Toolbar (Search, Filter, Tab toggles) */}
         <section className="mb-6">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-4 border-b border-[#E8DED2]">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-4 border-b border-[#E8DED1]">
             {/* View Tab Buttons */}
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => setMainTab('discover')}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-[13px] font-semibold transition-all duration-180 active:scale-95 ${
+                className={`px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-150 cursor-pointer ${
                   mainTab === 'discover'
-                    ? 'bg-[#292522] text-white shadow-2xs'
-                    : 'bg-[#FFFDF9] text-[#292522] hover:bg-white hover:text-[#861D2D] border border-[#E8DED2]'
+                    ? 'bg-[#302A27] text-[#FFFDFA] shadow-subtle'
+                    : 'bg-[#FFFDFA] text-[#302A27] hover:text-[#8D263B] border border-[#E8DED1]'
                 }`}
               >
                 All Stories
@@ -247,24 +243,24 @@ const Home = () => {
               <button
                 type="button"
                 onClick={() => setMainTab('shelf')}
-                className={`group px-4 py-2 rounded-xl text-xs sm:text-[13px] font-semibold transition-all duration-180 active:scale-95 flex items-center gap-2 ${
+                className={`group px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-150 flex items-center gap-1.5 cursor-pointer ${
                   mainTab === 'shelf'
-                    ? 'bg-[#861D2D] text-white shadow-2xs'
-                    : 'bg-[#FFFDF9] text-[#292522] hover:bg-white hover:text-[#861D2D] border border-[#E8DED2]'
+                    ? 'bg-[#8D263B] text-[#FFFDFA] shadow-subtle'
+                    : 'bg-[#FFFDFA] text-[#302A27] hover:text-[#8D263B] border border-[#E8DED1]'
                 }`}
               >
                 <PiBookmarkSimpleFill
                   className={`${
-                    mainTab === 'shelf' ? 'text-amber-300' : 'text-[#861D2D]'
-                  } group-hover:scale-105 transition-transform duration-200 text-sm`}
+                    mainTab === 'shelf' ? 'text-[#C6A16B]' : 'text-[#8D263B]'
+                  } text-xs`}
                 />
                 <span>My Shelf</span>
                 {savedCount > 0 && (
                   <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold transition-all duration-200 ${
+                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-medium ${
                       mainTab === 'shelf'
-                        ? 'bg-white text-[#861D2D]'
-                        : 'bg-[#861D2D] text-white'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-[#8D263B] text-white'
                     }`}
                   >
                     {savedCount}
@@ -277,20 +273,20 @@ const Home = () => {
             <div className="flex items-center gap-2 flex-wrap">
               {/* Search Bar with focus elevation & icon accent */}
               <div className="relative flex-1 sm:w-60 group/search">
-                <PiMagnifyingGlassBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#827870] group-focus-within/search:text-[#861D2D] text-xs pointer-events-none transition-colors duration-200" />
+                <PiMagnifyingGlassBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#81766D] group-focus-within/search:text-[#8D263B] text-xs pointer-events-none transition-colors" />
                 <input
                   type="text"
                   placeholder="Search title, author..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleSearch}
-                  className="w-full pl-9 pr-8 py-2 rounded-xl text-xs text-[#292522] placeholder-[#827870]/70 bg-white border border-[#E8DED2] hover:border-[#861D2D]/40 focus:outline-none focus:border-[#861D2D] shadow-2xs transition-colors"
+                  className="w-full pl-9 pr-8 py-1.5 rounded-full text-xs text-[#302A27] placeholder-[#81766D]/60 bg-[#FFFDFA] border border-[#E8DED1] hover:border-[#8D263B]/40 focus:outline-none focus:border-[#8D263B] shadow-subtle transition-colors"
                 />
                 {searchQuery && (
                   <button
                     onClick={handleClearSearch}
                     aria-label="Clear search"
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 transition-colors p-0.5 rounded-full hover:bg-stone-100"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#81766D] hover:text-[#302A27] transition-colors p-0.5 rounded-full"
                   >
                     <PiXBold className="text-xs" />
                   </button>
@@ -302,7 +298,7 @@ const Home = () => {
                 <select
                   value={category}
                   onChange={handleCategoryChange}
-                  className="text-[#292522] text-xs font-semibold rounded-xl px-3 py-2 pr-7 cursor-pointer appearance-none bg-white border border-[#E8DED2] hover:border-[#861D2D]/40 focus:outline-none focus:border-[#861D2D] shadow-2xs transition-colors"
+                  className="text-[#302A27] text-xs font-medium rounded-full px-3.5 py-1.5 pr-7 cursor-pointer appearance-none bg-[#FFFDFA] border border-[#E8DED1] hover:border-[#8D263B]/40 focus:outline-none focus:border-[#8D263B] shadow-subtle transition-colors"
                 >
                   <option value="All">All Genres</option>
                   <option value="Fiction">Fiction</option>
@@ -312,7 +308,7 @@ const Home = () => {
                   <option value="Technology">Technology</option>
                   <option value="Uncategorized">Uncategorized</option>
                 </select>
-                <PiFunnelBold className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#827870] group-hover/genre:text-[#861D2D] text-[11px] pointer-events-none transition-colors" />
+                <PiFunnelBold className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#81766D] group-hover/genre:text-[#8D263B] text-[11px] pointer-events-none transition-colors" />
               </div>
 
               {/* Sort Dropdown */}
@@ -320,7 +316,7 @@ const Home = () => {
                 <select
                   value={sortBy}
                   onChange={handleSortChange}
-                  className="text-[#292522] text-xs font-semibold rounded-xl px-3 py-2 pr-7 cursor-pointer appearance-none bg-white border border-[#E8DED2] hover:border-[#861D2D]/40 focus:outline-none focus:border-[#861D2D] shadow-2xs transition-colors"
+                  className="text-[#302A27] text-xs font-medium rounded-full px-3.5 py-1.5 pr-7 cursor-pointer appearance-none bg-[#FFFDFA] border border-[#E8DED1] hover:border-[#8D263B]/40 focus:outline-none focus:border-[#8D263B] shadow-subtle transition-colors"
                 >
                   <option value="createdAt">Recently Added</option>
                   <option value="rating-desc">Highest Rated</option>
@@ -329,19 +325,19 @@ const Home = () => {
                   <option value="year-newest">Year (Newest)</option>
                   <option value="year-oldest">Year (Oldest)</option>
                 </select>
-                <PiSortAscendingBold className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#827870] group-hover/sort:text-[#861D2D] text-[11px] pointer-events-none transition-colors" />
+                <PiSortAscendingBold className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#81766D] group-hover/sort:text-[#8D263B] text-[11px] pointer-events-none transition-colors" />
               </div>
 
-              {/* Layout Switcher (Masonry Gallery vs Oak Hardwood Shelf vs Table) */}
-              <div className="inline-flex rounded-xl bg-white p-0.5 border border-[#E8DED2] shadow-2xs">
+              {/* Layout Switcher */}
+              <div className="inline-flex rounded-full bg-[#FFFDFA] p-0.5 border border-[#E8DED1] shadow-subtle">
                 <button
                   type="button"
                   onClick={() => setShowType('masonry')}
-                  title="Organic Masonry Gallery"
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  title="Gallery"
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
                     showType === 'masonry'
-                      ? 'bg-[#292522] text-white shadow-2xs'
-                      : 'text-[#827870] hover:text-[#292522]'
+                      ? 'bg-[#302A27] text-[#FFFDFA] shadow-subtle'
+                      : 'text-[#81766D] hover:text-[#302A27]'
                   }`}
                 >
                   <PiSquaresFourBold className="text-sm" />

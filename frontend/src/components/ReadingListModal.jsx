@@ -25,12 +25,12 @@ import { getBookCoverUrl } from '../utils/imageHelper';
 const getStatusBadgeStyle = (status = 'want-to-read') => {
   switch (status) {
     case 'currently-reading':
-      return 'bg-[#F4E8E6] text-[#861D2D] border-[#861D2D]/20';
+      return 'bg-[#F4E8E6] text-[#8D263B] border-[#8D263B]/20';
     case 'finished':
       return 'bg-emerald-50 text-emerald-800 border-emerald-200';
     case 'want-to-read':
     default:
-      return 'bg-[#FAF7F2] text-[#827870] border-[#E8DED2]';
+      return 'bg-[#F7F3EC] text-[#81766D] border-[#E8DED1]';
   }
 };
 
@@ -233,10 +233,10 @@ const ReadingListModal = () => {
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex">
-        <div className="w-screen max-w-[520px] bg-[#FAF7F2] border-l border-[#E8DED2] shadow-2xl flex flex-col relative overflow-hidden text-[#292522] animate-drawer-in">
+        <div className="w-screen max-w-[520px] bg-[#F7F3EC] border-l border-[#E8DED1] shadow-2xl flex flex-col relative overflow-hidden text-[#302A27] animate-drawer-in">
           
           {/* 1. EDITORIAL HEADER WITH MOODBOARD COLLAGE */}
-          <header className="px-6 pt-7 pb-4 bg-[#FAF7F2] relative overflow-hidden border-b border-[#E8DED2]/80">
+          <header className="px-6 pt-7 pb-4 bg-[#F7F3EC] relative overflow-hidden border-b border-[#E8DED1]/80">
             {/* Aesthetic moodboard background collage fading into ivory */}
             <div className="absolute top-0 right-0 w-64 h-48 pointer-events-none select-none overflow-hidden z-0">
               <img
@@ -244,8 +244,8 @@ const ReadingListModal = () => {
                 alt=""
                 className="w-full h-full object-cover object-top opacity-70 mix-blend-multiply"
               />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#FAF7F2]/60 to-[#FAF7F2]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-[#FAF7F2]/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#F7F3EC]/60 to-[#F7F3EC]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#F7F3EC] via-[#F7F3EC]/40 to-transparent" />
             </div>
 
             {/* Discreet Circular Close Button */}
@@ -253,23 +253,23 @@ const ReadingListModal = () => {
               type="button"
               onClick={() => setIsDrawerOpen(false)}
               aria-label="Close shelf drawer"
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-stone-700 hover:text-stone-900 border border-[#E8DED2] shadow-2xs flex items-center justify-center transition-all hover:scale-105 active:scale-95 z-10"
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-stone-700 hover:text-stone-900 border border-[#E8DED1] shadow-2xs flex items-center justify-center transition-all hover:scale-105 active:scale-95 z-10"
             >
               <PiXBold className="text-sm" />
             </button>
 
             {/* Header Content */}
             <div className="relative z-10 pr-10">
-              <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#861D2D] font-bold block mb-1.5">
+              <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#8D263B] font-bold block mb-1.5">
                 YOUR PRIVATE LIBRARY
               </span>
               <h2
                 id="shelf-drawer-title"
-                className="font-serif text-[34px] sm:text-[38px] font-bold text-[#292522] tracking-tight leading-none"
+                className="font-serif text-[34px] sm:text-[38px] font-bold text-[#302A27] tracking-tight leading-none"
               >
                 My Reading Shelf.
               </h2>
-              <p className="font-serif italic text-sm text-[#827870] mt-1.5">
+              <p className="font-serif italic text-sm text-[#81766D] mt-1.5">
                 Books you&apos;ve chosen to keep close.
               </p>
             </div>
@@ -290,16 +290,16 @@ const ReadingListModal = () => {
                     onClick={() => setActiveFilter(tab.id)}
                     className={`h-9 px-2.5 rounded-lg transition-all duration-180 flex items-center justify-between text-xs font-medium border ${
                       isActive
-                        ? 'bg-[#861D2D] text-white border-[#861D2D] shadow-2xs'
-                        : 'bg-[#FFFDF9] hover:bg-white text-[#292522] border-[#E8DED2]'
+                        ? 'bg-[#8D263B] text-white border-[#8D263B] shadow-2xs'
+                        : 'bg-[#FFFDFA] hover:bg-white text-[#302A27] border-[#E8DED1]'
                     }`}
                   >
                     <span className="truncate text-[11px] font-semibold">{tab.label}</span>
                     <span
                       className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ml-1 flex-shrink-0 ${
                         isActive
-                          ? 'bg-white text-[#861D2D]'
-                          : 'bg-[#FAF7F2] text-[#827870]'
+                          ? 'bg-white text-[#8D263B]'
+                          : 'bg-[#F7F3EC] text-[#81766D]'
                       }`}
                     >
                       {tab.count}
@@ -319,7 +319,7 @@ const ReadingListModal = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search your shelf..."
-                  className="w-full h-10 pl-9 pr-7 text-xs bg-white border border-[#E8DED2] rounded-lg text-[#292522] placeholder-[#827870]/70 focus:outline-none focus:border-[#861D2D] transition-colors"
+                  className="w-full h-10 pl-9 pr-7 text-xs bg-white border border-[#E8DED1] rounded-lg text-[#302A27] placeholder-[#81766D]/70 focus:outline-none focus:border-[#8D263B] transition-colors"
                 />
                 {searchQuery && (
                   <button
@@ -345,8 +345,8 @@ const ReadingListModal = () => {
                   title="Filter by genre or view mode"
                   className={`w-10 h-10 rounded-lg border flex items-center justify-center transition-colors ${
                     selectedCategory !== 'all' || viewMode === 'spines'
-                      ? 'bg-[#F4E8E6] text-[#861D2D] border-[#861D2D]/40'
-                      : 'bg-white text-stone-600 border-[#E8DED2] hover:bg-[#FAF7F2]'
+                      ? 'bg-[#F4E8E6] text-[#8D263B] border-[#8D263B]/40'
+                      : 'bg-white text-stone-600 border-[#E8DED1] hover:bg-[#F7F3EC]'
                   }`}
                 >
                   <PiSlidersHorizontalBold className="text-base" />
@@ -356,9 +356,9 @@ const ReadingListModal = () => {
                 {showFilterMenu && (
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="absolute right-0 top-full mt-1.5 w-52 bg-white rounded-xl shadow-xl border border-[#E8DED2] py-2 z-30 text-xs text-[#292522] animate-in fade-in zoom-in-95"
+                    className="absolute right-0 top-full mt-1.5 w-52 bg-white rounded-xl shadow-xl border border-[#E8DED1] py-2 z-30 text-xs text-[#302A27] animate-in fade-in zoom-in-95"
                   >
-                    <div className="px-3 py-1 text-[10px] font-mono text-[#827870] uppercase tracking-wider border-b border-[#FAF7F2]">
+                    <div className="px-3 py-1 text-[10px] font-mono text-[#81766D] uppercase tracking-wider border-b border-[#F7F3EC]">
                       Display Mode
                     </div>
                     <div className="p-1.5 flex gap-1">
@@ -367,7 +367,7 @@ const ReadingListModal = () => {
                         onClick={() => setViewMode('cards')}
                         className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors ${
                           viewMode === 'cards'
-                            ? 'bg-[#861D2D] text-white'
+                            ? 'bg-[#8D263B] text-white'
                             : 'bg-stone-50 hover:bg-stone-100 text-stone-600'
                         }`}
                       >
@@ -379,7 +379,7 @@ const ReadingListModal = () => {
                         onClick={() => setViewMode('spines')}
                         className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors ${
                           viewMode === 'spines'
-                            ? 'bg-[#861D2D] text-white'
+                            ? 'bg-[#8D263B] text-white'
                             : 'bg-stone-50 hover:bg-stone-100 text-stone-600'
                         }`}
                       >
@@ -388,7 +388,7 @@ const ReadingListModal = () => {
                       </button>
                     </div>
 
-                    <div className="px-3 pt-2 pb-1 text-[10px] font-mono text-[#827870] uppercase tracking-wider border-t border-[#FAF7F2]">
+                    <div className="px-3 pt-2 pb-1 text-[10px] font-mono text-[#81766D] uppercase tracking-wider border-t border-[#F7F3EC]">
                       Filter by Genre
                     </div>
                     <div className="max-h-40 overflow-y-auto py-1">
@@ -400,11 +400,11 @@ const ReadingListModal = () => {
                             setSelectedCategory(cat);
                             setShowFilterMenu(false);
                           }}
-                          className="w-full text-left px-3 py-1.5 hover:bg-[#FAF7F2] flex items-center justify-between text-xs"
+                          className="w-full text-left px-3 py-1.5 hover:bg-[#F7F3EC] flex items-center justify-between text-xs"
                         >
                           <span className="capitalize">{cat === 'all' ? 'All Genres' : cat}</span>
                           {selectedCategory === cat && (
-                            <PiCheckBold className="text-[#861D2D] text-xs" />
+                            <PiCheckBold className="text-[#8D263B] text-xs" />
                           )}
                         </button>
                       ))}
@@ -422,7 +422,7 @@ const ReadingListModal = () => {
                     setShowSortMenu((prev) => !prev);
                     setShowFilterMenu(false);
                   }}
-                  className="h-10 px-3 bg-white border border-[#E8DED2] rounded-lg text-xs font-medium text-[#292522] flex items-center gap-1.5 hover:bg-[#FAF7F2] transition-colors whitespace-nowrap"
+                  className="h-10 px-3 bg-white border border-[#E8DED1] rounded-lg text-xs font-medium text-[#302A27] flex items-center gap-1.5 hover:bg-[#F7F3EC] transition-colors whitespace-nowrap"
                 >
                   <span>{getSortLabel(sortBy)}</span>
                   <PiCaretDownBold className="text-stone-400 text-xs" />
@@ -432,7 +432,7 @@ const ReadingListModal = () => {
                 {showSortMenu && (
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="absolute right-0 top-full mt-1.5 w-44 bg-white rounded-xl shadow-xl border border-[#E8DED2] py-1.5 z-30 text-xs text-[#292522] animate-in fade-in zoom-in-95"
+                    className="absolute right-0 top-full mt-1.5 w-44 bg-white rounded-xl shadow-xl border border-[#E8DED1] py-1.5 z-30 text-xs text-[#302A27] animate-in fade-in zoom-in-95"
                   >
                     {[
                       { key: 'recent', label: 'Recently Added' },
@@ -447,11 +447,11 @@ const ReadingListModal = () => {
                           setSortBy(option.key);
                           setShowSortMenu(false);
                         }}
-                        className="w-full text-left px-3 py-1.5 hover:bg-[#FAF7F2] flex items-center justify-between"
+                        className="w-full text-left px-3 py-1.5 hover:bg-[#F7F3EC] flex items-center justify-between"
                       >
                         <span>{option.label}</span>
                         {sortBy === option.key && (
-                          <PiCheckBold className="text-[#861D2D] text-xs" />
+                          <PiCheckBold className="text-[#8D263B] text-xs" />
                         )}
                       </button>
                     ))}
@@ -470,13 +470,13 @@ const ReadingListModal = () => {
                 {sortedList.length === 0 ? (
                   /* Refined Literary Empty State */
                   <div className="py-16 text-center">
-                    <div className="w-14 h-14 rounded-full bg-[#F4E8E6] border border-[#861D2D]/20 text-[#861D2D] flex items-center justify-center mx-auto mb-3 shadow-2xs">
+                    <div className="w-14 h-14 rounded-full bg-[#F4E8E6] border border-[#8D263B]/20 text-[#8D263B] flex items-center justify-center mx-auto mb-3 shadow-2xs">
                       <PiBookOpenTextBold className="text-2xl" />
                     </div>
-                    <h3 className="font-serif text-lg font-bold text-[#292522]">
+                    <h3 className="font-serif text-lg font-bold text-[#302A27]">
                       A little room for your next favorite.
                     </h3>
-                    <p className="text-xs text-[#827870] mt-1.5 max-w-xs mx-auto leading-relaxed">
+                    <p className="text-xs text-[#81766D] mt-1.5 max-w-xs mx-auto leading-relaxed">
                       {readingList.length === 0
                         ? 'Click the bookmark ribbon on any book in the literary discovery catalog to curate your private reading sanctuary.'
                         : 'No saved volumes matched your current status or filter criteria.'}
@@ -485,7 +485,7 @@ const ReadingListModal = () => {
                       <button
                         type="button"
                         onClick={() => setIsDrawerOpen(false)}
-                        className="mt-4 px-5 py-2 rounded-lg bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold shadow-2xs transition-all active:scale-95"
+                        className="mt-4 px-5 py-2 rounded-lg bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-semibold shadow-2xs transition-all active:scale-95"
                       >
                         Explore Discovery Catalog
                       </button>
@@ -503,13 +503,13 @@ const ReadingListModal = () => {
                     return (
                       <article
                         key={book._id}
-                        className="rounded-xl border border-[#E8DED2] bg-[#FFFDF9] p-4 transition-all hover:border-[#861D2D]/35 hover:shadow-2xs relative group/card"
+                        className="rounded-xl border border-[#E8DED1] bg-[#FFFDFA] p-4 transition-all hover:border-[#8D263B]/35 hover:shadow-2xs relative group/card"
                       >
                         <div className="flex items-start gap-4">
                           {/* Book Cover Thumbnail */}
                           <div
                             onClick={() => handleBookNavigate(book._id)}
-                            className="w-20 sm:w-24 aspect-[2/3] rounded-md overflow-hidden flex-shrink-0 bg-[#FAF7F2] border border-[#E8DED2] shadow-2xs cursor-pointer group"
+                            className="w-20 sm:w-24 aspect-[2/3] rounded-md overflow-hidden flex-shrink-0 bg-[#F7F3EC] border border-[#E8DED1] shadow-2xs cursor-pointer group"
                           >
                             {imageUrl ? (
                               <img
@@ -519,7 +519,7 @@ const ReadingListModal = () => {
                                 loading="lazy"
                               />
                             ) : (
-                              <div className="w-full h-full p-2 flex flex-col justify-between text-center bg-[#292522] text-[#FAF7F2]">
+                              <div className="w-full h-full p-2 flex flex-col justify-between text-center bg-[#302A27] text-[#F7F3EC]">
                                 <span className="text-[7px] font-mono text-amber-200/60 uppercase truncate">
                                   {book.category}
                                 </span>
@@ -540,7 +540,7 @@ const ReadingListModal = () => {
                               <div className="flex items-start justify-between gap-2">
                                 <h3
                                   onClick={() => handleBookNavigate(book._id)}
-                                  className="font-serif text-[16px] sm:text-[17px] font-bold text-[#292522] leading-snug cursor-pointer hover:text-[#861D2D] transition-colors line-clamp-1"
+                                  className="font-serif text-[16px] sm:text-[17px] font-bold text-[#302A27] leading-snug cursor-pointer hover:text-[#8D263B] transition-colors line-clamp-1"
                                 >
                                   {book.title}
                                 </h3>
@@ -554,7 +554,7 @@ const ReadingListModal = () => {
                                     }}
                                     title="Saved to shelf — click to remove"
                                     aria-label={`Remove ${book.title} from reading shelf`}
-                                    className="p-1 text-[#861D2D] hover:opacity-75 transition-opacity"
+                                    className="p-1 text-[#8D263B] hover:opacity-75 transition-opacity"
                                   >
                                     <PiBookmarkSimpleFill className="text-base" />
                                   </button>
@@ -576,9 +576,9 @@ const ReadingListModal = () => {
                                     {isMenuOpen && (
                                       <div
                                         onClick={(e) => e.stopPropagation()}
-                                        className="absolute right-0 top-full mt-1 w-44 bg-white rounded-xl shadow-xl border border-[#E8DED2] py-1.5 z-30 text-xs text-[#292522] animate-in fade-in zoom-in-95"
+                                        className="absolute right-0 top-full mt-1 w-44 bg-white rounded-xl shadow-xl border border-[#E8DED1] py-1.5 z-30 text-xs text-[#302A27] animate-in fade-in zoom-in-95"
                                       >
-                                        <div className="px-3 py-1 text-[10px] font-mono text-[#827870] uppercase tracking-wider border-b border-[#FAF7F2]">
+                                        <div className="px-3 py-1 text-[10px] font-mono text-[#81766D] uppercase tracking-wider border-b border-[#F7F3EC]">
                                           Reading Stage
                                         </div>
                                         <button
@@ -587,11 +587,11 @@ const ReadingListModal = () => {
                                             updateBookStatus(book._id, 'want-to-read');
                                             setActiveMenuId(null);
                                           }}
-                                          className="w-full text-left px-3 py-1.5 hover:bg-[#FAF7F2] flex items-center justify-between"
+                                          className="w-full text-left px-3 py-1.5 hover:bg-[#F7F3EC] flex items-center justify-between"
                                         >
                                           <span>Want to Read</span>
                                           {(book.readingStatus || 'want-to-read') === 'want-to-read' && (
-                                            <span className="w-1.5 h-1.5 rounded-full bg-[#861D2D]" />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#8D263B]" />
                                           )}
                                         </button>
                                         <button
@@ -600,11 +600,11 @@ const ReadingListModal = () => {
                                             updateBookStatus(book._id, 'currently-reading');
                                             setActiveMenuId(null);
                                           }}
-                                          className="w-full text-left px-3 py-1.5 hover:bg-[#FAF7F2] flex items-center justify-between"
+                                          className="w-full text-left px-3 py-1.5 hover:bg-[#F7F3EC] flex items-center justify-between"
                                         >
                                           <span>Reading Now</span>
                                           {book.readingStatus === 'currently-reading' && (
-                                            <span className="w-1.5 h-1.5 rounded-full bg-[#861D2D]" />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#8D263B]" />
                                           )}
                                         </button>
                                         <button
@@ -613,21 +613,21 @@ const ReadingListModal = () => {
                                             updateBookStatus(book._id, 'finished');
                                             setActiveMenuId(null);
                                           }}
-                                          className="w-full text-left px-3 py-1.5 hover:bg-[#FAF7F2] flex items-center justify-between"
+                                          className="w-full text-left px-3 py-1.5 hover:bg-[#F7F3EC] flex items-center justify-between"
                                         >
                                           <span>Finished</span>
                                           {book.readingStatus === 'finished' && (
-                                            <span className="w-1.5 h-1.5 rounded-full bg-[#861D2D]" />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#8D263B]" />
                                           )}
                                         </button>
-                                        <div className="my-1 border-t border-[#FAF7F2]" />
+                                        <div className="my-1 border-t border-[#F7F3EC]" />
                                         <button
                                           type="button"
                                           onClick={() => {
                                             handleBookNavigate(book._id);
                                             setActiveMenuId(null);
                                           }}
-                                          className="w-full text-left px-3 py-1.5 hover:bg-[#FAF7F2] text-[#292522]"
+                                          className="w-full text-left px-3 py-1.5 hover:bg-[#F7F3EC] text-[#302A27]"
                                         >
                                           View Details
                                         </button>
@@ -648,12 +648,12 @@ const ReadingListModal = () => {
                               </div>
 
                               {/* Author */}
-                              <p className="font-serif italic text-xs text-[#827870] mt-0.5">
+                              <p className="font-serif italic text-xs text-[#81766D] mt-0.5">
                                 by {book.author}
                               </p>
 
                               {/* Year & Category */}
-                              <p className="text-[11px] font-sans text-[#827870] mt-0.5">
+                              <p className="text-[11px] font-sans text-[#81766D] mt-0.5">
                                 {book.publishYear ? `${book.publishYear}  ·  ` : ''}
                                 {book.category || 'Literature'}
                               </p>
@@ -668,27 +668,27 @@ const ReadingListModal = () => {
                                   {getStatusLabel(book.readingStatus)}
                                 </span>
 
-                                <div className="flex items-center gap-1 text-[11px] font-semibold text-[#292522]">
+                                <div className="flex items-center gap-1 text-[11px] font-semibold text-[#302A27]">
                                   <PiStarFill className="text-[#E58929] text-xs" />
                                   <span>{(book.averageRating || 4.8).toFixed(1)} / 5</span>
                                 </div>
                               </div>
 
                               {/* Short Editorial Quote / Notes */}
-                              <p className="font-serif italic text-xs text-[#827870] mt-2 line-clamp-2 leading-relaxed">
+                              <p className="font-serif italic text-xs text-[#81766D] mt-2 line-clamp-2 leading-relaxed">
                                 &ldquo;{getBookQuote(book)}&rdquo;
                               </p>
 
                               {/* Reading Progress Bar (if reading) */}
                               {progressValue !== null && (
                                 <div className="mt-2.5 flex items-center gap-2">
-                                  <div className="flex-1 h-1 bg-[#E8DED2] rounded-full overflow-hidden">
+                                  <div className="flex-1 h-1 bg-[#E8DED1] rounded-full overflow-hidden">
                                     <div
-                                      className="h-full bg-[#861D2D] rounded-full"
+                                      className="h-full bg-[#8D263B] rounded-full"
                                       style={{ width: `${progressValue}%` }}
                                     />
                                   </div>
-                                  <span className="text-[10px] font-mono font-medium text-[#827870]">
+                                  <span className="text-[10px] font-mono font-medium text-[#81766D]">
                                     {progressValue}%
                                   </span>
                                 </div>
@@ -704,13 +704,13 @@ const ReadingListModal = () => {
                 {/* 5. INSPIRATIONAL STAMP QUOTE BANNER */}
                 {sortedList.length > 0 && (
                   <div className="pt-4 pb-2 text-center mt-2">
-                    <div className="w-7 h-7 rounded-full bg-[#F4E8E6] text-[#861D2D] flex items-center justify-center mx-auto mb-1.5">
+                    <div className="w-7 h-7 rounded-full bg-[#F4E8E6] text-[#8D263B] flex items-center justify-center mx-auto mb-1.5">
                       <PiBookOpenBold className="text-xs" />
                     </div>
-                    <p className="font-serif italic text-xs text-[#292522]">
+                    <p className="font-serif italic text-xs text-[#302A27]">
                       &ldquo;A small shelf now, a lifelong collection ahead.&rdquo;
                     </p>
-                    <span className="text-[9px] font-mono text-[#827870] uppercase tracking-[0.2em] block mt-0.5">
+                    <span className="text-[9px] font-mono text-[#81766D] uppercase tracking-[0.2em] block mt-0.5">
                       PAGETURNER SANCTUARY
                     </span>
                   </div>
@@ -720,7 +720,7 @@ const ReadingListModal = () => {
           </div>
 
           {/* 6. ANCHORED REFINED FOOTER */}
-          <footer className="px-6 py-4 border-t border-[#E8DED2] bg-[#FFFDF9] relative z-20">
+          <footer className="px-6 py-4 border-t border-[#E8DED1] bg-[#FFFDFA] relative z-20">
             {showClearConfirm ? (
               <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-xs animate-in fade-in">
                 <div className="flex items-start gap-2.5 mb-2.5">
@@ -739,14 +739,14 @@ const ReadingListModal = () => {
                   <button
                     type="button"
                     onClick={() => setShowClearConfirm(false)}
-                    className="px-3 py-1 rounded-md border border-[#E8DED2] bg-white text-xs text-stone-700 hover:bg-stone-50 transition-colors"
+                    className="px-3 py-1 rounded-md border border-[#E8DED1] bg-white text-xs text-stone-700 hover:bg-stone-50 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     onClick={handleConfirmClear}
-                    className="px-3.5 py-1 rounded-md bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold shadow-2xs transition-colors"
+                    className="px-3.5 py-1 rounded-md bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-semibold shadow-2xs transition-colors"
                   >
                     Yes, Clear Shelf
                   </button>
@@ -758,13 +758,13 @@ const ReadingListModal = () => {
                   <button
                     type="button"
                     onClick={() => setShowClearConfirm(true)}
-                    className="text-xs text-[#827870] hover:text-red-700 transition-colors flex items-center gap-1.5 group"
+                    className="text-xs text-[#81766D] hover:text-red-700 transition-colors flex items-center gap-1.5 group"
                   >
                     <PiTrashBold className="text-xs text-stone-400 group-hover:text-red-700 transition-colors" />
                     <span>Clear Entire Shelf...</span>
                   </button>
                 ) : (
-                  <span className="text-[11px] font-mono text-[#827870]">
+                  <span className="text-[11px] font-mono text-[#81766D]">
                     Shelf synchronized
                   </span>
                 )}
@@ -773,16 +773,16 @@ const ReadingListModal = () => {
                   <button
                     type="button"
                     onClick={() => setShowBookplate(true)}
-                    className="group inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-[#E8DED2] text-xs font-semibold text-[#292522] shadow-2xs hover:bg-[#FAF7F2] transition-colors"
+                    className="group inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-[#E8DED1] text-xs font-semibold text-[#302A27] shadow-2xs hover:bg-[#F7F3EC] transition-colors"
                   >
-                    <PiStampBold className="text-sm text-[#861D2D] group-hover:scale-105 transition-transform" />
+                    <PiStampBold className="text-sm text-[#8D263B] group-hover:scale-105 transition-transform" />
                     <span>Print My Bookplate</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setIsDrawerOpen(false)}
-                    className="px-5 py-2 rounded-lg bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold shadow-2xs active:scale-95 transition-all"
+                    className="px-5 py-2 rounded-lg bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-semibold shadow-2xs active:scale-95 transition-all"
                   >
                     Done
                   </button>

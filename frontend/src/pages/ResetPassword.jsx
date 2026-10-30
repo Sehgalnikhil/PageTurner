@@ -91,24 +91,24 @@ const ResetPassword = () => {
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center p-4 sm:p-6 my-10">
-        <div className="w-full max-w-md editorial-sheet p-8 sm:p-10 bg-white border border-[#E8DED2] shadow-xl rounded-3xl relative overflow-hidden">
+        <div className="w-full max-w-md editorial-sheet p-8 sm:p-10 bg-white border border-[#E8DED1] shadow-xl rounded-3xl relative overflow-hidden">
           {/* Decorative Washi Tape Bar */}
-          <div className="w-24 h-3.5 bg-[#861D2D]/20 mx-auto -mt-6 mb-6 rounded-xs transform rotate-1 border-x-2 border-dashed border-white/60 pointer-events-none" />
+          <div className="w-24 h-3.5 bg-[#8D263B]/20 mx-auto -mt-6 mb-6 rounded-xs transform rotate-1 border-x-2 border-dashed border-white/60 pointer-events-none" />
 
           {!token ? (
             <div className="text-center py-6 space-y-4">
               <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto">
                 <PiWarningCircleBold className="text-2xl" />
               </div>
-              <h2 className="font-serif text-2xl font-bold text-[#292522]">
+              <h2 className="font-serif text-2xl font-bold text-[#302A27]">
                 Missing Reset Token
               </h2>
-              <p className="text-xs sm:text-sm text-[#827870] font-serif italic leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#81766D] font-serif italic leading-relaxed">
                 The password reset link appears incomplete or missing the required token.
               </p>
               <Link
                 to="/forgot-password"
-                className="inline-block px-5 py-2.5 rounded-full bg-[#861D2D] text-white text-xs font-semibold shadow-xs hover:bg-[#701826] transition-colors"
+                className="inline-block px-5 py-2.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-xs hover:bg-[#67202F] transition-colors"
               >
                 Request a New Reset Link
               </Link>
@@ -119,10 +119,10 @@ const ResetPassword = () => {
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#7B1826] to-[#5C101B] text-amber-200 flex items-center justify-center mx-auto mb-3 shadow-md">
                   <PiLockKeyBold className="text-2xl" />
                 </div>
-                <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#292522]">
+                <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#302A27]">
                   Choose New Key
                 </h1>
-                <p className="text-xs sm:text-sm text-[#827870] font-serif italic mt-1.5 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#81766D] font-serif italic mt-1.5 leading-relaxed">
                   Enter your new password below to restore access to your private reading shelf.
                 </p>
               </div>
@@ -140,12 +140,12 @@ const ResetPassword = () => {
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="At least 5 characters"
                       autoFocus
-                      className="w-full pl-4 pr-11 py-3 rounded-xl text-xs sm:text-sm bg-[#FAF7F2] border border-[#E8DED2] text-[#292522] focus:outline-none focus:border-[#861D2D] focus:ring-1 focus:ring-[#861D2D] shadow-2xs transition-colors"
+                      className="w-full pl-4 pr-11 py-3 rounded-xl text-xs sm:text-sm bg-[#F7F3EC] border border-[#E8DED1] text-[#302A27] focus:outline-none focus:border-[#8D263B] focus:ring-1 focus:ring-[#8D263B] shadow-2xs transition-colors"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#827870] hover:text-[#292522] p-1"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#81766D] hover:text-[#302A27] p-1"
                     >
                       {showPassword ? <PiEyeSlashBold className="text-sm" /> : <PiEyeBold className="text-sm" />}
                     </button>
@@ -176,7 +176,7 @@ const ResetPassword = () => {
                           }`}
                         />
                       </div>
-                      <span className="text-[10px] font-mono text-[#827870]">
+                      <span className="text-[10px] font-mono text-[#81766D]">
                         Strength: <strong>{strength.text}</strong>
                       </span>
                     </div>
@@ -193,7 +193,7 @@ const ResetPassword = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Repeat your password"
-                    className="w-full px-4 py-3 rounded-xl text-xs sm:text-sm bg-[#FAF7F2] border border-[#E8DED2] text-[#292522] focus:outline-none focus:border-[#861D2D] focus:ring-1 focus:ring-[#861D2D] shadow-2xs transition-colors"
+                    className="w-full px-4 py-3 rounded-xl text-xs sm:text-sm bg-[#F7F3EC] border border-[#E8DED1] text-[#302A27] focus:outline-none focus:border-[#8D263B] focus:ring-1 focus:ring-[#8D263B] shadow-2xs transition-colors"
                   />
                 </div>
 
@@ -206,7 +206,7 @@ const ResetPassword = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-full bg-gradient-to-r from-[#7B1826] via-[#861D2D] to-[#6E1421] text-white text-xs sm:text-sm font-semibold shadow-md hover:brightness-105 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer mt-2"
+                  className="w-full py-3 rounded-full bg-gradient-to-r from-[#7B1826] via-[#8D263B] to-[#6E1421] text-white text-xs sm:text-sm font-semibold shadow-md hover:brightness-105 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer mt-2"
                 >
                   {loading ? (
                     <>
@@ -227,7 +227,7 @@ const ResetPassword = () => {
               <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto shadow-xs">
                 <PiCheckCircleFill className="text-3xl" />
               </div>
-              <h2 className="font-serif text-2xl font-bold text-[#292522]">
+              <h2 className="font-serif text-2xl font-bold text-[#302A27]">
                 Key Updated
               </h2>
               <p className="text-xs sm:text-sm text-[#786C62] font-serif italic leading-relaxed max-w-xs mx-auto">
@@ -236,7 +236,7 @@ const ResetPassword = () => {
               <div className="pt-2">
                 <Link
                   to="/login"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#861D2D] text-white text-xs font-semibold shadow-xs hover:bg-[#701826] transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-xs hover:bg-[#67202F] transition-colors"
                 >
                   <span>Sign In Now</span>
                   <PiArrowRightBold className="text-xs" />

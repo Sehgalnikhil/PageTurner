@@ -48,7 +48,7 @@ const DeleteBook = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-transparent text-[#1C1917]">
+    <div className="min-h-screen flex flex-col bg-transparent text-[#302A27]">
       <Navbar />
 
       <main className="flex-1 max-w-xl w-full mx-auto px-4 sm:px-6 py-12 relative z-10 flex flex-col justify-center">
@@ -61,21 +61,21 @@ const DeleteBook = () => {
             <Spinner />
           </div>
         ) : (
-          <div className="editorial-sheet p-8 sm:p-10 bg-white border border-stone-200 shadow-paper-hover">
+          <div className="editorial-sheet p-8 sm:p-10 bg-white border border-[#E8DED1] shadow-paper-hover">
             <div className="w-12 h-12 rounded-full bg-red-50 text-red-600 border border-red-200 flex items-center justify-center mx-auto mb-4">
               <PiWarningBold className="text-2xl" />
             </div>
 
-            <h1 className="font-serif text-2xl font-bold text-stone-900 text-center mb-2">
+            <h1 className="font-serif text-2xl font-bold text-[#302A27] text-center mb-2">
               Confirm Archival Removal
             </h1>
 
-            <p className="text-xs text-stone-600 text-center max-w-sm mx-auto mb-6 leading-relaxed">
+            <p className="text-xs text-[#81766D] text-center max-w-sm mx-auto mb-6 leading-relaxed">
               Are you certain you wish to delete this book record? This will permanently remove its catalog entry, reader ratings, and associated reviews.
             </p>
 
             {book && (
-              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-stone-200 mb-6 flex items-center gap-3">
+              <div className="p-4 rounded-xl bg-[#F7F3EC] border border-[#E8DED1] mb-6 flex items-center gap-3">
                 <div className="w-12 h-16 rounded overflow-hidden bg-stone-200 flex-shrink-0">
                   {book.image ? (
                     <img
@@ -90,16 +90,16 @@ const DeleteBook = () => {
                   )}
                 </div>
                 <div>
-                  <h3 className="font-serif text-sm font-bold text-stone-900 leading-snug">
+                  <h3 className="font-serif text-sm font-bold text-[#302A27] leading-snug">
                     {book.title}
                   </h3>
-                  <p className="text-xs text-stone-500">by {book.author}</p>
+                  <p className="text-xs text-[#81766D]">by {book.author}</p>
                   <span className="text-[11px] font-mono text-stone-400">Published {book.publishYear}</span>
                 </div>
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E8DED1]">
               <button
                 type="button"
                 onClick={() => navigate(`/books/details/${id}`)}

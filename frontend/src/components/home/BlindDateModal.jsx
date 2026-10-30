@@ -268,7 +268,7 @@ const BlindDateModal = ({ isOpen, onClose, books = [] }) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl bg-[#FAF7F2] rounded-3xl shadow-2xl border border-[#E0D7C7] overflow-hidden relative flex flex-col max-h-[92vh] animate-modal-in"
+        className="w-full max-w-xl bg-[#F7F3EC] rounded-3xl shadow-2xl border border-[#E0D7C7] overflow-hidden relative flex flex-col max-h-[92vh] animate-modal-in"
       >
         {/* Subtle decorative top banner */}
         <div className="bg-[#7B1826] text-white px-5 sm:px-6 py-2.5 flex items-center justify-between text-xs">

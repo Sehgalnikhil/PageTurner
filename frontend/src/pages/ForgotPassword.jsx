@@ -59,20 +59,20 @@ const ForgotPassword = () => {
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center p-4 sm:p-6 my-10">
-        <div className="w-full max-w-md editorial-sheet p-8 sm:p-10 bg-white border border-[#E8DED2] shadow-xl rounded-3xl relative overflow-hidden">
+        <div className="w-full max-w-md editorial-sheet p-8 sm:p-10 bg-white border border-[#E8DED1] shadow-xl rounded-3xl relative overflow-hidden">
           {/* Subtle Decorative Washi Tape Bar */}
           <div className="w-24 h-3.5 bg-[#C99A48]/30 mx-auto -mt-6 mb-6 rounded-xs transform -rotate-1 border-x-2 border-dashed border-white/60 pointer-events-none" />
 
           {!submitted ? (
             <>
               <div className="text-center mb-8">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#861D2D] to-[#5C101B] text-amber-200 flex items-center justify-center mx-auto mb-3 shadow-md">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#8D263B] to-[#5C101B] text-amber-200 flex items-center justify-center mx-auto mb-3 shadow-md">
                   <PiKeyBold className="text-2xl" />
                 </div>
-                <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#292522]">
+                <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#302A27]">
                   Recover Your Key
                 </h1>
-                <p className="text-xs sm:text-sm text-[#827870] font-serif italic mt-1.5 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#81766D] font-serif italic mt-1.5 leading-relaxed">
                   Enter your email address and we&apos;ll send an official dispatch to unlock your account.
                 </p>
               </div>
@@ -83,7 +83,7 @@ const ForgotPassword = () => {
                     Account Email Address
                   </label>
                   <div className="relative">
-                    <PiEnvelopeBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#827870] text-sm pointer-events-none" />
+                    <PiEnvelopeBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#81766D] text-sm pointer-events-none" />
                     <input
                       type="email"
                       value={email}
@@ -93,16 +93,16 @@ const ForgotPassword = () => {
                       }}
                       placeholder="your.email@example.com"
                       autoFocus
-                      className="w-full pl-10 pr-4 py-3 rounded-xl text-xs sm:text-sm bg-[#FAF7F2] border border-[#E8DED2] text-[#292522] focus:outline-none focus:border-[#861D2D] focus:ring-1 focus:ring-[#861D2D] shadow-2xs transition-colors"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl text-xs sm:text-sm bg-[#F7F3EC] border border-[#E8DED1] text-[#302A27] focus:outline-none focus:border-[#8D263B] focus:ring-1 focus:ring-[#8D263B] shadow-2xs transition-colors"
                     />
                   </div>
-                  {error && <p className="text-[11px] text-[#861D2D] font-medium mt-1.5">{error}</p>}
+                  {error && <p className="text-[11px] text-[#8D263B] font-medium mt-1.5">{error}</p>}
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-full bg-gradient-to-r from-[#7B1826] via-[#861D2D] to-[#6E1421] text-white text-xs sm:text-sm font-semibold shadow-md hover:brightness-105 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3 rounded-full bg-gradient-to-r from-[#7B1826] via-[#8D263B] to-[#6E1421] text-white text-xs sm:text-sm font-semibold shadow-md hover:brightness-105 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {loading ? (
                     <>
@@ -118,10 +118,10 @@ const ForgotPassword = () => {
                 </button>
               </form>
 
-              <div className="mt-8 pt-5 border-t border-[#E8DED2] flex items-center justify-between text-xs">
+              <div className="mt-8 pt-5 border-t border-[#E8DED1] flex items-center justify-between text-xs">
                 <Link
                   to="/login"
-                  className="font-medium text-[#786C62] hover:text-[#861D2D] flex items-center gap-1.5 transition-colors"
+                  className="font-medium text-[#786C62] hover:text-[#8D263B] flex items-center gap-1.5 transition-colors"
                 >
                   <PiArrowLeftBold className="text-xs" />
                   <span>Back to Sign In</span>
@@ -131,7 +131,7 @@ const ForgotPassword = () => {
                   href={previewUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-mono text-[10px] text-[#861D2D] hover:underline flex items-center gap-1"
+                  className="font-mono text-[10px] text-[#8D263B] hover:underline flex items-center gap-1"
                 >
                   <span>Preview Email</span>
                   <PiArrowSquareOutBold className="text-[11px]" />
@@ -145,15 +145,15 @@ const ForgotPassword = () => {
               </div>
 
               <div>
-                <h2 className="font-serif text-2xl font-bold text-[#292522]">
+                <h2 className="font-serif text-2xl font-bold text-[#302A27]">
                   Dispatch Sent
                 </h2>
                 <p className="text-xs sm:text-sm text-[#786C62] font-serif italic mt-2 leading-relaxed max-w-xs mx-auto">
-                  We&apos;ve sent a password reset link to <strong className="text-[#292522] not-italic">{email}</strong>.
+                  We&apos;ve sent a password reset link to <strong className="text-[#302A27] not-italic">{email}</strong>.
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DED2] text-left text-xs space-y-2">
+              <div className="p-4 rounded-2xl bg-[#F7F3EC] border border-[#E8DED1] text-left text-xs space-y-2">
                 <div className="flex items-center gap-2 text-[#7B1826] font-mono text-[10px] uppercase font-bold tracking-wider">
                   <span>⏱️ Time-Sensitive Link</span>
                 </div>
@@ -167,25 +167,25 @@ const ForgotPassword = () => {
                   href={previewUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#F0EAE0] text-[#292522] text-xs font-semibold border border-[#E8DED2] transition-colors shadow-2xs"
+                  className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-full bg-[#F7F3EC] hover:bg-[#F0EAE0] text-[#302A27] text-xs font-semibold border border-[#E8DED1] transition-colors shadow-2xs"
                 >
-                  <PiArrowSquareOutBold className="text-sm text-[#861D2D]" />
+                  <PiArrowSquareOutBold className="text-sm text-[#8D263B]" />
                   <span>Open Live Email Preview (Test Mode)</span>
                 </a>
 
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
-                  className="text-xs text-[#827870] hover:text-[#861D2D] hover:underline transition-colors block mx-auto"
+                  className="text-xs text-[#81766D] hover:text-[#8D263B] hover:underline transition-colors block mx-auto"
                 >
                   Didn&apos;t receive it? Send to another email
                 </button>
               </div>
 
-              <div className="pt-4 border-t border-[#E8DED2]">
+              <div className="pt-4 border-t border-[#E8DED1]">
                 <Link
                   to="/login"
-                  className="text-xs font-semibold text-[#861D2D] hover:underline flex items-center justify-center gap-1.5"
+                  className="text-xs font-semibold text-[#8D263B] hover:underline flex items-center justify-center gap-1.5"
                 >
                   <PiArrowLeftBold className="text-xs" />
                   <span>Return to Sign In</span>

@@ -32,7 +32,7 @@ const BookSingleCard = ({ book }) => {
         <div>
           {/* Top header */}
           <div className="flex items-center justify-between gap-2 mb-3">
-            <span className="text-[11px] font-mono font-medium text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">
+            <span className="text-[11px] font-mono font-medium text-[#81766D] bg-stone-100 px-2 py-0.5 rounded-full">
               {book.publishYear}
             </span>
             <div className="flex items-center gap-1">
@@ -57,7 +57,7 @@ const BookSingleCard = ({ book }) => {
                   e.stopPropagation();
                   setShowModal(true);
                 }}
-                className="p-1.5 rounded-lg text-stone-400 hover:text-stone-800 hover:bg-stone-100 transition-colors"
+                className="p-1.5 rounded-lg text-stone-400 hover:text-[#302A27] hover:bg-stone-100 transition-colors"
                 title="Quick preview"
               >
                 <PiEyeBold className="text-base" />
@@ -84,13 +84,13 @@ const BookSingleCard = ({ book }) => {
 
           {/* Info */}
           <div>
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-stone-500">
+            <span className="text-[10px] uppercase tracking-wider font-semibold text-[#81766D]">
               {book.category || 'General'}
             </span>
-            <h3 className="font-serif text-base font-bold text-stone-900 group-hover:text-burgundy leading-snug line-clamp-1 transition-colors">
+            <h3 className="font-serif text-base font-bold text-[#302A27] group-hover:text-burgundy leading-snug line-clamp-1 transition-colors">
               {book.title}
             </h3>
-            <p className="text-xs text-stone-600 truncate mt-0.5 font-medium">by {book.author}</p>
+            <p className="text-xs text-[#81766D] truncate mt-0.5 font-medium">by {book.author}</p>
           </div>
         </div>
 
@@ -109,7 +109,7 @@ const BookSingleCard = ({ book }) => {
             <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
               <Link
                 to={`/books/edit/${book._id}`}
-                className="p-1 rounded text-stone-400 hover:text-stone-800"
+                className="p-1 rounded text-stone-400 hover:text-[#302A27]"
                 title="Edit"
               >
                 <PiPencilSimpleBold />

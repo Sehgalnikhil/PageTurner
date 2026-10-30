@@ -50,19 +50,19 @@ const BookModal = ({ book, onClose }) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl bg-[#FAF7F2] rounded-2xl shadow-2xl border border-stone-200 overflow-hidden relative flex flex-col md:flex-row max-h-[90vh] animate-modal-in"
+        className="w-full max-w-2xl bg-[#F7F3EC] rounded-2xl shadow-2xl border border-[#E8DED1] overflow-hidden relative flex flex-col md:flex-row max-h-[90vh] animate-modal-in"
       >
         {/* Close Button */}
         <button
           onClick={onClose}
           aria-label="Close dialog"
-          className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-600 hover:text-stone-900 flex items-center justify-center shadow-xs transition-all duration-200 hover:rotate-90 active:scale-90"
+          className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-[#81766D] hover:text-[#302A27] flex items-center justify-center shadow-xs transition-all duration-200 hover:rotate-90 active:scale-90"
         >
           <PiXBold className="text-base" />
         </button>
 
         {/* Cover Column */}
-        <div className="w-full md:w-5/12 bg-stone-100 flex items-center justify-center relative p-6 border-b md:border-b-0 md:border-r border-stone-200">
+        <div className="w-full md:w-5/12 bg-stone-100 flex items-center justify-center relative p-6 border-b md:border-b-0 md:border-r border-[#E8DED1]">
           <div className="book-cover-wrap w-full max-w-[200px] aspect-[2/3] rounded-lg overflow-hidden shadow-book">
             {imageUrl ? (
               <img
@@ -87,17 +87,17 @@ const BookModal = ({ book, onClose }) => {
               <span className="text-[11px] font-semibold text-burgundy bg-burgundy-faint px-2.5 py-0.5 rounded-full border border-burgundy/15">
                 {book.category || 'General'}
               </span>
-              <span className="text-xs text-stone-500 font-mono">
+              <span className="text-xs text-[#81766D] font-mono">
                 {book.publishYear}
               </span>
             </div>
 
-            <h2 id="modal-book-title" className="font-serif text-2xl font-bold text-stone-900 leading-snug">
+            <h2 id="modal-book-title" className="font-serif text-2xl font-bold text-[#302A27] leading-snug">
               {book.title}
             </h2>
 
-            <p className="text-xs text-stone-600 font-medium mt-1">
-              by <span className="text-stone-900 font-semibold">{book.author}</span>
+            <p className="text-xs text-[#81766D] font-medium mt-1">
+              by <span className="text-[#302A27] font-semibold">{book.author}</span>
             </p>
 
             {/* Rating */}
@@ -106,7 +106,7 @@ const BookModal = ({ book, onClose }) => {
                 <div className="flex items-center text-amber-500 text-xs">
                   <PiStarFill />
                 </div>
-                <span className="text-xs font-bold text-stone-800">
+                <span className="text-xs font-bold text-[#302A27]">
                   {book.averageRating.toFixed(1)} / 5.0
                 </span>
                 <span className="text-xs text-stone-400">
@@ -116,7 +116,7 @@ const BookModal = ({ book, onClose }) => {
             )}
 
             {/* Tabs: Overview vs First Lines */}
-            <div className="mt-4 pt-3 border-t border-stone-200">
+            <div className="mt-4 pt-3 border-t border-[#E8DED1]">
               <div className="flex items-center gap-2 mb-3">
                 <button
                   type="button"
@@ -124,7 +124,7 @@ const BookModal = ({ book, onClose }) => {
                   className={`text-[11px] font-semibold pb-1 border-b-2 transition-all ${
                     activeTab === 'overview'
                       ? 'border-burgundy text-burgundy'
-                      : 'border-transparent text-stone-500 hover:text-stone-800'
+                      : 'border-transparent text-[#81766D] hover:text-[#302A27]'
                   }`}
                 >
                   Overview
@@ -135,7 +135,7 @@ const BookModal = ({ book, onClose }) => {
                   className={`text-[11px] font-semibold pb-1 border-b-2 transition-all flex items-center gap-1 ${
                     activeTab === 'first-lines'
                       ? 'border-burgundy text-burgundy'
-                      : 'border-transparent text-stone-500 hover:text-stone-800'
+                      : 'border-transparent text-[#81766D] hover:text-[#302A27]'
                   }`}
                 >
                   <PiSparkleBold className="text-amber-500 text-xs" />
@@ -144,7 +144,7 @@ const BookModal = ({ book, onClose }) => {
               </div>
 
               {activeTab === 'overview' ? (
-                <p className="text-xs text-stone-700 leading-relaxed max-h-36 overflow-y-auto pr-1">
+                <p className="text-xs text-[#302A27] leading-relaxed max-h-36 overflow-y-auto pr-1">
                   {book.description || `An essential title in the digital library collection. Explore full reader discussions and complete bibliographic metadata.`}
                 </p>
               ) : (
@@ -156,14 +156,14 @@ const BookModal = ({ book, onClose }) => {
           </div>
 
           {/* Actions */}
-          <div className="mt-6 pt-4 border-t border-stone-200 flex items-center justify-between gap-3">
+          <div className="mt-6 pt-4 border-t border-[#E8DED1] flex items-center justify-between gap-3">
             <button
               type="button"
               onClick={handleToggle}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 active:scale-95 shadow-xs ${
                 isSaved
                   ? 'bg-burgundy text-white hover:bg-[#63121E]'
-                  : 'bg-white text-stone-800 border border-stone-300 hover:bg-stone-50 hover:border-burgundy/30'
+                  : 'bg-white text-[#302A27] border border-stone-300 hover:bg-stone-50 hover:border-burgundy/30'
               }`}
             >
               {isSaved ? (

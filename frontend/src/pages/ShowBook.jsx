@@ -465,16 +465,16 @@ const ShowBook = () => {
   const highlightsList = savedEntry?.highlights || [];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#292522] selection:bg-[#861D2D] selection:text-[#FAF7F2]">
+    <div className="min-h-screen flex flex-col bg-[#F7F3EC] text-[#302A27] selection:bg-[#8D263B] selection:text-[#F7F3EC]">
       {/* 1. Global Navigation Bar */}
       <Navbar />
 
       <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-9">
         {/* 2. Top Sub-Bar: Back button + Shelf Action Pill + Share + More */}
-        <div className="flex items-center justify-between pb-6 mb-8 border-b border-[#E8DED2]">
+        <div className="flex items-center justify-between pb-6 mb-8 border-b border-[#E8DED1]">
           <Link
             to="/"
-            className="group inline-flex items-center gap-2 text-xs font-semibold text-[#827870] hover:text-[#861D2D] transition-colors"
+            className="group inline-flex items-center gap-2 text-xs font-semibold text-[#81766D] hover:text-[#8D263B] transition-colors"
           >
             <PiArrowLeftBold className="text-sm transition-transform group-hover:-translate-x-1" />
             <span>Back to Discover</span>
@@ -492,8 +492,8 @@ const ShowBook = () => {
                 }}
                 className={`inline-flex items-center gap-2 h-10 px-4 rounded-full text-xs font-semibold shadow-xs transition-all duration-200 active:scale-95 ${
                   isSaved
-                    ? 'bg-[#861D2D] hover:bg-[#701826] text-white'
-                    : 'bg-[#FFFDF9] hover:bg-white text-[#292522] border border-[#E8DED2]'
+                    ? 'bg-[#8D263B] hover:bg-[#67202F] text-white'
+                    : 'bg-[#FFFDFA] hover:bg-white text-[#302A27] border border-[#E8DED1]'
                 }`}
               >
                 {isSaved ? (
@@ -505,9 +505,9 @@ const ShowBook = () => {
                   </>
                 ) : (
                   <>
-                    <PiBookmarkSimpleBold className="text-[#861D2D] text-sm" />
+                    <PiBookmarkSimpleBold className="text-[#8D263B] text-sm" />
                     <span>Add to Shelf</span>
-                    <PiCaretDownBold className="text-[10px] text-[#827870]" />
+                    <PiCaretDownBold className="text-[10px] text-[#81766D]" />
                   </>
                 )}
               </button>
@@ -516,9 +516,9 @@ const ShowBook = () => {
               {shelfDropdownOpen && (
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="absolute right-0 top-full mt-2 w-52 bg-[#FFFDF9] rounded-2xl shadow-xl border border-[#E8DED2] py-2 z-40 text-xs text-[#292522] animate-in fade-in zoom-in-95"
+                  className="absolute right-0 top-full mt-2 w-52 bg-[#FFFDFA] rounded-2xl shadow-xl border border-[#E8DED1] py-2 z-40 text-xs text-[#302A27] animate-in fade-in zoom-in-95"
                 >
-                  <div className="px-3.5 py-1 text-[10px] font-mono text-[#827870] uppercase tracking-wider border-b border-[#FAF7F2]">
+                  <div className="px-3.5 py-1 text-[10px] font-mono text-[#81766D] uppercase tracking-wider border-b border-[#F7F3EC]">
                     Reading Stage
                   </div>
 
@@ -531,18 +531,18 @@ const ShowBook = () => {
                       key={st.id}
                       type="button"
                       onClick={() => handleToggleShelf(st.id)}
-                      className="w-full text-left px-3.5 py-2 hover:bg-[#FAF7F2] flex items-center justify-between transition-colors"
+                      className="w-full text-left px-3.5 py-2 hover:bg-[#F7F3EC] flex items-center justify-between transition-colors"
                     >
                       <span className="font-medium">{st.label}</span>
                       {isSaved && currentStatus === st.id && (
-                        <PiCheckBold className="text-[#861D2D] text-xs" />
+                        <PiCheckBold className="text-[#8D263B] text-xs" />
                       )}
                     </button>
                   ))}
 
                   {isSaved && (
                     <>
-                      <div className="my-1 border-t border-[#E8DED2]/60" />
+                      <div className="my-1 border-t border-[#E8DED1]/60" />
                       <button
                         type="button"
                         onClick={() => {
@@ -567,9 +567,9 @@ const ShowBook = () => {
               type="button"
               onClick={handleShareBook}
               title="Share book link"
-              className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-[#FFFDF9] hover:bg-white text-[#292522] border border-[#E8DED2] text-xs font-semibold shadow-xs transition-all active:scale-95"
+              className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-[#FFFDFA] hover:bg-white text-[#302A27] border border-[#E8DED1] text-xs font-semibold shadow-xs transition-all active:scale-95"
             >
-              <PiShareNetworkBold className="text-sm text-[#827870]" />
+              <PiShareNetworkBold className="text-sm text-[#81766D]" />
               <span>Share</span>
             </button>
 
@@ -583,15 +583,15 @@ const ShowBook = () => {
                   setShelfDropdownOpen(false);
                 }}
                 aria-label="More actions"
-                className="w-10 h-10 rounded-full bg-[#FFFDF9] hover:bg-white text-[#292522] border border-[#E8DED2] flex items-center justify-center shadow-xs transition-colors"
+                className="w-10 h-10 rounded-full bg-[#FFFDFA] hover:bg-white text-[#302A27] border border-[#E8DED1] flex items-center justify-center shadow-xs transition-colors"
               >
-                <PiDotsThreeBold className="text-base text-[#827870]" />
+                <PiDotsThreeBold className="text-base text-[#81766D]" />
               </button>
 
               {moreActionsOpen && (
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="absolute right-0 top-full mt-2 w-48 bg-[#FFFDF9] rounded-2xl shadow-xl border border-[#E8DED2] py-2 z-40 text-xs text-[#292522] animate-in fade-in zoom-in-95"
+                  className="absolute right-0 top-full mt-2 w-48 bg-[#FFFDFA] rounded-2xl shadow-xl border border-[#E8DED1] py-2 z-40 text-xs text-[#302A27] animate-in fade-in zoom-in-95"
                 >
                   <button
                     type="button"
@@ -601,9 +601,9 @@ const ShowBook = () => {
                       const el = document.getElementById('archival-reader-section');
                       if (el) el.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="w-full text-left px-3.5 py-2 hover:bg-[#FAF7F2] flex items-center gap-2"
+                    className="w-full text-left px-3.5 py-2 hover:bg-[#F7F3EC] flex items-center gap-2"
                   >
-                    <PiBookOpenTextBold className="text-[#861D2D] text-sm" />
+                    <PiBookOpenTextBold className="text-[#8D263B] text-sm" />
                     <span>Open Reader Preview</span>
                   </button>
 
@@ -614,7 +614,7 @@ const ShowBook = () => {
                       navigator.clipboard.writeText(`"${book.title}" by ${book.author}`);
                       enqueueSnackbar('Citation copied to clipboard.', { variant: 'success' });
                     }}
-                    className="w-full text-left px-3.5 py-2 hover:bg-[#FAF7F2] flex items-center gap-2"
+                    className="w-full text-left px-3.5 py-2 hover:bg-[#F7F3EC] flex items-center gap-2"
                   >
                     <PiSparkleBold className="text-[#C99A48] text-sm" />
                     <span>Copy Citation</span>
@@ -622,13 +622,13 @@ const ShowBook = () => {
 
                   {isAdmin && (
                     <>
-                      <div className="my-1 border-t border-[#E8DED2]/60" />
-                      <div className="px-3.5 py-1 text-[10px] font-mono text-[#827870] uppercase tracking-wider">
+                      <div className="my-1 border-t border-[#E8DED1]/60" />
+                      <div className="px-3.5 py-1 text-[10px] font-mono text-[#81766D] uppercase tracking-wider">
                         Curator Controls
                       </div>
                       <Link
                         to={`/books/edit/${book._id}`}
-                        className="w-full text-left px-3.5 py-2 hover:bg-[#FAF7F2] flex items-center gap-2 text-[#292522]"
+                        className="w-full text-left px-3.5 py-2 hover:bg-[#F7F3EC] flex items-center gap-2 text-[#302A27]"
                       >
                         <PiPencilSimpleBold className="text-sm text-stone-600" />
                         <span>Edit Catalog Record</span>
@@ -651,7 +651,7 @@ const ShowBook = () => {
         {loading ? (
           <div className="py-36 flex flex-col items-center justify-center gap-3">
             <Spinner />
-            <span className="font-serif italic text-sm text-[#827870]">
+            <span className="font-serif italic text-sm text-[#81766D]">
               Opening literary record...
             </span>
           </div>
@@ -663,7 +663,7 @@ const ShowBook = () => {
               {/* LEFT COLUMN (5 cols on lg/xl): Pinterest Moodboard & Reading Journal Actions */}
               <div className="lg:col-span-5 flex flex-col gap-6">
                 {/* 3A. Layered Moodboard Canvas */}
-                <div className="relative p-6 sm:p-8 rounded-3xl bg-[#F6EFE5] border border-[#E8DED2] shadow-sm overflow-hidden">
+                <div className="relative p-6 sm:p-8 rounded-3xl bg-[#F6EFE5] border border-[#E8DED1] shadow-sm overflow-hidden">
                   
                   {/* Subtle dried botanical sprig resting gracefully on the left edge */}
                   <div className="absolute -top-4 -left-6 w-36 h-48 pointer-events-none select-none z-10 opacity-80 mix-blend-multiply">
@@ -688,7 +688,7 @@ const ShowBook = () => {
                   <div className="relative z-10 flex items-center justify-center gap-3 sm:gap-4 pl-14 sm:pl-16">
                     {/* The Dominant Book Cover */}
                     <div className="relative group/cover flex-1 max-w-[270px] sm:max-w-[290px]">
-                      <div className="rounded-xl overflow-hidden shadow-2xl border border-stone-800/10 bg-[#FFFDF9] transition-transform duration-300 group-hover/cover:scale-[1.015]">
+                      <div className="rounded-xl overflow-hidden shadow-2xl border border-stone-800/10 bg-[#FFFDFA] transition-transform duration-300 group-hover/cover:scale-[1.015]">
                         <img
                           src={coverImageUrl}
                           alt={`Cover of ${book.title}`}
@@ -708,7 +708,7 @@ const ShowBook = () => {
                             setGalleryModalOpen(true);
                           }}
                           title={item.title}
-                          className="w-14 sm:w-16 h-14 sm:h-16 rounded-xl overflow-hidden border border-[#E8DED2] bg-white shadow-2xs hover:border-[#861D2D] hover:scale-105 transition-all p-0.5 cursor-pointer relative group"
+                          className="w-14 sm:w-16 h-14 sm:h-16 rounded-xl overflow-hidden border border-[#E8DED1] bg-white shadow-2xs hover:border-[#8D263B] hover:scale-105 transition-all p-0.5 cursor-pointer relative group"
                         >
                           <img
                             src={item.src}
@@ -727,10 +727,10 @@ const ShowBook = () => {
                           setSelectedGalleryItem(enrichment.moodboardItems[0]);
                           setGalleryModalOpen(true);
                         }}
-                        className="w-14 sm:w-16 h-14 sm:h-16 rounded-xl border border-dashed border-[#C99A48]/60 bg-[#FFFDF9] hover:bg-[#F4E8E6] text-[#861D2D] flex flex-col items-center justify-center transition-colors text-center p-1 shadow-2xs"
+                        className="w-14 sm:w-16 h-14 sm:h-16 rounded-xl border border-dashed border-[#C99A48]/60 bg-[#FFFDFA] hover:bg-[#F4E8E6] text-[#8D263B] flex flex-col items-center justify-center transition-colors text-center p-1 shadow-2xs"
                       >
                         <span className="font-serif font-bold text-xs leading-none">+4</span>
-                        <span className="text-[9px] font-mono uppercase tracking-wider text-[#827870] mt-0.5 leading-none">
+                        <span className="text-[9px] font-mono uppercase tracking-wider text-[#81766D] mt-0.5 leading-none">
                           more
                         </span>
                       </button>
@@ -739,14 +739,14 @@ const ShowBook = () => {
 
                   {/* Rating pill floating below cover */}
                   <div className="relative z-20 mt-6 flex justify-center">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFFDF9]/95 backdrop-blur-xs border border-[#E8DED2] text-xs shadow-2xs">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFFDFA]/95 backdrop-blur-xs border border-[#E8DED1] text-xs shadow-2xs">
                       <div className="flex items-center text-[#C99A48]">
                         <PiStarFill className="text-sm mr-1" />
-                        <span className="font-bold text-[#292522]">
+                        <span className="font-bold text-[#302A27]">
                           {(book.averageRating || 5.0).toFixed(1)} / 5.0
                         </span>
                       </div>
-                      <span className="text-[#827870]">
+                      <span className="text-[#81766D]">
                         ({reviewsCount > 0 ? `${reviewsCount.toLocaleString()} reviews` : '1,284 reviews'})
                       </span>
                     </div>
@@ -762,11 +762,11 @@ const ShowBook = () => {
                       onClick={() => handleToggleShelf(currentStatus)}
                       className={`h-11 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-2xs active:scale-95 ${
                         isSaved
-                          ? 'bg-[#861D2D] hover:bg-[#701826] text-white'
-                          : 'bg-[#FFFDF9] hover:bg-white text-[#292522] border border-[#E8DED2]'
+                          ? 'bg-[#8D263B] hover:bg-[#67202F] text-white'
+                          : 'bg-[#FFFDFA] hover:bg-white text-[#302A27] border border-[#E8DED1]'
                       }`}
                     >
-                      <PiBookmarkSimpleFill className={isSaved ? 'text-amber-300' : 'text-[#861D2D]'} />
+                      <PiBookmarkSimpleFill className={isSaved ? 'text-amber-300' : 'text-[#8D263B]'} />
                       <span>{isSaved ? 'On Your Shelf' : 'Add to Shelf'}</span>
                     </button>
 
@@ -776,17 +776,17 @@ const ShowBook = () => {
                       className={`h-11 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-2xs active:scale-95 border ${
                         currentStatus === 'finished'
                           ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                          : 'bg-[#FFFDF9] hover:bg-[#FAF7F2] text-[#292522] border-[#E8DED2]'
+                          : 'bg-[#FFFDFA] hover:bg-[#F7F3EC] text-[#302A27] border-[#E8DED1]'
                       }`}
                     >
-                      <PiCheckBold className={currentStatus === 'finished' ? 'text-emerald-700' : 'text-[#827870]'} />
+                      <PiCheckBold className={currentStatus === 'finished' ? 'text-emerald-700' : 'text-[#81766D]'} />
                       <span>{currentStatus === 'finished' ? 'Read Complete' : 'Mark as Read'}</span>
                     </button>
                   </div>
 
                   {/* Reading Status Selector */}
                   <div>
-                    <label className="block text-[11px] font-mono uppercase tracking-wider text-[#827870] font-semibold mb-2">
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-[#81766D] font-semibold mb-2">
                       Reading Status
                     </label>
                     <div className="grid grid-cols-3 gap-2">
@@ -803,8 +803,8 @@ const ShowBook = () => {
                             onClick={() => handleToggleShelf(st.id)}
                             className={`py-2 px-2 rounded-xl text-center text-xs font-semibold transition-all border ${
                               isCurrent
-                                ? 'bg-[#F4E8E6] text-[#861D2D] border-[#861D2D]/40 shadow-2xs'
-                                : 'bg-[#FFFDF9] text-[#292522] hover:bg-[#FAF7F2] border-[#E8DED2]'
+                                ? 'bg-[#F4E8E6] text-[#8D263B] border-[#8D263B]/40 shadow-2xs'
+                                : 'bg-[#FFFDFA] text-[#302A27] hover:bg-[#F7F3EC] border-[#E8DED1]'
                             }`}
                           >
                             <span className="truncate block">{st.label}</span>
@@ -817,17 +817,17 @@ const ShowBook = () => {
                   {/* Reading Progress Tracker */}
                   <div>
                     <div className="flex items-center justify-between text-xs mb-2">
-                      <span className="text-[11px] font-mono uppercase tracking-wider text-[#827870] font-semibold">
+                      <span className="text-[11px] font-mono uppercase tracking-wider text-[#81766D] font-semibold">
                         Reading Progress
                       </span>
-                      <span className="font-mono font-bold text-[#861D2D]">
+                      <span className="font-mono font-bold text-[#8D263B]">
                         {currentProgress}% complete
                       </span>
                     </div>
 
-                    <div className="relative w-full h-2.5 bg-[#E8DED2] rounded-full overflow-hidden">
+                    <div className="relative w-full h-2.5 bg-[#E8DED1] rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-[#861D2D] rounded-full transition-all duration-300"
+                        className="h-full bg-[#8D263B] rounded-full transition-all duration-300"
                         style={{ width: `${currentProgress}%` }}
                       />
                     </div>
@@ -839,22 +839,22 @@ const ShowBook = () => {
                       max="100"
                       value={currentProgress}
                       onChange={(e) => handleProgressChange(e.target.value)}
-                      className="w-full mt-2 accent-[#861D2D] cursor-pointer"
+                      className="w-full mt-2 accent-[#8D263B] cursor-pointer"
                       title="Adjust reading progress"
                     />
                   </div>
 
                   {/* Quick Action Buttons: Add Note & Add Bookmark */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#E8DED2]/80">
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#E8DED1]/80">
                     <button
                       type="button"
                       onClick={() => {
                         setActiveTab('notes');
                         setShowAddNoteForm(true);
                       }}
-                      className="h-10 px-3 rounded-xl bg-[#FFFDF9] hover:bg-[#FAF7F2] border border-[#E8DED2] text-xs font-semibold text-[#292522] flex items-center justify-center gap-1.5 shadow-2xs transition-all active:scale-95"
+                      className="h-10 px-3 rounded-xl bg-[#FFFDFA] hover:bg-[#F7F3EC] border border-[#E8DED1] text-xs font-semibold text-[#302A27] flex items-center justify-center gap-1.5 shadow-2xs transition-all active:scale-95"
                     >
-                      <PiNotePencilBold className="text-sm text-[#861D2D]" />
+                      <PiNotePencilBold className="text-sm text-[#8D263B]" />
                       <span>Add a Note</span>
                     </button>
 
@@ -864,7 +864,7 @@ const ShowBook = () => {
                         setActiveTab('highlights');
                         setShowAddHlForm(true);
                       }}
-                      className="h-10 px-3 rounded-xl bg-[#FFFDF9] hover:bg-[#FAF7F2] border border-[#E8DED2] text-xs font-semibold text-[#292522] flex items-center justify-center gap-1.5 shadow-2xs transition-all active:scale-95"
+                      className="h-10 px-3 rounded-xl bg-[#FFFDFA] hover:bg-[#F7F3EC] border border-[#E8DED1] text-xs font-semibold text-[#302A27] flex items-center justify-center gap-1.5 shadow-2xs transition-all active:scale-95"
                     >
                       <PiBookBookmarkBold className="text-sm text-[#C99A48]" />
                       <span>Add a Bookmark</span>
@@ -878,8 +878,8 @@ const ShowBook = () => {
                 
                 {/* Book Metadata & Title Header */}
                 <div>
-                  <div className="flex items-center gap-2 mb-2 font-mono text-[11px] uppercase tracking-wider text-[#827870] font-semibold">
-                    <span className="text-[#861D2D] font-bold">{book.category || 'BIOGRAPHY'}</span>
+                  <div className="flex items-center gap-2 mb-2 font-mono text-[11px] uppercase tracking-wider text-[#81766D] font-semibold">
+                    <span className="text-[#8D263B] font-bold">{book.category || 'BIOGRAPHY'}</span>
                     <span>•</span>
                     <span>Published {book.publishYear || 2018}</span>
                     <span>•</span>
@@ -887,17 +887,17 @@ const ShowBook = () => {
                   </div>
 
                   {/* Editorial Serif Title */}
-                  <h1 className="font-cormorant text-4xl sm:text-5xl xl:text-[54px] font-bold text-[#292522] leading-[1.08] tracking-tight mb-2">
+                  <h1 className="font-cormorant text-4xl sm:text-5xl xl:text-[54px] font-bold text-[#302A27] leading-[1.08] tracking-tight mb-2">
                     {book.title}
                   </h1>
 
                   {/* Author line in italic serif */}
-                  <p className="font-serif italic text-lg text-[#827870] mb-3">
+                  <p className="font-serif italic text-lg text-[#81766D] mb-3">
                     {enrichment.subtitle}
                   </p>
 
                   {/* Short lead preview synopsis */}
-                  <p className="text-xs sm:text-[13px] text-[#292522] leading-relaxed mb-4">
+                  <p className="text-xs sm:text-[13px] text-[#302A27] leading-relaxed mb-4">
                     {enrichment.shortLead}
                   </p>
 
@@ -906,7 +906,7 @@ const ShowBook = () => {
                     {enrichment.themes.map((theme, i) => (
                       <span
                         key={i}
-                        className="px-3 py-1 rounded-full text-[11px] font-medium bg-[#FFFDF9] border border-[#E8DED2] text-[#827870] hover:text-[#292522] hover:border-[#861D2D]/30 transition-colors"
+                        className="px-3 py-1 rounded-full text-[11px] font-medium bg-[#FFFDFA] border border-[#E8DED1] text-[#81766D] hover:text-[#302A27] hover:border-[#8D263B]/30 transition-colors"
                       >
                         {theme}
                       </span>
@@ -915,7 +915,7 @@ const ShowBook = () => {
                 </div>
 
                 {/* Content Navigation Tab Bar */}
-                <div className="border-b border-[#E8DED2] pt-2">
+                <div className="border-b border-[#E8DED1] pt-2">
                   <nav className="flex items-center gap-5 sm:gap-6 text-xs sm:text-[13px] overflow-x-auto scrollbar-none" aria-label="Book sections">
                     {[
                       { id: 'overview', label: 'Overview' },
@@ -932,13 +932,13 @@ const ShowBook = () => {
                           onClick={() => setActiveTab(tab.id)}
                           className={`pb-3 font-semibold transition-all relative whitespace-nowrap ${
                             isActive
-                              ? 'text-[#861D2D]'
-                              : 'text-[#827870] hover:text-[#292522]'
+                              ? 'text-[#8D263B]'
+                              : 'text-[#81766D] hover:text-[#302A27]'
                           }`}
                         >
                           <span>{tab.label}</span>
                           {isActive && (
-                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#861D2D] rounded-full" />
+                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#8D263B] rounded-full" />
                           )}
                         </button>
                       );
@@ -953,11 +953,11 @@ const ShowBook = () => {
                   {activeTab === 'overview' && (
                     <div className="space-y-6 animate-in fade-in duration-200">
                       <div>
-                        <h2 className="font-serif text-lg font-bold text-[#292522] mb-3">
+                        <h2 className="font-serif text-lg font-bold text-[#302A27] mb-3">
                           Overview
                         </h2>
 
-                        <div className="text-xs sm:text-[13px] text-[#292522] leading-relaxed font-sans space-y-3">
+                        <div className="text-xs sm:text-[13px] text-[#302A27] leading-relaxed font-sans space-y-3">
                           <p>
                             {book.description ||
                               'Born to survivalists in the mountains of Idaho, Tara Westover was seventeen the first time she set foot in a classroom. Her family was so isolated from mainstream society that there was no one to ensure she received an education, and no one to intervene when one of her older brothers became violent.'}
@@ -973,7 +973,7 @@ const ShowBook = () => {
                             <button
                               type="button"
                               onClick={() => setIsSynopsisExpanded((prev) => !prev)}
-                              className="text-xs font-semibold text-[#861D2D] hover:underline pt-1 block"
+                              className="text-xs font-semibold text-[#8D263B] hover:underline pt-1 block"
                             >
                               {isSynopsisExpanded ? 'Show less' : 'Read full synopsis...'}
                             </button>
@@ -983,15 +983,15 @@ const ShowBook = () => {
 
                       {/* Editorial Pull Quote Box */}
                       <div className="p-4 sm:p-5 rounded-2xl bg-[#FDF7F5] border border-[#F4E8E6] relative">
-                        <span className="text-3xl font-serif text-[#861D2D] leading-none absolute top-3 left-4 select-none">
+                        <span className="text-3xl font-serif text-[#8D263B] leading-none absolute top-3 left-4 select-none">
                           “
                         </span>
                         <div className="pl-6">
-                          <p className="font-serif italic text-sm sm:text-base text-[#861D2D] leading-snug font-medium mb-2">
+                          <p className="font-serif italic text-sm sm:text-base text-[#8D263B] leading-snug font-medium mb-2">
                             {enrichment.pullQuote.replace(/^[“"]|[”"]$/g, '')}
                           </p>
                           <div className="pt-2 border-t border-[#F4E8E6]">
-                            <span className="text-[10px] font-mono uppercase tracking-widest text-[#827870] font-bold">
+                            <span className="text-[10px] font-mono uppercase tracking-widest text-[#81766D] font-bold">
                               — {enrichment.quoteAuthor}
                             </span>
                           </div>
@@ -999,13 +999,13 @@ const ShowBook = () => {
                       </div>
 
                       {/* About the Author Section */}
-                      <div className="pt-4 border-t border-[#E8DED2]">
-                        <h3 className="font-serif text-sm font-bold text-[#292522] mb-3">
+                      <div className="pt-4 border-t border-[#E8DED1]">
+                        <h3 className="font-serif text-sm font-bold text-[#302A27] mb-3">
                           About the Author
                         </h3>
 
                         <div className="flex items-center gap-3.5">
-                          <div className="w-12 h-12 rounded-full overflow-hidden border border-[#E8DED2] flex-shrink-0 bg-[#FAF7F2] shadow-2xs">
+                          <div className="w-12 h-12 rounded-full overflow-hidden border border-[#E8DED1] flex-shrink-0 bg-[#F7F3EC] shadow-2xs">
                             <img
                               src="/images/editorial/author_portrait.jpg"
                               alt={book.author}
@@ -1015,10 +1015,10 @@ const ShowBook = () => {
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-serif font-bold text-sm text-[#292522]">
+                            <h4 className="font-serif font-bold text-sm text-[#302A27]">
                               {book.author}
                             </h4>
-                            <p className="text-[11px] text-[#827870] leading-snug line-clamp-2 mt-0.5">
+                            <p className="text-[11px] text-[#81766D] leading-snug line-clamp-2 mt-0.5">
                               {enrichment.authorBio}
                             </p>
                           </div>
@@ -1030,12 +1030,12 @@ const ShowBook = () => {
                   {/* TAB 2: REVIEWS */}
                   {activeTab === 'reviews' && (
                     <div className="space-y-6 animate-in fade-in duration-200">
-                      <div className="flex items-center justify-between pb-3 border-b border-[#E8DED2]">
+                      <div className="flex items-center justify-between pb-3 border-b border-[#E8DED1]">
                         <div>
-                          <h2 className="font-serif text-lg font-bold text-[#292522]">
+                          <h2 className="font-serif text-lg font-bold text-[#302A27]">
                             Reader Reflections
                           </h2>
-                          <p className="text-xs text-[#827870] mt-0.5">
+                          <p className="text-xs text-[#81766D] mt-0.5">
                             Community ratings &amp; thoughtful observations
                           </p>
                         </div>
@@ -1044,7 +1044,7 @@ const ShowBook = () => {
                         <select
                           value={reviewSort}
                           onChange={(e) => setReviewSort(e.target.value)}
-                          className="text-xs bg-[#FFFDF9] border border-[#E8DED2] rounded-lg px-2.5 py-1 text-[#292522] focus:outline-none"
+                          className="text-xs bg-[#FFFDFA] border border-[#E8DED1] rounded-lg px-2.5 py-1 text-[#302A27] focus:outline-none"
                         >
                           <option value="recent">Most Recent</option>
                           <option value="highest">Highest Rated</option>
@@ -1054,13 +1054,13 @@ const ShowBook = () => {
 
                       {/* Write a Review Section */}
                       {user ? (
-                        <form onSubmit={handleReviewSubmit} className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DED2]">
-                          <h4 className="font-serif text-xs font-bold text-[#292522] mb-2">
-                            Write a Reflection as <span className="text-[#861D2D]">{user.username}</span>
+                        <form onSubmit={handleReviewSubmit} className="p-4 rounded-2xl bg-[#F7F3EC] border border-[#E8DED1]">
+                          <h4 className="font-serif text-xs font-bold text-[#302A27] mb-2">
+                            Write a Reflection as <span className="text-[#8D263B]">{user.username}</span>
                           </h4>
 
                           <div className="mb-2.5">
-                            <label className="block text-[11px] font-semibold text-[#827870] mb-1">
+                            <label className="block text-[11px] font-semibold text-[#81766D] mb-1">
                               Your Rating
                             </label>
                             <div className="flex items-center gap-1 text-lg text-stone-300">
@@ -1076,7 +1076,7 @@ const ShowBook = () => {
                                   />
                                 </button>
                               ))}
-                              <span className="text-xs font-mono font-bold text-[#292522] ml-2">
+                              <span className="text-xs font-mono font-bold text-[#302A27] ml-2">
                                 {rating} of 5
                               </span>
                             </div>
@@ -1088,7 +1088,7 @@ const ShowBook = () => {
                               value={comment}
                               onChange={(e) => setComment(e.target.value)}
                               placeholder="Share your perspective on the characters, writing, or lasting impressions..."
-                              className="w-full p-2.5 rounded-xl text-xs bg-white border border-[#E8DED2] text-[#292522] placeholder-[#827870]/70 focus:outline-none focus:border-[#861D2D]"
+                              className="w-full p-2.5 rounded-xl text-xs bg-white border border-[#E8DED1] text-[#302A27] placeholder-[#81766D]/70 focus:outline-none focus:border-[#8D263B]"
                               required
                             />
                           </div>
@@ -1097,7 +1097,7 @@ const ShowBook = () => {
                             <button
                               type="submit"
                               disabled={reviewLoading}
-                              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold shadow-2xs disabled:opacity-50 transition-all active:scale-95"
+                              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-semibold shadow-2xs disabled:opacity-50 transition-all active:scale-95"
                             >
                               <PiPaperPlaneTiltBold className="text-xs" />
                               <span>{reviewLoading ? 'Publishing...' : 'Publish Reflection'}</span>
@@ -1105,13 +1105,13 @@ const ShowBook = () => {
                           </div>
                         </form>
                       ) : (
-                        <div className="p-4 rounded-2xl bg-[#F4E8E6] border border-[#861D2D]/20 flex items-center justify-between text-xs">
-                          <span className="text-[#861D2D] font-medium">
+                        <div className="p-4 rounded-2xl bg-[#F4E8E6] border border-[#8D263B]/20 flex items-center justify-between text-xs">
+                          <span className="text-[#8D263B] font-medium">
                             Sign in to share your reflection on this book.
                           </span>
                           <Link
                             to="/login"
-                            className="px-3 py-1.5 rounded-full bg-[#861D2D] text-white text-xs font-semibold shadow-2xs"
+                            className="px-3 py-1.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-2xs"
                           >
                             Sign In
                           </Link>
@@ -1129,7 +1129,7 @@ const ShowBook = () => {
                             return (
                               <div
                                 key={rev._id}
-                                className="p-4 rounded-xl border border-[#E8DED2] bg-[#FFFDF9] text-xs space-y-2"
+                                className="p-4 rounded-xl border border-[#E8DED1] bg-[#FFFDFA] text-xs space-y-2"
                               >
                                 {isEditing ? (
                                   <div className="space-y-2">
@@ -1150,20 +1150,20 @@ const ShowBook = () => {
                                       rows="2"
                                       value={editComment}
                                       onChange={(e) => setEditComment(e.target.value)}
-                                      className="w-full p-2 rounded-lg border border-[#E8DED2] text-xs"
+                                      className="w-full p-2 rounded-lg border border-[#E8DED1] text-xs"
                                     />
                                     <div className="flex justify-end gap-2">
                                       <button
                                         type="button"
                                         onClick={() => setEditingReviewId(null)}
-                                        className="px-2.5 py-1 text-xs border border-[#E8DED2] rounded-lg"
+                                        className="px-2.5 py-1 text-xs border border-[#E8DED1] rounded-lg"
                                       >
                                         Cancel
                                       </button>
                                       <button
                                         type="button"
                                         onClick={() => handleSaveEditReview(rev._id)}
-                                        className="px-3 py-1 text-xs bg-[#861D2D] text-white rounded-lg font-semibold"
+                                        className="px-3 py-1 text-xs bg-[#8D263B] text-white rounded-lg font-semibold"
                                       >
                                         Save
                                       </button>
@@ -1176,7 +1176,7 @@ const ShowBook = () => {
                                         <div className="w-6 h-6 rounded-full bg-[#FCEAD2] text-[#B45309] font-bold text-[10px] flex items-center justify-center">
                                           {rev.username ? rev.username[0].toUpperCase() : 'R'}
                                         </div>
-                                        <span className="font-bold text-[#292522]">
+                                        <span className="font-bold text-[#302A27]">
                                           {rev.username}
                                         </span>
                                       </div>
@@ -1188,12 +1188,12 @@ const ShowBook = () => {
                                         </div>
 
                                         {canModify && (
-                                          <div className="flex items-center gap-1 pl-2 border-l border-[#E8DED2]">
+                                          <div className="flex items-center gap-1 pl-2 border-l border-[#E8DED1]">
                                             {isOwner && (
                                               <button
                                                 type="button"
                                                 onClick={() => handleStartEditReview(rev)}
-                                                className="text-[#827870] hover:text-[#861D2D] p-1"
+                                                className="text-[#81766D] hover:text-[#8D263B] p-1"
                                                 title="Edit reflection"
                                               >
                                                 <PiPencilSimpleBold className="text-xs" />
@@ -1212,7 +1212,7 @@ const ShowBook = () => {
                                       </div>
                                     </div>
 
-                                    <p className="text-[#292522] leading-relaxed font-sans">
+                                    <p className="text-[#302A27] leading-relaxed font-sans">
                                       {rev.comment}
                                     </p>
                                   </>
@@ -1222,7 +1222,7 @@ const ShowBook = () => {
                           })
                         ) : (
                           <div className="text-center py-8">
-                            <p className="font-serif italic text-xs text-[#827870]">
+                            <p className="font-serif italic text-xs text-[#81766D]">
                               No reader reflections recorded yet. Be the first to record your impressions.
                             </p>
                           </div>
@@ -1234,12 +1234,12 @@ const ShowBook = () => {
                   {/* TAB 3: NOTES (Personal Reading Journal) */}
                   {activeTab === 'notes' && (
                     <div className="space-y-5 animate-in fade-in duration-200">
-                      <div className="flex items-center justify-between pb-3 border-b border-[#E8DED2]">
+                      <div className="flex items-center justify-between pb-3 border-b border-[#E8DED1]">
                         <div>
-                          <h2 className="font-serif text-lg font-bold text-[#292522]">
+                          <h2 className="font-serif text-lg font-bold text-[#302A27]">
                             My Reading Notes
                           </h2>
-                          <p className="text-xs text-[#827870]">
+                          <p className="text-xs text-[#81766D]">
                             Private journal entries stored on your device shelf
                           </p>
                         </div>
@@ -1247,7 +1247,7 @@ const ShowBook = () => {
                         <button
                           type="button"
                           onClick={() => setShowAddNoteForm((prev) => !prev)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#861D2D] text-white text-xs font-semibold shadow-2xs hover:bg-[#701826]"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-2xs hover:bg-[#67202F]"
                         >
                           <PiPlusBold className="text-xs" />
                           <span>New Note</span>
@@ -1256,8 +1256,8 @@ const ShowBook = () => {
 
                       {/* Add Note Form */}
                       {showAddNoteForm && (
-                        <form onSubmit={handleAddNote} className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DED2] space-y-2.5">
-                          <label className="block text-[11px] font-semibold text-[#827870]">
+                        <form onSubmit={handleAddNote} className="p-4 rounded-2xl bg-[#F7F3EC] border border-[#E8DED1] space-y-2.5">
+                          <label className="block text-[11px] font-semibold text-[#81766D]">
                             Add a Journal Reflection
                           </label>
                           <textarea
@@ -1265,20 +1265,20 @@ const ShowBook = () => {
                             value={newNoteText}
                             onChange={(e) => setNewNoteText(e.target.value)}
                             placeholder="Write your observation, key takeaway, or personal reaction..."
-                            className="w-full p-2.5 rounded-xl text-xs bg-white border border-[#E8DED2] text-[#292522] focus:outline-none focus:border-[#861D2D]"
+                            className="w-full p-2.5 rounded-xl text-xs bg-white border border-[#E8DED1] text-[#302A27] focus:outline-none focus:border-[#8D263B]"
                             required
                           />
                           <div className="flex justify-end gap-2">
                             <button
                               type="button"
                               onClick={() => setShowAddNoteForm(false)}
-                              className="px-3 py-1.5 text-xs text-[#827870] hover:text-[#292522]"
+                              className="px-3 py-1.5 text-xs text-[#81766D] hover:text-[#302A27]"
                             >
                               Cancel
                             </button>
                             <button
                               type="submit"
-                              className="px-4 py-1.5 rounded-full bg-[#861D2D] text-white text-xs font-semibold shadow-2xs"
+                              className="px-4 py-1.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-2xs"
                             >
                               Save Note
                             </button>
@@ -1292,9 +1292,9 @@ const ShowBook = () => {
                           journalNotesList.map((n) => (
                             <div
                               key={n.id}
-                              className="p-4 rounded-xl border border-[#E8DED2] bg-[#FAF7F2] space-y-2 relative group"
+                              className="p-4 rounded-xl border border-[#E8DED1] bg-[#F7F3EC] space-y-2 relative group"
                             >
-                              <div className="flex items-center justify-between text-[10px] font-mono text-[#827870]">
+                              <div className="flex items-center justify-between text-[10px] font-mono text-[#81766D]">
                                 <span>{n.createdAt ? new Date(n.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Saved note'}</span>
                                 <button
                                   type="button"
@@ -1305,21 +1305,21 @@ const ShowBook = () => {
                                   <PiTrashBold className="text-xs" />
                                 </button>
                               </div>
-                              <p className="text-xs text-[#292522] leading-relaxed whitespace-pre-wrap font-sans">
+                              <p className="text-xs text-[#302A27] leading-relaxed whitespace-pre-wrap font-sans">
                                 {n.text}
                               </p>
                             </div>
                           ))
                         ) : (
                           <div className="text-center py-8">
-                            <PiNotePencilBold className="text-3xl text-[#861D2D]/40 mx-auto mb-2" />
-                            <p className="font-serif italic text-xs text-[#827870]">
+                            <PiNotePencilBold className="text-3xl text-[#8D263B]/40 mx-auto mb-2" />
+                            <p className="font-serif italic text-xs text-[#81766D]">
                               No journal notes recorded for this title yet.
                             </p>
                             <button
                               type="button"
                               onClick={() => setShowAddNoteForm(true)}
-                              className="mt-3 px-4 py-1.5 rounded-full bg-[#861D2D] text-white text-xs font-semibold shadow-2xs"
+                              className="mt-3 px-4 py-1.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-2xs"
                             >
                               Add First Note
                             </button>
@@ -1332,12 +1332,12 @@ const ShowBook = () => {
                   {/* TAB 4: HIGHLIGHTS */}
                   {activeTab === 'highlights' && (
                     <div className="space-y-5 animate-in fade-in duration-200">
-                      <div className="flex items-center justify-between pb-3 border-b border-[#E8DED2]">
+                      <div className="flex items-center justify-between pb-3 border-b border-[#E8DED1]">
                         <div>
-                          <h2 className="font-serif text-lg font-bold text-[#292522]">
+                          <h2 className="font-serif text-lg font-bold text-[#302A27]">
                             Saved Highlights &amp; Bookmarks
                           </h2>
-                          <p className="text-xs text-[#827870]">
+                          <p className="text-xs text-[#81766D]">
                             Memorable passages and quotes
                           </p>
                         </div>
@@ -1345,7 +1345,7 @@ const ShowBook = () => {
                         <button
                           type="button"
                           onClick={() => setShowAddHlForm((prev) => !prev)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#861D2D] text-white text-xs font-semibold shadow-2xs hover:bg-[#701826]"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-2xs hover:bg-[#67202F]"
                         >
                           <PiPlusBold className="text-xs" />
                           <span>Add Bookmark</span>
@@ -1354,9 +1354,9 @@ const ShowBook = () => {
 
                       {/* Add Highlight Form */}
                       {showAddHlForm && (
-                        <form onSubmit={handleAddHighlight} className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DED2] space-y-2.5">
+                        <form onSubmit={handleAddHighlight} className="p-4 rounded-2xl bg-[#F7F3EC] border border-[#E8DED1] space-y-2.5">
                           <div>
-                            <label className="block text-[11px] font-semibold text-[#827870] mb-1">
+                            <label className="block text-[11px] font-semibold text-[#81766D] mb-1">
                               Quotation / Passage
                             </label>
                             <textarea
@@ -1364,13 +1364,13 @@ const ShowBook = () => {
                               value={newHlQuote}
                               onChange={(e) => setNewHlQuote(e.target.value)}
                               placeholder="“Quote from the book...”"
-                              className="w-full p-2 rounded-xl text-xs bg-white border border-[#E8DED2] text-[#292522] focus:outline-none"
+                              className="w-full p-2 rounded-xl text-xs bg-white border border-[#E8DED1] text-[#302A27] focus:outline-none"
                               required
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2">
                             <div>
-                              <label className="block text-[11px] font-semibold text-[#827870] mb-1">
+                              <label className="block text-[11px] font-semibold text-[#81766D] mb-1">
                                 Page Number (Optional)
                               </label>
                               <input
@@ -1378,11 +1378,11 @@ const ShowBook = () => {
                                 value={newHlPage}
                                 onChange={(e) => setNewHlPage(e.target.value)}
                                 placeholder="e.g. 142"
-                                className="w-full p-2 rounded-xl text-xs bg-white border border-[#E8DED2] text-[#292522]"
+                                className="w-full p-2 rounded-xl text-xs bg-white border border-[#E8DED1] text-[#302A27]"
                               />
                             </div>
                             <div>
-                              <label className="block text-[11px] font-semibold text-[#827870] mb-1">
+                              <label className="block text-[11px] font-semibold text-[#81766D] mb-1">
                                 Annotation Note (Optional)
                               </label>
                               <input
@@ -1390,7 +1390,7 @@ const ShowBook = () => {
                                 value={newHlNote}
                                 onChange={(e) => setNewHlNote(e.target.value)}
                                 placeholder="Why this resonated..."
-                                className="w-full p-2 rounded-xl text-xs bg-white border border-[#E8DED2] text-[#292522]"
+                                className="w-full p-2 rounded-xl text-xs bg-white border border-[#E8DED1] text-[#302A27]"
                               />
                             </div>
                           </div>
@@ -1398,13 +1398,13 @@ const ShowBook = () => {
                             <button
                               type="button"
                               onClick={() => setShowAddHlForm(false)}
-                              className="px-3 py-1.5 text-xs text-[#827870]"
+                              className="px-3 py-1.5 text-xs text-[#81766D]"
                             >
                               Cancel
                             </button>
                             <button
                               type="submit"
-                              className="px-4 py-1.5 rounded-full bg-[#861D2D] text-white text-xs font-semibold shadow-2xs"
+                              className="px-4 py-1.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-2xs"
                             >
                               Save Highlight
                             </button>
@@ -1418,9 +1418,9 @@ const ShowBook = () => {
                           highlightsList.map((hl) => (
                             <div
                               key={hl.id}
-                              className="p-4 rounded-xl border-l-4 border-l-[#861D2D] border border-[#E8DED2] bg-[#FAF7F2] space-y-1.5 relative group"
+                              className="p-4 rounded-xl border-l-4 border-l-[#8D263B] border border-[#E8DED1] bg-[#F7F3EC] space-y-1.5 relative group"
                             >
-                              <div className="flex items-center justify-between text-[10px] font-mono text-[#827870]">
+                              <div className="flex items-center justify-between text-[10px] font-mono text-[#81766D]">
                                 <span>{hl.page ? `Page ${hl.page}` : 'Bookmark'}</span>
                                 <button
                                   type="button"
@@ -1431,11 +1431,11 @@ const ShowBook = () => {
                                   <PiTrashBold className="text-xs" />
                                 </button>
                               </div>
-                              <p className="font-serif italic text-xs sm:text-sm text-[#292522] leading-snug">
+                              <p className="font-serif italic text-xs sm:text-sm text-[#302A27] leading-snug">
                                 &ldquo;{hl.quote}&rdquo;
                               </p>
                               {hl.note && (
-                                <p className="text-[11px] text-[#827870] pt-1 border-t border-[#E8DED2]/50">
+                                <p className="text-[11px] text-[#81766D] pt-1 border-t border-[#E8DED1]/50">
                                   {hl.note}
                                 </p>
                               )}
@@ -1444,13 +1444,13 @@ const ShowBook = () => {
                         ) : (
                           <div className="text-center py-8">
                             <PiBookBookmarkBold className="text-3xl text-[#C99A48]/50 mx-auto mb-2" />
-                            <p className="font-serif italic text-xs text-[#827870]">
+                            <p className="font-serif italic text-xs text-[#81766D]">
                               No passages highlighted yet. Save memorable quotes as you read.
                             </p>
                             <button
                               type="button"
                               onClick={() => setShowAddHlForm(true)}
-                              className="mt-3 px-4 py-1.5 rounded-full bg-[#861D2D] text-white text-xs font-semibold shadow-2xs"
+                              className="mt-3 px-4 py-1.5 rounded-full bg-[#8D263B] text-white text-xs font-semibold shadow-2xs"
                             >
                               Add First Highlight
                             </button>
@@ -1464,11 +1464,11 @@ const ShowBook = () => {
                   {activeTab === 'similar' && (
                     <div className="space-y-4 animate-in fade-in duration-200">
                       <div>
-                        <h2 className="font-serif text-lg font-bold text-[#292522]">
+                        <h2 className="font-serif text-lg font-bold text-[#302A27]">
                           Companion Works
                         </h2>
-                        <p className="text-xs text-[#827870]">
-                          Titles in <span className="font-semibold text-[#861D2D]">{book.category}</span>
+                        <p className="text-xs text-[#81766D]">
+                          Titles in <span className="font-semibold text-[#8D263B]">{book.category}</span>
                         </p>
                       </div>
 
@@ -1484,9 +1484,9 @@ const ShowBook = () => {
                             <Link
                               key={relBook._id}
                               to={`/books/details/${relBook._id}`}
-                              className="p-3 rounded-xl border border-[#E8DED2] bg-[#FFFDF9] hover:border-[#861D2D]/40 transition-all flex items-center gap-3 group"
+                              className="p-3 rounded-xl border border-[#E8DED1] bg-[#FFFDFA] hover:border-[#8D263B]/40 transition-all flex items-center gap-3 group"
                             >
-                              <div className="w-12 aspect-[2/3] rounded overflow-hidden border border-[#E8DED2] flex-shrink-0 bg-[#FAF7F2]">
+                              <div className="w-12 aspect-[2/3] rounded overflow-hidden border border-[#E8DED1] flex-shrink-0 bg-[#F7F3EC]">
                                 <img
                                   src={relImg}
                                   alt={relBook.title}
@@ -1494,13 +1494,13 @@ const ShowBook = () => {
                                 />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <h4 className="font-serif font-bold text-xs text-[#292522] truncate group-hover:text-[#861D2D] transition-colors">
+                                <h4 className="font-serif font-bold text-xs text-[#302A27] truncate group-hover:text-[#8D263B] transition-colors">
                                   {relBook.title}
                                 </h4>
-                                <p className="text-[11px] text-[#827870] italic truncate">
+                                <p className="text-[11px] text-[#81766D] italic truncate">
                                   by {relBook.author}
                                 </p>
-                                <span className="text-[10px] font-mono text-[#827870]">
+                                <span className="text-[10px] font-mono text-[#81766D]">
                                   {relBook.publishYear}
                                 </span>
                               </div>
@@ -1518,56 +1518,56 @@ const ShowBook = () => {
                 
                 {/* 1. At a Glance Metadata Card */}
                 <div className="editorial-surface p-6 sm:p-7 space-y-3.5">
-                  <h3 className="font-serif text-base font-bold text-[#292522] mb-1">
+                  <h3 className="font-serif text-base font-bold text-[#302A27] mb-1">
                     At a Glance
                   </h3>
 
                   <div className="space-y-2.5 text-xs">
-                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED2]/60">
-                      <span className="text-[#827870]">Rating</span>
-                      <span className="font-mono font-bold text-[#292522]">
+                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED1]/60">
+                      <span className="text-[#81766D]">Rating</span>
+                      <span className="font-mono font-bold text-[#302A27]">
                         {(book.averageRating || 5.0).toFixed(1)} / 5.0
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED2]/60">
-                      <span className="text-[#827870]">Reviews</span>
-                      <span className="font-mono text-[#292522]">
+                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED1]/60">
+                      <span className="text-[#81766D]">Reviews</span>
+                      <span className="font-mono text-[#302A27]">
                         {reviewsCount > 0 ? reviewsCount.toLocaleString() : '1,284'}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED2]/60">
-                      <span className="text-[#827870]">Pages</span>
-                      <span className="font-mono text-[#292522]">
+                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED1]/60">
+                      <span className="text-[#81766D]">Pages</span>
+                      <span className="font-mono text-[#302A27]">
                         {book.pageCount || 352}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED2]/60">
-                      <span className="text-[#827870]">Published</span>
-                      <span className="font-mono text-[#292522]">
+                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED1]/60">
+                      <span className="text-[#81766D]">Published</span>
+                      <span className="font-mono text-[#302A27]">
                         {book.publishYear || 2018}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED2]/60">
-                      <span className="text-[#827870]">Publisher</span>
-                      <span className="font-sans font-medium text-[#292522] truncate max-w-[130px]">
+                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED1]/60">
+                      <span className="text-[#81766D]">Publisher</span>
+                      <span className="font-sans font-medium text-[#302A27] truncate max-w-[130px]">
                         {enrichment.publisher}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED2]/60">
-                      <span className="text-[#827870]">Genre</span>
-                      <span className="font-medium text-[#861D2D]">
+                    <div className="flex items-center justify-between py-1 border-b border-[#E8DED1]/60">
+                      <span className="text-[#81766D]">Genre</span>
+                      <span className="font-medium text-[#8D263B]">
                         {book.category || 'Biography'}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between py-1">
-                      <span className="text-[#827870]">ISBN</span>
-                      <span className="font-mono text-[11px] text-[#292522]">
+                      <span className="text-[#81766D]">ISBN</span>
+                      <span className="font-mono text-[11px] text-[#302A27]">
                         {book.isbn || '978-0399590504'}
                       </span>
                     </div>
@@ -1577,10 +1577,10 @@ const ShowBook = () => {
                 {/* 2. Reader Sentiment Breakdown Card */}
                 <div className="editorial-surface p-6 sm:p-7 space-y-3.5">
                   <div>
-                    <h3 className="font-serif text-base font-bold text-[#292522]">
+                    <h3 className="font-serif text-base font-bold text-[#302A27]">
                       Reader Sentiment
                     </h3>
-                    <p className="text-[11px] text-[#827870] mt-0.5">
+                    <p className="text-[11px] text-[#81766D] mt-0.5">
                       What readers are saying
                     </p>
                   </div>
@@ -1594,16 +1594,16 @@ const ShowBook = () => {
                       { label: 'Well-written', pct: enrichment.sentiment.wellWritten },
                     ].map((item, idx) => (
                       <div key={idx} className="flex items-center justify-between gap-3">
-                        <span className="text-[#827870] min-w-[110px] text-xs font-medium">
+                        <span className="text-[#81766D] min-w-[110px] text-xs font-medium">
                           {item.label}
                         </span>
-                        <div className="flex-1 h-2 bg-[#E8DED2] rounded-full overflow-hidden">
+                        <div className="flex-1 h-2 bg-[#E8DED1] rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-[#861D2D] rounded-full"
+                            className="h-full bg-[#8D263B] rounded-full"
                             style={{ width: `${item.pct}%` }}
                           />
                         </div>
-                        <span className="font-mono text-[11px] text-[#827870] w-7 text-right">
+                        <span className="font-mono text-[11px] text-[#81766D] w-7 text-right">
                           {item.pct}%
                         </span>
                       </div>
@@ -1612,7 +1612,7 @@ const ShowBook = () => {
                 </div>
 
                 {/* 3. Aesthetic Editorial Quote / Moodboard Card */}
-                <div className="p-6 sm:p-7 rounded-2xl bg-[#F6EFE5] border border-[#E8DED2] relative overflow-hidden shadow-2xs">
+                <div className="p-6 sm:p-7 rounded-2xl bg-[#F6EFE5] border border-[#E8DED1] relative overflow-hidden shadow-2xs">
                   {/* Botanical flower branch graphic on the left */}
                   <div className="w-16 h-24 pointer-events-none select-none opacity-85 mix-blend-multiply mb-3">
                     <img
@@ -1623,11 +1623,11 @@ const ShowBook = () => {
                     />
                   </div>
 
-                  <p className="font-serif italic text-sm text-[#292522] leading-relaxed mb-3">
+                  <p className="font-serif italic text-sm text-[#302A27] leading-relaxed mb-3">
                     {enrichment.readerReviewQuote}
                   </p>
 
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#827870] font-bold block">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#81766D] font-bold block">
                     — READER REVIEW
                   </span>
                 </div>
@@ -1636,20 +1636,20 @@ const ShowBook = () => {
 
             {/* 4. REIMAGINED ARCHIVAL READER PREVIEW (Refined, Collapsible by Default) */}
             <section id="archival-reader-section" className="pt-6">
-              <div className="editorial-surface overflow-hidden border border-[#E8DED2]">
+              <div className="editorial-surface overflow-hidden border border-[#E8DED1]">
                 <div
                   onClick={() => setIsReaderExpanded((prev) => !prev)}
-                  className="p-6 flex items-center justify-between cursor-pointer bg-[#FFFDF9] hover:bg-[#FAF7F2] transition-colors"
+                  className="p-6 flex items-center justify-between cursor-pointer bg-[#FFFDFA] hover:bg-[#F7F3EC] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#F4E8E6] text-[#861D2D] flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#F4E8E6] text-[#8D263B] flex items-center justify-center flex-shrink-0">
                       <PiBookOpenTextBold className="text-xl" />
                     </div>
                     <div>
-                      <h3 className="font-serif text-lg font-bold text-[#292522]">
+                      <h3 className="font-serif text-lg font-bold text-[#302A27]">
                         Reader Preview &bull; Archival Edition
                       </h3>
-                      <p className="text-xs text-[#827870]">
+                      <p className="text-xs text-[#81766D]">
                         Experience typeset chapter excerpts with theme and sound ambiance
                       </p>
                     </div>
@@ -1657,7 +1657,7 @@ const ShowBook = () => {
 
                   <button
                     type="button"
-                    className="px-4 py-2 rounded-full border border-[#E8DED2] text-xs font-semibold text-[#861D2D] bg-[#FFFDF9] hover:bg-white shadow-2xs transition-colors flex items-center gap-1.5"
+                    className="px-4 py-2 rounded-full border border-[#E8DED1] text-xs font-semibold text-[#8D263B] bg-[#FFFDFA] hover:bg-white shadow-2xs transition-colors flex items-center gap-1.5"
                   >
                     <span>{isReaderExpanded ? 'Collapse Reader' : 'Open Reader Preview'}</span>
                     <PiCaretDownBold className={`text-xs transition-transform ${isReaderExpanded ? 'rotate-180' : ''}`} />
@@ -1665,7 +1665,7 @@ const ShowBook = () => {
                 </div>
 
                 {isReaderExpanded && (
-                  <div className="p-6 sm:p-8 bg-[#FAF7F2] border-t border-[#E8DED2] animate-in fade-in duration-300">
+                  <div className="p-6 sm:p-8 bg-[#F7F3EC] border-t border-[#E8DED1] animate-in fade-in duration-300">
                     <PageFlipPreview book={book} />
                   </div>
                 )}
@@ -1674,14 +1674,14 @@ const ShowBook = () => {
 
             {/* 5. "IF THIS BOOK SPOKE TO YOU" HORIZONTAL PINTEREST-INSPIRED CAROUSEL */}
             {relatedBooks.length > 0 && (
-              <section className="pt-8 pb-6 border-t border-[#E8DED2]">
+              <section className="pt-8 pb-6 border-t border-[#E8DED1]">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="font-cormorant text-2xl sm:text-3xl font-bold text-[#292522]">
+                    <h2 className="font-cormorant text-2xl sm:text-3xl font-bold text-[#302A27]">
                       If This Book Spoke to You
                     </h2>
-                    <p className="text-xs text-[#827870] mt-0.5">
-                      Companion works curated in <span className="font-semibold text-[#861D2D]">{book.category}</span>
+                    <p className="text-xs text-[#81766D] mt-0.5">
+                      Companion works curated in <span className="font-semibold text-[#8D263B]">{book.category}</span>
                     </p>
                   </div>
 
@@ -1691,7 +1691,7 @@ const ShowBook = () => {
                       type="button"
                       onClick={() => handleScrollCarousel('left')}
                       aria-label="Scroll left"
-                      className="w-9 h-9 rounded-full bg-[#FFFDF9] hover:bg-white border border-[#E8DED2] text-[#292522] flex items-center justify-center shadow-2xs hover:scale-105 active:scale-95 transition-all"
+                      className="w-9 h-9 rounded-full bg-[#FFFDFA] hover:bg-white border border-[#E8DED1] text-[#302A27] flex items-center justify-center shadow-2xs hover:scale-105 active:scale-95 transition-all"
                     >
                       <PiCaretLeftBold className="text-sm" />
                     </button>
@@ -1699,7 +1699,7 @@ const ShowBook = () => {
                       type="button"
                       onClick={() => handleScrollCarousel('right')}
                       aria-label="Scroll right"
-                      className="w-9 h-9 rounded-full bg-[#FFFDF9] hover:bg-white border border-[#E8DED2] text-[#292522] flex items-center justify-center shadow-2xs hover:scale-105 active:scale-95 transition-all"
+                      className="w-9 h-9 rounded-full bg-[#FFFDFA] hover:bg-white border border-[#E8DED1] text-[#302A27] flex items-center justify-center shadow-2xs hover:scale-105 active:scale-95 transition-all"
                     >
                       <PiCaretRightBold className="text-sm" />
                     </button>
@@ -1721,11 +1721,11 @@ const ShowBook = () => {
                     return (
                       <article
                         key={relBook._id}
-                        className="w-[200px] sm:w-[220px] flex-shrink-0 snap-start rounded-2xl bg-[#FFFDF9] border border-[#E8DED2] p-3 shadow-2xs hover:border-[#861D2D]/40 hover:shadow-md transition-all group/card flex flex-col justify-between"
+                        className="w-[200px] sm:w-[220px] flex-shrink-0 snap-start rounded-2xl bg-[#FFFDFA] border border-[#E8DED1] p-3 shadow-2xs hover:border-[#8D263B]/40 hover:shadow-md transition-all group/card flex flex-col justify-between"
                       >
                         <div>
                           {/* Book Cover */}
-                          <div className="w-full aspect-[2/3] rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#E8DED2] mb-3 relative group">
+                          <div className="w-full aspect-[2/3] rounded-xl overflow-hidden bg-[#F7F3EC] border border-[#E8DED1] mb-3 relative group">
                             <img
                               src={relImg}
                               alt={relBook.title}
@@ -1735,32 +1735,32 @@ const ShowBook = () => {
                           </div>
 
                           {/* Category Tag */}
-                          <span className="text-[10px] font-mono uppercase tracking-wider text-[#861D2D] font-bold block mb-1">
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-[#8D263B] font-bold block mb-1">
                             {relBook.category || 'Literature'}
                           </span>
 
                           {/* Title */}
-                          <h3 className="font-serif font-bold text-sm text-[#292522] line-clamp-1 group-hover/card:text-[#861D2D] transition-colors">
+                          <h3 className="font-serif font-bold text-sm text-[#302A27] line-clamp-1 group-hover/card:text-[#8D263B] transition-colors">
                             {relBook.title}
                           </h3>
 
                           {/* Author */}
-                          <p className="font-serif italic text-xs text-[#827870] truncate mt-0.5">
+                          <p className="font-serif italic text-xs text-[#81766D] truncate mt-0.5">
                             by {relBook.author}
                           </p>
 
                           {/* Rating */}
-                          <div className="flex items-center gap-1 text-[11px] font-mono text-[#292522] mt-2">
+                          <div className="flex items-center gap-1 text-[11px] font-mono text-[#302A27] mt-2">
                             <PiStarFill className="text-[#C99A48] text-xs" />
                             <span>{(relBook.averageRating || 4.9).toFixed(1)}</span>
-                            <span className="text-[#827870]">({relBook.publishYear})</span>
+                            <span className="text-[#81766D]">({relBook.publishYear})</span>
                           </div>
                         </div>
 
                         {/* View Book Link */}
                         <Link
                           to={`/books/details/${relBook._id}`}
-                          className="mt-3 w-full py-1.5 px-3 rounded-lg border border-[#E8DED2] hover:bg-[#861D2D] hover:text-white hover:border-[#861D2D] text-center text-xs font-semibold text-[#292522] transition-all flex items-center justify-center gap-1"
+                          className="mt-3 w-full py-1.5 px-3 rounded-lg border border-[#E8DED1] hover:bg-[#8D263B] hover:text-white hover:border-[#8D263B] text-center text-xs font-semibold text-[#302A27] transition-all flex items-center justify-center gap-1"
                         >
                           <span>View Book</span>
                           <PiArrowSquareOutBold className="text-xs" />
@@ -1782,25 +1782,25 @@ const ShowBook = () => {
           onClick={() => setGalleryModalOpen(false)}
         >
           <div
-            className="relative max-w-lg w-full bg-[#FFFDF9] rounded-3xl border border-[#E8DED2] p-6 shadow-2xl overflow-hidden"
+            className="relative max-w-lg w-full bg-[#FFFDFA] rounded-3xl border border-[#E8DED1] p-6 shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setGalleryModalOpen(false)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white border border-[#E8DED2] text-[#292522] flex items-center justify-center hover:bg-[#FAF7F2] transition-colors"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white border border-[#E8DED1] text-[#302A27] flex items-center justify-center hover:bg-[#F7F3EC] transition-colors"
             >
               <PiXBold className="text-sm" />
             </button>
 
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#861D2D] font-bold block mb-1">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[#8D263B] font-bold block mb-1">
               MOODBOARD &bull; {selectedGalleryItem.type.toUpperCase()}
             </span>
-            <h3 className="font-serif text-lg font-bold text-[#292522] mb-4">
+            <h3 className="font-serif text-lg font-bold text-[#302A27] mb-4">
               {selectedGalleryItem.title}
             </h3>
 
-            <div className="w-full aspect-square rounded-2xl overflow-hidden border border-[#E8DED2] bg-[#FAF7F2]">
+            <div className="w-full aspect-square rounded-2xl overflow-hidden border border-[#E8DED1] bg-[#F7F3EC]">
               <img
                 src={selectedGalleryItem.src}
                 alt={selectedGalleryItem.title}
@@ -1816,8 +1816,8 @@ const ShowBook = () => {
                   onClick={() => setSelectedGalleryItem(item)}
                   className={`w-12 h-12 rounded-xl overflow-hidden border flex-shrink-0 p-0.5 ${
                     selectedGalleryItem.id === item.id
-                      ? 'border-[#861D2D] ring-2 ring-[#861D2D]/20'
-                      : 'border-[#E8DED2]'
+                      ? 'border-[#8D263B] ring-2 ring-[#8D263B]/20'
+                      : 'border-[#E8DED1]'
                   }`}
                 >
                   <img

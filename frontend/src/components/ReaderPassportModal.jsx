@@ -149,11 +149,11 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-[#FFFDF9] rounded-3xl border border-[#E8DED2] shadow-2xl overflow-hidden text-[#292522] my-auto flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-2xl bg-[#FFFDFA] rounded-3xl border border-[#E8DED1] shadow-2xl overflow-hidden text-[#302A27] my-auto flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Ribbon with Pinterest/Editorial Aesthetics */}
-        <div className="bg-gradient-to-r from-[#7B1826] via-[#861D2D] to-[#5C101B] px-6 py-4 text-white flex items-center justify-between flex-shrink-0">
+        <div className="bg-gradient-to-r from-[#7B1826] via-[#8D263B] to-[#5C101B] px-6 py-4 text-white flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-2.5">
             <span className="w-8 h-8 rounded-full bg-white/15 border border-white/20 flex items-center justify-center text-amber-200 text-base shadow-2xs">
               ❦
@@ -177,7 +177,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
         </div>
 
         {/* Tab Navigation Pill Bar */}
-        <div className="px-6 pt-4 pb-2 bg-[#FAF7F2] border-b border-[#E8DED2] flex items-center justify-between flex-wrap gap-2 flex-shrink-0">
+        <div className="px-6 pt-4 pb-2 bg-[#F7F3EC] border-b border-[#E8DED1] flex items-center justify-between flex-wrap gap-2 flex-shrink-0">
           <div className="flex items-center gap-1.5 p-1 bg-[#EFE9DF] rounded-xl border border-[#DFD5C7]">
             <button
               type="button"
@@ -188,7 +188,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'passport'
                   ? 'bg-white text-[#7B1826] shadow-2xs font-bold'
-                  : 'text-[#695D53] hover:text-[#292522]'
+                  : 'text-[#695D53] hover:text-[#302A27]'
               }`}
             >
               <PiIdentificationCardBold className="text-sm" />
@@ -204,7 +204,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'mailbox'
                   ? 'bg-white text-[#7B1826] shadow-2xs font-bold'
-                  : 'text-[#695D53] hover:text-[#292522]'
+                  : 'text-[#695D53] hover:text-[#302A27]'
               }`}
             >
               <PiTrayBold className="text-sm" />
@@ -224,9 +224,9 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
             /* =================== TAB 1: OFFICIAL READER PASSPORT =================== */
             <div className="space-y-6 animate-fade-in">
               {/* Authentic Physical-Looking Reader Passport Card */}
-              <div className="relative rounded-2xl bg-gradient-to-b from-[#FAF4EC] to-[#F1E5D5] border-2 border-dashed border-[#CBB499] p-5 sm:p-6 shadow-sm text-[#292522] overflow-hidden">
+              <div className="relative rounded-2xl bg-gradient-to-b from-[#FAF4EC] to-[#F1E5D5] border-2 border-dashed border-[#CBB499] p-5 sm:p-6 shadow-sm text-[#302A27] overflow-hidden">
                 {/* Washi Tape Accent at Top Center */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-4 bg-[#861D2D]/20 rounded-xs transform -rotate-1 border-x border-dashed border-white/60 pointer-events-none" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-4 bg-[#8D263B]/20 rounded-xs transform -rotate-1 border-x border-dashed border-white/60 pointer-events-none" />
 
                 {/* Watermarked Ex Libris Stamp */}
                 <div className="absolute -bottom-6 -right-6 text-[#7B1826]/10 text-9xl font-serif select-none pointer-events-none">
@@ -257,7 +257,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                     <span className="font-mono text-[10px] uppercase text-[#7A695A] block">
                       Member Tier:
                     </span>
-                    <p className="font-bold text-[#861D2D] mt-0.5">
+                    <p className="font-bold text-[#8D263B] mt-0.5">
                       {user.role === 'admin'
                         ? 'Curator & Chief Librarian'
                         : 'Verified Founding Reader'}
@@ -283,53 +283,53 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
               {/* Starter Pack Books Included in Your Package */}
               <div>
                 <div className="flex items-center justify-between mb-2.5">
-                  <h4 className="font-serif text-sm font-bold text-[#292522] flex items-center gap-1.5">
-                    <PiBooksBold className="text-base text-[#861D2D]" />
+                  <h4 className="font-serif text-sm font-bold text-[#302A27] flex items-center gap-1.5">
+                    <PiBooksBold className="text-base text-[#8D263B]" />
                     <span>Starter Pack Books Included in Your Package</span>
                   </h4>
-                  <span className="font-mono text-[10px] text-[#827870] uppercase">
+                  <span className="font-mono text-[10px] text-[#81766D] uppercase">
                     3 Curated Classics
                   </span>
                 </div>
                 <div className="grid grid-cols-3 gap-2.5">
-                  <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8DED2] text-left hover:border-[#861D2D]/30 transition-colors">
-                    <span className="text-[9px] font-mono font-bold text-[#861D2D] uppercase block">
+                  <div className="p-3 rounded-2xl bg-[#F7F3EC] border border-[#E8DED1] text-left hover:border-[#8D263B]/30 transition-colors">
+                    <span className="text-[9px] font-mono font-bold text-[#8D263B] uppercase block">
                       Gothic
                     </span>
-                    <p className="font-serif font-bold text-xs text-[#292522] mt-0.5 truncate">
+                    <p className="font-serif font-bold text-xs text-[#302A27] mt-0.5 truncate">
                       Dorian Gray
                     </p>
-                    <p className="text-[10px] text-[#827870] italic">Oscar Wilde</p>
+                    <p className="text-[10px] text-[#81766D] italic">Oscar Wilde</p>
                   </div>
-                  <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8DED2] text-left hover:border-[#861D2D]/30 transition-colors">
+                  <div className="p-3 rounded-2xl bg-[#F7F3EC] border border-[#E8DED1] text-left hover:border-[#8D263B]/30 transition-colors">
                     <span className="text-[9px] font-mono font-bold text-[#B26E2B] uppercase block">
                       Philosophy
                     </span>
-                    <p className="font-serif font-bold text-xs text-[#292522] mt-0.5 truncate">
+                    <p className="font-serif font-bold text-xs text-[#302A27] mt-0.5 truncate">
                       The Alchemist
                     </p>
-                    <p className="text-[10px] text-[#827870] italic">Paulo Coelho</p>
+                    <p className="text-[10px] text-[#81766D] italic">Paulo Coelho</p>
                   </div>
-                  <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8DED2] text-left hover:border-[#861D2D]/30 transition-colors">
+                  <div className="p-3 rounded-2xl bg-[#F7F3EC] border border-[#E8DED1] text-left hover:border-[#8D263B]/30 transition-colors">
                     <span className="text-[9px] font-mono font-bold text-[#4E6349] uppercase block">
                       Sci-Fi Epic
                     </span>
-                    <p className="font-serif font-bold text-xs text-[#292522] mt-0.5 truncate">
+                    <p className="font-serif font-bold text-xs text-[#302A27] mt-0.5 truncate">
                       Dune
                     </p>
-                    <p className="text-[10px] text-[#827870] italic">Frank Herbert</p>
+                    <p className="text-[10px] text-[#81766D] italic">Frank Herbert</p>
                   </div>
                 </div>
               </div>
 
               {/* Passport Quick Actions */}
-              <div className="pt-2 border-t border-[#E8DED2] space-y-3">
+              <div className="pt-2 border-t border-[#E8DED1] space-y-3">
                 <div className="flex items-center gap-3 flex-wrap">
                   <button
                     type="button"
                     onClick={() => handleSendWelcomeEmail(user.email)}
                     disabled={loadingType === 'welcome' || !user.email}
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#7B1826] via-[#861D2D] to-[#6E1421] text-white text-xs sm:text-[13px] font-semibold shadow-md hover:brightness-105 active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#7B1826] via-[#8D263B] to-[#6E1421] text-white text-xs sm:text-[13px] font-semibold shadow-md hover:brightness-105 active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
                   >
                     {loadingType === 'welcome' ? (
                       <>
@@ -348,10 +348,10 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                     href={welcomePreviewUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#F2ECE1] text-[#292522] text-xs font-semibold border border-[#E8DED2] transition-colors shadow-2xs"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#F7F3EC] hover:bg-[#F2ECE1] text-[#302A27] text-xs font-semibold border border-[#E8DED1] transition-colors shadow-2xs"
                   >
                     <span>Live Preview</span>
-                    <PiArrowSquareOutBold className="text-sm text-[#861D2D]" />
+                    <PiArrowSquareOutBold className="text-sm text-[#8D263B]" />
                   </a>
                 </div>
 
@@ -359,7 +359,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                   <button
                     type="button"
                     onClick={() => setShowCustomInput(!showCustomInput)}
-                    className="text-[11px] font-mono text-[#827870] hover:text-[#861D2D] hover:underline transition-colors cursor-pointer"
+                    className="text-[11px] font-mono text-[#81766D] hover:text-[#8D263B] hover:underline transition-colors cursor-pointer"
                   >
                     {showCustomInput
                       ? '▲ Hide custom email option'
@@ -374,13 +374,13 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                       placeholder="Enter recipient email (e.g. friend@example.com)"
                       value={customEmail}
                       onChange={(e) => setCustomEmail(e.target.value)}
-                      className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-[#FAF7F2] border border-[#E8DED2] focus:outline-none focus:border-[#861D2D] text-[#292522]"
+                      className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-[#F7F3EC] border border-[#E8DED1] focus:outline-none focus:border-[#8D263B] text-[#302A27]"
                     />
                     <button
                       type="button"
                       onClick={() => handleSendWelcomeEmail(customEmail)}
                       disabled={loadingType === 'welcome' || !customEmail.trim()}
-                      className="px-4 py-2 rounded-xl bg-[#292522] hover:bg-black text-white text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-40 cursor-pointer"
+                      className="px-4 py-2 rounded-xl bg-[#302A27] hover:bg-black text-white text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-40 cursor-pointer"
                     >
                       <PiPaperPlaneTiltBold className="text-xs" />
                       <span>Send</span>
@@ -394,14 +394,14 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
             <div className="space-y-5 animate-fade-in">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-serif text-base font-bold text-[#292522]">
+                  <h4 className="font-serif text-base font-bold text-[#302A27]">
                     The PageTurner Postal Archive
                   </h4>
                   <p className="text-xs text-[#786C62] font-serif italic mt-0.5">
                     Three handcrafted email templates styled with warm paper textures, serifs, and security seals.
                   </p>
                 </div>
-                <span className="font-mono text-[10px] uppercase font-bold text-[#861D2D] px-2.5 py-1 bg-[#861D2D]/10 rounded-full border border-[#861D2D]/20">
+                <span className="font-mono text-[10px] uppercase font-bold text-[#8D263B] px-2.5 py-1 bg-[#8D263B]/10 rounded-full border border-[#8D263B]/20">
                   Gmail SMTP
                 </span>
               </div>
@@ -409,26 +409,26 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
               {/* Pinterest Pin Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* PIN 1: WELCOME PACKAGE */}
-                <div className="group relative rounded-2xl bg-[#FFFDF9] border border-[#E8DED2] p-4.5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between">
+                <div className="group relative rounded-2xl bg-[#FFFDFA] border border-[#E8DED1] p-4.5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between">
                   {/* Washi Tape Accent */}
                   <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-20 h-3 bg-[#C99A48]/35 rounded-xs transform -rotate-1 border-x border-dashed border-white/60 pointer-events-none" />
 
                   <div>
                     <div className="flex items-center justify-between mb-2.5 mt-1">
-                      <span className="font-mono text-[9px] uppercase font-bold text-[#861D2D] tracking-wider bg-[#F9ECEB] px-2 py-0.5 rounded-full">
+                      <span className="font-mono text-[9px] uppercase font-bold text-[#8D263B] tracking-wider bg-[#F9ECEB] px-2 py-0.5 rounded-full">
                         Letter No. 01
                       </span>
                       <span className="text-xs">📜</span>
                     </div>
 
-                    <h5 className="font-serif font-bold text-sm text-[#292522] group-hover:text-[#861D2D] transition-colors">
+                    <h5 className="font-serif font-bold text-sm text-[#302A27] group-hover:text-[#8D263B] transition-colors">
                       Welcome &amp; Passport
                     </h5>
                     <p className="text-[11px] text-[#695D53] font-serif italic mt-1 leading-relaxed">
                       Librarian greeting, member ID badge, and 3 starter pack classics.
                     </p>
 
-                    <div className="mt-3 py-1.5 px-2 rounded-lg bg-[#FAF7F2] border border-[#EFE8DD] text-[10px] font-mono text-[#786C62]">
+                    <div className="mt-3 py-1.5 px-2 rounded-lg bg-[#F7F3EC] border border-[#EFE8DD] text-[10px] font-mono text-[#786C62]">
                       Trigger: <strong>New Account Sign-up</strong>
                     </div>
                   </div>
@@ -438,7 +438,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                       type="button"
                       onClick={() => handleSendWelcomeEmail(user.email)}
                       disabled={loadingType === 'welcome'}
-                      className="w-full py-1.5 px-3 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs disabled:opacity-50"
+                      className="w-full py-1.5 px-3 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs disabled:opacity-50"
                     >
                       {loadingType === 'welcome' ? (
                         <PiSpinnerGapBold className="text-xs animate-spin" />
@@ -452,16 +452,16 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                       href={welcomePreviewUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full py-1.5 px-3 rounded-full bg-[#FAF7F2] hover:bg-[#EFE8DD] text-[#292522] text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors border border-[#E8DED2]"
+                      className="w-full py-1.5 px-3 rounded-full bg-[#F7F3EC] hover:bg-[#EFE8DD] text-[#302A27] text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors border border-[#E8DED1]"
                     >
-                      <PiArrowSquareOutBold className="text-xs text-[#861D2D]" />
+                      <PiArrowSquareOutBold className="text-xs text-[#8D263B]" />
                       <span>Live Inspector</span>
                     </a>
                   </div>
                 </div>
 
                 {/* PIN 2: SESSION SECURITY LOGIN ALERT */}
-                <div className="group relative rounded-2xl bg-[#FFFDF9] border border-[#E8DED2] p-4.5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between">
+                <div className="group relative rounded-2xl bg-[#FFFDFA] border border-[#E8DED1] p-4.5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between">
                   {/* Washi Tape Accent */}
                   <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-20 h-3 bg-[#4E6349]/35 rounded-xs transform rotate-1 border-x border-dashed border-white/60 pointer-events-none" />
 
@@ -473,14 +473,14 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                       <span className="text-xs">🛡️</span>
                     </div>
 
-                    <h5 className="font-serif font-bold text-sm text-[#292522] group-hover:text-[#4E6349] transition-colors">
+                    <h5 className="font-serif font-bold text-sm text-[#302A27] group-hover:text-[#4E6349] transition-colors">
                       Session Login Alert
                     </h5>
                     <p className="text-[11px] text-[#695D53] font-serif italic mt-1 leading-relaxed">
                       Instant security receipt with device, origin IP, timestamp, and lock trigger.
                     </p>
 
-                    <div className="mt-3 py-1.5 px-2 rounded-lg bg-[#FAF7F2] border border-[#EFE8DD] text-[10px] font-mono text-[#786C62]">
+                    <div className="mt-3 py-1.5 px-2 rounded-lg bg-[#F7F3EC] border border-[#EFE8DD] text-[10px] font-mono text-[#786C62]">
                       Trigger: <strong>Every Session Login</strong>
                     </div>
                   </div>
@@ -504,7 +504,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                       href={loginPreviewUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full py-1.5 px-3 rounded-full bg-[#FAF7F2] hover:bg-[#EFE8DD] text-[#292522] text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors border border-[#E8DED2]"
+                      className="w-full py-1.5 px-3 rounded-full bg-[#F7F3EC] hover:bg-[#EFE8DD] text-[#302A27] text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors border border-[#E8DED1]"
                     >
                       <PiArrowSquareOutBold className="text-xs text-[#4E6349]" />
                       <span>Live Inspector</span>
@@ -513,26 +513,26 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                 </div>
 
                 {/* PIN 3: CRYPTOGRAPHIC RESET PASSWORD */}
-                <div className="group relative rounded-2xl bg-[#FFFDF9] border border-[#E8DED2] p-4.5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between">
+                <div className="group relative rounded-2xl bg-[#FFFDFA] border border-[#E8DED1] p-4.5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between">
                   {/* Washi Tape Accent */}
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-20 h-3 bg-[#861D2D]/35 rounded-xs transform -rotate-2 border-x border-dashed border-white/60 pointer-events-none" />
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-20 h-3 bg-[#8D263B]/35 rounded-xs transform -rotate-2 border-x border-dashed border-white/60 pointer-events-none" />
 
                   <div>
                     <div className="flex items-center justify-between mb-2.5 mt-1">
-                      <span className="font-mono text-[9px] uppercase font-bold text-[#861D2D] tracking-wider bg-[#F9ECEB] px-2 py-0.5 rounded-full">
+                      <span className="font-mono text-[9px] uppercase font-bold text-[#8D263B] tracking-wider bg-[#F9ECEB] px-2 py-0.5 rounded-full">
                         Letter No. 03
                       </span>
                       <span className="text-xs">🗝️</span>
                     </div>
 
-                    <h5 className="font-serif font-bold text-sm text-[#292522] group-hover:text-[#861D2D] transition-colors">
+                    <h5 className="font-serif font-bold text-sm text-[#302A27] group-hover:text-[#8D263B] transition-colors">
                       Password Reset Key
                     </h5>
                     <p className="text-[11px] text-[#695D53] font-serif italic mt-1 leading-relaxed">
                       Wax-sealed 60-minute cryptographic recovery token with instant access link.
                     </p>
 
-                    <div className="mt-3 py-1.5 px-2 rounded-lg bg-[#FAF7F2] border border-[#EFE8DD] text-[10px] font-mono text-[#786C62]">
+                    <div className="mt-3 py-1.5 px-2 rounded-lg bg-[#F7F3EC] border border-[#EFE8DD] text-[10px] font-mono text-[#786C62]">
                       Trigger: <strong>Forgot Password Request</strong>
                     </div>
                   </div>
@@ -556,9 +556,9 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                       href={resetPreviewUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full py-1.5 px-3 rounded-full bg-[#FAF7F2] hover:bg-[#EFE8DD] text-[#292522] text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors border border-[#E8DED2]"
+                      className="w-full py-1.5 px-3 rounded-full bg-[#F7F3EC] hover:bg-[#EFE8DD] text-[#302A27] text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors border border-[#E8DED1]"
                     >
-                      <PiArrowSquareOutBold className="text-xs text-[#861D2D]" />
+                      <PiArrowSquareOutBold className="text-xs text-[#8D263B]" />
                       <span>Live Inspector</span>
                     </a>
                   </div>
@@ -566,7 +566,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
               </div>
 
               {/* Recipient Sandbox Quick-Dispatch Bar */}
-              <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DED2] text-xs">
+              <div className="p-4 rounded-2xl bg-[#F7F3EC] border border-[#E8DED1] text-xs">
                 <span className="font-mono text-[10px] uppercase font-bold text-[#786C62] block mb-2">
                   Dispatch Sandbox: Send Any Email to Arbitrary Recipient
                 </span>
@@ -576,13 +576,13 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                     value={customEmail}
                     onChange={(e) => setCustomEmail(e.target.value)}
                     placeholder="Enter any address (e.g. test@example.com)"
-                    className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-white border border-[#E8DED2] focus:outline-none focus:border-[#861D2D] text-[#292522]"
+                    className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-white border border-[#E8DED1] focus:outline-none focus:border-[#8D263B] text-[#302A27]"
                   />
                   <button
                     type="button"
                     onClick={() => handleSendWelcomeEmail(customEmail)}
                     disabled={!customEmail.trim() || !!loadingType}
-                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#F2ECE1] text-[#292522] border border-[#E8DED2] text-xs font-semibold disabled:opacity-40 cursor-pointer transition-colors"
+                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#F2ECE1] text-[#302A27] border border-[#E8DED1] text-xs font-semibold disabled:opacity-40 cursor-pointer transition-colors"
                   >
                     Welcome
                   </button>
@@ -590,7 +590,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                     type="button"
                     onClick={() => handleSendLoginAlert(customEmail)}
                     disabled={!customEmail.trim() || !!loadingType}
-                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#F2ECE1] text-[#292522] border border-[#E8DED2] text-xs font-semibold disabled:opacity-40 cursor-pointer transition-colors"
+                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#F2ECE1] text-[#302A27] border border-[#E8DED1] text-xs font-semibold disabled:opacity-40 cursor-pointer transition-colors"
                   >
                     Alert
                   </button>
@@ -598,7 +598,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                     type="button"
                     onClick={() => handleSendPasswordReset(customEmail)}
                     disabled={!customEmail.trim() || !!loadingType}
-                    className="px-3.5 py-2 rounded-xl bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold disabled:opacity-40 cursor-pointer transition-colors"
+                    className="px-3.5 py-2 rounded-xl bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-semibold disabled:opacity-40 cursor-pointer transition-colors"
                   >
                     Reset
                   </button>

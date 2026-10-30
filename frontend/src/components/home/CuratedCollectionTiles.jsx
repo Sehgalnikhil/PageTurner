@@ -85,11 +85,11 @@ const CuratedCollectionTiles = ({
       {/* 1. SECTION HEADER: Title, Metadata, Actions, & Carousel Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
         <div className="flex items-center gap-2.5">
-          <h2 className="font-serif text-xl sm:text-[23px] font-bold text-[#292522] tracking-tight">
+          <h2 className="font-serif text-2xl sm:text-[25px] font-medium text-[#302A27] tracking-tight">
             Curated Atmospheres
           </h2>
-          <span className="text-xs sm:text-sm text-[#827870] font-sans">
-            &bull; Image-led collections
+          <span className="text-xs sm:text-sm text-[#81766D] font-sans">
+            &bull; Image-led moodboards
           </span>
         </div>
 
@@ -99,7 +99,7 @@ const CuratedCollectionTiles = ({
             <button
               type="button"
               onClick={onClearMood}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4E8E6] text-[#861D2D] hover:bg-[#ebd8d5] text-xs font-semibold transition-colors shadow-2xs mr-1"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#8D263B]/10 text-[#8D263B] hover:bg-[#8D263B]/15 text-xs font-medium transition-colors shadow-subtle mr-1 cursor-pointer"
             >
               <span>Reset &ldquo;{selectedMood.title}&rdquo;</span>
               <PiXBold className="text-xs" />
@@ -108,15 +108,15 @@ const CuratedCollectionTiles = ({
 
           <Link
             to="/books/create"
-            className="h-9 px-4 rounded-full bg-[#861D2D] hover:bg-[#701826] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs active:scale-95"
+            className="h-8 px-3.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium flex items-center gap-1.5 transition-colors shadow-subtle"
           >
-            <PiPlusBold className="text-xs stroke-[3]" />
+            <PiPlusBold className="text-xs" />
             <span>Add Story</span>
           </Link>
 
-          <div className="h-9 px-3.5 rounded-full bg-[#FFFDF9] border border-[#E8DED2] text-xs font-mono text-[#292522] flex items-center gap-1.5 shadow-2xs">
-            <span className="font-bold text-[#861D2D]">{totalBooks}</span> works cataloged
-            <PiCaretRight className="text-xs text-[#827870]" />
+          <div className="h-8 px-3 rounded-full bg-[#FFFDFA] border border-[#E8DED1] text-xs font-mono text-[#302A27] flex items-center gap-1.5 shadow-subtle">
+            <span className="font-medium text-[#8D263B]">{totalBooks}</span> works
+            <PiCaretRight className="text-xs text-[#81766D]" />
           </div>
 
           <div className="flex items-center gap-1 ml-1">
@@ -124,7 +124,7 @@ const CuratedCollectionTiles = ({
               type="button"
               onClick={scrollLeft}
               aria-label="Previous atmospheric collections"
-              className="w-9 h-9 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E8DED2] flex items-center justify-center text-xs text-[#292522] hover:text-[#861D2D] shadow-2xs transition-colors active:scale-95"
+              className="w-8 h-8 rounded-full bg-[#FFFDFA] hover:bg-[#F7F3EC] border border-[#E8DED1] flex items-center justify-center text-xs text-[#302A27] hover:text-[#8D263B] shadow-subtle transition-colors cursor-pointer"
             >
               <PiCaretLeftBold />
             </button>
@@ -132,7 +132,7 @@ const CuratedCollectionTiles = ({
               type="button"
               onClick={scrollRight}
               aria-label="Next atmospheric collections"
-              className="w-9 h-9 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E8DED2] flex items-center justify-center text-xs text-[#292522] hover:text-[#861D2D] shadow-2xs transition-colors active:scale-95"
+              className="w-8 h-8 rounded-full bg-[#FFFDFA] hover:bg-[#F7F3EC] border border-[#E8DED1] flex items-center justify-center text-xs text-[#302A27] hover:text-[#8D263B] shadow-subtle transition-colors cursor-pointer"
             >
               <PiCaretRightBold />
             </button>
@@ -155,9 +155,9 @@ const CuratedCollectionTiles = ({
               key={col.id}
               type="button"
               onClick={() => onSelectMood(col)}
-              className={`group relative overflow-hidden rounded-2xl text-left h-[210px] sm:h-[220px] p-4 sm:p-4.5 flex flex-col justify-between transition-all duration-300 ease-out border shadow-2xs w-[250px] sm:w-[270px] lg:w-auto flex-shrink-0 snap-start ${
+              className={`group relative overflow-hidden rounded-xl text-left h-[210px] sm:h-[220px] p-4 sm:p-4.5 flex flex-col justify-between transition-all duration-200 ease-out border shadow-subtle w-[250px] sm:w-[270px] lg:w-auto flex-shrink-0 snap-start cursor-pointer ${
                 isSelected
-                  ? 'ring-2 ring-[#861D2D] ring-offset-2 ring-offset-[#FAF7F2] border-[#861D2D] -translate-y-1 shadow-md'
+                  ? 'ring-2 ring-[#8D263B] ring-offset-2 ring-offset-[#F7F3EC] border-[#8D263B] -translate-y-1 shadow-card'
                   : 'border-[#E8DED2] hover:-translate-y-1 hover:border-[#861D2D]/40 hover:shadow-md active:translate-y-0'
               }`}
             >

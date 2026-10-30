@@ -21,9 +21,9 @@ const getCategoryBadgeClass = (cat = '') => {
     case 'non-fiction':
       return 'bg-sage-faint text-sage-dark border-sage/20';
     case 'biography':
-      return 'bg-stone-100 text-stone-800 border-stone-200';
+      return 'bg-stone-100 text-[#302A27] border-[#E8DED1]';
     default:
-      return 'bg-stone-100 text-stone-700 border-stone-200';
+      return 'bg-stone-100 text-[#302A27] border-[#E8DED1]';
   }
 };
 
@@ -38,7 +38,7 @@ const BooksTable = ({ books = [] }) => {
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-stone-200 bg-[#F6F1E8] text-[11px] font-semibold text-stone-600 uppercase tracking-wider">
+            <tr className="border-b border-[#E8DED1] bg-[#F0E9DE] text-[11px] font-semibold text-[#81766D] uppercase tracking-wider">
               <th scope="col" className="py-3.5 px-5 w-12 text-center">#</th>
               <th scope="col" className="py-3.5 px-5">Book Title</th>
               <th scope="col" className="py-3.5 px-5">Author</th>
@@ -48,7 +48,7 @@ const BooksTable = ({ books = [] }) => {
               <th scope="col" className="py-3.5 px-5 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-stone-100 text-sm text-stone-800 bg-white">
+          <tbody className="divide-y divide-stone-100 text-sm text-[#302A27] bg-white">
             {books.map((book, index) => {
               const isSaved = isBookSaved(book._id);
               return (
@@ -64,13 +64,13 @@ const BooksTable = ({ books = [] }) => {
                   {/* Title */}
                   <td className="py-3.5 px-5">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-[#FAF4EA] text-stone-700 border border-stone-200 flex items-center justify-center flex-shrink-0 group-hover:border-burgundy/30 transition-colors">
+                      <div className="w-9 h-9 rounded-lg bg-[#FAF4EA] text-[#302A27] border border-[#E8DED1] flex items-center justify-center flex-shrink-0 group-hover:border-burgundy/30 transition-colors">
                         <PiBookOpenTextBold className="text-base text-burgundy" />
                       </div>
                       <div>
                         <Link
                           to={`/books/details/${book._id}`}
-                          className="font-serif font-bold text-stone-900 hover:text-burgundy block transition-colors leading-snug"
+                          className="font-serif font-bold text-[#302A27] hover:text-burgundy block transition-colors leading-snug"
                         >
                           {book.title}
                         </Link>
@@ -82,7 +82,7 @@ const BooksTable = ({ books = [] }) => {
                   </td>
 
                   {/* Author */}
-                  <td className="py-3.5 px-5 text-stone-700 text-xs font-medium">
+                  <td className="py-3.5 px-5 text-[#302A27] text-xs font-medium">
                     {book.author}
                   </td>
 
@@ -94,7 +94,7 @@ const BooksTable = ({ books = [] }) => {
                   </td>
 
                   {/* Publish Year */}
-                  <td className="py-3.5 px-5 text-center font-mono text-xs text-stone-600">
+                  <td className="py-3.5 px-5 text-center font-mono text-xs text-[#81766D]">
                     {book.publishYear}
                   </td>
 
@@ -129,7 +129,7 @@ const BooksTable = ({ books = [] }) => {
                       <Link
                         to={`/books/details/${book._id}`}
                         title="View Details"
-                        className="p-1.5 rounded-lg text-stone-500 hover:text-burgundy hover:bg-stone-100 transition-colors"
+                        className="p-1.5 rounded-lg text-[#81766D] hover:text-burgundy hover:bg-stone-100 transition-colors"
                       >
                         <PiEyeBold className="text-base" />
                       </Link>
@@ -139,7 +139,7 @@ const BooksTable = ({ books = [] }) => {
                           <Link
                             to={`/books/edit/${book._id}`}
                             title="Edit Book"
-                            className="p-1.5 rounded-lg text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors"
+                            className="p-1.5 rounded-lg text-[#81766D] hover:text-[#302A27] hover:bg-stone-100 transition-colors"
                           >
                             <PiPencilSimpleBold className="text-base" />
                           </Link>
