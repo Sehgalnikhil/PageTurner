@@ -33,6 +33,7 @@ import {
   PiListBulletsBold,
   PiDownloadSimpleBold,
   PiTrendUpBold,
+  PiSquaresFourBold,
 } from 'react-icons/pi';
 
 import { AuthContext } from '../context/AuthContext';
