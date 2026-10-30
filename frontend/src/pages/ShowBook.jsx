@@ -115,6 +115,7 @@ const getFallbackEnrichment = (book) => {
   const cat = book?.category || 'Literature';
   const author = book?.author || 'Author';
   const title = book?.title || 'Literary Classic';
+  const coverUrl = getBookCoverUrl(book?.image, book?.title, book?.isbn) || '/images/covers/educated.jpg';
 
   return {
     subtitle: `A work by ${author}`,
@@ -135,7 +136,7 @@ const getFallbackEnrichment = (book) => {
       wellWritten: 84,
     },
     moodboardItems: [
-      { id: 1, type: 'cover', title: 'Primary Jacket', src: book?.image },
+      { id: 1, type: 'cover', title: 'Primary Jacket', src: coverUrl },
       { id: 2, type: 'photo', title: 'Typeset Spread', src: '/images/editorial/moodboard_open_book.jpg' },
       { id: 3, type: 'photo', title: 'Setting Inspiration', src: '/images/editorial/moodboard_mountain.jpg' },
       { id: 4, type: 'photo', title: 'Reading Studio', src: '/images/editorial/moodboard_reading_nook.jpg' },
@@ -207,7 +208,17 @@ const ShowBook = () => {
   const currentProgress = savedEntry?.progress !== undefined ? savedEntry.progress : currentStatus === 'currently-reading' ? 68 : currentStatus === 'finished' ? 100 : 0;
 
   const enrichment = useMemo(() => {
-    return BOOK_ENRICHMENTS[book.title] || getFallbackEnrichment(book);
+    const raw = BOOK_ENRICHMENTS[book.title] || getFallbackEnrichment(book);
+    const coverUrl = getBookCoverUrl(book.image, book.title, book.isbn) || '/images/covers/educated.jpg';
+    return {
+      ...raw,
+      moodboardItems: (raw.moodboardItems || []).map((item) => {
+        if (item.type === 'cover' || item.title === 'Primary Jacket') {
+          return { ...item, src: coverUrl };
+        }
+        return item;
+      }),
+    };
   }, [book]);
 
   const fetchBookDetails = () => {
@@ -711,8 +722,13 @@ const ShowBook = () => {
                           className="w-14 sm:w-16 h-14 sm:h-16 rounded-xl overflow-hidden border border-[#E8DED1] bg-white shadow-2xs hover:border-[#8D263B] hover:scale-105 transition-all p-0.5 cursor-pointer relative group"
                         >
                           <img
-                            src={item.src}
+                            src={item.src || coverImageUrl}
                             alt={item.title}
+                            onError={(e) => {
+                              if (coverImageUrl && e.target.src !== coverImageUrl) {
+                                e.target.src = coverImageUrl;
+                              }
+                            }}
                             className="w-full h-full object-cover rounded-lg"
                             loading="lazy"
                           />
@@ -1474,11 +1490,9 @@ const ShowBook = () => {
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
                         {relatedBooks.slice(0, 4).map((relBook) => {
-                          const relImg = relBook.image?.startsWith('http')
-                            ? relBook.image
-                            : relBook.image
-                            ? `http://localhost:5555${relBook.image}`
-                            : 'https://covers.openlibrary.org/b/isbn/9780399590504-L.jpg';
+                          const relImg =
+                            getBookCoverUrl(relBook.image, relBook.title, relBook.isbn) ||
+                            '/images/covers/educated.jpg';
 
                           return (
                             <Link
@@ -1712,11 +1726,9 @@ const ShowBook = () => {
                   className="flex gap-5 overflow-x-auto scrollbar-none pb-4 pt-1 px-1 -mx-1 snap-x snap-mandatory"
                 >
                   {relatedBooks.map((relBook) => {
-                    const relImg = relBook.image?.startsWith('http')
-                      ? relBook.image
-                      : relBook.image
-                      ? `http://localhost:5555${relBook.image}`
-                      : 'https://covers.openlibrary.org/b/isbn/9780399590504-L.jpg';
+                    const relImg =
+                      getBookCoverUrl(relBook.image, relBook.title, relBook.isbn) ||
+                      '/images/covers/educated.jpg';
 
                     return (
                       <article
@@ -1802,8 +1814,13 @@ const ShowBook = () => {
 
             <div className="w-full aspect-square rounded-2xl overflow-hidden border border-[#E8DED1] bg-[#F7F3EC]">
               <img
-                src={selectedGalleryItem.src}
+                src={selectedGalleryItem.src || coverImageUrl}
                 alt={selectedGalleryItem.title}
+                onError={(e) => {
+                  if (coverImageUrl && e.target.src !== coverImageUrl) {
+                    e.target.src = coverImageUrl;
+                  }
+                }}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -1821,8 +1838,13 @@ const ShowBook = () => {
                   }`}
                 >
                   <img
-                    src={item.src}
+                    src={item.src || coverImageUrl}
                     alt={item.title}
+                    onError={(e) => {
+                      if (coverImageUrl && e.target.src !== coverImageUrl) {
+                        e.target.src = coverImageUrl;
+                      }
+                    }}
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </button>
