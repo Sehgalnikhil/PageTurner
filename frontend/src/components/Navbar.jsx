@@ -17,6 +17,8 @@ import {
   PiStackBold,
   PiBookOpenBold,
   PiCrownBold,
+  PiSparkleBold,
+  PiArrowRightBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { ReadingListContext } from '../context/ReadingListContext';
@@ -86,42 +88,86 @@ const Navbar = ({ totalBooks = 0 }) => {
       {/* 0. SITE-WIDE BROADCAST BANNER (CURATOR ANNOUNCEMENTS) */}
       {announcement?.active && !announcementDismissed && (
         <div
-          className={`w-full py-1.5 px-4 text-xs flex items-center justify-between transition-colors z-50 ${
+          className={`w-full py-2 px-4 text-xs flex items-center justify-between relative transition-all duration-300 z-50 ${
             announcement.tone === 'burgundy'
-              ? 'bg-[#8D263B] text-[#FFFDFA]'
+              ? 'bg-gradient-to-r from-[#67202F] via-[#8D263B] to-[#67202F] text-[#FFFDFA] border-b border-[#521724]/40 shadow-xs'
               : announcement.tone === 'amber'
-              ? 'bg-[#FAF5ED] text-[#A68350] border-b border-[#E8DED1]'
-              : 'bg-[#18151B] text-[#EDE4D8] border-b border-[#352D3C]'
+              ? 'bg-[#FAF5ED] text-[#302A27] border-b border-[#E8DED1] shadow-2xs'
+              : 'bg-gradient-to-r from-[#141118] via-[#1E1924] to-[#141118] text-[#EDE4D8] border-b border-[#352D3C] shadow-xs'
           }`}
         >
-          <div className="flex-1 flex items-center justify-center gap-2.5 text-center truncate px-2">
+          <div className="flex-1 flex items-center justify-center gap-2.5 sm:gap-3 text-center min-w-0 px-2">
+            {/* Elegant Dispatch Pill Badge */}
             <span
-              className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-medium uppercase tracking-wider ${
+              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9.5px] font-sans font-medium uppercase tracking-[0.14em] flex-shrink-0 shadow-2xs ${
                 announcement.tone === 'burgundy'
-                  ? 'bg-white/15 text-[#FFFDFA]'
+                  ? 'bg-white/12 border border-white/20 text-[#FFFDFA]'
                   : announcement.tone === 'amber'
-                  ? 'bg-[#C6A16B]/20 text-[#67202F]'
-                  : 'bg-white/10 text-[#DCD4E8]'
+                  ? 'bg-[#C6A16B]/20 border border-[#C6A16B]/35 text-[#67202F]'
+                  : 'bg-white/10 border border-white/15 text-[#DCD4E8]'
               }`}
             >
-              {announcement.badge || 'Curator Dispatch'}
+              <PiSparkleBold
+                className={`text-[10px] ${
+                  announcement.tone === 'amber' ? 'text-[#8D263B]' : 'text-[#C6A16B]'
+                }`}
+              />
+              <span className="leading-none">{announcement.badge || 'Curator Dispatch'}</span>
             </span>
-            <span className="font-serif font-medium text-xs sm:text-[13px] truncate tracking-wide">
+
+            {/* Primary Announcement Message */}
+            <span className="font-serif font-normal text-xs sm:text-[13px] tracking-wide truncate">
               {announcement.text}
             </span>
+
+            {/* Secondary Italic Subtext & Star Separator */}
             {announcement.subtext && (
-              <span className="hidden md:inline text-[11px] font-serif italic opacity-85">
-                &bull; {announcement.subtext}
+              <span className="hidden md:inline-flex items-center gap-2">
+                <span
+                  className={`text-[9px] select-none ${
+                    announcement.tone === 'amber' ? 'text-[#8D263B]/60' : 'text-[#C6A16B]'
+                  }`}
+                >
+                  ✦
+                </span>
+                <span
+                  className={`font-serif italic text-[11.5px] sm:text-[12px] truncate ${
+                    announcement.tone === 'amber' ? 'text-[#81766D]' : 'text-[#FAF5ED]/85'
+                  }`}
+                >
+                  {announcement.subtext}
+                </span>
               </span>
             )}
+
+            {/* Optional Callout / Explore action */}
+            {announcement.link && (
+              <a
+                href={announcement.link}
+                className={`hidden lg:inline-flex items-center gap-1 text-[11px] font-sans font-medium underline underline-offset-4 ml-1 transition-colors ${
+                  announcement.tone === 'amber'
+                    ? 'text-[#8D263B] hover:text-[#67202F]'
+                    : 'text-[#C6A16B] hover:text-white'
+                }`}
+              >
+                <span>Read More</span>
+                <PiArrowRightBold className="text-[9px]" />
+              </a>
+            )}
           </div>
+
+          {/* Dismiss Button */}
           <button
             type="button"
             onClick={() => setAnnouncementDismissed(true)}
-            className="p-1 rounded hover:bg-black/10 transition-colors opacity-75 hover:opacity-100 flex-shrink-0 cursor-pointer"
+            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all cursor-pointer flex-shrink-0 ${
+              announcement.tone === 'amber'
+                ? 'text-[#81766D] hover:text-[#302A27] hover:bg-black/5'
+                : 'text-white/60 hover:text-white hover:bg-white/15'
+            }`}
             title="Dismiss notification"
           >
-            <PiXBold className="text-xs" />
+            <PiXBold className="text-[10px]" />
           </button>
         </div>
       )}

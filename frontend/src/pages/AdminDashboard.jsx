@@ -1699,33 +1699,51 @@ const AdminDashboard = () => {
                 <div
                   className={`p-3.5 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left transition-all ${
                     announcementData.tone === 'burgundy'
-                      ? 'bg-[#8D263B] text-white border-[#67202F]'
+                      ? 'bg-gradient-to-r from-[#67202F] via-[#8D263B] to-[#67202F] text-[#FFFDFA] border-[#521724]/40 shadow-xs'
                       : announcementData.tone === 'amber'
-                      ? 'bg-[#FEF8E3] text-[#8A793A] border-[#EFE3B8]'
-                      : 'bg-[#1C1A19] text-[#F8E7B9] border-stone-800'
+                      ? 'bg-[#FAF5ED] text-[#302A27] border-[#E8DED1] shadow-2xs'
+                      : 'bg-gradient-to-r from-[#141118] via-[#1E1924] to-[#141118] text-[#EDE4D8] border-[#352D3C] shadow-xs'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <span
-                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider ${
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9.5px] font-sans font-medium uppercase tracking-[0.14em] shadow-2xs ${
                         announcementData.tone === 'burgundy'
-                          ? 'bg-white/20 text-white'
+                          ? 'bg-white/12 border border-white/20 text-[#FFFDFA]'
                           : announcementData.tone === 'amber'
-                          ? 'bg-[#8A793A]/15 text-[#8A793A]'
-                          : 'bg-[#C99A48]/20 text-[#F8E7B9]'
+                          ? 'bg-[#C6A16B]/20 border border-[#C6A16B]/35 text-[#67202F]'
+                          : 'bg-white/10 border border-white/15 text-[#DCD4E8]'
                       }`}
                     >
-                      {announcementData.badge || 'Curator Dispatch 🌸'}
+                      <PiSparkleBold
+                        className={`text-[10px] ${
+                          announcementData.tone === 'amber' ? 'text-[#8D263B]' : 'text-[#C6A16B]'
+                        }`}
+                      />
+                      <span>{announcementData.badge || 'Curator Dispatch'}</span>
                     </span>
-                    <span className="font-serif text-xs sm:text-sm font-semibold">
+                    <span className="font-serif text-xs sm:text-sm font-normal tracking-wide">
                       {announcementData.text || 'Type your message below...'}
                     </span>
                   </div>
 
                   {announcementData.subtext && (
-                    <span className="text-[11px] font-serif italic opacity-85">
-                      {announcementData.subtext}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`text-[9px] select-none ${
+                          announcementData.tone === 'amber' ? 'text-[#8D263B]/60' : 'text-[#C6A16B]'
+                        }`}
+                      >
+                        ✦
+                      </span>
+                      <span
+                        className={`text-[12px] font-serif italic truncate ${
+                          announcementData.tone === 'amber' ? 'text-[#81766D]' : 'text-[#FAF5ED]/85'
+                        }`}
+                      >
+                        {announcementData.subtext}
+                      </span>
+                    </div>
                   )}
                 </div>
               ) : (
