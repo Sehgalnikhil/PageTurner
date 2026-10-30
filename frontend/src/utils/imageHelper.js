@@ -2,6 +2,7 @@ import { API_BASE_URL } from '../services/api';
 
 // Map of canonical titles / ISBNs to lightning-fast local static cover images
 const TITLE_TO_SLUG = {
+  // Classics 1-20
   'to kill a mockingbird': 'to-kill-a-mockingbird',
   '1984': '1984',
   'the great gatsby': 'the-great-gatsby',
@@ -24,9 +25,45 @@ const TITLE_TO_SLUG = {
   'the picture of dorian gray': 'the-picture-of-dorian-gray',
   "man's search for meaning": 'mans-search-for-meaning',
   'mans search for meaning': 'mans-search-for-meaning',
+
+  // Literary Additions 21-50
+  'the secret history': 'the-secret-history',
+  'jane eyre': 'jane-eyre',
+  'wuthering heights': 'wuthering-heights',
+  'frankenstein': 'frankenstein',
+  'little women': 'little-women',
+  'norwegian wood': 'norwegian-wood',
+  'kafka on the shore': 'kafka-on-the-shore',
+  'one hundred years of solitude': 'one-hundred-years-of-solitude',
+  'the metamorphosis': 'metamorphosis',
+  'metamorphosis': 'metamorphosis',
+  'meditations': 'meditations',
+  'the stranger': 'the-stranger',
+  'beyond good and evil': 'beyond-good-and-evil',
+  'the bell jar': 'the-bell-jar',
+  'slaughterhouse-five': 'slaughterhouse-five',
+  'slaughterhouse five': 'slaughterhouse-five',
+  'the song of achilles': 'the-song-of-achilles',
+  'circe': 'circe',
+  'a gentle reminder': 'a-gentle-reminder',
+  'the shadow of the wind': 'the-shadow-of-the-wind',
+  'klara and the sun': 'klara-and-the-sun',
+  'never let me go': 'never-let-me-go',
+  'emma': 'emma',
+  'sense and sensibility': 'sense-and-sensibility',
+  'the odyssey': 'the-odyssey',
+  'the iliad': 'the-iliad',
+  'stoner': 'stoner',
+  'a little life': 'a-little-life',
+  'babel: an arcane history': 'babel',
+  'babel': 'babel',
+  'if we were villains': 'if-we-were-villains',
+  'pachinko': 'pachinko',
+  'before the coffee gets cold': 'before-the-coffee-gets-cold',
 };
 
 const ISBN_TO_SLUG = {
+  // Classics 1-20
   '9780061120084': 'to-kill-a-mockingbird',
   '9780451524935': '1984',
   '9780743273565': 'the-great-gatsby',
@@ -47,6 +84,39 @@ const ISBN_TO_SLUG = {
   '9780553296983': 'the-diary-of-a-young-girl',
   '9780141439570': 'the-picture-of-dorian-gray',
   '9780807014295': 'mans-search-for-meaning',
+
+  // Literary Additions 21-50
+  '9781400031702': 'the-secret-history',
+  '9780140167771': 'the-secret-history',
+  '9780141441146': 'jane-eyre',
+  '9780141439556': 'wuthering-heights',
+  '9780141439471': 'frankenstein',
+  '9780147514011': 'little-women',
+  '9780375704024': 'norwegian-wood',
+  '9781400079278': 'kafka-on-the-shore',
+  '9780060883287': 'one-hundred-years-of-solitude',
+  '9780143105244': 'metamorphosis',
+  '9780812968255': 'meditations',
+  '9780679720201': 'the-stranger',
+  '9780140449235': 'beyond-good-and-evil',
+  '9780060837020': 'the-bell-jar',
+  '9780385333849': 'slaughterhouse-five',
+  '9780062060624': 'the-song-of-achilles',
+  '9780316556347': 'circe',
+  '9781949759297': 'a-gentle-reminder',
+  '9780143034902': 'the-shadow-of-the-wind',
+  '9780593318171': 'klara-and-the-sun',
+  '9781400078776': 'never-let-me-go',
+  '9780141439587': 'emma',
+  '9780141439662': 'sense-and-sensibility',
+  '9780393356250': 'the-odyssey',
+  '9780140275360': 'the-iliad',
+  '9781590171998': 'stoner',
+  '9780804172707': 'a-little-life',
+  '9780063021426': 'babel',
+  '9781250095282': 'if-we-were-villains',
+  '9781455563937': 'pachinko',
+  '9781335430991': 'before-the-coffee-gets-cold',
 };
 
 /**

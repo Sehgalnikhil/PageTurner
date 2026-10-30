@@ -11,7 +11,7 @@ import systemRoute from './routes/systemRoute.js';
 import adminRoute from './routes/adminRoute.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import { seedDemoUsers } from './utils/seedDemoUsers.js';
-import { seed20Books } from './utils/seed20Books.js';
+import { seedComprehensiveBooks } from './utils/seedComprehensiveBooks.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -89,7 +89,7 @@ mongoose
   .then(async () => {
     console.log('✅ Connected to MongoDB database');
     await seedDemoUsers();
-    await seed20Books();
+    await seedComprehensiveBooks();
     const server = app.listen(PORT, () => {
       console.log(`🚀 PageTurner server listening on port: ${PORT}`);
     });
