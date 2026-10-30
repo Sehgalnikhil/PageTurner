@@ -96,24 +96,12 @@ const Navbar = ({ totalBooks = 0 }) => {
               : 'bg-gradient-to-r from-[#141118] via-[#1E1924] to-[#141118] text-[#EDE4D8] border-b border-[#352D3C] shadow-xs'
           }`}
         >
-          <div className="flex-1 flex items-center justify-center gap-2.5 sm:gap-3 text-center min-w-0 px-2">
-            {/* Elegant Dispatch Pill Badge */}
-            <span
-              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9.5px] font-sans font-medium uppercase tracking-[0.14em] flex-shrink-0 shadow-2xs ${
-                announcement.tone === 'burgundy'
-                  ? 'bg-white/12 border border-white/20 text-[#FFFDFA]'
-                  : announcement.tone === 'amber'
-                  ? 'bg-[#C6A16B]/20 border border-[#C6A16B]/35 text-[#67202F]'
-                  : 'bg-white/10 border border-white/15 text-[#DCD4E8]'
+          <div className="flex-1 flex items-center justify-center gap-2 sm:gap-2.5 text-center min-w-0 px-2">
+            <PiSparkleBold
+              className={`text-[11px] flex-shrink-0 ${
+                announcement.tone === 'amber' ? 'text-[#8D263B]' : 'text-[#C6A16B]'
               }`}
-            >
-              <PiSparkleBold
-                className={`text-[10px] ${
-                  announcement.tone === 'amber' ? 'text-[#8D263B]' : 'text-[#C6A16B]'
-                }`}
-              />
-              <span className="leading-none">{announcement.badge || 'Curator Dispatch'}</span>
-            </span>
+            />
 
             {/* Primary Announcement Message */}
             <span className="font-serif font-normal text-xs sm:text-[13px] tracking-wide truncate">

@@ -1705,23 +1705,12 @@ const AdminDashboard = () => {
                       : 'bg-gradient-to-r from-[#141118] via-[#1E1924] to-[#141118] text-[#EDE4D8] border-[#352D3C] shadow-xs'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5">
-                    <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9.5px] font-sans font-medium uppercase tracking-[0.14em] shadow-2xs ${
-                        announcementData.tone === 'burgundy'
-                          ? 'bg-white/12 border border-white/20 text-[#FFFDFA]'
-                          : announcementData.tone === 'amber'
-                          ? 'bg-[#C6A16B]/20 border border-[#C6A16B]/35 text-[#67202F]'
-                          : 'bg-white/10 border border-white/15 text-[#DCD4E8]'
+                  <div className="flex items-center gap-2">
+                    <PiSparkleBold
+                      className={`text-[11px] flex-shrink-0 ${
+                        announcementData.tone === 'amber' ? 'text-[#8D263B]' : 'text-[#C6A16B]'
                       }`}
-                    >
-                      <PiSparkleBold
-                        className={`text-[10px] ${
-                          announcementData.tone === 'amber' ? 'text-[#8D263B]' : 'text-[#C6A16B]'
-                        }`}
-                      />
-                      <span>{announcementData.badge || 'Curator Dispatch'}</span>
-                    </span>
+                    />
                     <span className="font-serif text-xs sm:text-sm font-normal tracking-wide">
                       {announcementData.text || 'Type your message below...'}
                     </span>
