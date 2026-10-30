@@ -128,58 +128,50 @@ const Navbar = ({ totalBooks = 0 }) => {
 
       <header className="sticky top-0 z-40 bg-[#F7F3EC]/95 backdrop-blur-md border-b border-[#E8DED1] transition-colors duration-150 w-full overflow-x-clip">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[68px] sm:h-[72px] gap-2 lg:gap-3">
+          <div className="flex items-center justify-between h-[66px] sm:h-[70px] gap-3">
             
             {/* 1. BRAND SECTION (LEFT) */}
             <div className="flex items-center flex-shrink-0">
-              <Link to="/" className="group flex items-center gap-2.5">
+              <Link to="/" className="group flex items-center gap-3">
                 {/* Refined Burgundy Emblem */}
-                <div className="relative">
-                  <div className="w-9 h-9 rounded-lg bg-[#8D263B] text-[#FFFDFA] flex items-center justify-center flex-shrink-0 transition-all duration-200 group-hover:bg-[#67202F] shadow-subtle">
-                    <PiBooksBold className="text-lg" />
-                  </div>
-                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#C6A16B] ring-2 ring-[#F7F3EC]" />
+                <div className="w-9 h-9 rounded-md bg-[#8D263B] text-[#FFFDFA] flex items-center justify-center flex-shrink-0 transition-all duration-200 group-hover:bg-[#67202F] shadow-sm">
+                  <PiBookOpenBold className="text-xl" />
                 </div>
 
-                <div className="flex flex-col">
-                  <span className="font-serif text-[21px] sm:text-[23px] font-medium text-[#302A27] tracking-tight leading-none group-hover:text-[#8D263B] transition-colors">
+                <div className="flex flex-col justify-center">
+                  <span className="font-serif text-[22px] sm:text-[24px] font-semibold text-[#302A27] tracking-tight leading-none group-hover:text-[#8D263B] transition-colors">
                     PageTurner
                   </span>
-                  <span className="text-[8.5px] uppercase font-mono tracking-[0.2em] text-[#81766D] font-medium block mt-0.5 leading-none">
-                    Literary Journal &amp; Discovery
+                  <span className="font-serif italic text-[11px] sm:text-[11.5px] text-[#81766D] mt-1 leading-none group-hover:text-[#67202F] transition-colors">
+                    A Curated Literary Sanctuary
                   </span>
                 </div>
               </Link>
             </div>
 
-            {/* 2. NAVIGATION ROW (Discover, My Shelf, Collections, Bookplates, Curator Desk) */}
-            <nav className="hidden md:flex items-center gap-1 flex-shrink-0" aria-label="Main Navigation">
+            {/* 2. NAVIGATION ROW (Clean Editorial Typography, No Pill Overload) */}
+            <nav className="hidden lg:flex items-center gap-6 xl:gap-8 flex-shrink-0" aria-label="Main Navigation">
               {/* Discover */}
               <Link
                 to="/"
-                className={`relative h-7.5 px-3 rounded-full text-xs font-medium transition-all duration-150 flex items-center justify-center gap-1.5 ${
+                className={`text-xs font-medium transition-all duration-150 relative py-1 ${
                   isDiscoverActive
-                    ? 'text-[#8D263B] bg-[#8D263B]/10 font-semibold'
-                    : 'text-[#302A27] hover:text-[#8D263B] hover:bg-[#8D263B]/5'
+                    ? 'text-[#8D263B] font-semibold after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#8D263B] after:rounded-full'
+                    : 'text-[#675C54] hover:text-[#8D263B]'
                 }`}
               >
-                <PiCompassBold className="text-xs text-[#8D263B]" />
-                <span>Discover</span>
-                {isDiscoverActive && (
-                  <span className="w-1 h-1 rounded-full bg-[#8D263B] ml-0.5" />
-                )}
+                Discover
               </Link>
 
-              {/* My Shelf with saved count badge */}
+              {/* My Shelf with count indicator */}
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(true)}
-                className="h-7.5 px-3 rounded-full text-xs font-medium text-[#302A27] hover:text-[#8D263B] hover:bg-[#8D263B]/5 transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-colors flex items-center gap-1.5 cursor-pointer py-1"
               >
-                <PiBookOpenBold className="text-xs text-[#81766D]" />
                 <span>My Shelf</span>
                 {bookmarkCount > 0 && (
-                  <span className="w-4 h-4 rounded-full bg-[#8D263B] text-white text-[9.5px] font-mono font-medium flex items-center justify-center leading-none">
+                  <span className="px-1.5 py-0.2 rounded-full bg-[#8D263B]/10 text-[#8D263B] text-[10px] font-mono font-semibold">
                     {bookmarkCount}
                   </span>
                 )}
@@ -188,96 +180,97 @@ const Navbar = ({ totalBooks = 0 }) => {
               {/* Collections */}
               <a
                 href="#curated-collections"
-                className="h-7.5 px-3 rounded-full text-xs font-medium text-[#302A27] hover:text-[#8D263B] hover:bg-[#8D263B]/5 transition-colors flex items-center gap-1.5"
+                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-colors py-1"
               >
-                <PiStackBold className="text-xs text-[#81766D]" />
-                <span>Collections</span>
+                Collections
               </a>
 
               {/* Bookplates */}
               <button
                 type="button"
                 onClick={() => setShowBookplate(true)}
-                className="h-7.5 px-3 rounded-full text-xs font-medium text-[#302A27] hover:text-[#8D263B] hover:bg-[#8D263B]/5 transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-colors cursor-pointer py-1"
               >
-                <PiTagBold className="text-xs text-[#81766D]" />
-                <span>Bookplates</span>
+                Bookplates
               </button>
 
               {/* Admin Curator Desk Link */}
               {isAdmin && (
                 <Link
                   to="/admin"
-                  className={`h-7.5 px-3 rounded-full text-xs font-medium transition-all duration-150 flex items-center gap-1.5 ${
+                  className={`text-xs font-medium transition-all duration-150 flex items-center gap-1 py-1 ${
                     location.pathname === '/admin'
-                      ? 'text-[#8D263B] bg-[#8D263B]/10 font-semibold border border-[#8D263B]/30'
-                      : 'text-[#67202F] bg-[#FAF5ED] hover:bg-[#F0E9DE] border border-[#E8DED1]'
+                      ? 'text-[#8D263B] font-semibold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#8D263B] after:rounded-full'
+                      : 'text-[#C6A16B] hover:text-[#8D263B]'
                   }`}
                   title="Curator Studio & Admin Desk"
                 >
-                  <PiCrownBold className="text-xs text-[#C6A16B]" />
+                  <PiCrownBold className="text-xs" />
                   <span>Curator Desk</span>
                 </Link>
               )}
             </nav>
 
             {/* 3. INTEGRATED SEARCH UTILITY (CENTER - Flexible) */}
-            <div className="hidden xl:flex items-center flex-1 max-w-[220px] min-w-[120px] mx-1">
+            <div className="hidden md:flex items-center flex-1 max-w-[240px] min-w-[140px] mx-1">
               <button
                 type="button"
                 onClick={() => setShowCommandK(true)}
                 title="Omnisearch (⌘K)"
-                className="w-full h-7.5 rounded-full border border-[#E8DED1] bg-[#FFFDFA] hover:border-[#8D263B]/40 px-3 flex items-center justify-between text-left transition-colors duration-150 cursor-pointer shadow-subtle"
+                className="w-full h-8 rounded-full border border-[#E8DED1] bg-[#FFFDFA] hover:border-[#C6A16B]/60 hover:bg-[#FDFBF7] px-3.5 flex items-center justify-between text-left transition-all duration-150 cursor-pointer shadow-2xs group"
               >
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <PiMagnifyingGlassBold className="text-[#81766D] text-xs flex-shrink-0" />
-                  <span className="text-[11px] text-[#81766D] font-normal truncate">
+                <div className="flex items-center gap-2 min-w-0">
+                  <PiMagnifyingGlassBold className="text-[#81766D] group-hover:text-[#8D263B] text-xs flex-shrink-0 transition-colors" />
+                  <span className="text-xs text-[#81766D] group-hover:text-[#302A27] font-normal truncate transition-colors">
                     Search library...
                   </span>
                 </div>
-                <kbd className="px-1 py-0.2 rounded bg-[#F7F3EC] border border-[#E8DED1] text-[9.5px] font-mono text-[#81766D] font-medium leading-none flex-shrink-0 ml-1.5">
+                <kbd className="px-1.5 py-0.5 rounded bg-[#F0E9DE]/60 border border-[#E8DED1] text-[9.5px] font-mono text-[#81766D] font-medium leading-none flex-shrink-0 ml-1.5">
                   ⌘K
                 </kbd>
               </button>
             </div>
 
-            {/* 4. RIGHT ACTIONS (+ Add Book, Profile, Logout, Mobile Toggles) */}
-            <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+            {/* 4. RIGHT ACTIONS (Sound, + Add Book, Profile, Logout, Mobile Toggles) */}
+            <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
               
-              {/* Optional Search icon on screens where search input is hidden */}
+              {/* Optional Search icon on small screens where search input is hidden */}
               <button
                 type="button"
                 onClick={() => setShowCommandK(true)}
                 title="Omnisearch (⌘K)"
-                className="xl:hidden p-1.5 rounded-full text-[#302A27] hover:bg-[#8D263B]/5 transition-colors cursor-pointer"
+                className="md:hidden p-1.5 rounded-full text-[#302A27] hover:bg-[#8D263B]/5 transition-colors cursor-pointer"
                 aria-label="Search catalog"
               >
-                <PiMagnifyingGlassBold className="text-base" />
+                <PiMagnifyingGlassBold className="text-lg" />
               </button>
 
-              {/* Sound Ambiance Control (2xl screens only to prevent navbar overflow) */}
+              {/* Sound Ambiance: Clean circular icon button with subtle active state */}
               <button
                 type="button"
                 onClick={handleCycleAmbient}
-                title={`Ambient Soundscape: ${ambientSound.toUpperCase()}`}
-                className="hidden 2xl:flex items-center gap-1.5 h-7.5 px-2.5 rounded-full border border-[#E8DED1] bg-[#FFFDFA] hover:bg-[#F7F3EC] text-xs font-medium text-[#302A27] hover:text-[#8D263B] transition-colors shadow-subtle cursor-pointer"
+                title={`Soundscape: ${ambientSound === 'off' ? 'Off' : ambientSound.charAt(0).toUpperCase() + ambientSound.slice(1)}`}
+                className={`w-8 h-8 rounded-full border transition-all flex items-center justify-center cursor-pointer ${
+                  ambientSound !== 'off'
+                    ? 'border-[#8D263B] bg-[#8D263B]/10 text-[#8D263B]'
+                    : 'border-[#E8DED1] bg-[#FFFDFA] hover:bg-[#F7F3EC] text-[#81766D] hover:text-[#302A27]'
+                }`}
               >
                 {ambientSound === 'rain' ? (
-                  <PiCloudRainBold className="text-xs text-[#8D263B]" />
+                  <PiCloudRainBold className="text-sm animate-pulse" />
                 ) : ambientSound === 'fireplace' ? (
-                  <PiFlameBold className="text-xs text-[#8D263B]" />
+                  <PiFlameBold className="text-sm animate-pulse" />
                 ) : ambientSound === 'clock' ? (
-                  <PiClockBold className="text-xs text-[#8D263B]" />
+                  <PiClockBold className="text-sm animate-pulse" />
                 ) : (
-                  <PiSpeakerHighBold className="text-xs text-[#81766D]" />
+                  <PiSpeakerHighBold className="text-sm" />
                 )}
-                <span className="text-[11px]">Sound</span>
               </button>
 
               {/* + Add Book Primary CTA */}
               <Link
                 to={user ? '/books/create' : '/login'}
-                className="flex items-center gap-1.5 h-7.5 px-3 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium transition-colors duration-150 flex-shrink-0 shadow-subtle"
+                className="flex items-center gap-1.5 h-8 px-3.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium transition-all duration-150 flex-shrink-0 shadow-sm active:scale-95"
               >
                 <PiPlusBold className="text-xs" />
                 <span>Add Book</span>
@@ -285,18 +278,18 @@ const Navbar = ({ totalBooks = 0 }) => {
 
               {/* User Profile & Logout */}
               {user ? (
-                <div className="flex items-center gap-1 pl-1">
+                <div className="flex items-center gap-1 pl-1.5 border-l border-[#E8DED1]">
                   <button
                     type="button"
                     onClick={() => setShowPassport(true)}
                     title="View Reader Passport"
-                    className="flex items-center gap-1.5 p-0.5 pl-1 pr-2 rounded-full hover:bg-[#8D263B]/5 border border-[#E8DED1] transition-all group cursor-pointer text-left shadow-subtle bg-[#FFFDFA]"
+                    className="flex items-center gap-2 p-1 rounded-lg hover:bg-[#8D263B]/5 transition-colors group cursor-pointer text-left"
                   >
-                    <div className="w-6.5 h-6.5 rounded-full bg-[#F0E9DE] text-[#67202F] font-serif font-medium text-xs flex items-center justify-center flex-shrink-0">
+                    <div className="w-7 h-7 rounded-full bg-[#F0E9DE] text-[#67202F] font-serif font-semibold text-xs flex items-center justify-center flex-shrink-0 border border-[#E8DED1] group-hover:border-[#8D263B]/30 transition-colors">
                       {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
                     </div>
 
-                    <span className="hidden sm:inline text-xs font-medium text-[#302A27] truncate max-w-[70px] lg:max-w-[85px] group-hover:text-[#8D263B] transition-colors">
+                    <span className="hidden sm:inline text-xs font-medium text-[#302A27] truncate max-w-[80px] group-hover:text-[#8D263B] transition-colors">
                       {user.username}
                     </span>
                   </button>
@@ -304,22 +297,22 @@ const Navbar = ({ totalBooks = 0 }) => {
                   <button
                     onClick={logout}
                     title="Sign out"
-                    className="p-1.5 rounded-full text-[#81766D] hover:text-[#8D263B] hover:bg-[#8D263B]/5 transition-colors cursor-pointer"
+                    className="w-7 h-7 rounded-full text-[#81766D] hover:text-[#8D263B] hover:bg-[#8D263B]/5 flex items-center justify-center transition-colors cursor-pointer"
                   >
                     <PiSignOutBold className="text-sm" />
                   </button>
                 </div>
               ) : (
-                <div className="hidden sm:flex items-center gap-1.5 pl-1">
+                <div className="hidden sm:flex items-center gap-2 pl-1.5 border-l border-[#E8DED1]">
                   <Link
                     to="/login"
-                    className="px-2.5 py-1 text-xs font-medium text-[#302A27] hover:text-[#8D263B] transition-colors"
+                    className="px-2 py-1 text-xs font-medium text-[#302A27] hover:text-[#8D263B] transition-colors"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
-                    className="h-7.5 px-3 flex items-center rounded-full bg-[#302A27] hover:bg-black text-[#FFFDFA] text-xs font-medium transition-colors shadow-subtle"
+                    className="h-8 px-3.5 flex items-center rounded-full bg-[#302A27] hover:bg-black text-[#FFFDFA] text-xs font-medium transition-colors shadow-2xs"
                   >
                     Join
                   </Link>
@@ -330,7 +323,7 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 onClick={() => setMobileMenuOpen((prev) => !prev)}
                 aria-label="Toggle navigation menu"
-                className="md:hidden p-1.5 rounded-full text-[#302A27] hover:bg-[#8D263B]/5 transition-colors"
+                className="lg:hidden p-1.5 rounded-lg text-[#302A27] hover:bg-[#8D263B]/5 transition-colors cursor-pointer"
               >
                 {mobileMenuOpen ? <PiXBold className="text-lg" /> : <PiListBold className="text-lg" />}
               </button>
@@ -380,9 +373,9 @@ const Navbar = ({ totalBooks = 0 }) => {
               <a
                 href="#curated-collections"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 flex items-center gap-2.5"
+                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#302A27] hover:bg-[#8D263B]/5 flex items-center gap-2.5 transition-colors"
               >
-                <PiStackBold className="text-base text-[#292522]" />
+                <PiStackBold className="text-base text-[#81766D]" />
                 <span>Collections</span>
               </a>
 
@@ -392,22 +385,22 @@ const Navbar = ({ totalBooks = 0 }) => {
                   setMobileMenuOpen(false);
                   setShowBookplate(true);
                 }}
-                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 text-left flex items-center gap-2.5 cursor-pointer"
+                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#302A27] hover:bg-[#8D263B]/5 text-left flex items-center gap-2.5 cursor-pointer transition-colors"
               >
-                <PiTagBold className="text-base text-[#292522]" />
+                <PiTagBold className="text-base text-[#81766D]" />
                 <span>Bookplates</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleCycleAmbient}
-                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 text-left flex items-center justify-between"
+                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#302A27] hover:bg-[#8D263B]/5 text-left flex items-center justify-between cursor-pointer transition-colors"
               >
                 <div className="flex items-center gap-2.5">
-                  <PiSpeakerHighBold className="text-base text-[#292522]" />
+                  <PiSpeakerHighBold className="text-base text-[#81766D]" />
                   <span>Soundscape</span>
                 </div>
-                <span className="capitalize font-mono text-[11px] text-[#861D2D] font-bold">
+                <span className="capitalize font-mono text-[11px] text-[#8D263B] font-semibold">
                   {ambientSound}
                 </span>
               </button>
@@ -416,25 +409,25 @@ const Navbar = ({ totalBooks = 0 }) => {
                 href="http://localhost:5555/books/export/csv"
                 download
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#292522] hover:bg-[#F4E8E6]/60 flex items-center gap-2.5"
+                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#302A27] hover:bg-[#8D263B]/5 flex items-center gap-2.5 transition-colors"
               >
-                <PiFileArrowDownBold className="text-base text-[#827870]" />
+                <PiFileArrowDownBold className="text-base text-[#81766D]" />
                 <span>Export Catalog (CSV)</span>
               </a>
 
               {user ? (
-                <div className="pt-3 mt-2 border-t border-[#E8DED2]">
+                <div className="pt-3 mt-2 border-t border-[#E8DED1]">
                   {isAdmin && (
                     <Link
                       to="/admin"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="w-full text-left px-3.5 py-2.5 rounded-full text-xs font-bold text-[#B45309] hover:bg-[#FCEAD2] flex items-center justify-between mb-2 border border-[#F3D7B5] bg-[#FFF9F2] shadow-2xs"
+                      className="w-full text-left px-3.5 py-2.5 rounded-full text-xs font-medium text-[#8D263B] hover:bg-[#8D263B]/10 flex items-center justify-between mb-2 border border-[#8D263B]/30 bg-[#FFFDFA] shadow-2xs"
                     >
                       <div className="flex items-center gap-2">
-                        <PiCrownBold className="text-base text-[#C99A48]" />
+                        <PiCrownBold className="text-base text-[#C6A16B]" />
                         <span>Curator Desk &amp; Admin Studio</span>
                       </div>
-                      <span className="text-[10px] font-mono uppercase bg-[#C99A48]/20 px-2 py-0.5 rounded-full font-bold">
+                      <span className="text-[10px] font-mono uppercase bg-[#C6A16B]/20 text-[#67202F] px-2 py-0.5 rounded-full font-medium">
                         ADMIN
                       </span>
                     </Link>
@@ -445,7 +438,7 @@ const Navbar = ({ totalBooks = 0 }) => {
                       setMobileMenuOpen(false);
                       setShowPassport(true);
                     }}
-                    className="w-full text-left px-3.5 py-2 rounded-full text-xs font-semibold text-[#861D2D] hover:bg-[#F4E8E6]/60 flex items-center gap-2 mb-2.5 border border-[#861D2D]/20 bg-[#FBF5F2]"
+                    className="w-full text-left px-3.5 py-2 rounded-full text-xs font-medium text-[#8D263B] hover:bg-[#8D263B]/10 flex items-center gap-2 mb-2.5 border border-[#8D263B]/20 bg-[#FFFDFA] cursor-pointer"
                   >
                     <span>✉️</span>
                     <span>Reader Passport &amp; Welcome Email</span>
@@ -453,14 +446,14 @@ const Navbar = ({ totalBooks = 0 }) => {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-[#FCEAD2] border border-[#F3D7B5] text-[#B45309] font-serif font-bold text-xs flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-[#F0E9DE] border border-[#E8DED1] text-[#67202F] font-serif font-semibold text-xs flex items-center justify-center">
                         {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
                       </div>
                       <div>
-                        <span className="text-xs font-bold text-[#292522] block leading-none">
+                        <span className="text-xs font-medium text-[#302A27] block leading-none">
                           {user.username}
                         </span>
-                        <span className="text-[9px] uppercase font-mono font-bold tracking-wider text-[#C99A48] mt-0.5 block">
+                        <span className="text-[9px] uppercase font-mono font-medium tracking-wider text-[#C6A16B] mt-0.5 block">
                           {isAdmin ? 'ADMIN' : 'READER'}
                         </span>
                       </div>
@@ -471,25 +464,25 @@ const Navbar = ({ totalBooks = 0 }) => {
                         setMobileMenuOpen(false);
                         logout();
                       }}
-                      className="px-3 py-1.5 text-xs font-semibold text-[#861D2D] hover:bg-[#F4E8E6] rounded-full"
+                      className="px-3 py-1.5 text-xs font-medium text-[#8D263B] hover:bg-[#8D263B]/10 rounded-full cursor-pointer transition-colors"
                     >
                       Sign Out
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="pt-3 mt-2 border-t border-[#E8DED2] grid grid-cols-2 gap-2">
+                <div className="pt-3 mt-2 border-t border-[#E8DED1] grid grid-cols-2 gap-2">
                   <Link
                     to="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="py-2.5 text-center text-xs font-medium rounded-full border border-[#E8DED2] bg-white text-[#292522]"
+                    className="py-2.5 text-center text-xs font-medium rounded-full border border-[#E8DED1] bg-[#FFFDFA] text-[#302A27]"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="py-2.5 text-center text-xs font-semibold rounded-full bg-[#861D2D] text-white"
+                    className="py-2.5 text-center text-xs font-medium rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA]"
                   >
                     Join
                   </Link>
