@@ -14,9 +14,6 @@ import {
   PiShieldCheckBold,
   PiUserBold,
   PiCrownBold,
-  PiBooksBold,
-  PiUsersBold,
-  PiFeatherBold,
 } from 'react-icons/pi';
 import { playWaxSealCrack, playRevealChime, playPageFlipSound } from '../utils/soundEffects';
 
@@ -112,111 +109,32 @@ const Login = () => {
       {/* 1. Global Navigation Bar */}
       <Navbar />
 
-      {/* 2. Main Login Arena with Reference Image Composition */}
-      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex items-center justify-center relative">
+      {/* 2. Main Login Arena matching Reference Image 1 with ZERO overlapping elements */}
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex items-center justify-center relative">
         
-        {/* Atmospheric Environmental Accents (Outside the Card matching Reference 1) */}
-        
-        {/* Soft botanical leaves on top left edge */}
-        <div className="hidden 2xl:block absolute top-12 left-4 w-44 h-44 pointer-events-none opacity-40 select-none">
-          <div className="w-full h-full bg-gradient-to-br from-[#8B9B84]/40 to-transparent rounded-full blur-2xl transform -rotate-12" />
-        </div>
-
-        {/* Taped Quote Note on Upper Right Wall */}
-        <div className="hidden xl:block absolute top-8 right-6 lg:right-10 z-20 pointer-events-none select-none drop-shadow-md transform rotate-[2deg] hover:rotate-0 transition-transform duration-300">
-          <img
-            src="/images/login-taped-note.png"
-            alt="Good books brighter people"
-            className="w-24 sm:w-28 h-auto object-contain"
-          />
-        </div>
-
-        {/* Lit Candle & Stacked Books on Bottom Right Corner */}
-        <div className="hidden lg:block absolute bottom-2 right-2 sm:right-6 lg:right-8 z-20 pointer-events-none select-none drop-shadow-xl transform translate-y-3">
-          <img
-            src="/images/login-corner-books.png"
-            alt="Stacked classical hardcovers with lit candle"
-            className="w-44 sm:w-52 h-auto object-contain"
-          />
-        </div>
-
         {/* 3. The Central Split Floating Sanctuary Card (804 x 504 proportion) */}
-        <div className="w-full max-w-[960px] bg-[#FFFCF7] rounded-[26px] sm:rounded-[30px] border border-[#E9DED0] shadow-[0_20px_50px_rgba(48,39,34,0.08)] overflow-hidden flex flex-col md:flex-row relative z-10 transition-all duration-300">
+        <div className="w-full max-w-[940px] bg-[#FFFCF7] rounded-[26px] sm:rounded-[30px] border border-[#E9DED0] shadow-[0_20px_50px_rgba(48,39,34,0.08)] overflow-hidden flex flex-col md:flex-row relative z-10 transition-all duration-300">
           
           {/* ============================================================
-              LEFT PANEL: Warm Library Reading Nook Still Life Photography
+              LEFT PANEL: Pure, Unobstructed Reading Nook Photograph
+              (Rendered cleanly without duplicate text or ghosting)
               ============================================================ */}
-          <div className="w-full md:w-[48%] lg:w-[49%] relative min-h-[380px] sm:min-h-[460px] md:min-h-[540px] bg-[#2A231E] overflow-hidden flex flex-col justify-between p-6 sm:p-7 text-white select-none">
-            
-            {/* The Authentic Photography Background */}
+          <div className="w-full md:w-[48%] lg:w-[49%] relative min-h-[380px] sm:min-h-[460px] md:min-h-[530px] bg-[#2A231E] overflow-hidden select-none">
             <img
               src="/images/login-left-nook.jpg"
-              alt="Cozy library reading chair, sunlit window, hardcovers, and Marcus Tullius Cicero quote"
-              className="absolute inset-0 w-full h-full object-cover object-center transform transition-transform duration-1000 hover:scale-103"
+              alt="A room without books is like a body without a soul — Marcus Tullius Cicero"
+              className="w-full h-full object-cover object-center transform transition-transform duration-700 hover:scale-[1.015]"
             />
-
-            {/* Dark warm atmospheric gradient overlay for typographic clarity */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/30 pointer-events-none" />
-
-            {/* Top Emblem & Brand Signature */}
-            <div className="relative z-10 flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-white/95 text-[#92283F] flex items-center justify-center shadow-md">
-                <PiBooksBold className="text-lg" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-serif text-base font-semibold tracking-tight text-white/95 leading-none">
-                  PageTurner
-                </span>
-                <span className="font-serif italic text-[10.5px] text-[#DDB7B0] leading-none mt-0.5">
-                  A quieter sanctuary...
-                </span>
-              </div>
-            </div>
-
-            {/* Middle Feature Quote */}
-            <div className="relative z-10 my-auto py-6 sm:py-8 max-w-[320px]">
-              <blockquote className="font-serif text-2xl sm:text-[27px] font-normal text-[#FFFDF9] leading-[1.28] tracking-tight drop-shadow-sm">
-                “A room without books is like a body without a soul.”
-              </blockquote>
-              <cite className="block text-[11px] font-sans font-medium uppercase tracking-[0.16em] text-[#DDB7B0] mt-3 not-italic">
-                — Marcus Tullius Cicero
-              </cite>
-            </div>
-
-            {/* Bottom 3 Benefits Bar + Pagination Indicators */}
-            <div className="relative z-10 pt-4 border-t border-white/15 flex items-end justify-between gap-3">
-              <div className="grid grid-cols-3 gap-2 flex-1 text-[10.5px] leading-tight text-white/90">
-                <div className="flex flex-col gap-1">
-                  <PiBooksBold className="text-sm text-[#C6A16B]" />
-                  <span className="font-light text-white/85">Sync across all your shelves</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <PiUsersBold className="text-sm text-[#C6A16B]" />
-                  <span className="font-light text-white/85">Curated communities</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <PiFeatherBold className="text-sm text-[#C6A16B]" />
-                  <span className="font-light text-white/85">Save your marginalia</span>
-                </div>
-              </div>
-
-              {/* Slider Pagination Dots */}
-              <div className="flex items-center gap-1.5 flex-shrink-0 self-center">
-                <span className="w-2 h-2 rounded-full bg-white shadow-xs" />
-                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
-                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
-              </div>
-            </div>
           </div>
 
           {/* ============================================================
               RIGHT PANEL: Paper White Literary Authentication Panel
               ============================================================ */}
-          <div className="w-full md:w-[52%] lg:w-[51%] bg-[#FFFCF7] p-6 sm:p-8 lg:p-9 flex flex-col justify-between relative">
+          <div className="w-full md:w-[52%] lg:w-[51%] bg-[#FFFCF7] p-6 sm:p-7 lg:p-8 flex flex-col justify-between relative">
             
             <div>
-              {/* Top Row: Navigation Tabs + Reader Passport Postmark Stamp */}
-              <div className="flex items-center justify-between pb-3 mb-5 border-b border-[#E9DED0]/60">
+              {/* Top Row: Navigation Tabs + Transparent Postmark Stamp */}
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#E9DED0]/60">
                 
                 {/* Tabs */}
                 <div className="flex items-center gap-6 text-xs sm:text-[13px] font-medium">
@@ -232,9 +150,9 @@ const Login = () => {
                 </div>
 
                 {/* Circular Reader Passport Postmark Stamp from Reference */}
-                <div className="flex-shrink-0 select-none opacity-90 hover:opacity-100 transition-opacity">
+                <div className="flex-shrink-0 select-none opacity-85 hover:opacity-100 transition-opacity">
                   <img
-                    src="/images/login-passport-stamp.png"
+                    src="/images/login-passport-stamp-clean.png"
                     alt="Reader Passport Stamp"
                     className="h-8 sm:h-9 w-auto object-contain"
                   />
@@ -247,19 +165,19 @@ const Login = () => {
               </div>
 
               {/* Main Heading */}
-              <h1 className="font-serif text-2xl sm:text-[30px] font-normal text-[#302722] leading-tight tracking-tight">
+              <h1 className="font-serif text-2xl sm:text-[28px] font-normal text-[#302722] leading-tight tracking-tight">
                 Step into your sanctuary.
               </h1>
 
               {/* Description */}
-              <p className="text-xs text-[#84766B] mt-1.5 leading-relaxed font-normal">
+              <p className="text-xs text-[#84766B] mt-1 leading-relaxed font-normal">
                 Enter your credentials to reopen your shelf, private notes, and favorite literary worlds.
               </p>
 
               {/* Quick 1-Click Demo Login Station */}
-              <div className="mt-4 p-2.5 rounded-xl bg-[#FAF5ED] border border-[#E9DED0]/80 flex flex-col sm:flex-row items-center justify-between gap-2">
+              <div className="mt-3.5 p-2 rounded-xl bg-[#FAF5ED] border border-[#E9DED0]/80 flex flex-col sm:flex-row items-center justify-between gap-2">
                 <span className="text-[10.5px] font-medium text-[#84766B] flex items-center gap-1">
-                  <span>✦ 1-Click Demo Access:</span>
+                  <span>✦ 1-Click Demo:</span>
                 </span>
                 <div className="flex items-center gap-1.5 w-full sm:w-auto">
                   <button
@@ -286,7 +204,7 @@ const Login = () => {
               </div>
 
               {/* The Sign In Form */}
-              <form onSubmit={handleLogin} className="mt-4 space-y-3.5">
+              <form onSubmit={handleLogin} className="mt-3.5 space-y-3">
                 
                 {/* 1. Email Address Field */}
                 <div>
@@ -354,7 +272,7 @@ const Login = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-11 rounded-full bg-[#92283F] hover:bg-[#702338] text-white text-xs font-medium tracking-wide flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-4"
+                  className="w-full h-10.5 rounded-full bg-[#92283F] hover:bg-[#702338] text-white text-xs font-medium tracking-wide flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-3.5"
                 >
                   {loading ? (
                     <span className="flex items-center gap-2">
@@ -371,7 +289,7 @@ const Login = () => {
               </form>
 
               {/* Divider: or continue with */}
-              <div className="relative my-4 text-center">
+              <div className="relative my-3.5 text-center">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-[#E9DED0]" />
                 </div>
@@ -385,7 +303,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => handleSocialClick('Google')}
-                  className="h-9.5 px-3 rounded-full border border-[#E9DED0] bg-[#FFFDF9] hover:bg-[#FAF5ED] text-xs font-medium text-[#302722] flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs"
+                  className="h-9 px-3 rounded-full border border-[#E9DED0] bg-[#FFFDF9] hover:bg-[#FAF5ED] text-xs font-medium text-[#302722] flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs"
                 >
                   <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
                     <path
@@ -411,7 +329,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => handleSocialClick('Apple')}
-                  className="h-9.5 px-3 rounded-full border border-[#E9DED0] bg-[#FFFDF9] hover:bg-[#FAF5ED] text-xs font-medium text-[#302722] flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs"
+                  className="h-9 px-3 rounded-full border border-[#E9DED0] bg-[#FFFDF9] hover:bg-[#FAF5ED] text-xs font-medium text-[#302722] flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs"
                 >
                   <svg className="w-4 h-4 flex-shrink-0 fill-current text-black" viewBox="0 0 24 24">
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.78 1.06-1.85.95-2.93-.93.04-2.09.62-2.75 1.4-.58.67-1.09 1.76-.95 2.81 1.04.08 2.12-.51 2.75-1.28z" />
@@ -421,7 +339,7 @@ const Login = () => {
               </div>
 
               {/* Bottom New User Link */}
-              <div className="mt-4 text-center text-xs text-[#84766B]">
+              <div className="mt-3.5 text-center text-xs text-[#84766B]">
                 <span>New to PageTurner? </span>
                 <Link
                   to="/register"
@@ -433,7 +351,7 @@ const Login = () => {
             </div>
 
             {/* Subtle Security Reassurance at bottom */}
-            <div className="mt-5 pt-3 border-t border-[#E9DED0]/60 flex items-center justify-center gap-1.5 text-[10.5px] text-[#84766B]/80 text-center">
+            <div className="mt-4 pt-2.5 border-t border-[#E9DED0]/60 flex items-center justify-center gap-1.5 text-[10px] text-[#84766B]/80 text-center">
               <PiShieldCheckBold className="text-xs text-[#8B9B84] flex-shrink-0" />
               <span>Protected by archival session hashing &amp; TLS encryption.</span>
             </div>
