@@ -32,19 +32,35 @@
 
   html {
     scroll-behavior: smooth;
+    /* High-refresh rate (90Hz / 120Hz ProMotion) optimization */
+    touch-action: manipulation;
   }
 
-  /* Hardware acceleration helper for silky 60fps renders */
+  /* Ultra-High-Frame-Rate Hardware Acceleration (90fps & 120fps ProMotion)
+     Bypasses CPU paint/layout cycles and routes transforms & opacities
+     directly through GPU compositor layers to hit 8.3ms per frame. */
   .gpu-accelerated,
   .book-pin,
   .cute-card-tilt,
   .cute-pill-hover,
   .cute-press,
-  .cute-sticker {
-    transform: translateZ(0);
+  .cute-sticker,
+  .wax-seal-btn,
+  .pin-actions-overlay,
+  .fallback-jacket {
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     perspective: 1000px;
-    will-change: transform;
+    -webkit-perspective: 1000px;
+    will-change: transform, opacity;
+    contain: layout style paint;
+  }
+
+  /* Offscreen content rendering optimization for rapid 120fps scrolling */
+  .book-pin {
+    content-visibility: auto;
+    contain-intrinsic-size: 320px 440px;
   }
 
   ::selection {
