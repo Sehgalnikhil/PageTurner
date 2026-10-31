@@ -92,21 +92,21 @@ const Register = () => {
       {/* 1. Global Navigation Bar */}
       <Navbar />
 
-      {/* 2. Main Signup Composition matching Reference Image 2 */}
-      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex items-center justify-center relative">
-        <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
+      {/* 2. Main Signup Composition with Enhanced Proportions */}
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex items-center justify-center relative">
+        <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10 xl:gap-12">
           
           {/* ============================================================
               1. LEFT: Ultra-High-Resolution Window Desk Still-Life
               ============================================================ */}
-          <div className="hidden lg:block w-[300px] xl:w-[340px] 2xl:w-[350px] flex-shrink-0 self-stretch rounded-2xl overflow-hidden shadow-sm border border-[#E9DED0] bg-[#F0E9DE] relative group select-none">
+          <div className="hidden lg:block w-[320px] xl:w-[360px] 2xl:w-[390px] flex-shrink-0 self-stretch rounded-[24px] overflow-hidden shadow-[0_15px_35px_rgba(48,39,34,0.08)] border border-[#E9DED0] bg-[#F0E9DE] relative group select-none">
             <img
               src="/images/signup-desk-scene-hd.jpg"
               alt="Cozy reading nook with candle, tea, stacked books, and open journal"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102"
             />
             {/* Subtle atmospheric vignette */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
           </div>
 
           {/* ============================================================
@@ -115,20 +115,20 @@ const Register = () => {
           <div className="flex-1 max-w-xl lg:max-w-lg xl:max-w-xl flex flex-col justify-center">
             
             {/* Top Tag */}
-            <div className="flex items-center gap-1.5 text-[10px] font-sans font-medium uppercase tracking-[0.2em] text-[#92283F] mb-2">
-              <span className="text-[9px]">✦</span>
+            <div className="flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.2em] text-[#92283F] mb-2.5">
+              <span className="text-[10px]">✦</span>
               <span>Join PageTurner</span>
             </div>
 
-            {/* Editorial Heading */}
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[42px] xl:text-[46px] font-normal text-[#302722] leading-[1.16] tracking-tight">
+            {/* Editorial Heading with Prominent Serif Hierarchy */}
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[44px] xl:text-[50px] font-normal text-[#302722] leading-[1.14] tracking-tight">
               A quieter corner for your{' '}
               <span className="italic text-[#92283F] font-normal">reading</span>{' '}
               life.
             </h1>
 
             {/* Subtitle Description */}
-            <p className="text-xs sm:text-[13px] text-[#84766B] leading-relaxed max-w-md mt-3 font-normal">
+            <p className="text-[13.5px] sm:text-sm text-[#84766B] leading-relaxed max-w-lg mt-3.5 font-normal">
               Curate your shelf, collect timeless{' '}
               <strong className="font-semibold text-[#302722]">stories</strong>, and record your
               reflections in a{' '}
@@ -136,49 +136,49 @@ const Register = () => {
               books.
             </p>
 
-            {/* Three Feature Badges with Delicate Circular Peach Icon Treatment */}
-            <div className="mt-6 sm:mt-7 space-y-4">
+            {/* Three Feature Badges with Generous Circular Peach Icon Treatments */}
+            <div className="mt-7 sm:mt-8 space-y-4.5 sm:space-y-5">
               
               {/* Feature 1 */}
-              <div className="flex items-start gap-3.5 group">
-                <div className="w-9 h-9 rounded-full bg-[#F7ECE9] text-[#92283F] flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 shadow-2xs">
-                  <PiBookOpenBold className="text-base" />
+              <div className="flex items-start gap-4 group">
+                <div className="w-10.5 h-10.5 rounded-full bg-[#F7ECE9] text-[#92283F] flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 shadow-2xs">
+                  <PiBookOpenBold className="text-lg" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-[#302722] leading-none">
+                  <h4 className="text-[13.5px] sm:text-sm font-semibold text-[#302722] leading-snug">
                     Build your personal shelf
                   </h4>
-                  <p className="text-[11.5px] text-[#84766B] mt-1 leading-normal">
+                  <p className="text-xs text-[#84766B] mt-0.5 leading-normal">
                     Track, organise and cherish your reads.
                   </p>
                 </div>
               </div>
 
               {/* Feature 2 */}
-              <div className="flex items-start gap-3.5 group">
-                <div className="w-9 h-9 rounded-full bg-[#F7ECE9] text-[#92283F] flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 shadow-2xs">
-                  <PiUsersBold className="text-base" />
+              <div className="flex items-start gap-4 group">
+                <div className="w-10.5 h-10.5 rounded-full bg-[#F7ECE9] text-[#92283F] flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 shadow-2xs">
+                  <PiUsersBold className="text-lg" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-[#302722] leading-none">
+                  <h4 className="text-[13.5px] sm:text-sm font-semibold text-[#302722] leading-snug">
                     Join a community
                   </h4>
-                  <p className="text-[11.5px] text-[#84766B] mt-1 leading-normal">
+                  <p className="text-xs text-[#84766B] mt-0.5 leading-normal">
                     Discover readers with similar tastes.
                   </p>
                 </div>
               </div>
 
               {/* Feature 3 */}
-              <div className="flex items-start gap-3.5 group">
-                <div className="w-9 h-9 rounded-full bg-[#F7ECE9] text-[#92283F] flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 shadow-2xs">
-                  <PiFeatherBold className="text-base" />
+              <div className="flex items-start gap-4 group">
+                <div className="w-10.5 h-10.5 rounded-full bg-[#F7ECE9] text-[#92283F] flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 shadow-2xs">
+                  <PiFeatherBold className="text-lg" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-[#302722] leading-none">
+                  <h4 className="text-[13.5px] sm:text-sm font-semibold text-[#302722] leading-snug">
                     Capture your thoughts
                   </h4>
-                  <p className="text-[11.5px] text-[#84766B] mt-1 leading-normal">
+                  <p className="text-xs text-[#84766B] mt-0.5 leading-normal">
                     Save highlights, notes and reflections.
                   </p>
                 </div>
@@ -186,11 +186,11 @@ const Register = () => {
             </div>
 
             {/* Pinned Parchment Quote Note from Reference */}
-            <div className="mt-6 pt-2 select-none">
+            <div className="mt-7 sm:mt-8 pt-2 select-none">
               <img
                 src="/images/signup-pinned-note.png"
                 alt="A reader lives a thousand lives before he dies - George R.R. Martin"
-                className="w-44 sm:w-48 drop-shadow-sm rotate-[-1deg] transition-transform hover:rotate-0"
+                className="w-48 sm:w-52 drop-shadow-sm rotate-[-1deg] transition-transform hover:rotate-0"
               />
             </div>
           </div>
@@ -198,60 +198,60 @@ const Register = () => {
           {/* ============================================================
               3. RIGHT: Layered Paper "Reader Passport" Card
               ============================================================ */}
-          <div className="w-full sm:w-[420px] lg:w-[420px] xl:w-[440px] flex-shrink-0 relative">
+          <div className="w-full sm:w-[430px] lg:w-[430px] xl:w-[460px] flex-shrink-0 relative">
             
-            {/* Pinned Kraft Luggage Tag on top right corner */}
-            <div className="absolute -top-3.5 -right-3 sm:-right-4 z-30 pointer-events-none drop-shadow-md select-none">
+            {/* Pinned Transparent Kraft Luggage Tag (Hangs cleanly over corner with ZERO text occlusion) */}
+            <div className="absolute -top-5 -right-3 sm:-right-4 z-20 pointer-events-none drop-shadow-md select-none">
               <img
-                src="/images/signup-kraft-tag.png"
+                src="/images/signup-kraft-tag-transparent.png"
                 alt="New Reader Passport awaits"
-                className="w-20 sm:w-[86px] h-auto transform rotate-[2deg]"
+                className="w-20 sm:w-[88px] h-auto transform rotate-[3deg]"
               />
             </div>
 
             {/* Layered stationery paper borders underneath for tactile depth */}
-            <div className="absolute -inset-1.5 bg-[#F3ECE0] rounded-[22px] -rotate-[0.6deg] border border-[#E9DED0]/70 pointer-events-none z-0 shadow-xs" />
-            <div className="absolute -inset-1 bg-[#FAF5EC] rounded-[20px] rotate-[0.4deg] border border-[#E9DED0]/90 pointer-events-none z-0" />
+            <div className="absolute -inset-1.5 bg-[#F3ECE0] rounded-[24px] -rotate-[0.6deg] border border-[#E9DED0]/70 pointer-events-none z-0 shadow-xs" />
+            <div className="absolute -inset-1 bg-[#FAF5EC] rounded-[22px] rotate-[0.4deg] border border-[#E9DED0]/90 pointer-events-none z-0" />
 
             {/* Main Interactive Form Card */}
-            <div className="relative z-10 bg-[#FFFCF7] rounded-2xl border border-[#E9DED0] p-6 sm:p-7 shadow-[0_15px_40px_rgba(48,39,34,0.06)]">
+            <div className="relative z-10 bg-[#FFFCF7] rounded-[24px] border border-[#E9DED0] p-7 sm:p-8 shadow-[0_20px_50px_rgba(48,39,34,0.07)]">
               
               {/* Card Header with Delicate Star Emblem */}
-              <div className="text-center mb-5">
+              <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-1.5 text-[#92283F] mb-2">
-                  <span className="text-[10px] text-[#C6A16B]">✦</span>
-                  <PiBookOpenBold className="text-xl" />
-                  <span className="text-[10px] text-[#C6A16B]">✦</span>
+                  <span className="text-xs text-[#C6A16B]">✦</span>
+                  <PiBookOpenBold className="text-2xl" />
+                  <span className="text-xs text-[#C6A16B]">✦</span>
                 </div>
 
-                <h2 className="font-serif text-2xl sm:text-[25px] font-normal text-[#302722] tracking-tight leading-tight">
+                <h2 className="font-serif text-2xl sm:text-[27px] font-normal text-[#302722] tracking-tight leading-tight">
                   Create Your Reader Passport
                 </h2>
-                <p className="text-xs text-[#84766B] mt-1 leading-normal">
+                <p className="text-xs sm:text-[12.5px] text-[#84766B] mt-1.5 leading-normal">
                   Step into a world of stories, ideas and kindred readers.
                 </p>
               </div>
 
-              {/* Form */}
-              <form onSubmit={handleRegister} className="space-y-3.5">
+              {/* Form with Enhanced Spacing & Input Heights */}
+              <form onSubmit={handleRegister} className="space-y-4">
                 
                 {/* 1. Reader Handle / Username */}
                 <div>
-                  <label className="block text-xs font-semibold text-[#302722] mb-1">
+                  <label className="block text-xs sm:text-[12.5px] font-semibold text-[#302722] mb-1.5">
                     Reader Handle / Username
                   </label>
                   <div className="relative">
-                    <PiUserBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] text-sm pointer-events-none" />
+                    <PiUserBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] text-base pointer-events-none" />
                     <input
                       type="text"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder="e.g. bookish_soul"
                       autoComplete="username"
-                      className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs"
+                      className="w-full pl-10 pr-3.5 py-3 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs sm:text-[13px] text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs"
                     />
                   </div>
-                  <p className="text-[10.5px] text-[#84766B] mt-1 leading-none">
+                  <p className="text-[11px] text-[#84766B] mt-1.5 leading-none">
                     This will be your unique identity in this community.
                   </p>
                   {errors.username && (
@@ -261,18 +261,18 @@ const Register = () => {
 
                 {/* 2. Email Address */}
                 <div>
-                  <label className="block text-xs font-semibold text-[#302722] mb-1">
+                  <label className="block text-xs sm:text-[12.5px] font-semibold text-[#302722] mb-1.5">
                     Email Address
                   </label>
                   <div className="relative">
-                    <PiEnvelopeBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] text-sm pointer-events-none" />
+                    <PiEnvelopeBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] text-base pointer-events-none" />
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@domain.com"
                       autoComplete="email"
-                      className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs"
+                      className="w-full pl-10 pr-3.5 py-3 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs sm:text-[13px] text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs"
                     />
                   </div>
                   {errors.email && (
@@ -282,29 +282,29 @@ const Register = () => {
 
                 {/* 3. Password */}
                 <div>
-                  <label className="block text-xs font-semibold text-[#302722] mb-1">
+                  <label className="block text-xs sm:text-[12.5px] font-semibold text-[#302722] mb-1.5">
                     Password
                   </label>
                   <div className="relative">
-                    <PiLockKeyBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] text-sm pointer-events-none" />
+                    <PiLockKeyBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] text-base pointer-events-none" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="At least 6 characters"
                       autoComplete="new-password"
-                      className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs"
+                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs sm:text-[13px] text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#84766B] hover:text-[#302722] p-1 transition-colors cursor-pointer"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#84766B] hover:text-[#302722] p-1 transition-colors cursor-pointer"
                       title={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? (
-                        <PiEyeSlashBold className="text-sm" />
+                        <PiEyeSlashBold className="text-base" />
                       ) : (
-                        <PiEyeBold className="text-sm" />
+                        <PiEyeBold className="text-base" />
                       )}
                     </button>
                   </div>
@@ -313,7 +313,7 @@ const Register = () => {
                   )}
                 </div>
 
-                {/* Submit Button */}
+                {/* Submit Button with Enhanced Dimensions & Lift */}
                 <button
                   type="submit"
                   disabled={loading}
@@ -335,24 +335,13 @@ const Register = () => {
               </form>
 
               {/* Already have an account? Sign in */}
-              <div className="mt-5 text-center text-xs text-[#84766B]">
+              <div className="mt-5 text-center text-xs sm:text-[12.5px] text-[#84766B]">
                 <span>Already have an account? </span>
                 <Link to="/login" className="font-semibold text-[#92283F] hover:text-[#702338] hover:underline">
                   Sign in
                 </Link>
               </div>
             </div>
-          </div>
-
-          {/* ============================================================
-              4. FAR RIGHT: Vertical Book Spines Shelf Edge (Desktop Only)
-              ============================================================ */}
-          <div className="hidden 2xl:block w-14 xl:w-16 self-stretch rounded-r-2xl overflow-hidden shadow-sm border-y border-r border-[#E9DED0] bg-[#F0E9DE] flex-shrink-0 select-none">
-            <img
-              src="/images/signup-right-spines.jpg"
-              alt="Vertical bookshelf collection"
-              className="w-full h-full object-cover"
-            />
           </div>
         </div>
       </main>
