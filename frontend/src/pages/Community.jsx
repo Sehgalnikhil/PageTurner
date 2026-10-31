@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/layout/Footer';
 import {
@@ -27,15 +27,93 @@ import {
   PiFlameBold,
   PiCloudRainBold,
   PiPaperPlaneRightBold,
+  PiSpeakerHighBold,
+  PiSpeakerSlashBold,
+  PiArrowsClockwiseBold,
+  PiCaretRightBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
+import {
+  playWaxSealCrack,
+  playPaperUnwrap,
+  playPageFlipSound,
+  playRevealChime,
+  playBookSpineSlide,
+  startAmbientSound,
+  stopAmbientSound,
+} from '../utils/soundEffects';
 
 const Community = () => {
   const { user } = useContext(AuthContext);
   const { enqueueSnackbar } = useSnackbar();
 
-  // Active Navigation Ribbon Tab
+  // ============================================================
+  // 1. EXTRAORDINARY ENTRANCE ANIMATION STATE
+  // ============================================================
+  const [hasEntered, setHasEntered] = useState(false);
+  const [isOpeningDoors, setIsOpeningDoors] = useState(false);
+  const [showEntranceOverlay, setShowEntranceOverlay] = useState(true);
+
+  // Trigger grand door opening
+  const handleOpenSalonDoors = () => {
+    if (isOpeningDoors) return;
+    setIsOpeningDoors(true);
+    playWaxSealCrack();
+    playRevealChime();
+
+    setTimeout(() => {
+      playPaperUnwrap();
+    }, 400);
+
+    setTimeout(() => {
+      setHasEntered(true);
+      setShowEntranceOverlay(false);
+      enqueueSnackbar('Welcome kindred mind, the Salon doors stand open 🕯️', {
+        variant: 'success',
+      });
+    }, 1300);
+  };
+
+  // Re-trigger entrance animation anytime
+  const handleReplayEntrance = () => {
+    setShowEntranceOverlay(true);
+    setIsOpeningDoors(false);
+    setHasEntered(false);
+    playBookSpineSlide();
+  };
+
+  // Auto-prompt sound check
+  const [activeAmbiance, setActiveAmbiance] = useState('off'); // 'off' | 'rain' | 'fireplace' | 'clock'
+  const handleToggleAmbiance = (type) => {
+    if (activeAmbiance === type) {
+      stopAmbientSound();
+      setActiveAmbiance('off');
+      enqueueSnackbar('Ambiance silenced 🔇', { variant: 'info' });
+    } else {
+      startAmbientSound(type);
+      setActiveAmbiance(type);
+      enqueueSnackbar(
+        type === 'rain'
+          ? 'Listening to rain against cathedral glass 🌧️'
+          : type === 'fireplace'
+          ? 'Hearth fire crackling in the salon 🕯️'
+          : 'Grandfather clock chiming softly 🕰️',
+        { variant: 'info' }
+      );
+    }
+  };
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      stopAmbientSound();
+    };
+  }, []);
+
+  // ============================================================
+  // 2. ACTIVE CHAMBER TAB NAVIGATION
+  // ============================================================
   const [activeTab, setActiveTab] = useState('feed'); // 'feed' | 'parlours' | 'rooms' | 'marginalia' | 'matches'
   const [sortOption, setSortOption] = useState('Recent');
   const [filterParlour, setFilterParlour] = useState('All Parlours');
@@ -45,23 +123,84 @@ const Community = () => {
   // Modals
   const [showCompose, setShowCompose] = useState(false);
   const [showCreateParlourModal, setShowCreateParlourModal] = useState(false);
+  const [selectedTableBook, setSelectedTableBook] = useState(null);
 
-  // Create Parlour Form State
-  const [newParlourTitle, setNewParlourTitle] = useState('');
-  const [newParlourDesc, setNewParlourDesc] = useState('');
-
-  // Reflection Compose State
+  // Compose State
   const [newReflectionText, setNewReflectionText] = useState('');
   const [newQuoteText, setNewQuoteText] = useState('');
   const [newQuoteAuthor, setNewQuoteAuthor] = useState('');
   const [selectedComposeParlour, setSelectedComposeParlour] = useState('The Gothic Study');
+  const [parchmentTone, setParchmentTone] = useState('vellum'); // 'vellum' | 'linen' | 'nocturne'
 
-  // Reading Room State
+  // Create Parlour State
+  const [newParlourTitle, setNewParlourTitle] = useState('');
+  const [newParlourDesc, setNewParlourDesc] = useState('');
+
+  // Silent Reading Room Timer
   const [readingTimerRunning, setReadingTimerRunning] = useState(false);
-  const [readingSeconds, setReadingSeconds] = useState(1420); // 23 mins in
-  const [selectedAmbiance, setSelectedAmbiance] = useState('rain');
+  const [readingSeconds, setReadingSeconds] = useState(1485); // 24m 45s
+  const [readingPagesGoal, setReadingPagesGoal] = useState(24);
+  const [readingPagesRead, setReadingPagesRead] = useState(18);
 
-  // Parlours Directory
+  useEffect(() => {
+    let interval = null;
+    if (readingTimerRunning) {
+      interval = setInterval(() => {
+        setReadingSeconds((prev) => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [readingTimerRunning]);
+
+  // ============================================================
+  // 3. PHYSICAL BOOKS CURRENTLY SPREAD ON THE SALON TABLE
+  // ============================================================
+  const tableBooks = [
+    {
+      id: 'tb-1',
+      title: 'The Picture of Dorian Gray',
+      author: 'Oscar Wilde',
+      activeReaders: 14,
+      tag: 'Victorian Aestheticism',
+      cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300&auto=format&fit=crop&q=80',
+      recentNote: '“Behind every exquisite thing that existed, there was something tragic.”',
+      noteAuthor: 'Eleanor Vance',
+    },
+    {
+      id: 'tb-2',
+      title: 'The Odyssey',
+      author: 'Homer',
+      activeReaders: 9,
+      tag: 'Epic Archaic Canon',
+      cover: 'https://images.unsplash.com/photo-1532012164546-f432f2e3777f?w=300&auto=format&fit=crop&q=80',
+      recentNote: '“There is a time for many words, and there is also a time for sleep.”',
+      noteAuthor: 'Julian Frost',
+    },
+    {
+      id: 'tb-3',
+      title: '1984',
+      author: 'George Orwell',
+      activeReaders: 21,
+      tag: 'Dystopian Vigil',
+      cover: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300&auto=format&fit=crop&q=80',
+      recentNote: '“Perhaps one did not want to be loved so much as to be understood.”',
+      noteAuthor: 'Arthur Pendelton',
+    },
+    {
+      id: 'tb-4',
+      title: 'Crime and Punishment',
+      author: 'Fyodor Dostoevsky',
+      activeReaders: 18,
+      tag: 'Psychological Realism',
+      cover: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=300&auto=format&fit=crop&q=80',
+      recentNote: '“Pain and suffering are always inevitable for a large intelligence and a deep heart.”',
+      noteAuthor: 'Clara Oswald',
+    },
+  ];
+
+  // ============================================================
+  // 4. PARLOURS DIRECTORY STATE
+  // ============================================================
   const [parlours, setParlours] = useState([
     {
       id: 'midnight',
@@ -92,7 +231,9 @@ const Community = () => {
     },
   ]);
 
-  // Feed Posts
+  // ============================================================
+  // 5. FEED POSTS & INTERACTIVE MARGINALIA COMMENTS
+  // ============================================================
   const [posts, setPosts] = useState([
     {
       id: 'post-1',
@@ -157,10 +298,10 @@ const Community = () => {
     },
   ]);
 
-  // Comment input per post
   const [commentInputs, setCommentInputs] = useState({});
 
   const handleToggleJoin = (id) => {
+    playBookSpineSlide();
     setParlours((prev) =>
       prev.map((p) => {
         if (p.id === id) {
@@ -176,6 +317,7 @@ const Community = () => {
   };
 
   const handleLike = (id) => {
+    playWaxSealCrack();
     setPosts((prev) =>
       prev.map((p) => {
         if (p.id === id) {
@@ -188,6 +330,7 @@ const Community = () => {
   };
 
   const handleBookmark = (id) => {
+    playPageFlipSound();
     setPosts((prev) =>
       prev.map((p) => {
         if (p.id === id) {
@@ -206,6 +349,7 @@ const Community = () => {
   };
 
   const toggleComments = (postId) => {
+    playPaperUnwrap();
     setPosts((prev) =>
       prev.map((p) => (p.id === postId ? { ...p, showComments: !p.showComments } : p))
     );
@@ -215,6 +359,7 @@ const Community = () => {
     const text = commentInputs[postId]?.trim();
     if (!text) return;
 
+    playPageFlipSound();
     const authorName = user?.username || 'Nikhil Sehgal';
     setPosts((prev) =>
       prev.map((p) => {
@@ -237,12 +382,15 @@ const Community = () => {
     );
 
     setCommentInputs((prev) => ({ ...prev, [postId]: '' }));
-    enqueueSnackbar('Comment added to discussion', { variant: 'success' });
+    enqueueSnackbar('Marginalia inscribed to the discussion ✒️', { variant: 'success' });
   };
 
   const handlePublishReflection = (e) => {
     e.preventDefault();
     if (!newReflectionText.trim()) return;
+
+    playWaxSealCrack();
+    playRevealChime();
 
     const authorName = user?.username || 'Nikhil Sehgal';
     const newPost = {
@@ -276,6 +424,7 @@ const Community = () => {
     e.preventDefault();
     if (!newParlourTitle.trim()) return;
 
+    playRevealChime();
     const newParlour = {
       id: `parlour-${Date.now()}`,
       title: newParlourTitle.trim(),
@@ -295,9 +444,20 @@ const Community = () => {
     });
   };
 
+  const handleWaxSealFortune = () => {
+    playWaxSealCrack();
+    const fortunes = [
+      '“A classic is a book that has never finished saying what it has to say.” — Italo Calvino',
+      '“You can never get a cup of tea large enough or a book long enough to suit me.” — C.S. Lewis',
+      '“There is no friend as loyal as a book.” — Ernest Hemingway',
+      '“We read to know we’re not alone.” — William Nicholson',
+    ];
+    const picked = fortunes[Math.floor(Math.random() * fortunes.length)];
+    enqueueSnackbar(picked, { variant: 'info', autoHideDuration: 6000 });
+  };
+
   const readerName = user?.username || 'Nikhil Sehgal';
 
-  // Filtered and sorted posts
   const filteredPosts = posts.filter((p) => {
     if (filterParlour === 'All Parlours') return true;
     return p.parlour === filterParlour;
@@ -306,12 +466,189 @@ const Community = () => {
   const sortedPosts = [...filteredPosts].sort((a, b) => {
     if (sortOption === 'Top Reflections') return b.likes - a.likes;
     if (sortOption === 'Most Discussed') return b.commentsCount - a.commentsCount;
-    return 0; // Recent default order
+    return 0;
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6F0E6] text-[#2F2620] selection:bg-[#7D2235]/20 font-sans">
+    <div className="min-h-screen flex flex-col bg-[#F6F0E6] text-[#2F2620] selection:bg-[#7D2235]/25 font-sans relative">
+      
+      {/* ============================================================
+          0. GRAND ENTRANCE FOLIO OVERLAY WITH 3D DOORS OPENING
+          ============================================================ */}
+      {showEntranceOverlay && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-black/90 perspective-salon">
+          
+          {/* Ambient Lighting Rays when Opening */}
+          {isOpeningDoors && (
+            <div className="absolute inset-0 z-40 bg-[radial-gradient(circle_at_center,_rgba(251,191,36,0.45)_0%,_rgba(125,34,53,0.3)_40%,_transparent_75%)] animate-light-rays pointer-events-none" />
+          )}
+
+          {/* Left Antique Leather Door */}
+          <div
+            className={`absolute left-0 top-0 bottom-0 w-1/2 leather-bound flex flex-col justify-between p-8 sm:p-14 z-20 border-r border-[#D4AF37]/40 ${
+              isOpeningDoors ? 'animate-folio-left' : ''
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl text-[#D4AF37]">⚜️</span>
+              <span className="font-serif uppercase tracking-[0.25em] text-xs gold-emboss">
+                PageTurner Heritage Sanctum
+              </span>
+            </div>
+
+            <div className="my-auto max-w-sm ml-auto text-right pr-4">
+              <span className="font-mono text-[11px] tracking-widest text-[#A8947C] uppercase block mb-2">
+                Curated Literary Order
+              </span>
+              <h2 className="font-serif italic text-3xl sm:text-4xl text-[#F5EDE0] leading-tight gold-emboss">
+                The Readers’ Salon
+              </h2>
+              <p className="font-serif italic text-sm text-[#CDBBA7] mt-3 leading-relaxed">
+                “A private haven where kindred minds linger over tea, ink, and ancient bindings.”
+              </p>
+            </div>
+
+            <div className="font-mono text-[10px] text-[#8C7A68] tracking-widest uppercase">
+              Chamber Folio • Volume I
+            </div>
+          </div>
+
+          {/* Right Antique Leather Door */}
+          <div
+            className={`absolute right-0 top-0 bottom-0 w-1/2 leather-bound flex flex-col justify-between p-8 sm:p-14 z-20 border-l border-[#D4AF37]/40 ${
+              isOpeningDoors ? 'animate-folio-right' : ''
+            }`}
+          >
+            <div className="flex items-center justify-end gap-3">
+              <span className="font-serif uppercase tracking-[0.25em] text-xs gold-emboss">
+                Est. MDCCCXC
+              </span>
+              <span className="text-2xl text-[#D4AF37]">⚜️</span>
+            </div>
+
+            <div className="my-auto max-w-sm mr-auto text-left pl-4">
+              <span className="font-mono text-[11px] tracking-widest text-[#A8947C] uppercase block mb-2">
+                Sanctuary Inscription
+              </span>
+              <p className="font-serif text-sm text-[#E6D7C3] leading-relaxed italic">
+                “Enter all who read not merely to pass the hours, but to dwell within them.”
+              </p>
+              <div className="flex items-center gap-2 mt-4 text-xs text-[#BFA890]">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>218 readers currently gathered inside</span>
+              </div>
+            </div>
+
+            <div className="font-mono text-[10px] text-[#8C7A68] tracking-widest uppercase text-right">
+              Non Omnis Moriar
+            </div>
+          </div>
+
+          {/* Central Wax Seal & Enter Trigger */}
+          <div
+            className={`relative z-30 flex flex-col items-center justify-center cursor-pointer group ${
+              isOpeningDoors ? 'animate-seal-break' : ''
+            }`}
+            onClick={handleOpenSalonDoors}
+          >
+            {/* Molten Red Wax Seal */}
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[#781B2A] border-4 border-[#52101B] shadow-[0_15px_45px_rgba(0,0,0,0.85)] flex flex-col items-center justify-center p-3 text-center transition-transform group-hover:scale-105 active:scale-95 ring-4 ring-[#9B2538]/50">
+              <PiFlameBold className="text-amber-300 text-2xl animate-candle-glow mb-1" />
+              <span className="font-serif text-[11px] uppercase tracking-widest text-[#FDE8EC] font-bold">
+                Enter
+              </span>
+              <span className="font-serif text-xs text-[#F2BBC5] italic font-semibold">
+                Salon
+              </span>
+              <span className="font-mono text-[8px] text-[#D4AF37] tracking-wider mt-0.5">
+                PT • 1890
+              </span>
+            </div>
+
+            <span className="mt-4 px-4 py-1.5 rounded-full bg-black/60 text-[#F5EDE0] text-xs font-serif italic border border-[#D4AF37]/30 backdrop-blur-md shadow-lg group-hover:bg-[#781B2A] group-hover:text-white transition-all">
+              Touch Wax Seal to Step Inside 🕯️
+            </span>
+          </div>
+
+        </div>
+      )}
+
+      {/* Main Page Navbar */}
       <Navbar />
+
+      {/* ============================================================
+          TOP AMBIENT TICKER & SOUND BAR
+          ============================================================ */}
+      <div className="w-full bg-[#271E18] text-[#E0D3C1] border-b border-[#3D3027] px-4 sm:px-8 py-2 text-xs flex flex-wrap items-center justify-between gap-3 shadow-md z-10">
+        
+        {/* Live Community Pulse Ticker */}
+        <div className="flex items-center gap-2.5 overflow-hidden">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#8E283F] text-white text-[10px] font-semibold uppercase tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse" />
+            Live Dispatch
+          </span>
+          <span className="text-xs text-[#D8C7B0] truncate max-w-xs sm:max-w-md font-serif italic">
+            🕯️ 218 readers reading now &bull; Eleanor Vance annotated Chapter IV of Dorian Gray &bull; Arthur started Part II of 1984
+          </span>
+        </div>
+
+        {/* Tactile Ambient Sounds Controller */}
+        <div className="flex items-center gap-2 sm:gap-3 text-xs">
+          <span className="text-[#968372] hidden md:inline font-mono text-[11px]">Ambiance:</span>
+          
+          <button
+            type="button"
+            onClick={() => handleToggleAmbiance('rain')}
+            className={`px-2.5 py-1 rounded-md flex items-center gap-1.5 transition-all text-[11px] ${
+              activeAmbiance === 'rain'
+                ? 'bg-[#8E283F] text-white font-semibold shadow-xs'
+                : 'hover:bg-white/10 text-[#C7B5A0]'
+            }`}
+            title="Rain against gothic window"
+          >
+            <PiCloudRainBold />
+            <span>Rain</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleToggleAmbiance('fireplace')}
+            className={`px-2.5 py-1 rounded-md flex items-center gap-1.5 transition-all text-[11px] ${
+              activeAmbiance === 'fireplace'
+                ? 'bg-[#8E283F] text-white font-semibold shadow-xs'
+                : 'hover:bg-white/10 text-[#C7B5A0]'
+            }`}
+            title="Crackling salon hearth flame"
+          >
+            <PiFlameBold />
+            <span>Hearth</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleToggleAmbiance('clock')}
+            className={`px-2.5 py-1 rounded-md flex items-center gap-1.5 transition-all text-[11px] ${
+              activeAmbiance === 'clock'
+                ? 'bg-[#8E283F] text-white font-semibold shadow-xs'
+                : 'hover:bg-white/10 text-[#C7B5A0]'
+            }`}
+            title="Grandfather clock & Turning Pages"
+          >
+            <PiClockBold />
+            <span>Clock</span>
+          </button>
+
+          {/* Re-trigger Grand Entrance Button */}
+          <button
+            type="button"
+            onClick={handleReplayEntrance}
+            className="p-1 rounded-md hover:bg-white/10 text-[#C7B5A0] ml-1"
+            title="Close & Re-open Grand Doors"
+          >
+            <PiArrowsClockwiseBold className="text-sm" />
+          </button>
+        </div>
+      </div>
 
       <main className="flex-1 w-full max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7">
         
@@ -354,7 +691,10 @@ const Community = () => {
                   {/* Primary Burgundy Button: Share a Reflection */}
                   <button
                     type="button"
-                    onClick={() => setShowCompose((prev) => !prev)}
+                    onClick={() => {
+                      playPaperUnwrap();
+                      setShowCompose((prev) => !prev);
+                    }}
                     className="h-10 px-5 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-[#FDFBF7] text-xs sm:text-sm font-medium tracking-wide flex items-center gap-2 shadow-[0_4px_16px_rgba(125,34,53,0.45)] border border-[#A4344C]/40 cute-press cursor-pointer transition-all"
                   >
                     <PiFeatherBold className="text-sm text-[#F7D8A4]" />
@@ -364,7 +704,10 @@ const Community = () => {
                   {/* Frosted Glass Outline Button: + Create a Parlour */}
                   <button
                     type="button"
-                    onClick={() => setShowCreateParlourModal(true)}
+                    onClick={() => {
+                      playBookSpineSlide();
+                      setShowCreateParlourModal(true);
+                    }}
                     className="h-10 px-5 rounded-full bg-black/40 hover:bg-black/60 text-[#EADBCC] text-xs sm:text-sm font-medium tracking-wide flex items-center gap-1.5 backdrop-blur-md border border-[#D1B898]/30 shadow-sm cute-press cursor-pointer transition-all"
                   >
                     <PiPlusBold className="text-xs text-[#EADBCC]" />
@@ -393,10 +736,11 @@ const Community = () => {
                     — Neil Gaiman
                   </p>
 
-                  {/* Authentic Dark Red Wax Seal Medallion in Corner */}
+                  {/* Authentic Dark Red Wax Seal Medallion in Corner (Interactive Fortune) */}
                   <div
-                    className="absolute -bottom-3 -right-3 w-10 h-10 rounded-full bg-[#7C1E2D] border-2 border-[#57131F] shadow-[0_6px_14px_rgba(0,0,0,0.4)] flex items-center justify-center text-[#E89EAA] font-serif text-[11px] font-bold ring-2 ring-[#992537]/40 select-none rotate-12 cursor-pointer hover:scale-105 transition-transform"
-                    title="Verified Salon Archival Seal"
+                    onClick={handleWaxSealFortune}
+                    className="absolute -bottom-3 -right-3 w-10 h-10 rounded-full bg-[#7C1E2D] border-2 border-[#57131F] shadow-[0_6px_14px_rgba(0,0,0,0.4)] flex items-center justify-center text-[#E89EAA] font-serif text-[11px] font-bold ring-2 ring-[#992537]/40 select-none rotate-12 cursor-pointer hover:scale-110 active:scale-95 transition-transform"
+                    title="Click for a secret literary fortune"
                   >
                     PT
                   </div>
@@ -405,7 +749,6 @@ const Community = () => {
 
             </div>
 
-            {/* Empty space for bottom clearance */}
             <div className="h-2" />
           </div>
 
@@ -418,7 +761,10 @@ const Community = () => {
             <div className="flex items-center gap-1.5 sm:gap-2 text-xs font-medium flex-wrap">
               <button
                 type="button"
-                onClick={() => setActiveTab('feed')}
+                onClick={() => {
+                  playPageFlipSound();
+                  setActiveTab('feed');
+                }}
                 className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
                   activeTab === 'feed'
                     ? 'bg-[#7D2235] text-white shadow-xs font-semibold'
@@ -431,7 +777,10 @@ const Community = () => {
 
               <button
                 type="button"
-                onClick={() => setActiveTab('parlours')}
+                onClick={() => {
+                  playPageFlipSound();
+                  setActiveTab('parlours');
+                }}
                 className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
                   activeTab === 'parlours'
                     ? 'bg-[#7D2235] text-white shadow-xs font-semibold'
@@ -444,7 +793,10 @@ const Community = () => {
 
               <button
                 type="button"
-                onClick={() => setActiveTab('rooms')}
+                onClick={() => {
+                  playPageFlipSound();
+                  setActiveTab('rooms');
+                }}
                 className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
                   activeTab === 'rooms'
                     ? 'bg-[#7D2235] text-white shadow-xs font-semibold'
@@ -457,7 +809,10 @@ const Community = () => {
 
               <button
                 type="button"
-                onClick={() => setActiveTab('marginalia')}
+                onClick={() => {
+                  playPageFlipSound();
+                  setActiveTab('marginalia');
+                }}
                 className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
                   activeTab === 'marginalia'
                     ? 'bg-[#7D2235] text-white shadow-xs font-semibold'
@@ -470,7 +825,10 @@ const Community = () => {
 
               <button
                 type="button"
-                onClick={() => setActiveTab('matches')}
+                onClick={() => {
+                  playPageFlipSound();
+                  setActiveTab('matches');
+                }}
                 className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
                   activeTab === 'matches'
                     ? 'bg-[#7D2235] text-white shadow-xs font-semibold'
@@ -508,6 +866,140 @@ const Community = () => {
 
           </div>
         </section>
+
+        {/* ============================================================
+            PHYSICAL BOOKS SPREAD ON THE SALON TABLE (IMMERSIVE COMMUNITY VIBE)
+            ============================================================ */}
+        {activeTab === 'feed' && (
+          <section className="mb-8 p-5 sm:p-6 rounded-2xl bg-[#EFE6D7] border border-[#D5C6AF] shadow-md text-left">
+            <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#DACBB5]">
+              <div>
+                <h3 className="font-serif text-lg font-bold text-[#2A2018] flex items-center gap-2">
+                  <span>Open on the Salon Tables</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-[#8E283F] text-white font-sans font-medium">
+                    Live Volumes
+                  </span>
+                </h3>
+                <p className="text-xs text-[#736354] mt-0.5">
+                  Pick up any volume to see readers currently reading at that table and their margin scribbles.
+                </p>
+              </div>
+              <span className="text-xs font-mono text-[#8C7A68] hidden sm:inline">
+                4 Volumes in Circulation
+              </span>
+            </div>
+
+            {/* Physical 3D Books Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {tableBooks.map((book) => (
+                <div
+                  key={book.id}
+                  onClick={() => {
+                    playBookSpineSlide();
+                    setSelectedTableBook(book);
+                  }}
+                  className="table-book-3d p-3 rounded-xl bg-[#FAF5EB] border border-[#D8C7B0] cursor-pointer flex flex-col justify-between group shadow-sm"
+                >
+                  <div className="relative aspect-[3/4] w-full rounded-lg overflow-hidden mb-2.5 shadow-md">
+                    <img
+                      src={book.cover}
+                      alt={book.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/60 text-amber-200 text-[10px] font-mono backdrop-blur-sm">
+                      {book.activeReaders} reading
+                    </div>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] font-mono text-[#8E283F] uppercase block tracking-wider font-semibold">
+                      {book.tag}
+                    </span>
+                    <h4 className="font-serif font-bold text-xs text-[#2A2018] leading-snug line-clamp-1 group-hover:text-[#8E283F] transition-colors">
+                      {book.title}
+                    </h4>
+                    <span className="text-[11px] text-[#736354] block mt-0.5">
+                      {book.author}
+                    </span>
+                  </div>
+
+                  <div className="mt-2.5 pt-2 border-t border-[#E5D7C2] flex items-center justify-between text-[11px] text-[#8E283F] font-medium">
+                    <span>Pull up a chair</span>
+                    <PiCaretRightBold className="group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Modal when a table book is clicked */}
+        {selectedTableBook && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="relative w-full max-w-lg bg-[#FAF4EA] rounded-2xl border-2 border-[#D8C7B0] p-6 shadow-2xl text-left animate-drawer-spring">
+              <button
+                type="button"
+                onClick={() => setSelectedTableBook(null)}
+                className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-black/5 text-[#7A6A5E] cursor-pointer"
+              >
+                <PiXBold className="text-base" />
+              </button>
+
+              <div className="flex gap-4 items-start">
+                <img
+                  src={selectedTableBook.cover}
+                  alt={selectedTableBook.title}
+                  className="w-24 h-32 rounded-lg object-cover border border-[#D8C7B0] shadow-md flex-shrink-0"
+                />
+                <div>
+                  <span className="text-[10px] font-mono text-[#8E283F] font-bold uppercase tracking-wider">
+                    {selectedTableBook.tag}
+                  </span>
+                  <h3 className="font-serif text-lg font-bold text-[#2F2620] leading-snug mt-0.5">
+                    {selectedTableBook.title}
+                  </h3>
+                  <span className="text-xs text-[#7A6A5E] block">{selectedTableBook.author}</span>
+                  <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                    {selectedTableBook.activeReaders} readers at this table
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 p-3.5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8]">
+                <span className="text-[10px] font-mono text-[#7A6A5E] uppercase block mb-1">
+                  Latest Margin Annotation by {selectedTableBook.noteAuthor}:
+                </span>
+                <blockquote className="font-serif italic text-xs sm:text-sm text-[#2F2620] leading-relaxed">
+                  {selectedTableBook.recentNote}
+                </blockquote>
+              </div>
+
+              <div className="flex items-center justify-end gap-2.5 mt-5">
+                <button
+                  type="button"
+                  onClick={() => setSelectedTableBook(null)}
+                  className="px-4 py-2 text-xs text-[#7A6A5E] hover:text-[#2F2620]"
+                >
+                  Close Volume
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playWaxSealCrack();
+                    enqueueSnackbar(`Joined table discussion for ${selectedTableBook.title}! 📖`, {
+                      variant: 'success',
+                    });
+                    setSelectedTableBook(null);
+                  }}
+                  className="px-5 py-2 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold shadow-md cute-press cursor-pointer"
+                >
+                  Join Reading Circle
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ============================================================
             CREATE PARLOUR MODAL (INTERACTIVE)
@@ -682,7 +1174,10 @@ const Community = () => {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setReadingTimerRunning((prev) => !prev)}
+                  onClick={() => {
+                    playWaxSealCrack();
+                    setReadingTimerRunning((prev) => !prev);
+                  }}
                   className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-xs cute-press cursor-pointer ${
                     readingTimerRunning
                       ? 'bg-amber-800 text-white'
@@ -710,35 +1205,43 @@ const Community = () => {
                 </span>
               </div>
 
-              {/* Sound Ambiance Selector */}
+              {/* Reading Sprint Goal */}
               <div className="p-5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8]">
-                <span className="text-xs font-serif font-bold text-[#2F2620] block mb-2">
-                  Sanctuary Ambiance
-                </span>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  {[
-                    { id: 'rain', label: 'Rain on Skylight', icon: <PiCloudRainBold /> },
-                    { id: 'fire', label: 'Hearth Flame', icon: <PiFlameBold /> },
-                    { id: 'library', label: 'Clock & Pages', icon: <PiClockBold /> },
-                    { id: 'silence', label: 'Pure Stillness', icon: <PiSparkleBold /> },
-                  ].map((s) => (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedAmbiance(s.id);
-                        enqueueSnackbar(`Ambiance switched to: ${s.label}`, { variant: 'info' });
-                      }}
-                      className={`p-2.5 rounded-lg border flex items-center gap-1.5 transition-all text-left ${
-                        selectedAmbiance === s.id
-                          ? 'bg-[#7D2235] text-white border-[#7D2235]'
-                          : 'bg-[#FAF5EB] text-[#2F2620] border-[#D8C7B0] hover:bg-white'
-                      }`}
-                    >
-                      {s.icon}
-                      <span className="text-[11px] font-medium">{s.label}</span>
-                    </button>
-                  ))}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-serif font-bold text-[#2F2620]">
+                    Session Page Goal
+                  </span>
+                  <span className="text-xs font-mono text-[#7D2235] font-bold">
+                    {readingPagesRead} / {readingPagesGoal} pages
+                  </span>
+                </div>
+                <div className="w-full h-2 rounded-full bg-[#D8C7B0] overflow-hidden my-2">
+                  <div
+                    className="h-full bg-[#7D2235] rounded-full transition-all duration-300"
+                    style={{ width: `${(readingPagesRead / readingPagesGoal) * 100}%` }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-xs mt-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playPageFlipSound();
+                      setReadingPagesRead((prev) => Math.max(0, prev - 1));
+                    }}
+                    className="px-2.5 py-1 rounded bg-[#FAF5EB] border border-[#DECDB8] hover:bg-white text-[11px]"
+                  >
+                    - 1 Page
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playPageFlipSound();
+                      setReadingPagesRead((prev) => Math.min(readingPagesGoal + 10, prev + 1));
+                    }}
+                    className="px-2.5 py-1 rounded bg-[#7D2235] text-white hover:bg-[#92283F] text-[11px] font-semibold"
+                  >
+                    + 1 Page Turn 📖
+                  </button>
                 </div>
               </div>
 
@@ -746,7 +1249,7 @@ const Community = () => {
               <div className="p-5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8]">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-serif font-bold text-[#2F2620]">
-                    Readers in Room
+                    Readers in Sanctum
                   </span>
                   <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
                     218 Online
@@ -755,15 +1258,15 @@ const Community = () => {
                 <div className="space-y-2 max-h-32 overflow-y-auto pr-1 text-xs">
                   <div className="flex items-center justify-between text-[#2F2620]">
                     <span>Eleanor Vance</span>
-                    <span className="text-[10px] text-[#7A6A5E] italic">The Picture of Dorian Gray</span>
+                    <span className="text-[10px] text-[#7A6A5E] italic">Dorian Gray (p. 84)</span>
                   </div>
                   <div className="flex items-center justify-between text-[#2F2620]">
                     <span>Arthur Pendelton</span>
-                    <span className="text-[10px] text-[#7A6A5E] italic">1984</span>
+                    <span className="text-[10px] text-[#7A6A5E] italic">1984 (p. 162)</span>
                   </div>
                   <div className="flex items-center justify-between text-[#2F2620]">
                     <span>Clara Oswald</span>
-                    <span className="text-[10px] text-[#7A6A5E] italic">Frankenstein</span>
+                    <span className="text-[10px] text-[#7A6A5E] italic">Frankenstein (p. 91)</span>
                   </div>
                 </div>
               </div>
@@ -791,7 +1294,7 @@ const Community = () => {
                 <p className="font-serif italic text-sm text-[#2F2620] mt-1">
                   “Youth! Youth! There is absolutely nothing in the world but youth!”
                 </p>
-                <div className="mt-2.5 p-2.5 rounded-lg bg-[#FAF5EB] border border-[#D8C7B0] text-xs text-[#52443A] font-handwriting">
+                <div className="mt-2.5 p-2.5 rounded-lg bg-[#FAF5EB] border border-[#D8C7B0] text-xs text-[#52443A]">
                   <em>Note by Eleanor:</em> Notice how Lord Henry sells youth as a currency Dorian never knew he was spending until this exact moment.
                 </div>
               </div>
@@ -864,7 +1367,10 @@ const Community = () => {
                   </div>
                   <button
                     type="button"
-                    onClick={() => enqueueSnackbar(`Exchange request dispatched to ${m.name}! ✉️`, { variant: 'success' })}
+                    onClick={() => {
+                      playPaperUnwrap();
+                      enqueueSnackbar(`Exchange request dispatched to ${m.name}! ✉️`, { variant: 'success' });
+                    }}
                     className="mt-3 w-full py-1.5 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold cute-press cursor-pointer"
                   >
                     Initiate Marginalia Exchange
@@ -1162,6 +1668,7 @@ const Community = () => {
                     <button
                       type="button"
                       onClick={() => {
+                        playPaperUnwrap();
                         navigator.clipboard?.writeText(window.location.href);
                         enqueueSnackbar('Copied reflection link to clipboard 📜', { variant: 'info' });
                       }}
@@ -1233,7 +1740,10 @@ const Community = () => {
               </h3>
               <button
                 type="button"
-                onClick={() => setActiveTab('parlours')}
+                onClick={() => {
+                  playPageFlipSound();
+                  setActiveTab('parlours');
+                }}
                 className="text-xs text-[#7D2235] font-semibold hover:underline cursor-pointer"
               >
                 View All →
