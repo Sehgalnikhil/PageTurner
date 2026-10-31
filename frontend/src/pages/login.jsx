@@ -203,11 +203,11 @@ const Login = () => {
                 </div>
 
                 {/* Circular Reader Passport Postmark Stamp from Reference */}
-                <div className="flex-shrink-0 select-none opacity-85 hover:opacity-100 transition-opacity animate-cute-bounce">
+                <div className="flex-shrink-0 select-none opacity-85 hover:opacity-100 transition-opacity animate-cute-bounce hover:animate-stamp-impression cursor-pointer" title="Reader Passport Archival Postmark">
                   <img
                     src="/images/login-passport-stamp-clean.png"
                     alt="Reader Passport Stamp"
-                    className="h-8 sm:h-9 w-auto object-contain"
+                    className="h-8 sm:h-9 w-auto object-contain hover:rotate-6 transition-transform"
                   />
                 </div>
               </div>
@@ -264,15 +264,15 @@ const Login = () => {
                   <label className="block text-xs font-semibold text-[#302722] mb-1">
                     Email Address
                   </label>
-                  <div className="relative">
-                    <PiEnvelopeBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] text-sm pointer-events-none" />
+                  <div className="relative group/emailfield">
+                    <PiEnvelopeBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] group-focus-within/emailfield:text-[#92283F] group-focus-within/emailfield:scale-115 text-sm pointer-events-none transition-all duration-200" />
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@example.com"
                       autoComplete="email"
-                      className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs"
+                      className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs focus:shadow-md"
                     />
                   </div>
                   {errors.email && (
@@ -293,15 +293,15 @@ const Login = () => {
                       Forgot your password?
                     </Link>
                   </div>
-                  <div className="relative">
-                    <PiLockKeyBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] text-sm pointer-events-none" />
+                  <div className="relative group/passfield">
+                    <PiLockKeyBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] group-focus-within/passfield:text-[#92283F] group-focus-within/passfield:scale-115 text-sm pointer-events-none transition-all duration-200" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Enter your password"
                       autoComplete="current-password"
-                      className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs"
+                      className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs focus:shadow-md"
                     />
                     <button
                       type="button"
@@ -325,8 +325,10 @@ const Login = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-12 sm:h-12.5 rounded-full bg-[#92283F] hover:bg-[#702338] text-white text-[13.5px] sm:text-sm font-semibold tracking-wide flex items-center justify-center gap-2.5 shadow-[0_4px_16px_rgba(146,40,63,0.22)] hover:shadow-[0_6px_22px_rgba(146,40,63,0.32)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-5 group"
+                  className="w-full h-12 sm:h-12.5 rounded-full bg-[#92283F] hover:bg-[#702338] text-white text-[13.5px] sm:text-sm font-semibold tracking-wide flex items-center justify-center gap-2.5 shadow-[0_4px_16px_rgba(146,40,63,0.22)] hover:shadow-[0_6px_22px_rgba(146,40,63,0.32)] cute-press transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-5 group overflow-hidden relative"
                 >
+                  {/* Subtle foil gleam across button */}
+                  <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 animate-foil-gleam" />
                   {loading ? (
                     <span className="flex items-center gap-2.5">
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

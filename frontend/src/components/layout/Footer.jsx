@@ -22,11 +22,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
           {/* Brand Colophon */}
           <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-[#8D263B] text-[#FFFDFA] flex items-center justify-center shadow-subtle">
+            <div className="flex items-center gap-3 mb-3 group/logo cursor-pointer">
+              <div className="w-8 h-8 rounded-lg bg-[#8D263B] text-[#FFFDFA] flex items-center justify-center shadow-subtle group-hover/logo:rotate-[-6deg] group-hover/logo:scale-115 transition-transform duration-300">
                 <PiBooksBold className="text-lg" />
               </div>
-              <span className="font-serif text-xl font-medium text-[#302A27] tracking-tight">
+              <span className="font-serif text-xl font-medium text-[#302A27] tracking-tight group-hover/logo:text-[#8D263B] transition-colors">
                 PageTurner
               </span>
             </div>
@@ -100,7 +100,7 @@ const Footer = () => {
               ].map((mood) => (
                 <span 
                   key={mood} 
-                  className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#FFFDFA] text-[#4A423E] border border-[#E8DED1]"
+                  className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#FFFDFA] text-[#4A423E] border border-[#E8DED1] cute-pill-hover cursor-pointer"
                 >
                   {mood}
                 </span>

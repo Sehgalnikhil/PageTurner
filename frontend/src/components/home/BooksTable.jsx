@@ -64,7 +64,7 @@ const BooksTable = ({ books = [] }) => {
                   {/* Title */}
                   <td className="py-3.5 px-5">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-[#FAF4EA] text-[#302A27] border border-[#E8DED1] flex items-center justify-center flex-shrink-0 group-hover:border-burgundy/30 transition-colors">
+                      <div className="w-9 h-9 rounded-lg bg-[#FAF4EA] text-[#302A27] border border-[#E8DED1] flex items-center justify-center flex-shrink-0 group-hover:border-burgundy/30 transition-transform group-hover:scale-110 group-hover:rotate-[-4deg]">
                         <PiBookOpenTextBold className="text-base text-burgundy" />
                       </div>
                       <div>
@@ -88,7 +88,7 @@ const BooksTable = ({ books = [] }) => {
 
                   {/* Category */}
                   <td className="py-3.5 px-5">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border ${getCategoryBadgeClass(book.category)}`}>
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border transition-transform group-hover:scale-105 ${getCategoryBadgeClass(book.category)}`}>
                       {book.category || 'General'}
                     </span>
                   </td>
@@ -117,13 +117,13 @@ const BooksTable = ({ books = [] }) => {
                         type="button"
                         onClick={() => toggleBook(book)}
                         title={isSaved ? 'Remove from shelf' : 'Save to shelf'}
-                        className={`p-1.5 rounded-lg transition-all ${
+                        className={`p-1.5 rounded-lg transition-all cute-press ${
                           isSaved
                             ? 'text-burgundy bg-burgundy-faint'
                             : 'text-stone-400 hover:text-burgundy hover:bg-stone-100'
                         }`}
                       >
-                        {isSaved ? <PiBookmarkSimpleFill className="text-base" /> : <PiBookmarkSimpleBold className="text-base" />}
+                        {isSaved ? <PiBookmarkSimpleFill className="text-base animate-jelly-pop" /> : <PiBookmarkSimpleBold className="text-base" />}
                       </button>
 
                       <Link

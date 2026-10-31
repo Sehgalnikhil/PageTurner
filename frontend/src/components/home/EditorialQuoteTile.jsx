@@ -33,10 +33,10 @@ const EditorialQuoteTile = ({ quoteIndex = 0 }) => {
 
   return (
     <div
-      className={`group w-full rounded-2xl p-6 sm:p-7 border ${item.tone} text-[#302A27] shadow-subtle hover:shadow-card hover:-translate-y-0.5 transition-all duration-200 ease-out relative overflow-hidden flex flex-col justify-between`}
+      className={`group w-full rounded-2xl p-6 sm:p-7 border ${item.tone} text-[#302A27] shadow-subtle hover:shadow-card cute-card-tilt transition-all duration-200 ease-out relative overflow-hidden flex flex-col justify-between`}
     >
-      {/* Decorative quote mark with subtle color change */}
-      <PiQuotesBold className="text-3xl text-[#8D263B]/25 group-hover:text-[#8D263B]/50 transition-colors duration-200 mb-3" />
+      {/* Decorative quote mark with subtle color change and float */}
+      <PiQuotesBold className="text-3xl text-[#8D263B]/25 group-hover:text-[#8D263B]/60 group-hover:scale-115 transition-all duration-300 mb-3" />
 
       {/* Quote text: elegant Cormorant Garamond */}
       <blockquote className="font-serif text-lg sm:text-xl italic font-normal text-[#302A27] leading-snug mb-4">
@@ -54,8 +54,8 @@ const EditorialQuoteTile = ({ quoteIndex = 0 }) => {
           </span>
         </div>
 
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFFDFA] border border-[#E8DED1] text-[10px] text-[#81766D] group-hover:border-[#8D263B]/30 transition-all duration-200 shadow-subtle">
-          <PiBookOpenTextBold className="text-xs text-[#8D263B]" />
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFFDFA] border border-[#E8DED1] text-[10px] text-[#81766D] group-hover:border-[#8D263B]/30 transition-all duration-200 shadow-subtle cute-pill-hover cursor-pointer">
+          <PiBookOpenTextBold className="text-xs text-[#8D263B] group-hover:rotate-6 transition-transform" />
           <span className="font-medium text-[#81766D] group-hover:text-[#302A27] transition-colors">
             Excerpt
           </span>
