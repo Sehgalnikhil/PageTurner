@@ -19,9 +19,11 @@ import {
   PiCrownBold,
   PiSparkleBold,
   PiArrowRightBold,
+  PiSunBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { ReadingListContext } from '../context/ReadingListContext';
+import { ThemeContext } from '../context/ThemeContext';
 import { adminService } from '../services/api';
 import { startAmbientSound, stopAmbientSound } from '../utils/soundEffects';
 import CommandKModal from './common/CommandKModal';
@@ -39,6 +41,7 @@ const Navbar = ({ totalBooks = 0 }) => {
 
   const { user, logout, isAdmin } = useContext(AuthContext);
   const { count: bookmarkCount, setIsDrawerOpen } = useContext(ReadingListContext);
+  const { cycleTheme } = useContext(ThemeContext) || {};
   const location = useLocation();
 
   // Load public broadcast banner
@@ -205,7 +208,7 @@ const Navbar = ({ totalBooks = 0 }) => {
               >
                 <span>My Shelf</span>
                 {bookmarkCount > 0 && (
-                  <span className="px-1.5 py-0.2 rounded-full bg-[#8D263B]/10 text-[#8D263B] text-[10px] font-mono font-semibold">
+                  <span className="w-4 h-4 rounded-full bg-[#8D263B] text-white text-[10px] font-sans font-semibold flex items-center justify-center shadow-2xs">
                     {bookmarkCount}
                   </span>
                 )}
@@ -256,7 +259,7 @@ const Navbar = ({ totalBooks = 0 }) => {
                 <div className="flex items-center gap-2 min-w-0">
                   <PiMagnifyingGlassBold className="text-[#81766D] group-hover:text-[#8D263B] text-xs flex-shrink-0 transition-colors" />
                   <span className="text-xs text-[#81766D] group-hover:text-[#302A27] font-normal truncate transition-colors">
-                    Search library...
+                    Search books, authors, ideas...
                   </span>
                 </div>
                 <kbd className="px-1.5 py-0.5 rounded bg-[#F0E9DE]/60 border border-[#E8DED1] text-[9.5px] font-mono text-[#81766D] font-medium leading-none flex-shrink-0 ml-1.5">
@@ -279,38 +282,52 @@ const Navbar = ({ totalBooks = 0 }) => {
                 <PiMagnifyingGlassBold className="text-lg" />
               </button>
 
-              {/* Sound Ambiance: Clean circular icon button with subtle active state */}
+              {/* Theme Toggle Sun Icon */}
               <button
                 type="button"
-                onClick={handleCycleAmbient}
-                title={`Soundscape: ${ambientSound === 'off' ? 'Off' : ambientSound.charAt(0).toUpperCase() + ambientSound.slice(1)}`}
-                className={`w-8 h-8 rounded-full border transition-all flex items-center justify-center cursor-pointer ${
-                  ambientSound !== 'off'
-                    ? 'border-[#8D263B] bg-[#8D263B]/10 text-[#8D263B]'
-                    : 'border-[#E8DED1] bg-[#FFFDFA] hover:bg-[#F7F3EC] text-[#81766D] hover:text-[#302A27]'
-                }`}
+                onClick={cycleTheme}
+                title="Toggle Reading Ambience (Ivory / Candlelight / Midnight)"
+                className="w-8 h-8 rounded-full border border-[#E8DED1] bg-[#FFFDFA] hover:bg-[#F7F3EC] text-[#81766D] hover:text-[#8D263B] transition-colors flex items-center justify-center cursor-pointer shadow-2xs"
               >
-                {ambientSound === 'rain' ? (
-                  <PiCloudRainBold className="text-sm animate-pulse" />
-                ) : ambientSound === 'fireplace' ? (
-                  <PiFlameBold className="text-sm animate-pulse" />
-                ) : ambientSound === 'clock' ? (
-                  <PiClockBold className="text-sm animate-pulse" />
-                ) : (
-                  <PiSpeakerHighBold className="text-sm" />
-                )}
+                <PiSunBold className="text-sm" />
               </button>
 
-              {/* + Add Book Primary CTA */}
-              <Link
-                to={user ? '/books/create' : '/login'}
-                className="flex items-center gap-1.5 h-8 px-3.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium transition-all duration-150 flex-shrink-0 shadow-sm active:scale-95"
-              >
-                <PiPlusBold className="text-xs" />
-                <span>Add Book</span>
-              </Link>
+              {/* Sound Ambiance: Clean circular icon button with subtle active state */}
+              {user && (
+                <button
+                  type="button"
+                  onClick={handleCycleAmbient}
+                  title={`Soundscape: ${ambientSound === 'off' ? 'Off' : ambientSound.charAt(0).toUpperCase() + ambientSound.slice(1)}`}
+                  className={`w-8 h-8 rounded-full border transition-all flex items-center justify-center cursor-pointer ${
+                    ambientSound !== 'off'
+                      ? 'border-[#8D263B] bg-[#8D263B]/10 text-[#8D263B]'
+                      : 'border-[#E8DED1] bg-[#FFFDFA] hover:bg-[#F7F3EC] text-[#81766D] hover:text-[#302A27]'
+                  }`}
+                >
+                  {ambientSound === 'rain' ? (
+                    <PiCloudRainBold className="text-sm animate-pulse" />
+                  ) : ambientSound === 'fireplace' ? (
+                    <PiFlameBold className="text-sm animate-pulse" />
+                  ) : ambientSound === 'clock' ? (
+                    <PiClockBold className="text-sm animate-pulse" />
+                  ) : (
+                    <PiSpeakerHighBold className="text-sm" />
+                  )}
+                </button>
+              )}
 
-              {/* User Profile & Logout */}
+              {/* + Add Book Primary CTA (When Logged In) */}
+              {user && (
+                <Link
+                  to="/books/create"
+                  className="flex items-center gap-1.5 h-8 px-3.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium transition-all duration-150 flex-shrink-0 shadow-sm active:scale-95"
+                >
+                  <PiPlusBold className="text-xs" />
+                  <span>Add Book</span>
+                </Link>
+              )}
+
+              {/* User Profile & Logout (When Logged In) */}
               {user ? (
                 <div className="flex items-center gap-1 pl-1.5 border-l border-[#E8DED1]">
                   <button
@@ -340,15 +357,16 @@ const Navbar = ({ totalBooks = 0 }) => {
                 <div className="hidden sm:flex items-center gap-2 pl-1.5 border-l border-[#E8DED1]">
                   <Link
                     to="/login"
-                    className="px-2 py-1 text-xs font-medium text-[#302A27] hover:text-[#8D263B] transition-colors"
+                    className="px-2.5 py-1 text-xs font-medium text-[#302A27] hover:text-[#8D263B] transition-colors"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
-                    className="h-8 px-3.5 flex items-center rounded-full bg-[#302A27] hover:bg-black text-[#FFFDFA] text-xs font-medium transition-colors shadow-2xs"
+                    className="h-8 px-4 flex items-center gap-1.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium transition-all shadow-sm active:scale-95"
                   >
-                    Join
+                    <span>Join</span>
+                    <PiArrowRightBold className="text-xs" />
                   </Link>
                 </div>
               )}
