@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/layout/Footer';
 import {
@@ -11,16 +10,16 @@ import {
   PiBookmarkSimpleBold,
   PiShareNetworkBold,
   PiDotsThreeBold,
-  PiCheckBold,
   PiMoonFill,
   PiPenNibBold,
   PiColumnsBold,
+  PiCaretDownBold,
+  PiBookOpenBold,
   PiUsersBold,
   PiSparkleBold,
-  PiCaretDownBold,
+  PiCheckBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
-import { ReadingListContext } from '../context/ReadingListContext';
 import { useSnackbar } from 'notistack';
 
 const Community = () => {
@@ -32,6 +31,12 @@ const Community = () => {
   const [filterParlour, setFilterParlour] = useState('All Parlours');
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
   const [parlourDropdownOpen, setParlourDropdownOpen] = useState(false);
+  const [showCompose, setShowCompose] = useState(false);
+
+  // New Reflection input state
+  const [newReflectionText, setNewReflectionText] = useState('');
+  const [newQuoteText, setNewQuoteText] = useState('');
+  const [newQuoteAuthor, setNewQuoteAuthor] = useState('');
 
   // Parlours State
   const [parlours, setParlours] = useState([
@@ -67,7 +72,7 @@ const Community = () => {
       id: 'post-1',
       author: 'Eleanor Vance',
       handle: 'eleanor_reads',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+      avatar: '/images/eleanor-avatar.jpg',
       time: '22m ago',
       parlour: 'The Gothic Study',
       quote: '“Behind every exquisite thing that existed, there was something tragic.”',
@@ -83,11 +88,11 @@ const Community = () => {
       id: 'post-2',
       author: 'Arthur Pendelton',
       handle: 'arthur_scribe',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+      avatar: '/images/arthur-avatar.jpg',
       time: '1h ago',
       parlour: 'Slow Readers Society',
-      quote: '“Freedom is the freedom to say that two plus two make four.”',
-      quoteAuthor: 'George Orwell',
+      quote: null,
+      quoteAuthor: null,
       quoteImg: null,
       content:
         'Rereading Part Two this morning under soft rain. What terrifies me most about 1984 isn’t the torture; it’s the quiet compliance of forgetting.',
@@ -101,11 +106,11 @@ const Community = () => {
     setParlours((prev) =>
       prev.map((p) => {
         if (p.id === id) {
-          const willJoin = !p.joined;
-          enqueueSnackbar(willJoin ? `Entered ${p.title} 🕯️` : `Departed ${p.title}`, {
-            variant: willJoin ? 'success' : 'info',
+          const next = !p.joined;
+          enqueueSnackbar(next ? `Entered ${p.title} 🕯️` : `Departed ${p.title}`, {
+            variant: next ? 'success' : 'info',
           });
-          return { ...p, joined: willJoin, members: willJoin ? p.members + 1 : p.members - 1 };
+          return { ...p, joined: next, members: next ? p.members + 1 : p.members - 1 };
         }
         return p;
       })
@@ -124,186 +129,236 @@ const Community = () => {
     );
   };
 
+  const handlePublishReflection = (e) => {
+    e.preventDefault();
+    if (!newReflectionText.trim()) return;
+
+    const authorName = user?.username || 'Nikhil Sehgal';
+    const newPost = {
+      id: `post-${Date.now()}`,
+      author: authorName,
+      handle: authorName.toLowerCase().replace(/\s+/g, '_'),
+      avatar: '/images/eleanor-avatar.jpg',
+      time: 'Just now',
+      parlour: 'The Gothic Study',
+      quote: newQuoteText.trim() ? `“${newQuoteText.trim()}”` : null,
+      quoteAuthor: newQuoteAuthor.trim() || 'Author',
+      quoteImg: '/images/dorian-open-book-spread.jpg',
+      content: newReflectionText.trim(),
+      likes: 1,
+      comments: 0,
+      liked: true,
+    };
+
+    setPosts([newPost, ...posts]);
+    setNewReflectionText('');
+    setNewQuoteText('');
+    setNewQuoteAuthor('');
+    setShowCompose(false);
+    enqueueSnackbar('Reflection shared to the Salon Common Room ✒️', { variant: 'success' });
+  };
+
   const readerName = user?.username || 'Nikhil Sehgal';
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F6F0E6] text-[#2F2620] selection:bg-[#92283F]/15 font-sans">
       <Navbar />
 
-      <main className="flex-1 w-full max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+      <main className="flex-1 w-full max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7">
         
         {/* ============================================================
-            1. HERO ILLUMINATED LIBRARY BANNER
+            1. HERO & RIBBON SECTION MATCHING REFERENCE SPECIFICATION
             ============================================================ */}
-        <section
-          className="relative w-full rounded-2xl overflow-hidden border border-[#DCD0BE] shadow-[0_12px_45px_rgba(40,30,22,0.22)] select-none mb-4"
-          style={{
-            backgroundImage: `url('/images/salon-hero-artwork.jpg')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center top',
-            minHeight: '340px',
-          }}
-        >
-          {/* Subtle gradient vignette */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/35 to-transparent pointer-events-none" />
+        <section className="relative w-full rounded-2xl overflow-hidden border border-[#DCD0BE] shadow-[0_12px_45px_rgba(40,30,22,0.22)] select-none mb-6">
+          {/* Main Visual Header */}
+          <div className="relative w-full">
+            <img
+              src="/images/salon-hero-illustration.jpg"
+              alt="The Readers' Salon"
+              className="w-full h-auto block max-h-[360px] object-cover object-top"
+            />
 
-          {/* Hero Content Left */}
-          <div className="relative z-10 p-7 sm:p-10 md:p-12 max-w-xl text-[#F9F5EE] flex flex-col justify-center">
-            <h1 className="font-serif italic text-3xl sm:text-4xl md:text-[46px] font-normal leading-tight text-[#FAF6EE] drop-shadow-md">
-              The Readers’ Salon
-            </h1>
-            
-            <p className="font-serif italic text-sm sm:text-base text-[#E5D7C5] mt-1.5 drop-shadow-sm">
-              A private literary haven for kindred minds.
-            </p>
-
-            <p className="text-xs sm:text-[13px] text-[#D8C7B3] mt-2.5 leading-relaxed max-w-md font-sans opacity-90">
-              Join intimate parlours, share reflections, exchange marginalia, and find readers who read the world like you do.
-            </p>
-
-            {/* Hero CTAs */}
-            <div className="flex items-center gap-3.5 mt-6 flex-wrap">
+            {/* Clickable Overlay Hitboxes for the Two Buttons on the Artwork */}
+            <div className="absolute left-[3%] sm:left-[5%] bottom-[12%] flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowCompose((prev) => !prev)}
+                aria-label="Share a Reflection"
+                className="h-9 px-4 sm:px-5 rounded-full bg-transparent hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+                title="Share a Reflection"
+              />
               <button
                 type="button"
                 onClick={() =>
-                  enqueueSnackbar('Opening reflection prompt...', { variant: 'info' })
+                  enqueueSnackbar('Parlour creation studio opens for curators...', { variant: 'info' })
                 }
-                className="px-5 py-2.5 rounded-full bg-[#8E283F] hover:bg-[#741E32] text-[#FAF5EE] text-xs font-semibold tracking-wide flex items-center gap-2 shadow-[0_4px_16px_rgba(142,40,63,0.45)] cute-press cursor-pointer border border-[#C97B89]/40"
-              >
-                <PiFeatherBold className="text-sm" />
-                <span>Share a Reflection</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  enqueueSnackbar('Parlour creation studio opens for curators...', {
-                    variant: 'info',
-                  })
-                }
-                className="px-5 py-2.5 rounded-full bg-[#1F1916]/75 hover:bg-[#1F1916]/90 text-[#F5ECE0] text-xs font-semibold tracking-wide flex items-center gap-1.5 backdrop-blur-xs border border-[#C6A16B]/50 cute-press cursor-pointer shadow-sm"
-              >
-                <PiPlusBold className="text-xs" />
-                <span>Create a Parlour</span>
-              </button>
+                aria-label="Create a Parlour"
+                className="h-9 px-4 sm:px-5 rounded-full bg-transparent hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+                title="Create a Parlour"
+              />
             </div>
           </div>
 
-          {/* Today in the Salon Quote Box (Top Right) */}
-          <div className="hidden lg:block absolute top-7 right-8 z-10 select-none">
-            <div className="relative w-[215px] p-5 rounded-lg bg-[#FAF4EB]/95 text-[#2F2620] shadow-[0_8px_30px_rgba(0,0,0,0.35)] border border-[#D9CDB8] rotate-[0.8deg] font-serif">
-              {/* Wax Seal Decoration hanging on right edge */}
-              <div className="absolute -bottom-3 -right-3 w-9 h-9 rounded-full bg-[#8E283F] text-amber-200 border-2 border-[#D9A9A6] flex items-center justify-center shadow-lg rotate-12">
-                <span className="font-serif text-[10px] font-bold">PT</span>
+          {/* Warm Archival Navigation Ribbon Bar Directly Integrated */}
+          <div className="w-full bg-[#EFE7D8] border-t border-[#DCD0BE] px-4 sm:px-6 py-2.5 flex items-center justify-between shadow-xs flex-wrap gap-2">
+            {/* 5 Distinct Navigation Tabs */}
+            <div className="flex items-center gap-1.5 sm:gap-2 text-xs font-medium flex-wrap">
+              <button
+                type="button"
+                onClick={() => setActiveTab('feed')}
+                className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
+                  activeTab === 'feed'
+                    ? 'bg-[#8E283F] text-white shadow-xs font-semibold'
+                    : 'text-[#645548] hover:text-[#2F2620]'
+                }`}
+              >
+                <span>Salon Feed</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('parlours')}
+                className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
+                  activeTab === 'parlours'
+                    ? 'bg-[#8E283F] text-white shadow-xs font-semibold'
+                    : 'text-[#645548] hover:text-[#2F2620]'
+                }`}
+              >
+                <span>Literary Parlours</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('rooms');
+                  enqueueSnackbar('Opening Silent Reading Room with fireplace ambiance... 🕯️', {
+                    variant: 'info',
+                  });
+                }}
+                className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
+                  activeTab === 'rooms'
+                    ? 'bg-[#8E283F] text-white shadow-xs font-semibold'
+                    : 'text-[#645548] hover:text-[#2F2620]'
+                }`}
+              >
+                <span>Reading Rooms</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('marginalia');
+                  enqueueSnackbar('Browsing community margin notes...', { variant: 'info' });
+                }}
+                className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
+                  activeTab === 'marginalia'
+                    ? 'bg-[#8E283F] text-white shadow-xs font-semibold'
+                    : 'text-[#645548] hover:text-[#2F2620]'
+                }`}
+              >
+                <span>Marginalia Exchange</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('matches');
+                  enqueueSnackbar('Matching kindred readers by literary velocity...', {
+                    variant: 'info',
+                  });
+                }}
+                className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
+                  activeTab === 'matches'
+                    ? 'bg-[#8E283F] text-white shadow-xs font-semibold'
+                    : 'text-[#645548] hover:text-[#2F2620]'
+                }`}
+              >
+                <span>Reader Matches</span>
+              </button>
+            </div>
+
+            {/* Right Telemetry */}
+            <div className="flex items-center gap-3 text-xs text-[#645548] font-sans">
+              <div className="flex -space-x-1.5 overflow-hidden">
+                <span className="inline-block w-5 h-5 rounded-full bg-[#8E283F] text-white text-[9px] font-bold text-center leading-5 ring-1 ring-white">
+                  E
+                </span>
+                <span className="inline-block w-5 h-5 rounded-full bg-[#C6A16B] text-[#1E1815] text-[9px] font-bold text-center leading-5 ring-1 ring-white">
+                  A
+                </span>
+                <span className="inline-block w-5 h-5 rounded-full bg-[#735A47] text-white text-[9px] font-bold text-center leading-5 ring-1 ring-white">
+                  S
+                </span>
               </div>
-
-              <div className="text-[11px] font-sans font-semibold tracking-wide text-[#8D263B] flex items-center justify-between mb-2 pb-1 border-b border-[#E8DED1]">
-                <span>Today in the Salon ♡</span>
-              </div>
-
-              <blockquote className="italic text-xs leading-relaxed text-[#2F2620]">
-                “A book is a dream you hold in your hands.”
-              </blockquote>
-
-              <p className="text-[10px] text-[#7A6A5E] font-sans font-medium text-right mt-2">
-                — Neil Gaiman
-              </p>
+              <span className="text-[11px] sm:text-xs font-medium text-[#483B32]">
+                12,480 Readers
+              </span>
+              <span className="flex items-center gap-1 text-[11px] sm:text-xs font-medium text-[#483B32]">
+                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+                <span>218 Reading Now</span>
+              </span>
             </div>
           </div>
         </section>
 
         {/* ============================================================
-            2. NAVIGATION RIBBON BAR (Pill tabs & live telemetry)
+            NEW REFLECTION COMPOSE CARD (EXPANDABLE)
             ============================================================ */}
-        <div className="w-full bg-[#EFE7D8] rounded-xl px-4 py-2 border border-[#D8CCB8] flex items-center justify-between shadow-2xs mb-6 flex-wrap gap-3">
-          {/* Tabs */}
-          <div className="flex items-center gap-2 flex-wrap text-xs font-medium">
-            <button
-              type="button"
-              onClick={() => setActiveTab('feed')}
-              className={`px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
-                activeTab === 'feed'
-                  ? 'bg-[#8E283F] text-white shadow-xs font-semibold'
-                  : 'text-[#645548] hover:text-[#2F2620]'
-              }`}
-            >
-              <span>Salon Feed</span>
-            </button>
+        {showCompose && (
+          <div className="mb-6 p-6 rounded-2xl bg-[#FAF5EB] border-2 border-[#8E283F]/30 shadow-lg animate-drawer-spring text-left">
+            <h3 className="font-serif text-lg font-bold text-[#2F2620] mb-3 flex items-center gap-2">
+              <PiFeatherBold className="text-[#8E283F]" />
+              <span>Inscribe Reflection to the Common Room</span>
+            </h3>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('parlours')}
-              className={`px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
-                activeTab === 'parlours'
-                  ? 'bg-[#8E283F] text-white shadow-xs font-semibold'
-                  : 'text-[#645548] hover:text-[#2F2620]'
-              }`}
-            >
-              <span>Literary Parlours</span>
-            </button>
+            <form onSubmit={handlePublishReflection} className="space-y-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  value={newQuoteText}
+                  onChange={(e) => setNewQuoteText(e.target.value)}
+                  placeholder="Quotation or passage (e.g. “To define is to limit...”)"
+                  className="w-full p-2.5 rounded-xl border border-[#D9CDB8] bg-[#FFFDF9] text-xs font-serif italic text-[#2F2620] focus:outline-none focus:border-[#8E283F]"
+                />
+                <input
+                  type="text"
+                  value={newQuoteAuthor}
+                  onChange={(e) => setNewQuoteAuthor(e.target.value)}
+                  placeholder="Author (e.g. Oscar Wilde)"
+                  className="w-full p-2.5 rounded-xl border border-[#D9CDB8] bg-[#FFFDF9] text-xs text-[#2F2620] focus:outline-none focus:border-[#8E283F]"
+                />
+              </div>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('rooms')}
-              className={`px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
-                activeTab === 'rooms'
-                  ? 'bg-[#8E283F] text-white shadow-xs font-semibold'
-                  : 'text-[#645548] hover:text-[#2F2620]'
-              }`}
-            >
-              <span>Reading Rooms</span>
-            </button>
+              <textarea
+                rows="3"
+                value={newReflectionText}
+                onChange={(e) => setNewReflectionText(e.target.value)}
+                placeholder="What did this passage reveal? Share your thoughts with fellow readers..."
+                className="w-full p-3 rounded-xl border border-[#D9CDB8] bg-[#FFFDF9] text-xs sm:text-[13px] text-[#2F2620] focus:outline-none focus:border-[#8E283F]"
+                required
+              />
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('marginalia')}
-              className={`px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
-                activeTab === 'marginalia'
-                  ? 'bg-[#8E283F] text-white shadow-xs font-semibold'
-                  : 'text-[#645548] hover:text-[#2F2620]'
-              }`}
-            >
-              <span>Marginalia Exchange</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('matches')}
-              className={`px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press cursor-pointer ${
-                activeTab === 'matches'
-                  ? 'bg-[#8E283F] text-white shadow-xs font-semibold'
-                  : 'text-[#645548] hover:text-[#2F2620]'
-              }`}
-            >
-              <span>Reader Matches</span>
-            </button>
+              <div className="flex items-center justify-end gap-2.5 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setShowCompose(false)}
+                  className="px-4 py-1.5 text-xs text-[#7A6A5E] hover:text-[#2F2620]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-full bg-[#8E283F] hover:bg-[#741E32] text-white text-xs font-semibold shadow-xs cute-press cursor-pointer"
+                >
+                  Publish to Common Room
+                </button>
+              </div>
+            </form>
           </div>
-
-          {/* Right Live Readers Telemetry */}
-          <div className="flex items-center gap-3 text-xs text-[#645548] font-sans">
-            <div className="flex -space-x-1.5 overflow-hidden">
-              <span className="inline-block w-5 h-5 rounded-full bg-[#8E283F] text-white text-[9px] font-bold text-center leading-5 ring-1 ring-white">
-                E
-              </span>
-              <span className="inline-block w-5 h-5 rounded-full bg-[#C6A16B] text-[#1E1815] text-[9px] font-bold text-center leading-5 ring-1 ring-white">
-                A
-              </span>
-              <span className="inline-block w-5 h-5 rounded-full bg-[#735A47] text-white text-[9px] font-bold text-center leading-5 ring-1 ring-white">
-                S
-              </span>
-            </div>
-            <span className="text-[11.5px] font-medium text-[#483B32]">
-              12,480 Readers
-            </span>
-            <span className="flex items-center gap-1 text-[11.5px] font-medium text-[#483B32]">
-              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-              <span>218 Reading Now</span>
-            </span>
-          </div>
-        </div>
+        )}
 
         {/* ============================================================
-            3. THREE-COLUMN PIXEL-PERFECT CONTENT SECTION
+            2. THREE-COLUMN SPECIFICATION LAYOUT
             ============================================================ */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 xl:gap-6 items-start">
           
@@ -386,7 +441,7 @@ const Community = () => {
           <div className="lg:col-span-6 space-y-4">
             
             {/* Header with Filters */}
-            <div className="flex items-center justify-between pb-2 mb-2">
+            <div className="flex items-center justify-between pb-2 mb-1">
               <h2 className="font-serif text-lg font-bold text-[#2F2620] flex items-center gap-2 border-b-2 border-[#8E283F] pb-1">
                 <span>From the Common Room</span>
                 <PiFeatherBold className="text-sm text-[#8E283F]" />
@@ -594,7 +649,7 @@ const Community = () => {
               ============================================================ */}
           <div className="lg:col-span-3 space-y-4">
             
-            <div className="flex items-center justify-between pb-2 mb-2">
+            <div className="flex items-center justify-between pb-2 mb-1">
               <h3 className="font-serif text-lg font-bold text-[#2F2620]">
                 Featured Literary Parlours
               </h3>
