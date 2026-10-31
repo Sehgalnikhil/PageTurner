@@ -228,6 +228,18 @@ const Navbar = ({ totalBooks = 0 }) => {
                 Bookplates
               </button>
 
+              {/* Community (The Readers' Salon) */}
+              <Link
+                to="/community"
+                className={`text-xs font-medium transition-all duration-150 py-1 ${
+                  location.pathname === '/community'
+                    ? 'text-[#8D263B] font-semibold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#8D263B] after:rounded-full'
+                    : 'text-[#675C54] hover:text-[#8D263B]'
+                }`}
+              >
+                Salon
+              </Link>
+
               {/* Admin Curator Desk Link */}
               {isAdmin && (
                 <Link
