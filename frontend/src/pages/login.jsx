@@ -14,6 +14,9 @@ import {
   PiShieldCheckBold,
   PiUserBold,
   PiCrownBold,
+  PiBooksBold,
+  PiUsersBold,
+  PiFeatherBold,
 } from 'react-icons/pi';
 import { playWaxSealCrack, playRevealChime, playPageFlipSound } from '../utils/soundEffects';
 
@@ -116,15 +119,69 @@ const Login = () => {
         <div className="w-full max-w-[940px] bg-[#FFFCF7] rounded-[26px] sm:rounded-[30px] border border-[#E9DED0] shadow-[0_20px_50px_rgba(48,39,34,0.08)] overflow-hidden flex flex-col md:flex-row relative z-10 transition-all duration-300">
           
           {/* ============================================================
-              LEFT PANEL: Pure, Unobstructed Reading Nook Photograph
-              (Rendered cleanly without duplicate text or ghosting)
+              LEFT PANEL: Ultra-High-Resolution Literary Reading Nook
+              With True Native Vector Typography (Retina Crisp)
               ============================================================ */}
-          <div className="w-full md:w-[48%] lg:w-[49%] relative min-h-[380px] sm:min-h-[460px] md:min-h-[530px] bg-[#2A231E] overflow-hidden select-none">
+          <div className="w-full md:w-[48%] lg:w-[49%] relative min-h-[380px] sm:min-h-[460px] md:min-h-[530px] bg-[#2A231E] overflow-hidden flex flex-col justify-between p-6 sm:p-7 select-none">
+            {/* Ultra-High-Resolution Photography Asset (896x1200) */}
             <img
-              src="/images/login-left-nook.jpg"
-              alt="A room without books is like a body without a soul — Marcus Tullius Cicero"
-              className="w-full h-full object-cover object-center transform transition-transform duration-700 hover:scale-[1.015]"
+              src="/images/login-reading-nook-hd.jpg"
+              alt="Cozy library reading chair, sunlit window, hardcovers, and Marcus Tullius Cicero quote"
+              className="absolute inset-0 w-full h-full object-cover object-center transform transition-transform duration-700 hover:scale-[1.015]"
             />
+
+            {/* Subtle atmospheric gradient overlay for magazine-grade contrast */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30 pointer-events-none" />
+
+            {/* Top Emblem & Brand Signature */}
+            <div className="relative z-10 flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-white/95 text-[#92283F] flex items-center justify-center shadow-md">
+                <PiBooksBold className="text-lg" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-serif text-base font-semibold tracking-tight text-white/95 leading-none">
+                  PageTurner
+                </span>
+                <span className="font-serif italic text-[10.5px] text-[#DDB7B0] leading-none mt-0.5">
+                  A quieter sanctuary...
+                </span>
+              </div>
+            </div>
+
+            {/* Middle Feature Quote in Cormorant Garamond */}
+            <div className="relative z-10 my-auto py-6 sm:py-8 max-w-[320px]">
+              <blockquote className="font-serif text-2xl sm:text-[27px] font-normal text-[#FFFDF9] leading-[1.28] tracking-tight drop-shadow-sm">
+                “A room without books is like a body without a soul.”
+              </blockquote>
+              <cite className="block text-[11px] font-sans font-medium uppercase tracking-[0.16em] text-[#DDB7B0] mt-3 not-italic">
+                — Marcus Tullius Cicero
+              </cite>
+            </div>
+
+            {/* Bottom 3 Benefits Bar + Pagination Indicators */}
+            <div className="relative z-10 pt-4 border-t border-white/15 flex items-end justify-between gap-3">
+              <div className="grid grid-cols-3 gap-2 flex-1 text-[10.5px] leading-tight text-white/90">
+                <div className="flex flex-col gap-1">
+                  <PiBooksBold className="text-sm text-[#C6A16B]" />
+                  <span className="font-light text-white/85">Sync across all your shelves</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <PiUsersBold className="text-sm text-[#C6A16B]" />
+                  <span className="font-light text-white/85">Curated communities</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <PiFeatherBold className="text-sm text-[#C6A16B]" />
+                  <span className="font-light text-white/85">Save your marginalia</span>
+                </div>
+              </div>
+
+              {/* Slider Pagination Dots */}
+              <div className="flex items-center gap-1.5 flex-shrink-0 self-center">
+                <span className="w-2 h-2 rounded-full bg-white shadow-xs" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+              </div>
+            </div>
           </div>
 
           {/* ============================================================

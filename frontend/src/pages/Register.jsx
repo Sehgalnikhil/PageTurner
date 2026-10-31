@@ -101,11 +101,11 @@ const Register = () => {
         <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
           
           {/* ============================================================
-              1. LEFT: Window Desk Photography (Candle, Journal, Book Stack)
+              1. LEFT: Ultra-High-Resolution Window Desk Still-Life
               ============================================================ */}
           <div className="hidden lg:block w-[300px] xl:w-[340px] 2xl:w-[350px] flex-shrink-0 self-stretch rounded-2xl overflow-hidden shadow-sm border border-[#E9DED0] bg-[#F0E9DE] relative group select-none">
             <img
-              src="/images/signup-desk-scene.jpg"
+              src="/images/signup-desk-scene-hd.jpg"
               alt="Cozy reading nook with candle, tea, stacked books, and open journal"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102"
             />
