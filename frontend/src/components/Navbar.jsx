@@ -19,6 +19,7 @@ import {
   PiCrownBold,
   PiSparkleBold,
   PiArrowRightBold,
+  PiFeatherBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { ReadingListContext } from '../context/ReadingListContext';
@@ -231,13 +232,14 @@ const Navbar = ({ totalBooks = 0 }) => {
               {/* Community (The Readers' Salon) */}
               <Link
                 to="/community"
-                className={`text-xs font-medium transition-all duration-150 py-1 ${
+                className={`text-xs font-serif tracking-wide px-3 py-1 rounded-full flex items-center gap-1.5 transition-all cute-press ${
                   location.pathname === '/community'
-                    ? 'text-[#8D263B] font-semibold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#8D263B] after:rounded-full'
-                    : 'text-[#675C54] hover:text-[#8D263B]'
+                    ? 'bg-[#7A2134] text-[#FDFBF7] shadow-xs font-semibold'
+                    : 'text-[#675C54] hover:text-[#8D263B] hover:bg-[#8D263B]/5'
                 }`}
               >
-                Salon
+                <PiFeatherBold className="text-xs text-[#E8C28A]" />
+                <span>The Salon</span>
               </Link>
 
               {/* Admin Curator Desk Link */}
