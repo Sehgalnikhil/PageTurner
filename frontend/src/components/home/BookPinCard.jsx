@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   PiBookmarkSimpleBold,
@@ -14,12 +14,15 @@ import BookModal from './BookModal';
 import { AuthContext } from '../../context/AuthContext';
 import { ReadingListContext } from '../../context/ReadingListContext';
 import { getBookCoverUrl } from '../../utils/imageHelper';
+import { bookService } from '../../services/api';
 
 const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
   const [showModal, setShowModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [imgError, setImgError] = useState(false);
   const [popping, setPopping] = useState(false);
+  const [tiltStyle, setTiltStyle] = useState({});
+  const cardRef = useRef(null);
 
   const navigate = useNavigate();
   const { isAdmin } = useContext(AuthContext);
@@ -33,6 +36,37 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
     index % 3 === 0 ? 'h-72' : index % 3 === 1 ? 'h-64' : 'h-80';
 
   const authorInitial = book.author ? book.author.trim().charAt(0).toUpperCase() : 'A';
+
+  // 3D Parallax Tilt with Cursor-Tracking Specular Gleam
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((centerY - y) / centerY) * 7.5; // Max 7.5 deg
+    const rotateY = ((x - centerX) / centerX) * 7.5;
+    const sheenX = (x / rect.width) * 100;
+    const sheenY = (y / rect.height) * 100;
+
+    setTiltStyle({
+      transform: `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`,
+      '--sheen-x': `${sheenX.toFixed(1)}%`,
+      '--sheen-y': `${sheenY.toFixed(1)}%`,
+    });
+  };
+
+  const handleMouseEnter = () => {
+    // 0ms hover prefetching
+    bookService.prefetchById(book._id);
+  };
+
+  const handleMouseLeave = () => {
+    setTiltStyle({
+      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)',
+    });
+  };
 
   const handleCardClick = () => {
     navigate(`/books/details/${book._id}`);
@@ -58,7 +92,12 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
   return (
     <>
       <article
+        ref={cardRef}
         onClick={handleCardClick}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        style={tiltStyle}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -68,12 +107,20 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
         tabIndex={0}
         role="button"
         aria-label={`View details for ${book.title} by ${book.author}`}
-        className={`book-pin group cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8D263B] focus-visible:ring-offset-2 cute-card-tilt ${
+        className={`book-pin group cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8D263B] focus-visible:ring-offset-2 relative transition-[box-shadow] duration-200 ${
           isFeatured
             ? 'bg-[#FFFDFA] border-[#D9A9A6]/60 shadow-card hover:border-[#8D263B]'
             : 'bg-[#FFFDFA] border-[#E8DED1] shadow-subtle hover:border-[#D9A9A6]'
         }`}
       >
+        {/* Dynamic Specular Sheen Layer that follows cursor */}
+        <div
+          className="absolute inset-0 rounded-[0.875rem] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30"
+          style={{
+            background:
+              'radial-gradient(circle at var(--sheen-x, 50%) var(--sheen-y, 50%), rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 65%)',
+          }}
+        />
         {/* Curated Spotlight Banner: Fixed initial height, never expands on hover */}
         {isFeatured && (
           <div className="px-3.5 py-1 bg-[#8D263B] text-[#FFFDFA] flex items-center justify-between text-[10px] font-mono uppercase tracking-wider font-medium rounded-t-[0.875rem]">

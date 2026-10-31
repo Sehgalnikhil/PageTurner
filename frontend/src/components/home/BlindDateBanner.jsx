@@ -288,6 +288,23 @@ const BlindDateBanner = ({ books = [] }) => {
   // 3D Mouse Tilt state
   const parcelRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [waxShards, setWaxShards] = useState([]);
+
+  // Generate 16 physical wax shards that shatter outwards
+  const spawnWaxShards = () => {
+    const shards = Array.from({ length: 16 }, (_, i) => {
+      const angle = (i / 16) * 360 + (Math.random() * 20 - 10);
+      const distance = 80 + Math.random() * 110;
+      const rad = (angle * Math.PI) / 180;
+      const tx = Math.cos(rad) * distance;
+      const ty = Math.sin(rad) * distance;
+      const rot = Math.random() * 360;
+      const size = 6 + Math.random() * 8;
+      return { id: i, tx, ty, rot, size };
+    });
+    setWaxShards(shards);
+    setTimeout(() => setWaxShards([]), 900);
+  };
 
   // Pick initial book and sync when real books arrive from API
   useEffect(() => {
@@ -363,9 +380,10 @@ const BlindDateBanner = ({ books = [] }) => {
     // Step 1: Seal compresses (0 - 120ms)
     setUnwrappingStage('compressing');
 
-    // Step 2: Wax seal cracks and separates (120 - 350ms)
+    // Step 2: Wax seal cracks and explodes into physical shards (120 - 350ms)
     setTimeout(() => {
       setUnwrappingStage('cracking');
+      spawnWaxShards();
       playWaxSealCrack();
     }, 120);
 
@@ -799,6 +817,23 @@ const BlindDateBanner = ({ books = [] }) => {
 
                     {/* Central Crimson Wax Seal Medallion */}
                     <div className="absolute inset-0 flex items-center justify-center z-30">
+                      {/* Physical Shattered Wax Shards */}
+                      {waxShards.map((shard) => (
+                        <div
+                          key={shard.id}
+                          className="absolute pointer-events-none rounded-xs shadow-md z-40"
+                          style={{
+                            width: `${shard.size}px`,
+                            height: `${shard.size * 0.75}px`,
+                            backgroundColor: shard.id % 2 === 0 ? '#8D263B' : '#67202F',
+                            border: '1px solid #D9A9A6',
+                            transform: `translate(${shard.tx}px, ${shard.ty}px) rotate(${shard.rot}deg)`,
+                            opacity: 0,
+                            transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+                          }}
+                        />
+                      ))}
+
                       <button
                         type="button"
                         onClick={handleBreakSeal}

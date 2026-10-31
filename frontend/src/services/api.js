@@ -52,10 +52,29 @@ api.interceptors.response.use(
 
 export default api;
 
+// In-memory instant LRU cache for 0ms hover-prefetched book details
+const bookDetailCache = new Map();
+
 // Modular API Services
 export const bookService = {
   getAll: (params) => api.get('/books', { params }),
-  getById: (id) => api.get(`/books/${id}`),
+  getById: (id) => {
+    if (bookDetailCache.has(id)) {
+      return Promise.resolve({ data: bookDetailCache.get(id), fromCache: true });
+    }
+    return api.get(`/books/${id}`).then((res) => {
+      bookDetailCache.set(id, res.data);
+      return res;
+    });
+  },
+  prefetchById: (id) => {
+    if (!id || bookDetailCache.has(id)) return;
+    api.get(`/books/${id}`)
+      .then((res) => {
+        bookDetailCache.set(id, res.data);
+      })
+      .catch(() => {});
+  },
   create: (formData) =>
     api.post('/books', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
