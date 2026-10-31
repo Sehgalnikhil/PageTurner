@@ -92,6 +92,44 @@ const BOOK_VOLUMES = {
           'Add personal annotations, favorite bookmarks, and reading reflections to your private shelf.',
         ],
       },
+      {
+        type: 'narrative',
+        chapterNum: 'CHAPTER II &bull; THE MOUNTAIN DAWN',
+        runningHead: 'IDAHO WILDERNESS',
+        firstLine: 'The wind swept down from the crest of the mountain, carrying the bitter scent of sage and pine.',
+        body: [
+          'In winter, the snow drifted higher than the fences, burying the rusted tractor tires and scrap heap in mounds of immaculate white.',
+          'We learned the contours of silence before we learned grammar, watching the seasons turn against the immovable granite ridges.',
+        ],
+      },
+      {
+        type: 'narrative',
+        chapterNum: 'CHAPTER III &bull; THE BOOKS ON THE SILL',
+        runningHead: 'THE AWAKENING',
+        firstLine: 'There was a small wooden shelf beside the kitchen window where mother kept an old medical almanac and a dictionary with torn corners.',
+        body: [
+          'I copied words into small spiral pads with a stubby pencil, fascinated by how symbols on paper could bridge centuries of human experience.',
+          'The discovery of ideas was like a sudden illumination in a darkened room, revealing doors where I had only ever seen walls.',
+        ],
+      },
+      {
+        type: 'narrative',
+        chapterNum: 'REFLECTIONS ON FREEDOM',
+        runningHead: 'CAMBRIDGE SCHOLAR',
+        firstLine: 'Standing on the stone bridge overlooking the river Cam, I realized that true education is not merely knowledge—it is the grace to forgive.',
+        body: [
+          'To understand the past without being held hostage by it is perhaps the highest achievement of any reading life.',
+        ],
+      },
+      {
+        type: 'sanctuary',
+        chapterNum: 'EPILOGUE &bull; MARGINALIA',
+        runningHead: 'SANCTUARY ARCHIVE',
+        firstLine: '“You are not made of the things that broke you; you are made of the questions you dared to ask.”',
+        body: [
+          'This volume is preserved in the PageTurner digital sanctuary for curious readers worldwide.',
+        ],
+      },
     ],
   },
 
@@ -165,6 +203,45 @@ const BOOK_VOLUMES = {
           'Save this title to your shelf for personal reflections and quote notes.',
         ],
       },
+      {
+        type: 'narrative',
+        chapterNum: 'CHAPTER II &bull; THE PORTRAIT COMPLETED',
+        runningHead: 'THE FATAL WISH',
+        firstLine: '“How sad it is!” murmured Dorian Gray with his eyes still fixed upon his own picture.',
+        body: [
+          '“How sad it is! I shall grow old, and horrible, and dreadful. But this picture will remain always young. It will never be older than this particular day of June.”',
+          '“If it were only the other way! If it were I who was to be always young, and the picture that was to grow old! For that—for that—I would give everything!”',
+        ],
+      },
+      {
+        type: 'narrative',
+        chapterNum: 'CHAPTER III &bull; SHADOWS IN MAYFAIR',
+        runningHead: 'THE DECADENT CIRCLE',
+        firstLine: 'London in the twilight was a city of violet shadows and muffled hansoms clicking over wet cobblestones.',
+        body: [
+          'Dorian walked through the library of his house, admiring the carved ivory chimneypiece and the rows of vellum-bound volumes that lined the mahogany walls.',
+          'Yet beneath the embroidered velvet curtains of the locked upstairs room, the canvas began its terrible, silent transformation.',
+        ],
+      },
+      {
+        type: 'narrative',
+        chapterNum: 'PHILOSOPHICAL APHORISMS',
+        runningHead: 'LORD HENRY’S MAXIMS',
+        firstLine: '“The only things one never regrets are one’s mistakes,” said Lord Henry smiling.',
+        body: [
+          '“To be good is to be in harmony with oneself. Discord is to be forced to be in harmony with others.”',
+          '“Conscience and cowardice are really the same things, Basil. Conscience is the trade-name of the firm.”',
+        ],
+      },
+      {
+        type: 'sanctuary',
+        chapterNum: 'EPILOGUE &bull; THE CONSOLATION OF ART',
+        runningHead: 'SANCTUARY ARCHIVE',
+        firstLine: '“All art is at once surface and symbol. Those who go beneath the surface do so at their peril.”',
+        body: [
+          'Wilde reminds us that every reader finds in art what they carry in their own heart.',
+        ],
+      },
     ],
   },
 
@@ -235,6 +312,44 @@ const BOOK_VOLUMES = {
         firstLine: '“Until they become conscious they will never rebel, and until after they have rebelled they cannot become conscious.”',
         body: [
           'Contemplate how language shapes what thoughts can be conceived and remembered.',
+        ],
+      },
+      {
+        type: 'narrative',
+        chapterNum: 'PART TWO &bull; THE GLASS PAPERWEIGHT',
+        runningHead: 'RELICS OF THE PAST',
+        firstLine: 'What appealed to him about it was not so much its beauty as the air it seemed to possess of belonging to an age quite different from the present one.',
+        body: [
+          'The piece of coral, a tiny crinkle of pink like a sugar rosebud from a cake, was embedded in the clear glass hemisphere.',
+          'The paperweight was the room he was in, and the coral was his life, fixed in a sort of eternity at the heart of the crystal.',
+        ],
+      },
+      {
+        type: 'narrative',
+        chapterNum: 'THE NATURE OF TRUTH',
+        runningHead: 'MINISTRY OF TRUTH',
+        firstLine: 'In the end the Party would announce that two and two made five, and you would have to believe it.',
+        body: [
+          'It was inevitable that they should make that claim sooner or later: the logic of their position demanded it.',
+          'The heresy of heresies was common sense. Stones are hard, water is wet, objects unsupported fall towards the earth’s centre.',
+        ],
+      },
+      {
+        type: 'narrative',
+        chapterNum: 'THE PRINCIPLES OF NEWSSPEAK',
+        runningHead: 'APPENDIX &bull; LANGUAGE AS CONTROL',
+        firstLine: 'The purpose of Newspeak was not only to provide a medium of expression for the world-view of Ingsoc, but to make all other modes of thought impossible.',
+        body: [
+          'It was intended that when Newspeak had been adopted once and for all, a heretical thought should be literally unthinkable, at least so far as thought is dependent on words.',
+        ],
+      },
+      {
+        type: 'sanctuary',
+        chapterNum: 'EPILOGUE &bull; THE UNVANQUISHED MIND',
+        runningHead: 'SANCTUARY ARCHIVE',
+        firstLine: '“To the future or to the past, to a time when thought is free, when men are different from one another and do not live alone.”',
+        body: [
+          'A reminder of why books, memory, and uncurbed reading remain our greatest human sanctuary.',
         ],
       },
     ],
@@ -318,6 +433,44 @@ const generateBookPages = (book) => {
         firstLine: '“A small shelf now, a lifelong collection ahead.”',
         body: [
           'Add personal annotations, favorite bookmarks, and reading stages to your private library shelf.',
+        ],
+      },
+      {
+        type: 'narrative',
+        chapterNum: 'CHAPTER II &bull; THE INNER HORIZON',
+        runningHead: 'ATMOSPHERIC CONTINUATION',
+        firstLine: 'In the stillness that follows a turning page, the architecture of the mind expands to accommodate worlds never before envisioned.',
+        body: [
+          'The cadence of fine writing creates its own tempo, slowing the rush of the modern day and returning the reader to a state of undivided attention.',
+          'Between author and reader lies an enduring pact: that language, when carefully chosen, can bridge any divide of time or distance.',
+        ],
+      },
+      {
+        type: 'narrative',
+        chapterNum: 'CHAPTER III &bull; THE CURATOR’S MARGINALIA',
+        runningHead: 'COLLECTOR’S OBSERVATIONS',
+        firstLine: 'Every great book is both a reflection of the era in which it was penned and a mirror held up to every era that follows.',
+        body: [
+          'To reread is to recognize how much we have altered since last we held the same volume in our hands.',
+          'The paper remains unchanged; it is the eye that surveys it that has grown older, wiser, and more attuned to its subtleties.',
+        ],
+      },
+      {
+        type: 'narrative',
+        chapterNum: 'ARCHIVAL PASSAGE &bull; THE ESSENCE',
+        runningHead: 'LITERARY MEDITATION',
+        firstLine: '“Books are the quietest and most constant of friends; they are the most accessible and wisest of counselors.”',
+        body: [
+          'Preserve your reflections and bookmarks as marginal notes in your personal reading sanctuary.',
+        ],
+      },
+      {
+        type: 'sanctuary',
+        chapterNum: 'COLOPHON &bull; FINIS',
+        runningHead: 'PAGETURNER PRESS ARCHIVE',
+        firstLine: 'Typeset in Cormorant Garamond & DM Sans on archival paper stock.',
+        body: [
+          'Preserved in the digital permanent collection of PageTurner &bull; A Curated Literary Sanctuary.',
         ],
       },
     ],
