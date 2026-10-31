@@ -93,17 +93,19 @@ const Register = () => {
       <Navbar />
 
       {/* 2. Main Signup Composition with Enhanced Proportions */}
-      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex items-center justify-center relative">
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex items-center justify-center relative animate-fade-in">
         <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10 xl:gap-12">
           
           {/* ============================================================
               1. LEFT: Ultra-High-Resolution Window Desk Still-Life
               ============================================================ */}
-          <div className="hidden lg:block w-[320px] xl:w-[360px] 2xl:w-[390px] flex-shrink-0 self-stretch rounded-[24px] overflow-hidden shadow-[0_15px_35px_rgba(48,39,34,0.08)] border border-[#E9DED0] bg-[#F0E9DE] relative group select-none">
+          <div className="hidden lg:block w-[320px] xl:w-[360px] 2xl:w-[390px] flex-shrink-0 self-stretch rounded-[24px] overflow-hidden shadow-[0_15px_35px_rgba(48,39,34,0.08)] border border-[#E9DED0] bg-[#F0E9DE] relative group select-none gpu-accelerated">
             <img
               src="/images/signup-desk-scene-hd.jpg"
               alt="Cozy reading nook with candle, tea, stacked books, and open journal"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102"
+              loading="eager"
+              decoding="async"
             />
             {/* Subtle atmospheric vignette */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
@@ -198,10 +200,10 @@ const Register = () => {
           {/* ============================================================
               3. RIGHT: Layered Paper "Reader Passport" Card
               ============================================================ */}
-          <div className="w-full sm:w-[430px] lg:w-[430px] xl:w-[460px] flex-shrink-0 relative">
+          <div className="w-full sm:w-[430px] lg:w-[430px] xl:w-[460px] flex-shrink-0 relative animate-card-entrance gpu-accelerated">
             
-            {/* Pinned Transparent Kraft Luggage Tag (Hangs cleanly over corner with ZERO text occlusion) */}
-            <div className="absolute -top-5 -right-3 sm:-right-4 z-20 pointer-events-none drop-shadow-md select-none">
+            {/* Pinned Transparent Kraft Luggage Tag (Hangs cleanly over corner with gentle ambient float) */}
+            <div className="absolute -top-5 -right-3 sm:-right-4 z-20 pointer-events-none drop-shadow-md select-none animate-gentle-float">
               <img
                 src="/images/signup-kraft-tag-transparent.png"
                 alt="New Reader Passport awaits"

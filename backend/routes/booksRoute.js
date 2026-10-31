@@ -190,7 +190,8 @@ router.get('/', async (request, response, next) => {
       .populate('reviews.userId', 'username email')
       .skip(skip)
       .limit(limit)
-      .sort(sortOptions);
+      .sort(sortOptions)
+      .lean();
 
     return response.status(200).json({
       count,

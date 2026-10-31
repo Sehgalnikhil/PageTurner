@@ -79,4 +79,11 @@ const bookSchema = mongoose.Schema(
   }
 );
 
+// High-Performance Query & Text Search Compound Indexes
+bookSchema.index({ category: 1, createdAt: -1 });
+bookSchema.index({ averageRating: -1 });
+bookSchema.index({ title: 1, author: 1 });
+bookSchema.index({ isbn: 1 });
+bookSchema.index({ isFeatured: 1 });
+
 export const Book = mongoose.model('Book', bookSchema);

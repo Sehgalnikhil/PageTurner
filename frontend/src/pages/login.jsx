@@ -109,10 +109,10 @@ const Login = () => {
       <Navbar />
 
       {/* 2. Main Login Arena matching Reference Image 1 with ZERO overlapping elements */}
-      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex items-center justify-center relative">
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex items-center justify-center relative animate-fade-in">
         
         {/* 3. The Central Split Floating Sanctuary Card (804 x 504 proportion) */}
-        <div className="w-full max-w-[940px] bg-[#FFFCF7] rounded-[26px] sm:rounded-[30px] border border-[#E9DED0] shadow-[0_20px_50px_rgba(48,39,34,0.08)] overflow-hidden flex flex-col md:flex-row relative z-10 transition-all duration-300">
+        <div className="w-full max-w-[940px] bg-[#FFFCF7] rounded-[26px] sm:rounded-[30px] border border-[#E9DED0] shadow-[0_20px_50px_rgba(48,39,34,0.08)] overflow-hidden flex flex-col md:flex-row relative z-10 animate-card-entrance gpu-accelerated transition-all duration-300">
           
           {/* ============================================================
               LEFT PANEL: Ultra-High-Resolution Literary Reading Nook
