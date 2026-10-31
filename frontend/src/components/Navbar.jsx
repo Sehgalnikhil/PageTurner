@@ -19,11 +19,9 @@ import {
   PiCrownBold,
   PiSparkleBold,
   PiArrowRightBold,
-  PiSunBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { ReadingListContext } from '../context/ReadingListContext';
-import { ThemeContext } from '../context/ThemeContext';
 import { adminService } from '../services/api';
 import { startAmbientSound, stopAmbientSound } from '../utils/soundEffects';
 import CommandKModal from './common/CommandKModal';
@@ -41,7 +39,6 @@ const Navbar = ({ totalBooks = 0 }) => {
 
   const { user, logout, isAdmin } = useContext(AuthContext);
   const { count: bookmarkCount, setIsDrawerOpen } = useContext(ReadingListContext);
-  const { cycleTheme } = useContext(ThemeContext) || {};
   const location = useLocation();
 
   // Load public broadcast banner
@@ -280,16 +277,6 @@ const Navbar = ({ totalBooks = 0 }) => {
                 aria-label="Search catalog"
               >
                 <PiMagnifyingGlassBold className="text-lg" />
-              </button>
-
-              {/* Theme Toggle Sun Icon */}
-              <button
-                type="button"
-                onClick={cycleTheme}
-                title="Toggle Reading Ambience (Ivory / Candlelight / Midnight)"
-                className="w-8 h-8 rounded-full border border-[#E8DED1] bg-[#FFFDFA] hover:bg-[#F7F3EC] text-[#81766D] hover:text-[#8D263B] transition-colors flex items-center justify-center cursor-pointer shadow-2xs"
-              >
-                <PiSunBold className="text-sm" />
               </button>
 
               {/* Sound Ambiance: Clean circular icon button with subtle active state */}
