@@ -547,20 +547,20 @@ const PageFlipPreview = ({ book }) => {
     if (wheelLockRef.current || isFlipping) return;
 
     const dominantDelta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-    if (Math.abs(dominantDelta) < 20) return;
+    if (Math.abs(dominantDelta) < 16) return;
 
-    if (dominantDelta > 20) {
+    if (dominantDelta > 16) {
       wheelLockRef.current = true;
       handleTurnForward();
       setTimeout(() => {
         wheelLockRef.current = false;
-      }, 540);
-    } else if (dominantDelta < -20) {
+      }, 240);
+    } else if (dominantDelta < -16) {
       wheelLockRef.current = true;
       handleTurnBackward();
       setTimeout(() => {
         wheelLockRef.current = false;
-      }, 540);
+      }, 240);
     }
   };
 
@@ -571,7 +571,7 @@ const PageFlipPreview = ({ book }) => {
   const handleTouchEnd = (e) => {
     if (touchStartXRef.current === null) return;
     const diff = e.changedTouches[0].clientX - touchStartXRef.current;
-    if (Math.abs(diff) > 40) {
+    if (Math.abs(diff) > 24) {
       if (diff < 0) {
         handleTurnForward();
       } else {
@@ -596,7 +596,7 @@ const PageFlipPreview = ({ book }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [viewMode, singlePageIndex, currentSpread, isFlipping, isFullscreen]);
 
-  // Turn Forward (Synchronized with 520ms hardware-accelerated GPU curve)
+  // Turn Forward (Ultra-fast & silky 220ms GPU flip)
   const handleTurnForward = () => {
     if (isFlipping) return;
 
@@ -607,7 +607,7 @@ const PageFlipPreview = ({ book }) => {
       setTimeout(() => {
         setSinglePageIndex((prev) => prev + 1);
         setIsFlipping(null);
-      }, 520);
+      }, 220);
     } else {
       if (currentSpread >= totalSpreads - 1) return;
       playPageFlipSound();
@@ -615,11 +615,11 @@ const PageFlipPreview = ({ book }) => {
       setTimeout(() => {
         setCurrentSpread((prev) => prev + 1);
         setIsFlipping(null);
-      }, 520);
+      }, 220);
     }
   };
 
-  // Turn Backward (Synchronized with 520ms hardware-accelerated GPU curve)
+  // Turn Backward (Ultra-fast & silky 220ms GPU flip)
   const handleTurnBackward = () => {
     if (isFlipping) return;
 
@@ -630,7 +630,7 @@ const PageFlipPreview = ({ book }) => {
       setTimeout(() => {
         setSinglePageIndex((prev) => prev - 1);
         setIsFlipping(null);
-      }, 520);
+      }, 220);
     } else {
       if (currentSpread <= 0) return;
       playPageFlipSound();
@@ -638,7 +638,7 @@ const PageFlipPreview = ({ book }) => {
       setTimeout(() => {
         setCurrentSpread((prev) => prev - 1);
         setIsFlipping(null);
-      }, 520);
+      }, 220);
     }
   };
 

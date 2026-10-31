@@ -776,14 +776,14 @@
 .book-turning-leaf-forward {
   right: 0;
   transform-origin: left center;
-  animation: appleBooksTurnForward 0.52s cubic-bezier(0.2, 1, 0.35, 1) forwards;
+  animation: appleBooksTurnForward 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.16);
 }
 
 .book-turning-leaf-backward {
   left: 0;
   transform-origin: right center;
-  animation: appleBooksTurnBackward 0.52s cubic-bezier(0.2, 1, 0.35, 1) forwards;
+  animation: appleBooksTurnBackward 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.16);
 }
 
@@ -791,7 +791,7 @@
   left: 0;
   right: 0;
   transform-origin: left center;
-  animation: appleBooksTurnForward 0.52s cubic-bezier(0.2, 1, 0.35, 1) forwards;
+  animation: appleBooksTurnForward 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.16);
 }
 
@@ -799,7 +799,7 @@
   left: 0;
   right: 0;
   transform-origin: right center;
-  animation: appleBooksTurnBackward 0.52s cubic-bezier(0.2, 1, 0.35, 1) forwards;
+  animation: appleBooksTurnBackward 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.16);
 }
 
