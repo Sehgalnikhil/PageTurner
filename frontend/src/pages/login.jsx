@@ -10,12 +10,13 @@ import {
   PiLockKeyBold,
   PiEyeBold,
   PiEyeSlashBold,
-  PiBookOpenBold,
+  PiArrowRightBold,
+  PiShieldCheckBold,
+  PiUserBold,
+  PiCrownBold,
+  PiBooksBold,
   PiUsersBold,
   PiFeatherBold,
-  PiArrowRightBold,
-  PiSparkleBold,
-  PiCrownBold,
 } from 'react-icons/pi';
 import { playWaxSealCrack, playRevealChime, playPageFlipSound } from '../utils/soundEffects';
 
@@ -35,9 +36,9 @@ const Login = () => {
 
   const validate = () => {
     const errs = {};
-    if (!email) {
+    if (!email.trim()) {
       errs.email = 'Email address is required';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!/\S+@\S+\.\S+/.test(email.trim())) {
       errs.email = 'Please provide a valid email';
     }
 
@@ -52,16 +53,16 @@ const Login = () => {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (!validate()) return;
 
     setLoading(true);
     try {
       playWaxSealCrack();
-      const { data } = await authService.login({ email, password });
+      const { data } = await authService.login({ email: email.trim(), password });
       playRevealChime();
       login(data);
-      enqueueSnackbar(`Welcome back to the library, ${data.username}! ✉️`, {
+      enqueueSnackbar(`Welcome back to your sanctuary, ${data.username}! ✉️`, {
         variant: 'success',
         autoHideDuration: 4000,
       });
@@ -76,7 +77,7 @@ const Login = () => {
     }
   };
 
-  const fillAndLogin = async (demoEmail, demoPassword) => {
+  const fillAndLogin = async (demoEmail, demoPassword, roleName) => {
     setEmail(demoEmail);
     setPassword(demoPassword);
     setErrors({});
@@ -87,14 +88,14 @@ const Login = () => {
       const { data } = await authService.login({ email: demoEmail, password: demoPassword });
       playRevealChime();
       login(data);
-      enqueueSnackbar(`Signed in as ${data.username}! Session security email dispatched. ✉️`, {
+      enqueueSnackbar(`Signed in as ${roleName} (${data.username})! Welcome back ✦`, {
         variant: 'success',
         autoHideDuration: 4000,
       });
       navigate(from, { replace: true });
     } catch (error) {
       enqueueSnackbar(
-        error.customMessage || error.response?.data?.message || 'Login failed',
+        error.customMessage || error.response?.data?.message || 'Demo access failed',
         { variant: 'error' }
       );
     } finally {
@@ -107,242 +108,234 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF6EE] text-[#302A27] selection:bg-[#8D263B]/15">
+    <div className="min-h-screen flex flex-col bg-[#F7F2E9] text-[#302722] selection:bg-[#92283F]/15 relative overflow-x-hidden">
+      {/* 1. Global Navigation Bar */}
       <Navbar />
 
-      <main className="flex-1 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex items-center justify-center">
-        <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
+      {/* 2. Main Login Arena with Reference Image Composition */}
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex items-center justify-center relative">
+        
+        {/* Atmospheric Environmental Accents (Outside the Card matching Reference 1) */}
+        
+        {/* Soft botanical leaves on top left edge */}
+        <div className="hidden 2xl:block absolute top-12 left-4 w-44 h-44 pointer-events-none opacity-40 select-none">
+          <div className="w-full h-full bg-gradient-to-br from-[#8B9B84]/40 to-transparent rounded-full blur-2xl transform -rotate-12" />
+        </div>
+
+        {/* Taped Quote Note on Upper Right Wall */}
+        <div className="hidden xl:block absolute top-8 right-6 lg:right-10 z-20 pointer-events-none select-none drop-shadow-md transform rotate-[2deg] hover:rotate-0 transition-transform duration-300">
+          <img
+            src="/images/login-taped-note.png"
+            alt="Good books brighter people"
+            className="w-24 sm:w-28 h-auto object-contain"
+          />
+        </div>
+
+        {/* Lit Candle & Stacked Books on Bottom Right Corner */}
+        <div className="hidden lg:block absolute bottom-2 right-2 sm:right-6 lg:right-8 z-20 pointer-events-none select-none drop-shadow-xl transform translate-y-3">
+          <img
+            src="/images/login-corner-books.png"
+            alt="Stacked classical hardcovers with lit candle"
+            className="w-44 sm:w-52 h-auto object-contain"
+          />
+        </div>
+
+        {/* 3. The Central Split Floating Sanctuary Card (804 x 504 proportion) */}
+        <div className="w-full max-w-[960px] bg-[#FFFCF7] rounded-[26px] sm:rounded-[30px] border border-[#E9DED0] shadow-[0_20px_50px_rgba(48,39,34,0.08)] overflow-hidden flex flex-col md:flex-row relative z-10 transition-all duration-300">
           
-          {/* 1. LEFT COZY READING DESK PHOTO (WINDOW, STACKED BOOKS, CANDLE & JOURNAL) */}
-          <div className="hidden lg:block w-[300px] xl:w-[340px] 2xl:w-[360px] flex-shrink-0 self-stretch rounded-2xl overflow-hidden shadow-sm border border-[#E8DED1]/70 bg-[#F0E9DE] relative group">
+          {/* ============================================================
+              LEFT PANEL: Warm Library Reading Nook Still Life Photography
+              ============================================================ */}
+          <div className="w-full md:w-[48%] lg:w-[49%] relative min-h-[380px] sm:min-h-[460px] md:min-h-[540px] bg-[#2A231E] overflow-hidden flex flex-col justify-between p-6 sm:p-7 text-white select-none">
+            
+            {/* The Authentic Photography Background */}
             <img
-              src="/images/auth-left-desk.jpg"
-              alt="Cozy reading nook with candle, tea, stacked books, and open journal"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102"
+              src="/images/login-left-nook.jpg"
+              alt="Cozy library reading chair, sunlit window, hardcovers, and Marcus Tullius Cicero quote"
+              className="absolute inset-0 w-full h-full object-cover object-center transform transition-transform duration-1000 hover:scale-103"
             />
-            {/* Subtle atmospheric vignette */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
-          </div>
 
-          {/* 2. MIDDLE EDITORIAL TEXT & THREE VALUE PROPOSITIONS */}
-          <div className="flex-1 max-w-xl lg:max-w-lg xl:max-w-xl flex flex-col justify-center">
-            
-            {/* Top Tag */}
-            <div className="flex items-center gap-1.5 text-[10px] font-sans font-medium uppercase tracking-[0.2em] text-[#8D263B] mb-2">
-              <span className="text-[9px]">✦</span>
-              <span>Welcome Back</span>
-            </div>
+            {/* Dark warm atmospheric gradient overlay for typographic clarity */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/30 pointer-events-none" />
 
-            {/* Editorial Heading */}
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[42px] xl:text-[46px] font-normal text-[#302A27] leading-[1.16] tracking-tight">
-              A quieter corner for your{' '}
-              <span className="italic text-[#8D263B] font-normal">reading</span>{' '}
-              life.
-            </h1>
-
-            {/* Subtitle Description */}
-            <p className="text-xs sm:text-[13px] text-[#675C54] leading-relaxed max-w-md mt-3 font-normal">
-              Curate your shelf, collect timeless{' '}
-              <strong className="font-semibold text-[#302A27]">stories</strong>, and record your
-              reflections in a{' '}
-              <strong className="font-semibold text-[#302A27]">community</strong> that truly loves
-              books.
-            </p>
-
-            {/* Three Feature Badges */}
-            <div className="mt-6 sm:mt-7 space-y-4">
-              
-              {/* Feature 1 */}
-              <div className="flex items-start gap-3.5 group">
-                <div className="w-9 h-9 rounded-full bg-[#F5E8E5] text-[#8D263B] flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 shadow-2xs">
-                  <PiBookOpenBold className="text-base" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-semibold text-[#302A27] leading-none">
-                    Build your personal shelf
-                  </h4>
-                  <p className="text-[11.5px] text-[#81766D] mt-1 leading-normal">
-                    Track, organise and cherish your reads.
-                  </p>
-                </div>
+            {/* Top Emblem & Brand Signature */}
+            <div className="relative z-10 flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-white/95 text-[#92283F] flex items-center justify-center shadow-md">
+                <PiBooksBold className="text-lg" />
               </div>
-
-              {/* Feature 2 */}
-              <div className="flex items-start gap-3.5 group">
-                <div className="w-9 h-9 rounded-full bg-[#F5E8E5] text-[#8D263B] flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 shadow-2xs">
-                  <PiUsersBold className="text-base" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-semibold text-[#302A27] leading-none">
-                    Join a community
-                  </h4>
-                  <p className="text-[11.5px] text-[#81766D] mt-1 leading-normal">
-                    Discover readers with similar tastes.
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature 3 */}
-              <div className="flex items-start gap-3.5 group">
-                <div className="w-9 h-9 rounded-full bg-[#F5E8E5] text-[#8D263B] flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 shadow-2xs">
-                  <PiFeatherBold className="text-base" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-semibold text-[#302A27] leading-none">
-                    Capture your thoughts
-                  </h4>
-                  <p className="text-[11.5px] text-[#81766D] mt-1 leading-normal">
-                    Save highlights, notes and reflections.
-                  </p>
-                </div>
+              <div className="flex flex-col">
+                <span className="font-serif text-base font-semibold tracking-tight text-white/95 leading-none">
+                  PageTurner
+                </span>
+                <span className="font-serif italic text-[10.5px] text-[#DDB7B0] leading-none mt-0.5">
+                  A quieter sanctuary...
+                </span>
               </div>
             </div>
 
-            {/* Pinned Quote Note Image */}
-            <div className="mt-6 pt-2">
-              <img
-                src="/images/auth-pinned-note.png"
-                alt="A reader lives a thousand lives before he dies - George R.R. Martin"
-                className="w-44 sm:w-48 drop-shadow-sm rotate-[-1deg] transition-transform hover:rotate-0"
-              />
+            {/* Middle Feature Quote */}
+            <div className="relative z-10 my-auto py-6 sm:py-8 max-w-[320px]">
+              <blockquote className="font-serif text-2xl sm:text-[27px] font-normal text-[#FFFDF9] leading-[1.28] tracking-tight drop-shadow-sm">
+                “A room without books is like a body without a soul.”
+              </blockquote>
+              <cite className="block text-[11px] font-sans font-medium uppercase tracking-[0.16em] text-[#DDB7B0] mt-3 not-italic">
+                — Marcus Tullius Cicero
+              </cite>
+            </div>
+
+            {/* Bottom 3 Benefits Bar + Pagination Indicators */}
+            <div className="relative z-10 pt-4 border-t border-white/15 flex items-end justify-between gap-3">
+              <div className="grid grid-cols-3 gap-2 flex-1 text-[10.5px] leading-tight text-white/90">
+                <div className="flex flex-col gap-1">
+                  <PiBooksBold className="text-sm text-[#C6A16B]" />
+                  <span className="font-light text-white/85">Sync across all your shelves</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <PiUsersBold className="text-sm text-[#C6A16B]" />
+                  <span className="font-light text-white/85">Curated communities</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <PiFeatherBold className="text-sm text-[#C6A16B]" />
+                  <span className="font-light text-white/85">Save your marginalia</span>
+                </div>
+              </div>
+
+              {/* Slider Pagination Dots */}
+              <div className="flex items-center gap-1.5 flex-shrink-0 self-center">
+                <span className="w-2 h-2 rounded-full bg-white shadow-xs" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+              </div>
             </div>
           </div>
 
-          {/* 3. RIGHT STACKED "READER PASSPORT" CARD */}
-          <div className="w-full sm:w-[420px] lg:w-[420px] xl:w-[440px] flex-shrink-0 relative">
+          {/* ============================================================
+              RIGHT PANEL: Paper White Literary Authentication Panel
+              ============================================================ */}
+          <div className="w-full md:w-[52%] lg:w-[51%] bg-[#FFFCF7] p-6 sm:p-8 lg:p-9 flex flex-col justify-between relative">
             
-            {/* Pinned Kraft Tag on top right */}
-            <div className="absolute -top-3.5 -right-3 sm:-right-4 z-30 pointer-events-none drop-shadow-md">
-              <img
-                src="/images/auth-kraft-tag.png"
-                alt="Reader Passport awaits"
-                className="w-20 sm:w-[86px] h-auto transform rotate-[2deg]"
-              />
-            </div>
-
-            {/* Layered stationery paper borders */}
-            <div className="absolute -inset-1.5 bg-[#F3ECE0] rounded-[22px] -rotate-[0.6deg] border border-[#E8DED1]/70 pointer-events-none z-0 shadow-xs" />
-            <div className="absolute -inset-1 bg-[#FAF5EC] rounded-[20px] rotate-[0.4deg] border border-[#E8DED1]/90 pointer-events-none z-0" />
-
-            {/* Main Interactive Form Card */}
-            <div className="relative z-10 bg-white rounded-2xl border border-[#E8DED1] p-6 sm:p-7 shadow-[0_15px_40px_rgba(48,42,39,0.06)]">
-              
-              {/* Card Header */}
-              <div className="text-center mb-4">
-                <div className="flex items-center justify-center gap-1.5 text-[#8D263B] mb-2">
-                  <span className="text-[10px] text-[#C6A16B]">✦</span>
-                  <PiBookOpenBold className="text-xl" />
-                  <span className="text-[10px] text-[#C6A16B]">✦</span>
-                </div>
-
-                <h2 className="font-serif text-2xl sm:text-[25px] font-normal text-[#302A27] tracking-tight leading-tight">
-                  Open Your Reader Passport
-                </h2>
-                <p className="text-xs text-[#81766D] mt-1 leading-normal">
-                  Step into a world of stories, ideas and kindred readers.
-                </p>
-              </div>
-
-              {/* 1-Click Instant Demo Credentials */}
-              <div className="mb-4 p-2.5 rounded-xl bg-[#FAF6EE] border border-[#E8DED1]">
-                <div className="flex items-center justify-between mb-1.5 px-0.5">
-                  <span className="text-[9.5px] font-sans font-medium uppercase tracking-[0.14em] text-[#81766D]">
-                    1-Click Demo Access
-                  </span>
-                  <span className="text-[9px] font-mono text-[#81766D]">Instant Sign In</span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => fillAndLogin('student@pageturner.io', 'student123')}
-                    className="px-2.5 py-1.5 rounded-lg border border-[#E8DED1] bg-white hover:border-[#8D263B]/40 hover:bg-[#FFF9F2] text-left transition-all shadow-2xs group cursor-pointer"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-semibold text-[#302A27] group-hover:text-[#8D263B]">
-                        Reader
-                      </span>
-                      <span className="text-[8.5px] font-mono uppercase bg-[#8D263B]/10 text-[#8D263B] px-1 rounded">
-                        Demo
-                      </span>
-                    </div>
-                    <span className="text-[10px] font-mono text-[#81766D] block truncate mt-0.5">
-                      student@pageturner.io
-                    </span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => fillAndLogin('admin@pageturner.io', 'admin123')}
-                    className="px-2.5 py-1.5 rounded-lg border border-[#E8DED1] bg-white hover:border-[#C6A16B] hover:bg-[#FFF9F2] text-left transition-all shadow-2xs group cursor-pointer"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-semibold text-[#302A27] group-hover:text-[#67202F] flex items-center gap-1">
-                        <PiCrownBold className="text-[#C6A16B] text-[11px]" />
-                        <span>Curator</span>
-                      </span>
-                      <span className="text-[8.5px] font-mono uppercase bg-[#C6A16B]/20 text-[#67202F] px-1 rounded">
-                        Admin
-                      </span>
-                    </div>
-                    <span className="text-[10px] font-mono text-[#81766D] block truncate mt-0.5">
-                      admin@pageturner.io
-                    </span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Form */}
-              <form onSubmit={handleLogin} className="space-y-3.5">
+            <div>
+              {/* Top Row: Navigation Tabs + Reader Passport Postmark Stamp */}
+              <div className="flex items-center justify-between pb-3 mb-5 border-b border-[#E9DED0]/60">
                 
-                {/* 1. Email Address */}
+                {/* Tabs */}
+                <div className="flex items-center gap-6 text-xs sm:text-[13px] font-medium">
+                  <span className="text-[#92283F] font-semibold pb-1 border-b-2 border-[#92283F] cursor-default">
+                    Sign In
+                  </span>
+                  <Link
+                    to="/register"
+                    className="text-[#84766B] hover:text-[#302722] pb-1 transition-colors"
+                  >
+                    Create Passport
+                  </Link>
+                </div>
+
+                {/* Circular Reader Passport Postmark Stamp from Reference */}
+                <div className="flex-shrink-0 select-none opacity-90 hover:opacity-100 transition-opacity">
+                  <img
+                    src="/images/login-passport-stamp.png"
+                    alt="Reader Passport Stamp"
+                    className="h-8 sm:h-9 w-auto object-contain"
+                  />
+                </div>
+              </div>
+
+              {/* Subheading / Tag */}
+              <div className="text-[10px] font-sans font-semibold uppercase tracking-[0.22em] text-[#92283F] mb-1">
+                Welcome Back
+              </div>
+
+              {/* Main Heading */}
+              <h1 className="font-serif text-2xl sm:text-[30px] font-normal text-[#302722] leading-tight tracking-tight">
+                Step into your sanctuary.
+              </h1>
+
+              {/* Description */}
+              <p className="text-xs text-[#84766B] mt-1.5 leading-relaxed font-normal">
+                Enter your credentials to reopen your shelf, private notes, and favorite literary worlds.
+              </p>
+
+              {/* Quick 1-Click Demo Login Station */}
+              <div className="mt-4 p-2.5 rounded-xl bg-[#FAF5ED] border border-[#E9DED0]/80 flex flex-col sm:flex-row items-center justify-between gap-2">
+                <span className="text-[10.5px] font-medium text-[#84766B] flex items-center gap-1">
+                  <span>✦ 1-Click Demo Access:</span>
+                </span>
+                <div className="flex items-center gap-1.5 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => fillAndLogin('student@pageturner.io', 'student123', 'Demo Reader')}
+                    disabled={loading}
+                    className="flex-1 sm:flex-none h-7 px-2.5 rounded-lg border border-[#E9DED0] bg-[#FFFCF7] hover:bg-white text-[11px] font-medium text-[#302722] hover:text-[#92283F] hover:border-[#92283F]/40 flex items-center justify-center gap-1 transition-all cursor-pointer shadow-2xs active:scale-95"
+                    title="Sign in with Reader demo account"
+                  >
+                    <PiUserBold className="text-xs text-[#8B9B84]" />
+                    <span>Demo Reader</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => fillAndLogin('admin@pageturner.io', 'admin123', 'Curator Admin')}
+                    disabled={loading}
+                    className="flex-1 sm:flex-none h-7 px-2.5 rounded-lg border border-[#E9DED0] bg-[#FFFCF7] hover:bg-white text-[11px] font-medium text-[#302722] hover:text-[#92283F] hover:border-[#92283F]/40 flex items-center justify-center gap-1 transition-all cursor-pointer shadow-2xs active:scale-95"
+                    title="Sign in with Curator Admin account"
+                  >
+                    <PiCrownBold className="text-xs text-[#C6A16B]" />
+                    <span>Curator Admin</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* The Sign In Form */}
+              <form onSubmit={handleLogin} className="mt-4 space-y-3.5">
+                
+                {/* 1. Email Address Field */}
                 <div>
-                  <label className="block text-xs font-semibold text-[#302A27] mb-1">
+                  <label className="block text-xs font-semibold text-[#302722] mb-1">
                     Email Address
                   </label>
                   <div className="relative">
-                    <PiEnvelopeBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#81766D] text-sm pointer-events-none" />
+                    <PiEnvelopeBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] text-sm pointer-events-none" />
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@domain.com"
+                      placeholder="you@example.com"
                       autoComplete="email"
-                      className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-[#E8DED1] bg-[#FFFDFA] text-xs text-[#302A27] placeholder:text-[#81766D]/50 focus:outline-none focus:border-[#8D263B] focus:ring-1 focus:ring-[#8D263B] transition-all shadow-2xs"
+                      className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs"
                     />
                   </div>
                   {errors.email && (
-                    <p className="text-[11px] text-[#8D263B] font-medium mt-1">{errors.email}</p>
+                    <p className="text-[11px] text-[#92283F] font-medium mt-1">{errors.email}</p>
                   )}
                 </div>
 
-                {/* 2. Password */}
+                {/* 2. Password Field with Forgot Password Link */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-semibold text-[#302A27]">
+                    <label className="text-xs font-semibold text-[#302722]">
                       Password
                     </label>
                     <Link
                       to="/forgot-password"
-                      className="text-[11px] font-serif italic text-[#81766D] hover:text-[#8D263B] transition-colors"
+                      className="text-[11px] font-medium text-[#92283F] hover:text-[#702338] italic hover:underline"
                     >
-                      Forgot password?
+                      Forgot your password?
                     </Link>
                   </div>
                   <div className="relative">
-                    <PiLockKeyBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#81766D] text-sm pointer-events-none" />
+                    <PiLockKeyBold className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#84766B] text-sm pointer-events-none" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="At least 6 characters"
+                      placeholder="Enter your password"
                       autoComplete="current-password"
-                      className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-[#E8DED1] bg-[#FFFDFA] text-xs text-[#302A27] placeholder:text-[#81766D]/50 focus:outline-none focus:border-[#8D263B] focus:ring-1 focus:ring-[#8D263B] transition-all shadow-2xs"
+                      className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-[#E9DED0] bg-[#FFFDF9] text-xs text-[#302722] placeholder:text-[#84766B]/50 focus:outline-none focus:border-[#92283F] focus:ring-1 focus:ring-[#92283F] transition-all shadow-2xs"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#81766D] hover:text-[#302A27] p-1 transition-colors cursor-pointer"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#84766B] hover:text-[#302722] p-1 transition-colors cursor-pointer"
                       title={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? (
@@ -353,47 +346,46 @@ const Login = () => {
                     </button>
                   </div>
                   {errors.password && (
-                    <p className="text-[11px] text-[#8D263B] font-medium mt-1">{errors.password}</p>
+                    <p className="text-[11px] text-[#92283F] font-medium mt-1">{errors.password}</p>
                   )}
                 </div>
 
-                {/* Submit Button */}
+                {/* 3. Primary Sign In CTA Button */}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-10.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-white text-xs font-medium tracking-wide flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-4"
+                  className="w-full h-11 rounded-full bg-[#92283F] hover:bg-[#702338] text-white text-xs font-medium tracking-wide flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-4"
                 >
                   {loading ? (
                     <span className="flex items-center gap-2">
                       <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Opening Sanctuary...</span>
+                      <span>Reopening Sanctuary Vault...</span>
                     </span>
                   ) : (
                     <>
-                      <PiSparkleBold className="text-xs text-[#C6A16B]" />
-                      <span>Sign In to Reader Passport</span>
-                      <PiArrowRightBold className="text-xs ml-0.5" />
+                      <span>Sign In to PageTurner</span>
+                      <PiArrowRightBold className="text-xs" />
                     </>
                   )}
                 </button>
               </form>
 
-              {/* Or continue with divider */}
+              {/* Divider: or continue with */}
               <div className="relative my-4 text-center">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-[#E8DED1]" />
+                  <div className="w-full border-t border-[#E9DED0]" />
                 </div>
-                <span className="relative px-3 bg-white text-[11px] text-[#81766D] font-normal">
+                <span className="relative px-3 bg-[#FFFCF7] text-[11px] text-[#84766B] font-normal">
                   or continue with
                 </span>
               </div>
 
-              {/* Social Login Buttons */}
+              {/* Social Login Buttons (Google & Apple) */}
               <div className="grid grid-cols-2 gap-2.5">
                 <button
                   type="button"
                   onClick={() => handleSocialClick('Google')}
-                  className="h-9.5 px-3 rounded-full border border-[#E8DED1] bg-[#FFFDFA] hover:bg-[#FAF6EE] text-xs font-medium text-[#302A27] flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs"
+                  className="h-9.5 px-3 rounded-full border border-[#E9DED0] bg-[#FFFDF9] hover:bg-[#FAF5ED] text-xs font-medium text-[#302722] flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs"
                 >
                   <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
                     <path
@@ -419,7 +411,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => handleSocialClick('Apple')}
-                  className="h-9.5 px-3 rounded-full border border-[#E8DED1] bg-[#FFFDFA] hover:bg-[#FAF6EE] text-xs font-medium text-[#302A27] flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs"
+                  className="h-9.5 px-3 rounded-full border border-[#E9DED0] bg-[#FFFDF9] hover:bg-[#FAF5ED] text-xs font-medium text-[#302722] flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs"
                 >
                   <svg className="w-4 h-4 flex-shrink-0 fill-current text-black" viewBox="0 0 24 24">
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.78 1.06-1.85.95-2.93-.93.04-2.09.62-2.75 1.4-.58.67-1.09 1.76-.95 2.81 1.04.08 2.12-.51 2.75-1.28z" />
@@ -428,27 +420,28 @@ const Login = () => {
                 </button>
               </div>
 
-              {/* Don't have an account? Join */}
-              <div className="mt-4 text-center text-xs text-[#81766D]">
-                <span>Don&apos;t have an account yet? </span>
-                <Link to="/register" className="font-semibold text-[#8D263B] hover:underline">
-                  Join PageTurner
+              {/* Bottom New User Link */}
+              <div className="mt-4 text-center text-xs text-[#84766B]">
+                <span>New to PageTurner? </span>
+                <Link
+                  to="/register"
+                  className="font-semibold text-[#92283F] hover:text-[#702338] hover:underline"
+                >
+                  Create your Reader Passport →
                 </Link>
               </div>
             </div>
-          </div>
 
-          {/* 4. RIGHT EDGE BOOK SPINES (DESKTOP) */}
-          <div className="hidden 2xl:block w-14 xl:w-16 self-stretch rounded-r-2xl overflow-hidden shadow-sm border-y border-r border-[#E8DED1]/70 bg-[#F0E9DE] flex-shrink-0">
-            <img
-              src="/images/auth-right-spines.jpg"
-              alt="Vertical bookshelf collection"
-              className="w-full h-full object-cover"
-            />
+            {/* Subtle Security Reassurance at bottom */}
+            <div className="mt-5 pt-3 border-t border-[#E9DED0]/60 flex items-center justify-center gap-1.5 text-[10.5px] text-[#84766B]/80 text-center">
+              <PiShieldCheckBold className="text-xs text-[#8B9B84] flex-shrink-0" />
+              <span>Protected by archival session hashing &amp; TLS encryption.</span>
+            </div>
           </div>
         </div>
       </main>
 
+      {/* 4. Global Footer */}
       <Footer />
     </div>
   );
