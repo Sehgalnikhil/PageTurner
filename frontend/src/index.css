@@ -1271,3 +1271,79 @@ html {
   box-shadow: 0 18px 36px -8px rgba(48, 39, 34, 0.12);
 }
 
+/* ==========================================================================
+   Extended Cute & Charming Animation Suite
+   ========================================================================== */
+
+@keyframes cuteFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(1deg); }
+}
+
+@keyframes cutePop {
+  0% { transform: scale(0.92); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes ribbonSway {
+  0%, 100% { transform: rotate(0deg); transform-origin: top center; }
+  33% { transform: rotate(4deg); transform-origin: top center; }
+  66% { transform: rotate(-3deg); transform-origin: top center; }
+}
+
+@keyframes waxPulseGlow {
+  0%, 100% {
+    box-shadow: 0 4px 18px rgba(141, 38, 59, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.25);
+  }
+  50% {
+    box-shadow: 0 6px 26px rgba(141, 38, 59, 0.55), 0 0 16px rgba(198, 161, 107, 0.4), inset 0 2px 6px rgba(255, 255, 255, 0.4);
+  }
+}
+
+@keyframes shimmerGlint {
+  0% { transform: translateX(-100%) rotate(25deg); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: translateX(200%) rotate(25deg); opacity: 0; }
+}
+
+.animate-cute-float {
+  animation: cuteFloat 3.5s ease-in-out infinite;
+}
+
+.animate-cute-pop {
+  animation: cutePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-ribbon-sway {
+  animation: ribbonSway 3s ease-in-out infinite;
+}
+
+.animate-wax-glow {
+  animation: waxPulseGlow 2.5s ease-in-out infinite;
+}
+
+.animate-shimmer-glint {
+  animation: shimmerGlint 2.8s ease-in-out infinite;
+}
+
+/* Cute springy button push */
+.cute-press {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cute-press:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+.cute-press:active {
+  transform: translateY(1px) scale(0.96);
+}
+
+/* Cute floating sticker badge */
+.cute-sticker {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cute-sticker:hover {
+  transform: rotate(3deg) scale(1.06);
+}
+
+

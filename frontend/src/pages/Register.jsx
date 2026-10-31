@@ -192,7 +192,7 @@ const Register = () => {
               <img
                 src="/images/signup-pinned-note.png"
                 alt="A reader lives a thousand lives before he dies - George R.R. Martin"
-                className="w-48 sm:w-52 drop-shadow-sm rotate-[-1deg] transition-transform hover:rotate-0"
+                className="w-48 sm:w-52 drop-shadow-sm rotate-[-1deg] transition-transform hover:rotate-0 cute-sticker cursor-pointer"
               />
             </div>
           </div>

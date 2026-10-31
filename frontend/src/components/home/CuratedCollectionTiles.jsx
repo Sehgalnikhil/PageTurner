@@ -108,9 +108,9 @@ const CuratedCollectionTiles = ({
 
           <Link
             to="/books/create"
-            className="h-8 px-3.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium flex items-center gap-1.5 transition-colors shadow-subtle"
+            className="h-8 px-3.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium flex items-center gap-1.5 transition-all shadow-subtle cute-pill-hover group"
           >
-            <PiPlusBold className="text-xs" />
+            <PiPlusBold className="text-xs transition-transform duration-300 group-hover:rotate-90 group-hover:scale-125" />
             <span>Add Story</span>
           </Link>
 

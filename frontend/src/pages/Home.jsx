@@ -191,13 +191,13 @@ const Home = () => {
                   const el = document.getElementById('curated-collections');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="group relative inline-flex items-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] font-sans text-xs sm:text-[13px] font-medium tracking-wide shadow-subtle hover:shadow-card hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer overflow-hidden"
+                className="group relative inline-flex items-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] font-sans text-xs sm:text-[13px] font-medium tracking-wide shadow-subtle hover:shadow-card cute-press cursor-pointer overflow-hidden"
               >
-                <PiCompassBold className="text-[#C6A16B] text-sm sm:text-base group-hover:rotate-45 transition-transform duration-300 relative z-10" />
+                <PiCompassBold className="text-[#C6A16B] text-sm sm:text-base group-hover:rotate-45 group-hover:scale-125 transition-transform duration-300 relative z-10" />
                 <span className="relative z-10 font-medium">Start Exploring</span>
 
                 {/* Circular badge with gliding arrow */}
-                <span className="relative z-10 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-white transition-all duration-200 group-hover:bg-white group-hover:text-[#8D263B] group-hover:translate-x-0.5">
+                <span className="relative z-10 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-white transition-all duration-200 group-hover:bg-white group-hover:text-[#8D263B] group-hover:translate-x-1 group-hover:scale-110">
                   <PiArrowRightBold className="text-[10px]" />
                 </span>
               </button>
@@ -231,7 +231,7 @@ const Home = () => {
               <button
                 type="button"
                 onClick={() => setMainTab('discover')}
-                className={`px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-150 cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-150 cute-pill-hover cursor-pointer ${
                   mainTab === 'discover'
                     ? 'bg-[#302A27] text-[#FFFDFA] shadow-subtle'
                     : 'bg-[#FFFDFA] text-[#302A27] hover:text-[#8D263B] border border-[#E8DED1]'
@@ -243,7 +243,7 @@ const Home = () => {
               <button
                 type="button"
                 onClick={() => setMainTab('shelf')}
-                className={`group px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-150 flex items-center gap-1.5 cursor-pointer ${
+                className={`group px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-150 flex items-center gap-1.5 cute-pill-hover cursor-pointer ${
                   mainTab === 'shelf'
                     ? 'bg-[#8D263B] text-[#FFFDFA] shadow-subtle'
                     : 'bg-[#FFFDFA] text-[#302A27] hover:text-[#8D263B] border border-[#E8DED1]'

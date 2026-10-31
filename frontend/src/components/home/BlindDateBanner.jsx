@@ -804,7 +804,7 @@ const BlindDateBanner = ({ books = [] }) => {
                         onClick={handleBreakSeal}
                         disabled={isAnimating}
                         aria-label="Break the wax seal"
-                        className={`wax-seal-btn flex items-center justify-center text-amber-100 ${
+                        className={`wax-seal-btn flex items-center justify-center text-amber-100 animate-wax-glow ${
                           unwrappingStage === 'compressing' ? 'seal-compressing' : ''
                         } ${unwrappingStage === 'cracking' ? 'animate-wax-crack' : ''}`}
                       >
