@@ -1648,39 +1648,49 @@ const ShowBook = () => {
               </div>
             </div>
 
-            {/* 4. REIMAGINED ARCHIVAL READER PREVIEW (Refined, Collapsible by Default) */}
+            {/* 4. REIMAGINED ARCHIVAL READER PREVIEW (Premium Editorial Sanctuary Stage) */}
             <section id="archival-reader-section" className="pt-6">
-              <div className="editorial-surface overflow-hidden border border-[#E8DED1]">
+              <div className="rounded-3xl overflow-hidden border border-[#E8DED1] bg-[#FFFDFA] shadow-[0_12px_40px_-10px_rgba(48,39,34,0.08)]">
                 <div
                   onClick={() => setIsReaderExpanded((prev) => !prev)}
-                  className="p-6 flex items-center justify-between cursor-pointer bg-[#FFFDFA] hover:bg-[#F7F3EC] transition-colors"
+                  className="p-6 sm:p-7 flex items-center justify-between cursor-pointer bg-gradient-to-r from-[#FFFDFA] via-[#FAF5ED] to-[#FFFDFA] hover:via-[#F5ECE0] transition-all group"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#F4E8E6] text-[#8D263B] flex items-center justify-center flex-shrink-0">
-                      <PiBookOpenTextBold className="text-xl" />
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-[#8D263B] text-[#FFFDFA] flex items-center justify-center flex-shrink-0 shadow-md group-hover:rotate-[-6deg] group-hover:scale-110 transition-transform duration-300">
+                      <PiBookOpenTextBold className="text-2xl" />
                     </div>
                     <div>
-                      <h3 className="font-serif text-lg font-bold text-[#302A27]">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold text-[#8D263B]">
+                          Exclusive Reading Sanctuary
+                        </span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#C6A16B] animate-starburst" />
+                      </div>
+                      <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#302A27] tracking-tight">
                         Reader Preview &bull; Archival Edition
                       </h3>
-                      <p className="text-xs text-[#81766D]">
-                        Experience typeset chapter excerpts with theme and sound ambiance
+                      <p className="text-xs text-[#81766D] mt-0.5">
+                        Experience authentic typeset chapter excerpts, real turning pages, and customizable ambient light
                       </p>
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    className="px-4 py-2 rounded-full border border-[#E8DED1] text-xs font-semibold text-[#8D263B] bg-[#FFFDFA] hover:bg-white shadow-2xs transition-colors flex items-center gap-1.5"
+                    className="px-5 py-2.5 rounded-full border border-[#E8DED1] text-xs font-semibold text-[#8D263B] bg-[#FFFDFA] hover:bg-white shadow-xs transition-all cute-press flex items-center gap-2 group-hover:border-[#8D263B]/40"
                   >
                     <span>{isReaderExpanded ? 'Collapse Reader' : 'Open Reader Preview'}</span>
-                    <PiCaretDownBold className={`text-xs transition-transform ${isReaderExpanded ? 'rotate-180' : ''}`} />
+                    <PiCaretDownBold className={`text-xs transition-transform duration-300 ${isReaderExpanded ? 'rotate-180' : ''}`} />
                   </button>
                 </div>
 
                 {isReaderExpanded && (
-                  <div className="p-6 sm:p-8 bg-[#F7F3EC] border-t border-[#E8DED1] animate-in fade-in duration-300">
-                    <PageFlipPreview book={book} />
+                  <div className="p-6 sm:p-10 md:p-12 bg-gradient-to-b from-[#FAF5EC] via-[#F4EDE2] to-[#EFE5D5] border-t border-[#E8DED1] relative overflow-hidden animate-in fade-in duration-300">
+                    {/* Ambient library sunlight rays overlay */}
+                    <div className="absolute inset-0 pointer-events-none opacity-25 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-200 via-transparent to-transparent" />
+                    <div className="relative z-10 max-w-4xl mx-auto">
+                      <PageFlipPreview book={book} />
+                    </div>
                   </div>
                 )}
               </div>

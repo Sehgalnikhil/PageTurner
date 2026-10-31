@@ -1086,38 +1086,40 @@ const PageFlipPreview = ({ book }) => {
   return (
     <div className="w-full my-4 relative select-none">
       {/* 1. INLINE HUD CONTROL BAR */}
-      <div className="w-full max-w-[660px] mx-auto flex items-center justify-between bg-black/75 backdrop-blur-md text-stone-200 px-3.5 py-1.5 rounded-xl mb-3 border border-white/10 text-xs shadow-md">
-        <div className="flex items-center gap-1.5 truncate">
-          <PiBookOpenBold className="text-amber-400 text-sm flex-shrink-0" />
-          <span className="font-serif font-bold text-stone-100 truncate text-[11px] sm:text-xs">
+      <div className="w-full max-w-[700px] mx-auto flex items-center justify-between bg-[#1F1916]/90 backdrop-blur-md text-[#E8DED1] px-4 py-2 rounded-2xl mb-4 border border-[#C6A16B]/30 text-xs shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+        <div className="flex items-center gap-2 truncate">
+          <div className="w-6 h-6 rounded-md bg-[#8D263B] text-amber-200 flex items-center justify-center flex-shrink-0 shadow-xs">
+            <PiBookOpenBold className="text-xs" />
+          </div>
+          <span className="font-serif font-bold text-amber-100 truncate text-xs sm:text-[13px] tracking-wide">
             {book?.title || 'Apple Books'}
           </span>
         </div>
 
         {/* Center: Layout View Mode Toggle [ 📱 iPhone | 📖 Duo ] */}
-        <div className="flex items-center bg-white/10 rounded-full p-0.5 border border-white/15 text-[10px] font-mono">
+        <div className="flex items-center bg-black/40 rounded-full p-1 border border-white/10 text-[10px] font-mono">
           <button
             type="button"
             onClick={() => setViewMode('single')}
-            className={`px-2 py-0.5 rounded-full flex items-center gap-1 transition-all ${
+            className={`px-3 py-1 rounded-full flex items-center gap-1.5 transition-all cute-press ${
               viewMode === 'single'
-                ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
+                ? 'bg-[#C6A16B] text-[#1F1916] font-bold shadow-xs'
                 : 'text-stone-300 hover:text-white'
             }`}
-            title="Apple Books iPhone View (Single Page)"
+            title="Single Page View"
           >
             <PiDeviceMobileBold className="text-xs" />
-            <span className="hidden sm:inline">iPhone</span>
+            <span className="hidden sm:inline">Single</span>
           </button>
           <button
             type="button"
             onClick={() => setViewMode('duo')}
-            className={`px-2 py-0.5 rounded-full flex items-center gap-1 transition-all ${
+            className={`px-3 py-1 rounded-full flex items-center gap-1.5 transition-all cute-press ${
               viewMode === 'duo'
-                ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
+                ? 'bg-[#C6A16B] text-[#1F1916] font-bold shadow-xs'
                 : 'text-stone-300 hover:text-white'
             }`}
-            title="Apple Books Duo Spread (Two Facing Pages)"
+            title="Two Facing Pages"
           >
             <PiBookBookmarkBold className="text-xs" />
             <span className="hidden sm:inline">Duo Spread</span>
