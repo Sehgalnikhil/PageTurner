@@ -24,9 +24,27 @@
     font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Hardware acceleration helper for silky 60fps renders */
+  .gpu-accelerated,
+  .book-pin,
+  .cute-card-tilt,
+  .cute-pill-hover,
+  .cute-press,
+  .cute-sticker {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
   }
 
   ::selection {
