@@ -68,7 +68,7 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
         tabIndex={0}
         role="button"
         aria-label={`View details for ${book.title} by ${book.author}`}
-        className={`book-pin group cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8D263B] focus-visible:ring-offset-2 ${
+        className={`book-pin group cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8D263B] focus-visible:ring-offset-2 cute-card-tilt ${
           isFeatured
             ? 'bg-[#FFFDFA] border-[#D9A9A6]/60 shadow-card hover:border-[#8D263B]'
             : 'bg-[#FFFDFA] border-[#E8DED1] shadow-subtle hover:border-[#D9A9A6]'
@@ -155,7 +155,9 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
                   onClick={handleBookmarkClick}
                   title={isSaved ? 'Remove from shelf' : 'Save to shelf'}
                   aria-label={isSaved ? 'Saved to shelf' : 'Save to shelf'}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium shadow-sm flex items-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 border cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium shadow-sm flex items-center gap-1.5 transition-all duration-150 cute-pill-hover border cursor-pointer ${
+                    popping ? 'scale-110 rotate-[-3deg]' : ''
+                  } ${
                     isSaved
                       ? 'bg-[#302A27] text-[#C6A16B] border-[#C6A16B]/30'
                       : 'bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] border-transparent'

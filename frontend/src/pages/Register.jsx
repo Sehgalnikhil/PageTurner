@@ -203,7 +203,7 @@ const Register = () => {
           <div className="w-full sm:w-[430px] lg:w-[430px] xl:w-[460px] flex-shrink-0 relative animate-card-entrance gpu-accelerated">
             
             {/* Pinned Transparent Kraft Luggage Tag (Hangs cleanly over corner with gentle ambient float) */}
-            <div className="absolute -top-5 -right-3 sm:-right-4 z-20 pointer-events-none drop-shadow-md select-none animate-gentle-float">
+            <div className="absolute -top-5 -right-3 sm:-right-4 z-20 pointer-events-none drop-shadow-md select-none animate-tag-sway">
               <img
                 src="/images/signup-kraft-tag-transparent.png"
                 alt="New Reader Passport awaits"

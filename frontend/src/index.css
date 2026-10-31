@@ -1196,3 +1196,78 @@ html {
 .interactive-lift:active {
   transform: translateY(0) scale(0.99);
 }
+
+/* ==========================================================================
+   Cute, Charming & Tactile Micro-Animations Suite
+   ========================================================================== */
+
+@keyframes cuteWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3.5deg) scale(1.05); }
+  75% { transform: rotate(3.5deg) scale(1.05); }
+}
+
+@keyframes cuteBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes sparkleTwinkle {
+  0% { transform: rotate(0deg) scale(0.9); opacity: 0.7; }
+  50% { transform: rotate(180deg) scale(1.25); opacity: 1; }
+  100% { transform: rotate(360deg) scale(0.9); opacity: 0.7; }
+}
+
+@keyframes heartBeatCute {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.18); }
+  50% { transform: scale(0.96); }
+  75% { transform: scale(1.12); }
+}
+
+@keyframes tagSway {
+  0%, 100% { transform: rotate(2deg) translateY(0); }
+  50% { transform: rotate(5deg) translateY(-3px); }
+}
+
+.animate-cute-wiggle {
+  animation: cuteWiggle 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-cute-bounce {
+  animation: cuteBounce 2.5s ease-in-out infinite;
+}
+
+.animate-sparkle-twinkle {
+  animation: sparkleTwinkle 3s linear infinite;
+}
+
+.animate-heart-cute {
+  animation: heartBeatCute 1.4s ease-in-out infinite;
+}
+
+.animate-tag-sway {
+  animation: tagSway 4s ease-in-out infinite;
+}
+
+/* Cute tactile hover pills */
+.cute-pill-hover {
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cute-pill-hover:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 18px -2px rgba(146, 40, 63, 0.18);
+}
+.cute-pill-hover:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Cute tactile card tilt */
+.cute-card-tilt {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+.cute-card-tilt:hover {
+  transform: translateY(-5px) rotate(-0.6deg);
+  box-shadow: 0 18px 36px -8px rgba(48, 39, 34, 0.12);
+}
+

@@ -168,7 +168,7 @@ const Navbar = ({ totalBooks = 0 }) => {
             <div className="flex items-center flex-shrink-0">
               <Link to="/" className="group flex items-center gap-3">
                 {/* Refined Burgundy Emblem */}
-                <div className="w-9 h-9 rounded-md bg-[#8D263B] text-[#FFFDFA] flex items-center justify-center flex-shrink-0 transition-all duration-200 group-hover:bg-[#67202F] shadow-sm">
+                <div className="w-9 h-9 rounded-md bg-[#8D263B] text-[#FFFDFA] flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:rotate-[-6deg] group-hover:scale-110 shadow-sm">
                   <PiBookOpenBold className="text-xl" />
                 </div>
 
@@ -201,11 +201,11 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(true)}
-                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-colors flex items-center gap-1.5 cursor-pointer py-1"
+                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-colors flex items-center gap-1.5 cursor-pointer py-1 group/shelf"
               >
                 <span>My Shelf</span>
                 {bookmarkCount > 0 && (
-                  <span className="w-4 h-4 rounded-full bg-[#8D263B] text-white text-[10px] font-sans font-semibold flex items-center justify-center shadow-2xs">
+                  <span className="w-4 h-4 rounded-full bg-[#8D263B] text-white text-[10px] font-sans font-semibold flex items-center justify-center shadow-2xs animate-heart-cute">
                     {bookmarkCount}
                   </span>
                 )}
@@ -307,9 +307,9 @@ const Navbar = ({ totalBooks = 0 }) => {
               {user && (
                 <Link
                   to="/books/create"
-                  className="flex items-center gap-1.5 h-8 px-3.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium transition-all duration-150 flex-shrink-0 shadow-sm active:scale-95"
+                  className="flex items-center gap-1.5 h-8 px-3.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium transition-all duration-150 flex-shrink-0 shadow-sm active:scale-95 group/addbtn cute-pill-hover"
                 >
-                  <PiPlusBold className="text-xs" />
+                  <PiPlusBold className="text-xs transition-transform duration-300 group-hover/addbtn:rotate-90 group-hover/addbtn:scale-125" />
                   <span>Add Book</span>
                 </Link>
               )}

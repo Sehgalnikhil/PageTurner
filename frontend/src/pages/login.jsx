@@ -203,7 +203,7 @@ const Login = () => {
                 </div>
 
                 {/* Circular Reader Passport Postmark Stamp from Reference */}
-                <div className="flex-shrink-0 select-none opacity-85 hover:opacity-100 transition-opacity">
+                <div className="flex-shrink-0 select-none opacity-85 hover:opacity-100 transition-opacity animate-cute-bounce">
                   <img
                     src="/images/login-passport-stamp-clean.png"
                     alt="Reader Passport Stamp"
