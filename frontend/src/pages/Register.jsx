@@ -317,18 +317,18 @@ const Register = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-10.5 rounded-full bg-[#92283F] hover:bg-[#702338] text-white text-xs font-medium tracking-wide flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-4"
+                  className="w-full h-12 sm:h-12.5 rounded-full bg-[#92283F] hover:bg-[#702338] text-white text-[13.5px] sm:text-sm font-semibold tracking-wide flex items-center justify-center gap-2.5 shadow-[0_4px_16px_rgba(146,40,63,0.22)] hover:shadow-[0_6px_22px_rgba(146,40,63,0.32)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-5 group"
                 >
                   {loading ? (
-                    <span className="flex items-center gap-2">
-                      <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span className="flex items-center gap-2.5">
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       <span>Creating Passport...</span>
                     </span>
                   ) : (
                     <>
-                      <PiSparkleBold className="text-xs text-[#C6A16B]" />
+                      <PiSparkleBold className="text-sm text-[#C6A16B]" />
                       <span>Create Reader Passport</span>
-                      <PiArrowRightBold className="text-xs ml-0.5" />
+                      <PiArrowRightBold className="text-sm group-hover:translate-x-1 transition-transform duration-200" />
                     </>
                   )}
                 </button>
