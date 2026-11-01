@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { PiXBold, PiArrowRightBold, PiCaretLeftBold, PiCaretRightBold, PiPlusBold, PiCaretRight, PiSparkleBold } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 
-// 6 Distinct, high-quality, authentic curated atmospheric collections matching mockup
+// 6 Distinct, high-quality, authentic curated atmospheric collections with clean photography
 const COLLECTIONS_DATA = [
   {
     id: 'dark-academia',
@@ -13,7 +13,7 @@ const COLLECTIONS_DATA = [
     keywords: ['secret history', 'dorian', 'villains', 'babel', 'crime and punishment', 'frankenstein'],
     fallbackCategory: 'Fiction',
     theme: 'dark',
-    bgImage: '/images/atmospheres/dark_academia_hd.jpg',
+    bgImage: '/images/atmospheres/clean_dark_academia.jpg',
   },
   {
     id: 'mind-bending',
@@ -24,7 +24,7 @@ const COLLECTIONS_DATA = [
     keywords: ['dune', '1984', 'brave new world', 'fahrenheit', 'klara', 'solitude'],
     fallbackCategory: 'Sci-Fi',
     theme: 'dark',
-    bgImage: '/images/atmospheres/mind_bending_hd.jpg',
+    bgImage: '/images/atmospheres/clean_mind_bending.jpg',
   },
   {
     id: 'ideas-startups',
@@ -35,7 +35,7 @@ const COLLECTIONS_DATA = [
     keywords: ['zero to one', 'hard thing', 'startup', 'atomic habits', 'steve jobs', 'thinking, fast', 'good to great'],
     fallbackCategory: 'Non-Fiction',
     theme: 'dark',
-    bgImage: '/images/atmospheres/ideas_startups_hd.jpg',
+    bgImage: '/images/atmospheres/clean_ideas_startups.jpg',
   },
   {
     id: 'perspective-shifts',
@@ -46,7 +46,7 @@ const COLLECTIONS_DATA = [
     keywords: ['meditations', 'meaning', 'sapiens', 'mockingbird', 'metamorphosis', 'thinking'],
     fallbackCategory: 'Non-Fiction',
     theme: 'dark',
-    bgImage: '/images/atmospheres/perspective_shifts_hd.jpg',
+    bgImage: '/images/atmospheres/clean_perspective_shifts.jpg',
   },
   {
     id: 'late-night',
@@ -57,7 +57,7 @@ const COLLECTIONS_DATA = [
     keywords: ['great gatsby', 'shadow of the wind', 'norwegian wood', 'bell jar', 'stoner', 'kafka on the shore'],
     fallbackCategory: 'Fiction',
     theme: 'dark',
-    bgImage: '/images/atmospheres/late_night_hd.jpg',
+    bgImage: '/images/atmospheres/clean_late_night.jpg',
   },
   {
     id: 'personal-growth',
@@ -68,7 +68,7 @@ const COLLECTIONS_DATA = [
     keywords: ['atomic habits', 'deep work', 'grit', 'mastery', 'alchemist', 'craft', 'art of'],
     fallbackCategory: 'Non-Fiction',
     theme: 'dark',
-    bgImage: '/images/atmospheres/personal_growth_hd.jpg',
+    bgImage: '/images/atmospheres/clean_personal_growth.jpg',
   },
 ];
 
