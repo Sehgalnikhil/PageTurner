@@ -77,8 +77,45 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  // Compress and resize uploaded image for fast upload and permanent persistence
+  const compressImage = (file, maxWidth = 320, maxHeight = 320, quality = 0.88) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = (err) => reject(err);
+      };
+      reader.onerror = (err) => reject(err);
+    });
+  };
+
   // Handle local image file upload from reader's machine
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -87,28 +124,19 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
       return;
     }
 
-    if (file.size > 3 * 1024 * 1024) {
-      enqueueSnackbar('Image size should be under 3MB', { variant: 'warning' });
-    }
-
     setIsUploading(true);
     playPaperUnwrap();
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result;
-      if (typeof dataUrl === 'string') {
-        setSelectedAvatar(dataUrl);
-        setCustomUrl('');
-        enqueueSnackbar('Custom portrait loaded for preview 📷', { variant: 'info' });
-      }
+    try {
+      const compressedDataUrl = await compressImage(file, 320, 320, 0.88);
+      setSelectedAvatar(compressedDataUrl);
+      setCustomUrl('');
+      enqueueSnackbar('Custom portrait loaded for preview 📷', { variant: 'info' });
+    } catch {
+      enqueueSnackbar('Could not process image file', { variant: 'error' });
+    } finally {
       setIsUploading(false);
-    };
-    reader.onerror = () => {
-      enqueueSnackbar('Could not load image file', { variant: 'error' });
-      setIsUploading(false);
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   // Apply URL directly
