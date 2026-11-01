@@ -161,7 +161,17 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-transparent transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-transparent transition-colors duration-300 relative overflow-x-hidden">
+      {/* Decorative Botanical Branch flourish in top-left matching Mockup */}
+      <div className="absolute top-16 left-0 w-36 h-64 pointer-events-none select-none z-0 opacity-80 hidden sm:block">
+        <img
+          src="/images/botanical_branch_clean.png"
+          alt=""
+          className="w-full h-full object-contain object-left-top"
+          aria-hidden="true"
+        />
+      </div>
+
       <Navbar totalBooks={totalBooks} />
 
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">

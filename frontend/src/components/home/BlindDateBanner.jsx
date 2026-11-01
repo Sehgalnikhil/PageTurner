@@ -451,6 +451,15 @@ const BlindDateBanner = ({ books = [] }) => {
         {/* Inner Gilded Hairline Filigree Frame */}
         <div className="absolute inset-2 sm:inset-3 rounded-[22px] border border-[#C6A16B]/25 pointer-events-none z-10" />
 
+        {/* Cinematic Candlelit Studio Ambience on the right matching Mockup */}
+        <div className="absolute inset-y-0 right-0 w-full sm:w-[55%] md:w-[50%] lg:w-[48%] overflow-hidden pointer-events-none select-none opacity-40 mix-blend-screen">
+          <img
+            src="/images/blind_date_parcel_mockup.jpg"
+            alt="Warm candlelit books and dried florals"
+            className="w-full h-full object-cover object-center"
+          />
+        </div>
+
         {/* Soft Art-Directed Studio Lighting & Depth Vignettes */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-rose-950/30 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-amber-950/25 rounded-full blur-3xl pointer-events-none" />
@@ -489,15 +498,21 @@ const BlindDateBanner = ({ books = [] }) => {
             {unwrappingStage !== 'revealed' ? (
               /* ================= THE 3 CLEAR, READABLE CLUES ================= */
               <div className="space-y-4">
-                {/* Archival Parchment Clues Plaque */}
+                {/* Archival Parchment Clues Plaque matching Mockup */}
                 <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-[#FAF4EC] to-[#F1E5D5] text-[#1A120B] border border-[#CBB39C] shadow-[0_10px_30px_-5px_rgba(0,0,0,0.45)] relative overflow-hidden">
-                  <div className="flex items-center justify-between border-b border-[#D8C4AE] pb-2.5 mb-3.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-md bg-[#8D263B]/10 text-[#8D263B] flex items-center justify-center">
-                        <PiFeatherBold className="text-xs" />
-                      </div>
-                      <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.16em] font-bold text-[#5A4535]">
-                        Archival Mystery Clues
+                  <div className="flex items-center justify-between gap-2 border-b border-[#D8C4AE] pb-2.5 mb-3.5 flex-wrap">
+                    <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF5EB] border border-[#D5C6B3] text-[9.5px] font-mono uppercase tracking-wider font-bold text-[#5A4535] shadow-2xs">
+                        <span>🪶 ARCHIVAL MYSTERY CLUES</span>
+                        <span className="text-[9px] text-[#81766D]">&gt;</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF5EB]/60 border border-[#D5C6B3]/60 text-[9.5px] font-mono uppercase tracking-wider font-medium text-[#7A6453]">
+                        <span>◎ ATMOSPHERE &amp; SETTING</span>
+                        <span className="text-[9px] text-[#81766D]">&gt;</span>
+                      </span>
+                      <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF5EB]/60 border border-[#D5C6B3]/60 text-[9.5px] font-mono uppercase tracking-wider font-medium text-[#7A6453]">
+                        <span>✦ LIKELY THEMES</span>
+                        <span className="text-[9px] text-[#81766D]">&gt;</span>
                       </span>
                     </div>
                     <span className="text-[9px] sm:text-[10px] font-mono text-[#7A6453] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full bg-[#E8D9C7]/60 border border-[#D0BFAF]/60">
