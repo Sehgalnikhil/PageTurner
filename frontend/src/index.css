@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -23,10 +23,11 @@
   body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'DM Sans', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "liga", "clig";
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
@@ -80,13 +81,23 @@
     color: inherit;
   }
 
-  h1, h2, h3, h4, .font-serif, .font-cormorant {
+  h1, h2, h3, h4, .font-serif {
+    font-family: 'Playfair Display', 'Fraunces', 'Cormorant Garamond', Georgia, serif;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
+  }
+
+  .font-cormorant {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    letter-spacing: -0.015em;
+  }
+
+  .font-display {
+    font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
   }
 
   .font-mono {
     font-family: 'DM Mono', 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: -0.01em;
   }
 
   .editorial-surface {

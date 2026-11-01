@@ -7,8 +7,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        sans: ['"DM Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['"Playfair Display"', '"Fraunces"', '"Cormorant Garamond"', 'Georgia', 'serif'],
+        display: ['"Fraunces"', '"Playfair Display"', 'Georgia', 'serif'],
+        cormorant: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans: ['"Plus Jakarta Sans"', '"DM Sans"', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['"DM Mono"', '"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       colors: {
