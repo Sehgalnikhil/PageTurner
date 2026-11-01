@@ -10,36 +10,59 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       const stored = localStorage.getItem('userInfo');
+      const savedCustomAvatar = localStorage.getItem('sanctuary_custom_avatar');
+
       if (stored) {
         try {
           let parsed = JSON.parse(stored);
 
-          // If session is using demo user, seamlessly upgrade to real registered database user
+          // Guarantee persistent user avatar from dedicated storage
+          if (savedCustomAvatar && (!parsed.avatar || parsed.avatar.includes('photo-1544717305-2782549b5136'))) {
+            parsed.avatar = savedCustomAvatar;
+          }
+
+          // If session was using demo user, upgrade to primary database user, but PRESERVE user customizations
           if (parsed.username === 'Admin Demo' || parsed.email === 'admin@pageturner.io' || parsed.username === 'Reader Demo') {
             try {
               const res = await authService.switchAccount({ email: 'nikhilsehgal1806@gmail.com' });
               if (res.data) {
-                parsed = res.data;
+                parsed = {
+                  ...res.data,
+                  avatar: savedCustomAvatar || parsed.avatar || res.data.avatar,
+                };
               }
             } catch (switchErr) {
               console.warn('Could not auto-switch demo to real user:', switchErr);
             }
           }
 
+          // Immediate optimistic state hydration
           setUser(parsed);
           localStorage.setItem('userInfo', JSON.stringify(parsed));
 
           // Verify token and refresh user info from backend
           if (parsed.token) {
-            const { data } = await authService.getProfile();
-            if (data) {
-              const updated = { ...parsed, ...data };
-              setUser(updated);
-              localStorage.setItem('userInfo', JSON.stringify(updated));
+            try {
+              const { data } = await authService.getProfile();
+              if (data) {
+                const finalAvatar = savedCustomAvatar || parsed.avatar || data.avatar;
+                const updated = {
+                  ...parsed,
+                  ...data,
+                  avatar: finalAvatar,
+                };
+                setUser(updated);
+                localStorage.setItem('userInfo', JSON.stringify(updated));
+                if (finalAvatar) {
+                  localStorage.setItem('sanctuary_custom_avatar', finalAvatar);
+                }
+              }
+            } catch (profileErr) {
+              console.warn('Profile fetch warning (retaining cached session):', profileErr.message);
             }
           }
         } catch (error) {
-          console.error('Session expired or invalid token:', error);
+          console.error('Session parsing error:', error);
           localStorage.removeItem('userInfo');
           setUser(null);
         }
@@ -48,8 +71,15 @@ export const AuthProvider = ({ children }) => {
         try {
           const res = await authService.switchAccount({ email: 'nikhilsehgal1806@gmail.com' });
           if (res.data) {
-            setUser(res.data);
-            localStorage.setItem('userInfo', JSON.stringify(res.data));
+            const initialUser = {
+              ...res.data,
+              avatar: savedCustomAvatar || res.data.avatar,
+            };
+            setUser(initialUser);
+            localStorage.setItem('userInfo', JSON.stringify(initialUser));
+            if (initialUser.avatar) {
+              localStorage.setItem('sanctuary_custom_avatar', initialUser.avatar);
+            }
           }
         } catch (err) {
           console.warn('Could not initialize real default user:', err);
@@ -62,31 +92,57 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData) => {
-    localStorage.setItem('userInfo', JSON.stringify(userData));
-    setUser(userData);
+    const savedCustomAvatar = localStorage.getItem('sanctuary_custom_avatar');
+    const finalUserData = {
+      ...userData,
+      avatar: userData.avatar || savedCustomAvatar,
+    };
+    localStorage.setItem('userInfo', JSON.stringify(finalUserData));
+    if (finalUserData.avatar) {
+      localStorage.setItem('sanctuary_custom_avatar', finalUserData.avatar);
+    }
+    setUser(finalUserData);
   };
 
   const logout = () => {
     localStorage.removeItem('userInfo');
+    // Note: We retain sanctuary_custom_avatar so next login/guest uses preferred aesthetic portrait
     setUser(null);
   };
 
   const updateAvatar = async (newAvatar) => {
-    // 1. Optimistic instant local update
+    if (!newAvatar) return false;
+
+    // 1. Optimistic instant local update in both storage keys & state
     const updated = {
       ...(user || {}),
       avatar: newAvatar,
     };
     setUser(updated);
     localStorage.setItem('userInfo', JSON.stringify(updated));
+    localStorage.setItem('sanctuary_custom_avatar', newAvatar);
 
-    // 2. Persist to backend if token exists
-    if (user?.token) {
-      try {
-        await authService.updateAvatar(newAvatar);
-      } catch (err) {
-        console.error('Failed to sync avatar with backend:', err);
+    // 2. Persist to backend and sync with MongoDB
+    try {
+      const res = await authService.updateAvatar({
+        avatar: newAvatar,
+        email: user?.email,
+        username: user?.username,
+        userId: user?._id || user?.id,
+      });
+
+      if (res?.data) {
+        const synced = {
+          ...updated,
+          avatar: res.data.avatar || newAvatar,
+          ...(res.data.token ? { token: res.data.token } : {}),
+        };
+        setUser(synced);
+        localStorage.setItem('userInfo', JSON.stringify(synced));
+        localStorage.setItem('sanctuary_custom_avatar', res.data.avatar || newAvatar);
       }
+    } catch (err) {
+      console.warn('Avatar synced locally; backend sync note:', err.message);
     }
     return true;
   };
@@ -97,9 +153,17 @@ export const AuthProvider = ({ children }) => {
         email: targetEmailOrUsername || 'nikhilsehgal1806@gmail.com',
       });
       if (res.data) {
-        setUser(res.data);
-        localStorage.setItem('userInfo', JSON.stringify(res.data));
-        return res.data;
+        const savedCustomAvatar = localStorage.getItem('sanctuary_custom_avatar');
+        const switched = {
+          ...res.data,
+          avatar: res.data.avatar || savedCustomAvatar,
+        };
+        setUser(switched);
+        localStorage.setItem('userInfo', JSON.stringify(switched));
+        if (switched.avatar) {
+          localStorage.setItem('sanctuary_custom_avatar', switched.avatar);
+        }
+        return switched;
       }
     } catch (err) {
       console.error('Failed to switch to real user:', err);

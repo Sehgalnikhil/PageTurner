@@ -96,7 +96,10 @@ export const authService = {
   getProfile: () => api.get('/auth/me'),
   sendWelcomeEmail: (data) => api.post('/auth/send-welcome-email', data),
   sendLoginAlert: (data) => api.post('/auth/send-login-alert', data),
-  updateAvatar: (avatar) => api.put('/auth/avatar', { avatar }),
+  updateAvatar: (payload) => {
+    const data = typeof payload === 'string' ? { avatar: payload } : payload;
+    return api.put('/auth/avatar', data);
+  },
   getRealUsers: () => api.get('/auth/real-users'),
   switchAccount: (data) => api.post('/auth/switch-account', data),
   forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
