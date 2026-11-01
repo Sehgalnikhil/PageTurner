@@ -105,11 +105,11 @@ export const authService = {
   forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
   resetPassword: (data) => api.post('/auth/reset-password', data),
   getEmailPreviewUrl: (username, email) =>
-    `${API_BASE_URL}/auth/email/preview?username=${encodeURIComponent(username || '')}&email=${encodeURIComponent(email || '')}`,
+    `${API_BASE_URL}/auth/email/preview?username=${encodeURIComponent(username || '')}&email=${encodeURIComponent(email || '')}&frontendUrl=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : '')}`,
   getLoginEmailPreviewUrl: (username, email) =>
-    `${API_BASE_URL}/auth/email/login-preview?username=${encodeURIComponent(username || '')}&email=${encodeURIComponent(email || '')}`,
+    `${API_BASE_URL}/auth/email/login-preview?username=${encodeURIComponent(username || '')}&email=${encodeURIComponent(email || '')}&frontendUrl=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : '')}`,
   getResetEmailPreviewUrl: (username, email) =>
-    `${API_BASE_URL}/auth/email/reset-preview?username=${encodeURIComponent(username || '')}&email=${encodeURIComponent(email || '')}`,
+    `${API_BASE_URL}/auth/email/reset-preview?username=${encodeURIComponent(username || '')}&email=${encodeURIComponent(email || '')}&frontendUrl=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : '')}`,
 };
 
 export const systemService = {

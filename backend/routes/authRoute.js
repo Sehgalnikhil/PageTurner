@@ -80,7 +80,9 @@ router.post('/register', async (req, res) => {
 
     if (user) {
       // Send beautiful welcome email asynchronously in background (non-blocking)
-      sendWelcomeEmail(user.email, user.username).catch((err) => {
+      sendWelcomeEmail(user.email, user.username, {
+        frontendUrl: req.headers.origin || req.headers.referer || '',
+      }).catch((err) => {
         console.warn('Welcome email background send note:', err.message);
       });
 
@@ -126,6 +128,7 @@ router.post('/login', async (req, res) => {
         ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress || req.ip || '127.0.0.1',
         userAgent: req.headers['user-agent'] || 'Web Browser',
         time: new Date(),
+        frontendUrl: req.headers.origin || req.headers.referer || '',
       });
 
       res.json({
@@ -300,11 +303,13 @@ router.get('/email/preview', (req, res) => {
   const email = req.query.email || 'alex.rivera@example.com';
   const memberId = req.query.memberId || generateMemberId(username);
 
+  const frontendUrl = req.query.frontendUrl || req.headers.origin || req.headers.referer || '';
+
   const emailHtml = generateWelcomeEmailHtml({
     username,
     email,
     memberId,
-    frontendUrl: 'http://localhost:5173',
+    frontendUrl,
   });
 
   // If ?raw=true, return pure HTML for testing/crawlers
@@ -447,14 +452,14 @@ router.get('/email/preview', (req, res) => {
 
     <div class="controls">
       <button class="btn" id="toggleView" onclick="toggleViewport()">📱 Mobile View</button>
-      <a href="/auth/email/preview?raw=true&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}" target="_blank" class="btn">↗ Open Raw HTML</a>
+      <a href="/auth/email/preview?raw=true&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&frontendUrl=${encodeURIComponent(frontendUrl)}" target="_blank" class="btn">↗ Open Raw HTML</a>
       <button class="btn btn-primary" onclick="sendTestEmail()">✉️ Send to My Email</button>
     </div>
   </header>
 
   <main class="preview-canvas">
     <div class="preview-frame-wrap" id="frameWrap">
-      <iframe src="/auth/email/preview?raw=true&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&memberId=${encodeURIComponent(memberId)}" title="Email Live Preview"></iframe>
+      <iframe src="/auth/email/preview?raw=true&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&memberId=${encodeURIComponent(memberId)}&frontendUrl=${encodeURIComponent(frontendUrl)}" title="Email Live Preview"></iframe>
     </div>
   </main>
 
@@ -508,13 +513,14 @@ router.get('/email/login-preview', (req, res) => {
   const email = req.query.email || 'alex.rivera@example.com';
   const ip = req.query.ip || '192.168.1.42';
   const userAgent = req.headers['user-agent'] || 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)';
+  const frontendUrl = req.query.frontendUrl || req.headers.origin || req.headers.referer || '';
 
   const emailHtml = generateLoginNotificationEmailHtml({
     username,
     email,
     ip,
     userAgent,
-    frontendUrl: 'http://localhost:5173',
+    frontendUrl,
   });
 
   res.setHeader('Content-Type', 'text/html').send(emailHtml);
@@ -532,7 +538,10 @@ router.post('/send-welcome-email', async (req, res) => {
     }
 
     const recipientUsername = username || email.split('@')[0];
-    const result = await sendWelcomeEmail(email.trim(), recipientUsername.trim());
+    const frontendUrl = req.body.frontendUrl || req.headers.origin || req.headers.referer || '';
+    const result = await sendWelcomeEmail(email.trim(), recipientUsername.trim(), {
+      frontendUrl,
+    });
 
     if (result.success) {
       return res.status(200).json({
@@ -569,11 +578,12 @@ router.post('/send-login-alert', async (req, res) => {
     const recipientUsername = username || email.split('@')[0];
     const ip = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '127.0.0.1';
     const userAgent = req.headers['user-agent'] || 'Mozilla/5.0';
+    const frontendUrl = req.body.frontendUrl || req.headers.origin || req.headers.referer || '';
 
     const result = await sendLoginNotificationEmail(email.trim(), recipientUsername.trim(), {
       ip,
       userAgent,
-      frontendUrl: 'http://localhost:5173',
+      frontendUrl,
     });
 
     if (result.success) {
@@ -623,7 +633,10 @@ router.post('/forgot-password', async (req, res) => {
     await user.save();
 
     // Dispatch reset email asynchronously
-    sendPasswordResetEmail(user.email, user.username, resetToken);
+    const frontendUrl = req.body.frontendUrl || req.headers.origin || req.headers.referer || '';
+    sendPasswordResetEmail(user.email, user.username, resetToken, {
+      frontendUrl,
+    });
 
     res.status(200).json({
       success: true,
@@ -688,12 +701,13 @@ router.get('/email/reset-preview', (req, res) => {
   const username = req.query.username || 'Alex Rivera';
   const email = req.query.email || 'alex.rivera@example.com';
   const token = req.query.token || 'demo_secure_reset_token_68294';
+  const frontendUrl = req.query.frontendUrl || req.headers.origin || req.headers.referer || '';
 
   const emailHtml = generatePasswordResetEmailHtml({
     username,
     email,
     resetToken: token,
-    frontendUrl: 'http://localhost:5173',
+    frontendUrl,
   });
 
   res.setHeader('Content-Type', 'text/html').send(emailHtml);

@@ -135,6 +135,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
       const res = await authService.sendWelcomeEmail({
         email: emailToSend,
         username: activeUser.username,
+        frontendUrl: typeof window !== 'undefined' ? window.location.origin : undefined,
       });
 
       if (res.data?.success) {
@@ -169,6 +170,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
       const res = await authService.sendLoginAlert({
         email: emailToSend,
         username: activeUser.username,
+        frontendUrl: typeof window !== 'undefined' ? window.location.origin : undefined,
       });
 
       if (res.data?.success) {

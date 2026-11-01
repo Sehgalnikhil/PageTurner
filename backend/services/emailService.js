@@ -5,6 +5,21 @@ import nodemailer from 'nodemailer';
 let testAccountTransporter = null;
 
 /**
+ * Resolve the public frontend URL for email deep-links.
+ * Prefers explicitly supplied URL, then FRONTEND_URL environment variable,
+ * defaulting to the live deployed Netlify application.
+ */
+export const resolveFrontendUrl = (explicitUrl = '') => {
+  if (explicitUrl && typeof explicitUrl === 'string') {
+    return explicitUrl.replace(/\/$/, '');
+  }
+  if (process.env.FRONTEND_URL) {
+    return process.env.FRONTEND_URL.replace(/\/$/, '');
+  }
+  return 'https://pageeturner.netlify.app';
+};
+
+/**
  * Get or create a nodemailer transporter.
  * If EMAIL_USER and EMAIL_PASS are configured, uses Gmail SMTP.
  * Automatically sanitizes Gmail 16-character App Passwords by removing formatted spaces.
@@ -61,540 +76,6 @@ export const generateMemberId = (username = 'Reader') => {
 };
 
 /**
- * Generate rich, responsive, magazine-grade HTML email matching PageTurner's aesthetic
- */
-export const generateWelcomeEmailHtml = ({
-  username = 'Reader',
-  email = '',
-  memberId = '',
-  frontendUrl = 'http://localhost:5173',
-}) => {
-  const resolvedMemberId = memberId || generateMemberId(username);
-  const issuedDate = new Date().toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to PageTurner — Your Official Reader Passport</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #FAF7F2;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      color: #292522;
-      -webkit-font-smoothing: antialiased;
-    }
-    table {
-      border-collapse: collapse;
-      mso-table-lspace: 0pt;
-      mso-table-rspace: 0pt;
-    }
-    img {
-      border: 0;
-      outline: none;
-      text-decoration: none;
-      display: block;
-    }
-    .wrapper {
-      width: 100%;
-      background-color: #FAF7F2;
-      padding: 40px 12px;
-    }
-    .main-card {
-      background-color: #FFFDF9;
-      margin: 0 auto;
-      max-width: 620px;
-      border: 1px solid #E8DED2;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(41, 37, 34, 0.08);
-      overflow: hidden;
-    }
-    .masthead {
-      background: linear-gradient(135deg, #7B1826 0%, #861D2D 60%, #5C101B 100%);
-      padding: 34px 28px;
-      text-align: center;
-      color: #FFFDF9;
-      position: relative;
-    }
-    .masthead-seal {
-      display: inline-block;
-      width: 44px;
-      height: 44px;
-      line-height: 44px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      font-size: 20px;
-      margin-bottom: 12px;
-    }
-    .masthead h1 {
-      margin: 0;
-      font-family: 'Georgia', serif;
-      font-size: 30px;
-      letter-spacing: -0.5px;
-      font-weight: 700;
-      color: #FFFDF9;
-    }
-    .masthead p {
-      margin: 8px 0 0;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2.5px;
-      font-family: 'Courier New', Courier, monospace;
-      color: #F8E8CD;
-      font-weight: bold;
-    }
-    .content {
-      padding: 36px 32px;
-    }
-    .greeting {
-      font-family: 'Georgia', serif;
-      font-size: 26px;
-      font-weight: 700;
-      color: #292522;
-      line-height: 1.25;
-      margin-bottom: 12px;
-    }
-    .greeting span {
-      color: #861D2D;
-      font-style: italic;
-      font-weight: normal;
-    }
-    .lead-text {
-      font-size: 15px;
-      line-height: 1.7;
-      color: #5A524C;
-      font-family: 'Georgia', serif;
-      margin-bottom: 24px;
-    }
-
-    /* Official Reader Passport Card */
-    .passport-card {
-      background: linear-gradient(180deg, #F9F5EC 0%, #F1E6D4 100%);
-      border: 2px dashed #CBB499;
-      border-radius: 16px;
-      padding: 22px 24px;
-      margin: 28px 0 32px;
-      box-shadow: 0 4px 16px rgba(50, 30, 15, 0.06);
-    }
-    .passport-header {
-      border-bottom: 1px solid #D6C3AA;
-      padding-bottom: 12px;
-      margin-bottom: 16px;
-    }
-    .passport-title {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #7B1826;
-      font-weight: bold;
-    }
-    .passport-meta-table {
-      width: 100%;
-    }
-    .passport-meta-table td {
-      padding: 4px 0;
-      font-size: 13px;
-    }
-    .passport-label {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 11px;
-      text-transform: uppercase;
-      color: #7A695A;
-      width: 120px;
-    }
-    .passport-value {
-      font-family: 'Georgia', serif;
-      font-weight: bold;
-      color: #292522;
-    }
-
-    /* 3 Starter Recommendations */
-    .section-title {
-      font-family: 'Georgia', serif;
-      font-size: 19px;
-      font-weight: 700;
-      color: #292522;
-      margin: 32px 0 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #EAE0D5;
-    }
-    .section-subtitle {
-      font-size: 13px;
-      color: #786C62;
-      font-family: 'Georgia', serif;
-      font-style: italic;
-      margin-top: -12px;
-      margin-bottom: 20px;
-    }
-    .book-card-table {
-      width: 100%;
-      margin-bottom: 14px;
-      background: #FAF7F2;
-      border: 1px solid #E6DCD0;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .book-card-table td {
-      padding: 14px 16px;
-      vertical-align: middle;
-    }
-    .book-thumb {
-      width: 58px;
-      height: 82px;
-      border-radius: 6px;
-      object-fit: cover;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-    .book-title {
-      font-family: 'Georgia', serif;
-      font-size: 16px;
-      font-weight: bold;
-      color: #292522;
-      margin: 0 0 3px;
-      line-height: 1.3;
-    }
-    .book-author {
-      font-size: 12px;
-      color: #786C62;
-      font-family: 'Georgia', serif;
-      font-style: italic;
-      margin: 0 0 6px;
-    }
-    .book-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 10px;
-      font-family: 'Courier New', Courier, monospace;
-      text-transform: uppercase;
-      font-weight: bold;
-      background: #EAE1D5;
-      color: #5C4B3E;
-    }
-    .book-action-btn {
-      display: inline-block;
-      background-color: #861D2D;
-      color: #FFFFFF !important;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: bold;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      box-shadow: 0 2px 6px rgba(134, 29, 45, 0.25);
-    }
-
-    /* Blind Date Mystery Teaser Card */
-    .mystery-teaser {
-      background: linear-gradient(135deg, #24171D 0%, #170E13 100%);
-      color: #FAF5ED;
-      border-radius: 14px;
-      padding: 24px;
-      margin: 28px 0;
-      border: 1px solid #482D3A;
-      text-align: center;
-    }
-    .mystery-teaser h3 {
-      font-family: 'Georgia', serif;
-      font-size: 19px;
-      color: #F8E4CF;
-      margin: 0 0 8px;
-    }
-    .mystery-teaser p {
-      font-size: 13px;
-      line-height: 1.6;
-      color: #D6C2B4;
-      font-family: 'Georgia', serif;
-      font-style: italic;
-      margin: 0 auto 16px;
-      max-width: 440px;
-    }
-    .mystery-btn {
-      display: inline-block;
-      background: linear-gradient(90deg, #9E1F32 0%, #7B1826 100%);
-      color: #FFF5EB !important;
-      text-decoration: none;
-      padding: 11px 24px;
-      border-radius: 24px;
-      font-weight: bold;
-      font-size: 12px;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    /* Quick Start 3 Rituals */
-    .rituals-box {
-      background-color: #FBF8F3;
-      border: 1px solid #EBE1D4;
-      border-radius: 14px;
-      padding: 20px 22px;
-      margin-bottom: 28px;
-    }
-    .ritual-item {
-      margin-bottom: 14px;
-      font-size: 13px;
-      color: #4A423D;
-      line-height: 1.5;
-    }
-    .ritual-item:last-child {
-      margin-bottom: 0;
-    }
-    .ritual-num {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-      border-radius: 50%;
-      background: #861D2D;
-      color: #FFFFFF;
-      font-size: 11px;
-      font-weight: bold;
-      margin-right: 8px;
-    }
-
-    /* Primary CTA */
-    .cta-container {
-      text-align: center;
-      margin: 36px 0 20px;
-    }
-    .primary-btn {
-      display: inline-block;
-      background: linear-gradient(135deg, #7B1826 0%, #962334 100%);
-      color: #FFFFFF !important;
-      text-decoration: none;
-      padding: 15px 36px;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 6px 18px rgba(123, 24, 38, 0.35);
-    }
-
-    /* Footer */
-    .footer {
-      border-top: 1px solid #E8DED2;
-      background-color: #F8F4EC;
-      padding: 24px 32px;
-      text-align: center;
-      font-size: 11px;
-      color: #7C7167;
-      font-family: 'Courier New', Courier, monospace;
-      line-height: 1.7;
-    }
-    .footer a {
-      color: #861D2D;
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <div class="wrapper">
-    <div class="main-card">
-      
-      <!-- Masthead Header -->
-      <div class="masthead">
-        <div class="masthead-seal">❦</div>
-        <h1>PageTurner</h1>
-        <p>Digital Reading Journal &bull; Issue No. 24</p>
-      </div>
-
-      <!-- Main Body Content -->
-      <div class="content">
-        <div class="greeting">
-          Welcome to the library, <span>${username}.</span>
-        </div>
-        <p class="lead-text">
-          Your reader passport is officially active. PageTurner is an artisanal universe designed for deep reading, timeless reflections, and quieter days.
-        </p>
-
-        <!-- Official Reader Passport Card -->
-        <div class="passport-card">
-          <div class="passport-header">
-            <span class="passport-title">Official Reader Passport &bull; Ex Libris</span>
-          </div>
-          <table class="passport-meta-table">
-            <tr>
-              <td class="passport-label">Reader Name:</td>
-              <td class="passport-value">${username}</td>
-            </tr>
-            <tr>
-              <td class="passport-label">Passport No:</td>
-              <td class="passport-value" style="font-family: 'Courier New', Courier, monospace; color: #861D2D;">${resolvedMemberId}</td>
-            </tr>
-            <tr>
-              <td class="passport-label">Member Tier:</td>
-              <td class="passport-value">Verified Founding Reader</td>
-            </tr>
-            <tr>
-              <td class="passport-label">Date Issued:</td>
-              <td class="passport-value">${issuedDate}</td>
-            </tr>
-            <tr>
-              <td class="passport-label">Privileges:</td>
-              <td class="passport-value">Unlimited Shelf Pins, Blind Date Volumes, CSV Journal Export</td>
-            </tr>
-          </table>
-        </div>
-
-        <!-- 3 Hand-Curated Starter Pack Recommendations -->
-        <div class="section-title">Your Curated Starter Pack</div>
-        <div class="section-subtitle">Three extraordinary stories hand-selected to inaugurate your private shelf:</div>
-
-        <!-- Book 1: The Picture of Dorian Gray -->
-        <table class="book-card-table">
-          <tr>
-            <td style="width: 70px;">
-              <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=200&q=80" alt="The Picture of Dorian Gray" class="book-thumb" />
-            </td>
-            <td>
-              <h4 class="book-title">The Picture of Dorian Gray</h4>
-              <p class="book-author">by Oscar Wilde &bull; 1890</p>
-              <span class="book-badge">Gothic Fiction &bull; 4.8 ★</span>
-            </td>
-            <td style="text-align: right; width: 110px;">
-              <a href="${frontendUrl}" class="book-action-btn">Pin to Shelf &rarr;</a>
-            </td>
-          </tr>
-        </table>
-
-        <!-- Book 2: The Alchemist -->
-        <table class="book-card-table">
-          <tr>
-            <td style="width: 70px;">
-              <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=200&q=80" alt="The Alchemist" class="book-thumb" />
-            </td>
-            <td>
-              <h4 class="book-title">The Alchemist</h4>
-              <p class="book-author">by Paulo Coelho &bull; 1988</p>
-              <span class="book-badge">Philosophy &bull; 4.7 ★</span>
-            </td>
-            <td style="text-align: right; width: 110px;">
-              <a href="${frontendUrl}" class="book-action-btn">Pin to Shelf &rarr;</a>
-            </td>
-          </tr>
-        </table>
-
-        <!-- Book 3: Dune -->
-        <table class="book-card-table">
-          <tr>
-            <td style="width: 70px;">
-              <img src="https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=200&q=80" alt="Dune" class="book-thumb" />
-            </td>
-            <td>
-              <h4 class="book-title">Dune</h4>
-              <p class="book-author">by Frank Herbert &bull; 1965</p>
-              <span class="book-badge">Sci-Fi Epic &bull; 4.9 ★</span>
-            </td>
-            <td style="text-align: right; width: 110px;">
-              <a href="${frontendUrl}" class="book-action-btn">Pin to Shelf &rarr;</a>
-            </td>
-          </tr>
-        </table>
-
-        <!-- Blind Date with a Book Mystery Teaser -->
-        <div class="mystery-teaser">
-          <div style="font-size: 24px; margin-bottom: 6px;">💌</div>
-          <h3>A Mystery Volume Awaits You</h3>
-          <p>
-            An unopened volume is wrapped in tactile kraft paper and sealed in crimson wax in the library gallery. Three anonymous clues have been placed for your curiosity.
-          </p>
-          <a href="${frontendUrl}#blind-date-section" class="mystery-btn">Break the Wax Seal &rarr;</a>
-        </div>
-
-        <!-- 3 Reader Rituals -->
-        <div class="section-title">The Three Daily Rituals</div>
-        <div class="rituals-box">
-          <div class="ritual-item">
-            <span class="ritual-num">1</span> <strong>Curate by Atmosphere:</strong> Explore books through cinematic moodboards like <em>Dark Academia</em>, <em>Mind-Bending</em>, and <em>Quiet Comfort</em>.
-          </div>
-          <div class="ritual-item">
-            <span class="ritual-num">2</span> <strong>Build Your Private Shelf:</strong> Tap the crimson <em>Save Pin</em> on any story to collect it to your personal reading sanctum.
-          </div>
-          <div class="ritual-item">
-            <span class="ritual-num">3</span> <strong>Export Your Reading Log:</strong> Download your entire catalog anytime via CSV for offline reflection and timeless record-keeping.
-          </div>
-        </div>
-
-        <!-- Primary Call to Action -->
-        <div class="cta-container">
-          <a href="${frontendUrl}" class="primary-btn">Enter the Library &amp; Begin Exploring &rarr;</a>
-        </div>
-      </div>
-
-      <!-- Editorial Footer -->
-      <div class="footer">
-        PageTurner &bull; Digital Reading Journal &bull; Issue No. 24<br>
-        Curated universe of books, ideas &amp; quieter days.<br>
-        Member ID: ${resolvedMemberId} &bull; Delivered to ${email || username}<br>
-        <span style="font-size: 10px; color: #9E9184;">&copy; ${new Date().getFullYear()} PageTurner. All rights reserved.</span>
-      </div>
-    </div>
-  </div>
-</body>
-</html>`;
-};
-
-/**
- * Send welcome email asynchronously.
- * Automatically handles Gmail SMTP with fallback to Ethereal.
- */
-export const sendWelcomeEmail = async (toEmail, username, options = {}) => {
-  try {
-    const transporter = await getTransporter();
-    if (!transporter) {
-      console.log(`[Email Service] No transporter available. Skipped email to ${toEmail}.`);
-      return { success: false, reason: 'No transporter available' };
-    }
-
-    const memberId = options.memberId || generateMemberId(username);
-    const fromAddress = process.env.EMAIL_USER
-      ? `"PageTurner Library" <${process.env.EMAIL_USER}>`
-      : '"PageTurner Library" <no-reply@pageturner.io>';
-
-    const mailOptions = {
-      from: fromAddress,
-      to: toEmail,
-      subject: `Welcome to PageTurner, ${username} — Your Official Reader Passport & Starter Pack`,
-      html: generateWelcomeEmailHtml({
-        username,
-        email: toEmail,
-        memberId,
-        frontendUrl: options.frontendUrl || 'http://localhost:5173',
-      }),
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`[Email Service] ✅ Welcome email dispatched to ${toEmail} (MessageId: ${info.messageId})`);
-
-    const previewUrl = nodemailer.getTestMessageUrl(info);
-    if (previewUrl) {
-      console.log(`[Email Service] ✉️  Preview Welcome Email Online: ${previewUrl}`);
-    }
-
-    return {
-      success: true,
-      messageId: info.messageId,
-      previewUrl: previewUrl || null,
-      memberId,
-      sentTo: toEmail,
-    };
-  } catch (error) {
-    console.error(`[Email Service] ❌ Failed to send welcome email to ${toEmail}:`, error.message);
-    return { success: false, error: error.message };
-  }
-};
-
-/**
  * Parse a raw user-agent string into a friendly "Browser on OS" description
  */
 export const parseUserAgent = (uaString = '') => {
@@ -619,7 +100,605 @@ export const parseUserAgent = (uaString = '') => {
 };
 
 /**
- * Generate responsive, magazine-grade Login Notification HTML email
+ * =========================================================================
+ * 1. WELCOME EMAIL — EX-LIBRIS PASSPORT & LITERARY STARTER PACKAGE
+ * =========================================================================
+ */
+export const generateWelcomeEmailHtml = ({
+  username = 'Reader',
+  email = '',
+  memberId = '',
+  frontendUrl = '',
+}) => {
+  const baseUrl = resolveFrontendUrl(frontendUrl);
+  const resolvedMemberId = memberId || generateMemberId(username);
+  const issuedDate = new Date().toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to PageTurner — Official Reader Passport & Starter Pack</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #F6F1E8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #2F2620;
+      -webkit-font-smoothing: antialiased;
+    }
+    table {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+    img {
+      border: 0;
+      outline: none;
+      text-decoration: none;
+      display: block;
+    }
+    .wrapper {
+      width: 100%;
+      background-color: #F6F1E8;
+      padding: 36px 12px;
+    }
+    .main-card {
+      background-color: #FFFDF9;
+      margin: 0 auto;
+      max-width: 640px;
+      border: 1px solid #E2D5C3;
+      border-radius: 24px;
+      box-shadow: 0 16px 48px rgba(47, 38, 32, 0.08);
+      overflow: hidden;
+    }
+    .masthead {
+      background: linear-gradient(135deg, #4A0E18 0%, #7D1D2D 60%, #4A0E18 100%);
+      padding: 38px 30px 32px;
+      text-align: center;
+      color: #FFFDF8;
+      position: relative;
+      border-bottom: 3px solid #C6A16B;
+    }
+    .masthead-logo {
+      margin: 0 auto 16px;
+      max-height: 58px;
+      width: auto;
+      display: inline-block;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35));
+    }
+    .masthead-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(247, 216, 164, 0.4);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      font-family: 'DM Mono', 'Courier New', monospace;
+      color: #F7D8A4;
+      margin-bottom: 12px;
+    }
+    .masthead h1 {
+      margin: 0;
+      font-family: 'Georgia', serif;
+      font-size: 28px;
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+      color: #FFFDF8;
+      font-weight: 700;
+    }
+    .masthead p {
+      margin: 8px 0 0;
+      font-size: 13px;
+      color: #EBD6BC;
+      font-family: 'Georgia', serif;
+      font-style: italic;
+    }
+    .content {
+      padding: 36px 32px 30px;
+    }
+    .greeting {
+      font-family: 'Georgia', serif;
+      font-size: 24px;
+      color: #2F2620;
+      line-height: 1.3;
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+    .greeting span {
+      color: #7D1D2D;
+      font-style: italic;
+    }
+    .lead-text {
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: #5F5248;
+      font-family: 'Georgia', serif;
+      margin-bottom: 26px;
+    }
+
+    /* Tactile Reader Passport Card */
+    .passport-box {
+      background: linear-gradient(180deg, #FAF5EB 0%, #F1E5D3 100%);
+      border: 2px dashed #C8B298;
+      border-radius: 20px;
+      padding: 24px 26px;
+      margin: 28px 0 32px;
+      box-shadow: 0 8px 24px rgba(47, 38, 32, 0.05);
+      position: relative;
+    }
+    .passport-ribbon {
+      border-bottom: 1px solid #D8C5AD;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .passport-seal-pill {
+      display: inline-block;
+      background: #7D1D2D;
+      color: #F7D8A4;
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-family: 'DM Mono', monospace;
+    }
+    .passport-id-badge {
+      float: right;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: bold;
+      color: #2F2620;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 3px 10px;
+      border-radius: 6px;
+      border: 1px solid #D5C2AA;
+    }
+    .passport-table {
+      width: 100%;
+    }
+    .passport-table td {
+      padding: 6px 0;
+      font-size: 13px;
+      vertical-align: top;
+    }
+    .passport-lbl {
+      font-family: 'DM Mono', monospace;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #847262;
+      width: 130px;
+    }
+    .passport-val {
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      color: #2F2620;
+    }
+    .passport-privileges {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #D8C5AD;
+      font-size: 11.5px;
+      color: #6A5B4F;
+      font-family: 'Georgia', serif;
+      line-height: 1.6;
+    }
+
+    /* Quick Action Dock */
+    .action-dock {
+      text-align: center;
+      margin: 28px 0;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: linear-gradient(135deg, #7D1D2D 0%, #982236 100%);
+      color: #FFFFFF !important;
+      text-decoration: none;
+      padding: 13px 30px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 14px rgba(125, 29, 45, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-secondary {
+      display: inline-block;
+      background: #F4EADA;
+      color: #4A3A2F !important;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #D9C8B1;
+      margin: 6px 4px;
+    }
+
+    /* Curated Starter Trilogy */
+    .section-title {
+      font-family: 'Georgia', serif;
+      font-size: 19px;
+      color: #2F2620;
+      font-weight: 700;
+      margin: 32px 0 6px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #E6D9C8;
+    }
+    .section-desc {
+      font-size: 12.5px;
+      color: #7A695B;
+      font-family: 'Georgia', serif;
+      font-style: italic;
+      margin-bottom: 18px;
+    }
+    .book-item-table {
+      width: 100%;
+      background: #FAF6EE;
+      border: 1px solid #E5D8C6;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .book-item-table td {
+      padding: 14px 16px;
+      vertical-align: middle;
+    }
+    .book-cover-img {
+      width: 62px;
+      height: 88px;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(47, 38, 32, 0.18);
+    }
+    .book-name {
+      font-family: 'Georgia', serif;
+      font-size: 16px;
+      font-weight: bold;
+      color: #2F2620;
+      margin: 0 0 2px;
+    }
+    .book-author {
+      font-size: 12px;
+      color: #7A695B;
+      font-family: 'Georgia', serif;
+      font-style: italic;
+      margin: 0 0 6px;
+    }
+    .book-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #ECE0CE;
+      color: #6B5746;
+      font-size: 9.5px;
+      font-weight: bold;
+      font-family: 'DM Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .book-btn {
+      display: inline-block;
+      background: #7D1D2D;
+      color: #FFFFFF !important;
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(125, 29, 45, 0.2);
+    }
+
+    /* Blind Date Mystery Teaser */
+    .mystery-banner {
+      background: linear-gradient(135deg, #2A1C22 0%, #1A1015 100%);
+      border: 1px solid #4D333F;
+      border-radius: 16px;
+      padding: 24px;
+      color: #FFFDF8;
+      text-align: center;
+      margin: 28px 0;
+    }
+    .mystery-banner h4 {
+      margin: 0 0 6px;
+      font-family: 'Georgia', serif;
+      font-size: 18px;
+      color: #F8E3CD;
+    }
+    .mystery-banner p {
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #D3BFB1;
+      font-family: 'Georgia', serif;
+      font-style: italic;
+      max-width: 460px;
+      margin: 0 auto 16px;
+    }
+    .mystery-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #9C2034 0%, #7D1D2D 100%);
+      color: #FFF9F2 !important;
+      text-decoration: none;
+      padding: 9px 22px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: bold;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Rituals Box */
+    .rituals-card {
+      background: #FBF8F2;
+      border: 1px solid #E8DCCF;
+      border-radius: 14px;
+      padding: 20px 22px;
+      margin: 26px 0;
+    }
+    .ritual-row {
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #4A3E35;
+      line-height: 1.5;
+    }
+    .ritual-row:last-child {
+      margin-bottom: 0;
+    }
+    .ritual-dot {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      border-radius: 50%;
+      background: #7D1D2D;
+      color: #FFF;
+      font-size: 10px;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    /* Sign-off & Footer */
+    .signoff {
+      border-top: 1px solid #E6D9C8;
+      padding-top: 22px;
+      margin-top: 30px;
+      text-align: center;
+    }
+    .signoff p {
+      font-family: 'Georgia', serif;
+      font-style: italic;
+      color: #6F5E51;
+      font-size: 14px;
+      margin: 4px 0;
+    }
+    .footer {
+      background: #F1E7D7;
+      padding: 24px 28px;
+      text-align: center;
+      border-top: 1px solid #DECDB7;
+      font-size: 11px;
+      color: #837264;
+      line-height: 1.6;
+    }
+    .footer a {
+      color: #7D1D2D;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="main-card">
+      
+      <!-- Top Masthead with Official Logo -->
+      <div class="masthead">
+        <a href="${baseUrl}" target="_blank" style="text-decoration: none;">
+          <img src="${baseUrl}/images/pageturner-full-transparent.png" alt="PageTurner" class="masthead-logo" />
+        </a>
+        <br />
+        <span class="masthead-badge">Official Reader Folio &bull; Issue No. 24</span>
+        <h1>Welcome to Your Sanctuary</h1>
+        <p>A Curated Haven for Book Lovers, Thoughtful Collectors &amp; Kindred Minds</p>
+      </div>
+
+      <!-- Main Body Content -->
+      <div class="content">
+        <div class="greeting">
+          Greetings, <span>${username}</span>.
+        </div>
+        <div class="lead-text">
+          Your Reader Passport has been sealed and inscribed into the permanent stacks of PageTurner. Within these halls, books are not mere data points—they are atmospheres to live inside, thoughts to linger over, and conversations across centuries.
+        </div>
+
+        <!-- The Physical-Style Reader Passport Card -->
+        <div class="passport-box">
+          <div class="passport-ribbon">
+            <span class="passport-seal-pill">&#10086; Verified Sanctuary Member</span>
+            <span class="passport-id-badge">${resolvedMemberId}</span>
+          </div>
+
+          <table class="passport-table">
+            <tr>
+              <td class="passport-lbl">Reader Name:</td>
+              <td class="passport-val">${username}</td>
+            </tr>
+            <tr>
+              <td class="passport-lbl">Dispatch Address:</td>
+              <td class="passport-val">${email || 'Reader Sanctuary Box'}</td>
+            </tr>
+            <tr>
+              <td class="passport-lbl">Curator Status:</td>
+              <td class="passport-val" style="color: #7D1D2D;">Active Library Fellow</td>
+            </tr>
+            <tr>
+              <td class="passport-lbl">Inscribed Date:</td>
+              <td class="passport-val" style="color: #6F5E51; font-weight: normal;">${issuedDate}</td>
+            </tr>
+          </table>
+
+          <div class="passport-privileges">
+            <strong>Active Sanctuary Privileges:</strong> Unlimited Personal Shelf Pins, Mystery Parcel Blind Dates, Real-Time Marginalia Scribing, Epistolary Letters &amp; Mailbox Exchange, and Binaural Reading Chambers.
+          </div>
+        </div>
+
+        <!-- Functional 1-Click Action Dock -->
+        <div class="action-dock">
+          <a href="${baseUrl}" class="btn-primary" target="_blank">
+            &#10022; Step Into Your Sanctuary
+          </a>
+          <br style="line-height: 22px;" />
+          <a href="${baseUrl}/?openShelf=true" class="btn-secondary" target="_blank">
+            &#128218; View Reading Shelf
+          </a>
+          <a href="${baseUrl}/community" class="btn-secondary" target="_blank">
+            &#127963; Enter Readers' Salon
+          </a>
+        </div>
+
+        <!-- Curated Starter Pack Trilogy -->
+        <div class="section-title">Starter Volumes Included in Your Package</div>
+        <div class="section-desc">Three canonical works selected by our chief librarians to inaugurate your collection:</div>
+
+        <!-- Volume 1: Dorian Gray -->
+        <table class="book-item-table">
+          <tr>
+            <td style="width: 72px;">
+              <img src="${baseUrl}/images/dorian-open-book-spread.jpg" alt="The Picture of Dorian Gray" class="book-cover-img" />
+            </td>
+            <td>
+              <div class="book-name">The Picture of Dorian Gray</div>
+              <div class="book-author">Oscar Wilde</div>
+              <div style="margin-bottom: 6px;">
+                <span class="book-badge">Gothic Aestheticism</span>
+                <span style="font-size: 11px; color: #847262; font-style: italic; margin-left: 6px;">~6 hrs</span>
+              </div>
+              <div style="font-size: 12px; color: #6A5B4F; font-family: 'Georgia', serif; font-style: italic;">
+                "Behind every exquisite thing that existed, there was something tragic."
+              </div>
+            </td>
+            <td style="width: 90px; text-align: right;">
+              <a href="${baseUrl}/?openShelf=true" class="book-btn" target="_blank">+ Shelf</a>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Volume 2: Meditations -->
+        <table class="book-item-table">
+          <tr>
+            <td style="width: 72px;">
+              <img src="https://covers.openlibrary.org/b/isbn/9780140449334-M.jpg" alt="Meditations" class="book-cover-img" />
+            </td>
+            <td>
+              <div class="book-name">Meditations</div>
+              <div class="book-author">Marcus Aurelius</div>
+              <div style="margin-bottom: 6px;">
+                <span class="book-badge">Stoic Philosophy</span>
+                <span style="font-size: 11px; color: #847262; font-style: italic; margin-left: 6px;">~4 hrs</span>
+              </div>
+              <div style="font-size: 12px; color: #6A5B4F; font-family: 'Georgia', serif; font-style: italic;">
+                "You have power over your mind - not outside events. Realise this, and you will find strength."
+              </div>
+            </td>
+            <td style="width: 90px; text-align: right;">
+              <a href="${baseUrl}/?openShelf=true" class="book-btn" target="_blank">+ Shelf</a>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Volume 3: Dune -->
+        <table class="book-item-table">
+          <tr>
+            <td style="width: 72px;">
+              <img src="https://covers.openlibrary.org/b/isbn/9780441172719-M.jpg" alt="Dune" class="book-cover-img" />
+            </td>
+            <td>
+              <div class="book-name">Dune</div>
+              <div class="book-author">Frank Herbert</div>
+              <div style="margin-bottom: 6px;">
+                <span class="book-badge">Speculative Sci-Fi</span>
+                <span style="font-size: 11px; color: #847262; font-style: italic; margin-left: 6px;">~18 hrs</span>
+              </div>
+              <div style="font-size: 12px; color: #6A5B4F; font-family: 'Georgia', serif; font-style: italic;">
+                "I must not fear. Fear is the mind-killer. Fear is the little-death that brings total obliteration."
+              </div>
+            </td>
+            <td style="width: 90px; text-align: right;">
+              <a href="${baseUrl}/?openShelf=true" class="book-btn" target="_blank">+ Shelf</a>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Blind Date Mystery Parcel Section -->
+        <div class="mystery-banner">
+          <h4>&#127873; Blind Date with a Book &bull; Mystery Parcel</h4>
+          <p>
+            Wrapped in heavy kraft paper with twine and wax seals. You know only the mood, rhythm, and sensory clues. Break the wax seal and meet your next beloved book.
+          </p>
+          <a href="${baseUrl}/?openBlindDate=true" class="mystery-btn" target="_blank">
+            Reveal Your Mystery Parcel &rarr;
+          </a>
+        </div>
+
+        <!-- Three Recommended Rituals -->
+        <div class="rituals-card">
+          <div style="font-family: 'Georgia', serif; font-size: 15px; font-weight: bold; color: #2F2620; margin-bottom: 12px;">
+            Three Archival Rituals for Your First Visit:
+          </div>
+          <div class="ritual-row">
+            <span class="ritual-dot">1</span>
+            <strong>Curate Your Shelf:</strong> Pin beloved classics to your personal wall and set reading velocity targets.
+          </div>
+          <div class="ritual-row">
+            <span class="ritual-dot">2</span>
+            <strong>Step into The Salon:</strong> Inscribe margin thoughts, discuss active reading chapters, and join kindred parlours.
+          </div>
+          <div class="ritual-row">
+            <span class="ritual-dot">3</span>
+            <strong>Dispatch Wax Letters:</strong> Exchange intimate reflections with registered readers through our Poste Restante mailbox.
+          </div>
+        </div>
+
+        <!-- Curator Sign-off -->
+        <div class="signoff">
+          <p>May your hours here be peaceful, quiet, and deeply thought-provoking.</p>
+          <p style="font-weight: bold; color: #7D1D2D; margin-top: 8px;">
+            &mdash; The Chief Curators &amp; Librarians of PageTurner
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        PageTurner Digital Reading Sanctuary &bull; Permanent Collection<br />
+        This dispatch was sealed for <strong>${email || username}</strong> under Member ID <strong>${resolvedMemberId}</strong>.<br />
+        <a href="${baseUrl}" target="_blank">Visit Web Sanctuary</a> &bull; 
+        <a href="${baseUrl}/community" target="_blank">Readers' Salon</a> &bull; 
+        <a href="${baseUrl}/login" target="_blank">Sign In</a>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>`;
+};
+
+/**
+ * =========================================================================
+ * 2. LOGIN NOTIFICATION EMAIL — SESSION RESUMED & SECURITY ADVISORY
+ * =========================================================================
  */
 export const generateLoginNotificationEmailHtml = ({
   username = 'Reader',
@@ -627,8 +706,9 @@ export const generateLoginNotificationEmailHtml = ({
   time = '',
   ip = '127.0.0.1',
   userAgent = '',
-  frontendUrl = 'http://localhost:5173',
+  frontendUrl = '',
 }) => {
+  const baseUrl = resolveFrontendUrl(frontendUrl);
   const formattedTime =
     time ||
     new Date().toLocaleString('en-US', {
@@ -643,14 +723,14 @@ export const generateLoginNotificationEmailHtml = ({
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Security Notice: New Login to PageTurner</title>
+  <title>Security Notice: Session Resumed on PageTurner</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background-color: #FAF7F2;
+      background-color: #F6F1E8;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      color: #292522;
+      color: #2F2620;
       -webkit-font-smoothing: antialiased;
     }
     table {
@@ -660,36 +740,36 @@ export const generateLoginNotificationEmailHtml = ({
     }
     .wrapper {
       width: 100%;
-      background-color: #FAF7F2;
-      padding: 40px 12px;
+      background-color: #F6F1E8;
+      padding: 36px 12px;
     }
     .main-card {
       background-color: #FFFDF9;
       margin: 0 auto;
-      max-width: 580px;
-      border: 1px solid #E8DED2;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(41, 37, 34, 0.08);
+      max-width: 600px;
+      border: 1px solid #E2D5C3;
+      border-radius: 24px;
+      box-shadow: 0 16px 48px rgba(47, 38, 32, 0.08);
       overflow: hidden;
     }
     .masthead {
-      background: linear-gradient(135deg, #1C1917 0%, #292524 60%, #1A1015 100%);
-      padding: 30px 24px;
+      background: linear-gradient(135deg, #1E1719 0%, #2E1B23 60%, #1A1015 100%);
+      padding: 32px 28px;
       text-align: center;
-      color: #FFFDF9;
-      border-bottom: 2px solid #861D2D;
+      color: #FFFDF8;
+      border-bottom: 3px solid #7D1D2D;
     }
     .masthead-badge {
       display: inline-block;
-      padding: 4px 12px;
+      padding: 3px 12px;
       border-radius: 999px;
-      background: rgba(134, 29, 45, 0.3);
-      border: 1px solid rgba(248, 232, 205, 0.3);
+      background: rgba(125, 29, 45, 0.4);
+      border: 1px solid rgba(247, 216, 164, 0.3);
       font-size: 10px;
-      text-transform: uppercase;
       letter-spacing: 2px;
-      font-family: 'Courier New', Courier, monospace;
-      color: #F8E8CD;
+      text-transform: uppercase;
+      font-family: 'DM Mono', monospace;
+      color: #F7D8A4;
       font-weight: bold;
       margin-bottom: 10px;
     }
@@ -697,176 +777,151 @@ export const generateLoginNotificationEmailHtml = ({
       margin: 0;
       font-family: 'Georgia', serif;
       font-size: 24px;
-      letter-spacing: -0.5px;
+      color: #FFFDF8;
       font-weight: 700;
-      color: #FFFDF9;
     }
     .content {
-      padding: 36px 32px;
+      padding: 34px 30px;
     }
     .greeting {
       font-family: 'Georgia', serif;
       font-size: 22px;
-      font-weight: 700;
-      color: #292522;
-      line-height: 1.3;
+      color: #2F2620;
       margin-bottom: 12px;
+      font-weight: 700;
     }
-    .greeting span {
-      color: #861D2D;
-    }
-    .lead-text {
-      font-size: 14px;
-      line-height: 1.65;
-      color: #5A524C;
-      font-family: 'Georgia', serif;
-      margin-bottom: 24px;
-    }
-
-    /* Security Dossier Card */
-    .session-card {
-      background: linear-gradient(180deg, #F9F5EC 0%, #F1E6D4 100%);
-      border: 1px solid #D6C3AA;
-      border-radius: 14px;
+    .telemetry-card {
+      background: #FAF5EB;
+      border: 1px solid #E5D7C4;
+      border-radius: 16px;
       padding: 20px 22px;
-      margin: 24px 0 28px;
-      box-shadow: 0 4px 12px rgba(50, 30, 15, 0.05);
+      margin: 22px 0 28px;
     }
-    .session-header {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #7B1826;
-      font-weight: bold;
-      border-bottom: 1px solid #D6C3AA;
-      padding-bottom: 8px;
-      margin-bottom: 14px;
-    }
-    .session-table {
+    .telemetry-table {
       width: 100%;
     }
-    .session-table td {
+    .telemetry-table td {
       padding: 6px 0;
       font-size: 13px;
-      vertical-align: top;
     }
-    .session-label {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 11px;
+    .telemetry-lbl {
+      font-family: 'DM Mono', monospace;
+      font-size: 10.5px;
       text-transform: uppercase;
-      color: #7A695A;
-      width: 130px;
-      font-weight: 600;
+      color: #837264;
+      width: 120px;
     }
-    .session-value {
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      font-weight: 600;
-      color: #292522;
+    .telemetry-val {
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      color: #2F2620;
     }
-
-    .notice-box {
-      background-color: #FAF5F0;
-      border-left: 3px solid #C99A48;
-      border-radius: 0 10px 10px 0;
-      padding: 14px 16px;
-      margin-bottom: 28px;
-      font-size: 12px;
-      line-height: 1.6;
-      color: #63564A;
-    }
-    .notice-box strong {
-      color: #292522;
-    }
-
-    .cta-container {
-      text-align: center;
-      margin: 28px 0 16px;
-    }
-    .primary-btn {
+    .btn-confirm {
       display: inline-block;
-      background: linear-gradient(135deg, #7B1826 0%, #861D2D 100%);
+      background: linear-gradient(135deg, #7D1D2D 0%, #982236 100%);
       color: #FFFFFF !important;
       text-decoration: none;
-      padding: 13px 32px;
-      border-radius: 28px;
-      font-weight: 600;
-      font-size: 13px;
-      letter-spacing: 0.4px;
-      box-shadow: 0 4px 14px rgba(123, 24, 38, 0.3);
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(125, 29, 45, 0.3);
     }
-
-    .footer {
-      border-top: 1px solid #E8DED2;
-      background-color: #F8F4EC;
-      padding: 22px 32px;
-      text-align: center;
-      font-size: 11px;
-      color: #7C7167;
-      font-family: 'Courier New', Courier, monospace;
+    .btn-alert {
+      display: inline-block;
+      background: #FFF4F2;
+      color: #B42318 !important;
+      text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid #FECDCA;
+      margin-left: 8px;
+    }
+    .security-notice {
+      background: #FDF9F3;
+      border-left: 3px solid #C6A16B;
+      padding: 14px 16px;
+      border-radius: 0 10px 10px 0;
+      margin-top: 26px;
+      font-size: 12.5px;
+      color: #6E5F52;
       line-height: 1.6;
+      font-family: 'Georgia', serif;
+    }
+    .footer {
+      background: #F1E7D7;
+      padding: 22px 26px;
+      text-align: center;
+      border-top: 1px solid #DECDB7;
+      font-size: 11px;
+      color: #837264;
+      line-height: 1.6;
+    }
+    .footer a {
+      color: #7D1D2D;
+      text-decoration: none;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="wrapper">
     <div class="main-card">
-      
-      <!-- Masthead -->
       <div class="masthead">
-        <div class="masthead-badge">🔒 Session Security Alert</div>
-        <h1>PageTurner Authentication</h1>
+        <span class="masthead-badge">&#128737; Security Sentinel</span>
+        <h1>Sanctuary Reading Session Resumed</h1>
       </div>
 
-      <!-- Main Body -->
       <div class="content">
         <div class="greeting">
-          Welcome back, <span>${username}.</span>
+          Hello, ${username}.
         </div>
-        <p class="lead-text">
-          A new sign-in was successfully verified for your PageTurner reader account. Here are the session details for your records:
+        <p style="font-size: 14px; line-height: 1.6; color: #5F5248; font-family: 'Georgia', serif; margin: 0 0 20px;">
+          A reading session was just reopened for your PageTurner sanctuary account. If this was you opening your book collection, you may safely resume reading.
         </p>
 
-        <!-- Session Details Box -->
-        <div class="session-card">
-          <div class="session-header">Session Verification Details</div>
-          <table class="session-table">
+        <!-- Session Dossier -->
+        <div class="telemetry-card">
+          <table class="telemetry-table">
             <tr>
-              <td class="session-label">Date &amp; Time:</td>
-              <td class="session-value">${formattedTime}</td>
+              <td class="telemetry-lbl">Time of Entry:</td>
+              <td class="telemetry-val">${formattedTime}</td>
             </tr>
             <tr>
-              <td class="session-label">Device / Browser:</td>
-              <td class="session-value">${device}</td>
+              <td class="telemetry-lbl">Device / OS:</td>
+              <td class="telemetry-val">${device}</td>
             </tr>
             <tr>
-              <td class="session-label">Network IP:</td>
-              <td class="session-value" style="font-family: 'Courier New', Courier, monospace;">${cleanIp}</td>
+              <td class="telemetry-lbl">IP Origin:</td>
+              <td class="telemetry-val">${cleanIp}</td>
             </tr>
             <tr>
-              <td class="session-label">Account:</td>
-              <td class="session-value" style="font-family: 'Courier New', Courier, monospace;">${email}</td>
+              <td class="telemetry-lbl">Sanctuary Account:</td>
+              <td class="telemetry-val" style="color: #7D1D2D;">${email || username}</td>
             </tr>
           </table>
         </div>
 
-        <!-- Security Advice -->
-        <div class="notice-box">
-          <strong>Was this you?</strong> If you initiated this sign-in, no action is necessary. You may continue exploring your personal reading collection.<br><br>
-          <strong>Did not recognize this activity?</strong> If you suspect unauthorized access, please update your password immediately in your account settings or contact the library curator.
+        <!-- Action Choices -->
+        <div style="text-align: center; margin: 26px 0;">
+          <a href="${baseUrl}" class="btn-confirm" target="_blank">
+            &#10022; Resume Reading Session
+          </a>
+          <a href="${baseUrl}/forgot-password?email=${encodeURIComponent(email)}" class="btn-alert" target="_blank">
+            &#128274; Not You? Secure Account
+          </a>
         </div>
 
-        <!-- Call to Action -->
-        <div class="cta-container">
-          <a href="${frontendUrl}" class="primary-btn">Open My Reading Shelf &rarr;</a>
+        <div class="security-notice">
+          <strong>Librarian's Note:</strong> We dispatch security alerts whenever an archival session token is generated on a browser or device. If you did not initiate this login, click <em>Secure Account</em> above to immediately reset your password and invalidate all active reading sessions.
         </div>
       </div>
 
-      <!-- Footer -->
       <div class="footer">
-        PageTurner Literary Journal &bull; Security &bull; Issue No. 24<br>
-        Delivered to ${email}<br>
-        &copy; ${new Date().getFullYear()} PageTurner. All rights reserved.
+        PageTurner Digital Reading Sanctuary &bull; Automated Security Protocol<br />
+        Dispatched to ${email || username} &bull; Protected by TLS Encryption &amp; Archival Tokens
       </div>
     </div>
   </div>
@@ -875,48 +930,276 @@ export const generateLoginNotificationEmailHtml = ({
 };
 
 /**
- * Send login notification email asynchronously.
+ * =========================================================================
+ * 3. PASSWORD RESET EMAIL — SANCTUARY KEY RECOVERY
+ * =========================================================================
  */
+export const generatePasswordResetEmailHtml = ({
+  username = 'Reader',
+  email = '',
+  resetToken = '',
+  frontendUrl = '',
+}) => {
+  const baseUrl = resolveFrontendUrl(frontendUrl);
+  const resetLink = `${baseUrl}/reset-password?token=${encodeURIComponent(resetToken)}&email=${encodeURIComponent(email)}`;
+  const displayToken = resetToken ? resetToken.slice(0, 8).toUpperCase() : 'PT-KEY-77';
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Your PageTurner Sanctuary Key</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #F6F1E8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #2F2620;
+      -webkit-font-smoothing: antialiased;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    .wrapper {
+      width: 100%;
+      background-color: #F6F1E8;
+      padding: 36px 12px;
+    }
+    .main-card {
+      background-color: #FFFDF9;
+      margin: 0 auto;
+      max-width: 600px;
+      border: 1px solid #E2D5C3;
+      border-radius: 24px;
+      box-shadow: 0 16px 48px rgba(47, 38, 32, 0.08);
+      overflow: hidden;
+      position: relative;
+    }
+    .masthead {
+      background: linear-gradient(135deg, #4A0E18 0%, #7D1D2D 60%, #4A0E18 100%);
+      padding: 34px 28px;
+      text-align: center;
+      color: #FFFDF8;
+      border-bottom: 3px solid #C6A16B;
+    }
+    .masthead-seal {
+      display: inline-block;
+      width: 46px;
+      height: 46px;
+      line-height: 46px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(247, 216, 164, 0.4);
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .masthead h1 {
+      margin: 0;
+      font-family: 'Georgia', serif;
+      font-size: 25px;
+      color: #FFFDF8;
+      font-weight: 700;
+    }
+    .masthead p {
+      margin: 6px 0 0;
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: #F7D8A4;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .content {
+      padding: 34px 30px;
+    }
+    .greeting {
+      font-family: 'Georgia', serif;
+      font-size: 22px;
+      color: #2F2620;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .btn-reset {
+      display: inline-block;
+      background: linear-gradient(135deg, #7D1D2D 0%, #982236 100%);
+      color: #FFFFFF !important;
+      text-decoration: none;
+      padding: 13px 32px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 14px rgba(125, 29, 45, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .token-box {
+      background: #FAF5EB;
+      border: 2px dashed #CBB59D;
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin: 24px 0;
+      text-align: center;
+    }
+    .token-code {
+      font-family: 'DM Mono', monospace;
+      font-size: 18px;
+      font-weight: bold;
+      color: #7D1D2D;
+      letter-spacing: 2px;
+      word-break: break-all;
+    }
+    .footer {
+      background: #F1E7D7;
+      padding: 22px 26px;
+      text-align: center;
+      border-top: 1px solid #DECDB7;
+      font-size: 11px;
+      color: #837264;
+      line-height: 1.6;
+    }
+    .footer a {
+      color: #7D1D2D;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="main-card">
+      <div class="masthead">
+        <div class="masthead-seal">&#128273;</div>
+        <h1>Sanctuary Key Recovery</h1>
+        <p>ARCHIVAL FOLIO &bull; ACCESS RESTORATION</p>
+      </div>
+
+      <div class="content">
+        <div class="greeting">
+          Greetings, ${username}.
+        </div>
+        <p style="font-size: 14.5px; line-height: 1.7; color: #5F5248; font-family: 'Georgia', serif; margin: 0 0 20px;">
+          We received a request to inscribe a new password for your PageTurner sanctuary account. Click the button below to forge your new key:
+        </p>
+
+        <!-- Primary 1-Click Action -->
+        <div style="text-align: center; margin: 26px 0;">
+          <a href="${resetLink}" class="btn-reset" target="_blank">
+            &#128273; Inscribe New Sanctuary Key &rarr;
+          </a>
+        </div>
+
+        <!-- Backup Token Box -->
+        <div class="token-box">
+          <div style="font-size: 11px; font-family: 'DM Mono', monospace; text-transform: uppercase; color: #837264; letter-spacing: 1px; margin-bottom: 6px;">
+            Archival Verification Token (Expires in 60 Minutes)
+          </div>
+          <div class="token-code">${displayToken}</div>
+          <div style="font-size: 11.5px; color: #837264; font-family: 'Georgia', serif; font-style: italic; margin-top: 6px;">
+            If direct clicking is disabled by your email reader, paste the token above on the recovery page.
+          </div>
+        </div>
+
+        <p style="font-size: 12.5px; line-height: 1.6; color: #7F7063; font-family: 'Georgia', serif; margin: 20px 0 0;">
+          <strong>Security Note:</strong> This dispatch is valid for 60 minutes. If you did not make this request, you may safely ignore this letter—your existing key remains untouched and your private shelf remains secure.
+        </p>
+      </div>
+
+      <div class="footer">
+        PageTurner Digital Reading Sanctuary &bull; Permanent Collection<br />
+        Dispatched to ${email || username} &bull; <a href="${baseUrl}">Return to Sanctuary</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+};
+
+/**
+ * =========================================================================
+ * DISPATCH HANDLERS
+ * =========================================================================
+ */
+
+export const sendWelcomeEmail = async (toEmail, username, options = {}) => {
+  try {
+    const transporter = await getTransporter();
+    if (!transporter) {
+      console.log(`[Email Service] No transporter available. Skipped email to ${toEmail}.`);
+      return { success: false, reason: 'No transporter available' };
+    }
+
+    const memberId = options.memberId || generateMemberId(username);
+    const fromAddress = process.env.EMAIL_USER
+      ? `"PageTurner Sanctuary" <${process.env.EMAIL_USER}>`
+      : '"PageTurner Sanctuary" <curator@pageeturner.netlify.app>';
+
+    const frontendUrl = resolveFrontendUrl(options.frontendUrl);
+
+    const mailOptions = {
+      from: fromAddress,
+      to: toEmail,
+      subject: `Welcome to PageTurner, ${username} — Your Official Reader Passport & Starter Pack`,
+      html: generateWelcomeEmailHtml({
+        username,
+        email: toEmail,
+        memberId,
+        frontendUrl,
+      }),
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`[Email Service] ✅ Welcome email dispatched to ${toEmail} (MessageId: ${info.messageId})`);
+
+    const previewUrl = nodemailer.getTestMessageUrl(info);
+    if (previewUrl) {
+      console.log(`[Email Service] ✉️ Preview Welcome Email: ${previewUrl}`);
+    }
+
+    return {
+      success: true,
+      messageId: info.messageId,
+      previewUrl: previewUrl || null,
+      memberId,
+      sentTo: toEmail,
+    };
+  } catch (error) {
+    console.error(`[Email Service] ❌ Failed to send welcome email to ${toEmail}:`, error.message);
+    return { success: false, error: error.message };
+  }
+};
+
 export const sendLoginNotificationEmail = async (toEmail, username, details = {}) => {
   try {
     const transporter = await getTransporter();
     if (!transporter) {
-      console.log(`[Email Service] No transporter available. Skipped login email to ${toEmail}.`);
       return { success: false, reason: 'No transporter available' };
     }
 
     const fromAddress = process.env.EMAIL_USER
       ? `"PageTurner Security" <${process.env.EMAIL_USER}>`
-      : '"PageTurner Security" <no-reply@pageturner.io>';
+      : '"PageTurner Security" <curator@pageeturner.netlify.app>';
 
-    const time = details.time || new Date();
-    const formattedDate = new Date(time).toLocaleString('en-US', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    });
+    const frontendUrl = resolveFrontendUrl(details.frontendUrl);
 
     const mailOptions = {
       from: fromAddress,
       to: toEmail,
-      subject: `New Login to PageTurner — ${formattedDate}`,
+      subject: `Security Notice: Sanctuary Reading Session Resumed (${username})`,
       html: generateLoginNotificationEmailHtml({
         username,
         email: toEmail,
-        time: formattedDate,
+        time: details.time ? new Date(details.time).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) : '',
         ip: details.ip || '127.0.0.1',
         userAgent: details.userAgent || '',
-        frontendUrl: details.frontendUrl || 'http://localhost:5173',
+        frontendUrl,
       }),
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log(`[Email Service] 🔐 Login security email dispatched to ${toEmail} (MessageId: ${info.messageId})`);
+    console.log(`[Email Service] ✅ Login notification dispatched to ${toEmail} (MessageId: ${info.messageId})`);
 
     const previewUrl = nodemailer.getTestMessageUrl(info);
-    if (previewUrl) {
-      console.log(`[Email Service] ✉️  Preview Login Email Online: ${previewUrl}`);
-    }
-
     return {
       success: true,
       messageId: info.messageId,
@@ -924,291 +1207,40 @@ export const sendLoginNotificationEmail = async (toEmail, username, details = {}
       sentTo: toEmail,
     };
   } catch (error) {
-    console.error(`[Email Service] ❌ Failed to send login notification email to ${toEmail}:`, error.message);
+    console.error(`[Email Service] ❌ Failed to send login notification to ${toEmail}:`, error.message);
     return { success: false, error: error.message };
   }
 };
 
-/**
- * Generate Pinterest-style, editorial Password Reset Request HTML email
- */
-export const generatePasswordResetEmailHtml = ({
-  username = 'Reader',
-  email = '',
-  resetToken = '',
-  frontendUrl = 'http://localhost:5173',
-}) => {
-  const resetLink = `${frontendUrl}/reset-password?token=${encodeURIComponent(resetToken)}`;
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Your PageTurner Password</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #FAF7F2;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      color: #292522;
-      -webkit-font-smoothing: antialiased;
-    }
-    table {
-      border-collapse: collapse;
-      mso-table-lspace: 0pt;
-      mso-table-rspace: 0pt;
-    }
-    .wrapper {
-      width: 100%;
-      background-color: #FAF7F2;
-      padding: 40px 12px;
-    }
-    .main-card {
-      background-color: #FFFDF9;
-      margin: 0 auto;
-      max-width: 580px;
-      border: 1px solid #E8DED2;
-      border-radius: 20px;
-      box-shadow: 0 10px 32px rgba(41, 37, 34, 0.08);
-      overflow: hidden;
-      position: relative;
-    }
-    .masthead {
-      background: linear-gradient(135deg, #7B1826 0%, #861D2D 60%, #5C101B 100%);
-      padding: 32px 24px 28px;
-      text-align: center;
-      color: #FFFDF9;
-    }
-    .masthead-seal {
-      display: inline-block;
-      width: 42px;
-      height: 42px;
-      line-height: 42px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-    .masthead h1 {
-      margin: 0;
-      font-family: 'Georgia', serif;
-      font-size: 26px;
-      letter-spacing: -0.5px;
-      font-weight: 700;
-      color: #FFFDF9;
-    }
-    .masthead p {
-      margin: 6px 0 0;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-family: 'Courier New', Courier, monospace;
-      color: #F8E8CD;
-      font-weight: bold;
-    }
-    .content {
-      padding: 36px 32px;
-    }
-    .greeting {
-      font-family: 'Georgia', serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: #292522;
-      line-height: 1.3;
-      margin-bottom: 12px;
-    }
-    .greeting span {
-      color: #861D2D;
-      font-style: italic;
-    }
-    .lead-text {
-      font-size: 15px;
-      line-height: 1.65;
-      color: #5A524C;
-      font-family: 'Georgia', serif;
-      margin-bottom: 24px;
-    }
-
-    /* Pinterest-Style Vintage Dispatch Card */
-    .pin-dossier {
-      background: linear-gradient(180deg, #F9F5EC 0%, #F1E6D4 100%);
-      border: 2px dashed #CBB499;
-      border-radius: 16px;
-      padding: 24px;
-      margin: 24px 0 28px;
-      box-shadow: 0 4px 14px rgba(50, 30, 15, 0.05);
-      position: relative;
-    }
-    .pin-dossier-header {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #7B1826;
-      font-weight: bold;
-      border-bottom: 1px solid #D6C3AA;
-      padding-bottom: 10px;
-      margin-bottom: 16px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .expiry-tag {
-      background: #E8D9C7;
-      color: #5A4535;
-      padding: 2px 8px;
-      border-radius: 8px;
-      font-size: 10px;
-      font-family: 'Courier New', Courier, monospace;
-      font-weight: bold;
-    }
-
-    .cta-container {
-      text-align: center;
-      margin: 30px 0 20px;
-    }
-    .primary-btn {
-      display: inline-block;
-      background: linear-gradient(135deg, #7B1826 0%, #962334 100%);
-      color: #FFFFFF !important;
-      text-decoration: none;
-      padding: 15px 36px;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 6px 18px rgba(123, 24, 38, 0.35);
-    }
-    .fallback-link {
-      font-size: 11px;
-      font-family: 'Courier New', Courier, monospace;
-      word-break: break-all;
-      color: #827870;
-      background: #F4ECE1;
-      padding: 10px 12px;
-      border-radius: 8px;
-      margin-top: 18px;
-      line-height: 1.5;
-    }
-    .notice-box {
-      background-color: #FAF5F0;
-      border-left: 3px solid #861D2D;
-      border-radius: 0 10px 10px 0;
-      padding: 14px 16px;
-      margin: 24px 0 12px;
-      font-size: 12px;
-      line-height: 1.6;
-      color: #63564A;
-      font-family: 'Georgia', serif;
-      font-style: italic;
-    }
-
-    .footer {
-      border-top: 1px solid #E8DED2;
-      background-color: #F8F4EC;
-      padding: 22px 32px;
-      text-align: center;
-      font-size: 11px;
-      color: #7C7167;
-      font-family: 'Courier New', Courier, monospace;
-      line-height: 1.6;
-    }
-  </style>
-</head>
-<body>
-  <div class="wrapper">
-    <div class="main-card">
-      
-      <!-- Masthead -->
-      <div class="masthead">
-        <div class="masthead-seal">🗝️</div>
-        <h1>Password Reset Request</h1>
-        <p>PageTurner &bull; Account Recovery &bull; Issue No. 24</p>
-      </div>
-
-      <!-- Main Body -->
-      <div class="content">
-        <div class="greeting">
-          Hello, <span>${username}.</span>
-        </div>
-        <p class="lead-text">
-          We received an official request to reset the password for your PageTurner reader account (<strong style="color: #292522;">${email}</strong>).
-        </p>
-
-        <!-- Pinterest-Styled Card -->
-        <div class="pin-dossier">
-          <div class="pin-dossier-header">
-            <span>Security Verification Dispatch</span>
-            <span class="expiry-tag">⏱️ Valid for 60 Minutes</span>
-          </div>
-          <p style="font-size: 14px; font-family: 'Georgia', serif; line-height: 1.6; color: #4A3E36; margin: 0 0 16px;">
-            Click the button below to choose a fresh password and safely unlock your reading collection:
-          </p>
-
-          <div class="cta-container">
-            <a href="${resetLink}" class="primary-btn">Reset My Password &rarr;</a>
-          </div>
-
-          <div class="fallback-link">
-            Or copy and paste this URL into your browser:<br>
-            <a href="${resetLink}" style="color: #7B1826;">${resetLink}</a>
-          </div>
-        </div>
-
-        <div class="notice-box">
-          <strong>Didn&apos;t request this?</strong> Don&apos;t worry — your password remains completely secure, and no action was taken on your account. You can safely disregard this message.
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="footer">
-        PageTurner Literary Journal &bull; Digital Reading &amp; Ephemera<br>
-        Delivered to ${email}<br>
-        &copy; ${new Date().getFullYear()} PageTurner. All rights reserved.
-      </div>
-    </div>
-  </div>
-</body>
-</html>`;
-};
-
-/**
- * Send password reset email asynchronously
- */
 export const sendPasswordResetEmail = async (toEmail, username, resetToken, options = {}) => {
   try {
     const transporter = await getTransporter();
     if (!transporter) {
-      console.log(`[Email Service] No transporter available. Skipped reset email to ${toEmail}.`);
       return { success: false, reason: 'No transporter available' };
     }
 
     const fromAddress = process.env.EMAIL_USER
-      ? `"PageTurner Library" <${process.env.EMAIL_USER}>`
-      : '"PageTurner Library" <no-reply@pageturner.io>';
+      ? `"PageTurner Sanctuary" <${process.env.EMAIL_USER}>`
+      : '"PageTurner Sanctuary" <curator@pageeturner.netlify.app>';
+
+    const frontendUrl = resolveFrontendUrl(options.frontendUrl);
 
     const mailOptions = {
       from: fromAddress,
       to: toEmail,
-      subject: `Reset Your PageTurner Password — Security Verification`,
+      subject: `PageTurner: Inscribe Your New Sanctuary Key (${username})`,
       html: generatePasswordResetEmailHtml({
         username,
         email: toEmail,
         resetToken,
-        frontendUrl: options.frontendUrl || 'http://localhost:5173',
+        frontendUrl,
       }),
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log(`[Email Service] 🗝️ Password reset email dispatched to ${toEmail} (MessageId: ${info.messageId})`);
+    console.log(`[Email Service] ✅ Password reset email dispatched to ${toEmail} (MessageId: ${info.messageId})`);
 
     const previewUrl = nodemailer.getTestMessageUrl(info);
-    if (previewUrl) {
-      console.log(`[Email Service] ✉️  Preview Reset Email Online: ${previewUrl}`);
-    }
-
     return {
       success: true,
       messageId: info.messageId,
