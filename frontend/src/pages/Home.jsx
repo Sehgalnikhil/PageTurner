@@ -166,29 +166,29 @@ const Home = () => {
 
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
         {/* Seamlessly Integrated Editorial Masthead Banner */}
-        <header className="mb-8 rounded-2xl bg-[#FFFDFA] border border-[#E8DED1] overflow-hidden shadow-card relative">
+        <header className="mb-9 rounded-2xl bg-[#FFFDF9] border border-[#E2D5C3] overflow-hidden shadow-[0_8px_30px_rgba(40,25,15,0.06)] relative group">
           {/* Seamlessly Embedded Moodboard Artwork with Feathered Editorial Blend */}
           <div className="absolute inset-y-0 right-0 w-full sm:w-[65%] md:w-[58%] lg:w-[52%] xl:w-[48%] overflow-hidden pointer-events-none select-none">
             <img
               src="/images/hero-moodboard.jpg"
               alt="Literary Moodboard - A quieter brighter you"
-              className="w-full h-full object-cover object-right sm:object-center"
+              className="w-full h-full object-cover object-right sm:object-center opacity-90 group-hover:scale-102 transition-transform duration-700"
             />
             {/* Seamless feathering gradient from surface background to transparent */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FFFDFA] via-[#FFFDFA]/90 sm:via-[#FFFDFA]/50 to-transparent pointer-events-none" />
-            <div className="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-[#FFFDFA]/60 to-transparent pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-[#FFFDFA]/60 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FFFDF9] via-[#FFFDF9]/90 sm:via-[#FFFDF9]/50 to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-[#FFFDF9]/60 to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-[#FFFDF9]/60 to-transparent pointer-events-none" />
           </div>
 
           {/* Left Content Column */}
-          <div className="relative z-10 p-6 sm:p-8 lg:p-10 max-w-xl xl:max-w-2xl min-h-[200px] sm:min-h-[210px] lg:min-h-[230px] flex flex-col justify-center">
+          <div className="relative z-10 p-6 sm:p-8 lg:p-10 max-w-xl xl:max-w-2xl min-h-[200px] sm:min-h-[210px] lg:min-h-[235px] flex flex-col justify-center">
             <div className="flex items-center gap-2 mb-2.5">
-              <span className="h-[1px] w-5 bg-[#C6A16B]"></span>
-              <span className="text-[9px] sm:text-[10px] font-mono font-medium uppercase tracking-[0.22em] text-[#8D263B]">
+              <span className="h-[1px] w-6 bg-[#C6A16B]"></span>
+              <span className="text-[9.5px] sm:text-[10px] font-mono font-semibold uppercase tracking-[0.24em] text-[#8D263B]">
                 Digital Reading Journal &bull; Issue No. 24
               </span>
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[42px] font-medium text-[#302A27] tracking-tight leading-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[44px] font-bold text-[#2A1E17] tracking-tight leading-tight">
               Fall into <span className="italic font-normal text-[#8D263B]">another world.</span>
             </h1>
             <p className="text-xs sm:text-[13px] text-[#81766D] font-serif italic mt-2 mb-5 leading-relaxed max-w-lg">
