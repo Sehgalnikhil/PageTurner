@@ -68,6 +68,16 @@
     color: #FFFDFA;
   }
 
+  button, [role="button"], .select-none {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  button::selection, [role="button"]::selection, .select-none::selection {
+    background: transparent;
+    color: inherit;
+  }
+
   h1, h2, h3, h4, .font-serif, .font-cormorant {
     font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
     letter-spacing: -0.015em;

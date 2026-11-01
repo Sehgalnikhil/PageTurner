@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/layout/Footer';
 import {
@@ -59,6 +59,7 @@ const formatTimeAgo = (dateStr) => {
 
 const Community = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useContext(AuthContext);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -68,8 +69,19 @@ const Community = () => {
   };
 
   // Extraordinary Entrance Animation State ('sealed' | 'opening' | 'revealed')
-  // Automatically triggers every time the reader visits or reloads The Salon
-  const [entranceStage, setEntranceStage] = useState('sealed');
+  // ONLY triggers when user navigates to The Salon via the Navbar link
+  const [entranceStage, setEntranceStage] = useState(() => {
+    return location.state?.fromNavbar ? 'sealed' : 'revealed';
+  });
+
+  // Watch for Navbar navigation clicks (even if already on /community)
+  useEffect(() => {
+    if (location.state?.fromNavbar) {
+      setEntranceStage('sealed');
+      // Replace state in browser history so refreshing won't replay animation
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state?.triggerTimestamp]);
 
   const handleOpenSalon = () => {
     if (entranceStage !== 'sealed') return;
@@ -86,11 +98,6 @@ const Community = () => {
   const handleSkipEntrance = (e) => {
     if (e) e.stopPropagation();
     setEntranceStage('revealed');
-  };
-
-  const handleReplayEntrance = () => {
-    playWaxSealCrack();
-    setEntranceStage('sealed');
   };
 
   // Automatically start the ceremonial door opening after 1.4s of majestic ambiance
@@ -1007,17 +1014,6 @@ const Community = () => {
                   >
                     <PiPlusBold className="text-xs text-[#EADBCC]" />
                     <span>Create a Parlour</span>
-                  </button>
-
-                  {/* Replay Opening Animation Button */}
-                  <button
-                    type="button"
-                    onClick={handleReplayEntrance}
-                    title="Replay opening sanctuary animation"
-                    className="h-10 px-4 rounded-full bg-black/40 hover:bg-black/60 text-[#FDFBF7] text-xs font-medium tracking-wide flex items-center gap-2 backdrop-blur-md border border-[#C6A16B]/40 shadow-sm cute-press cursor-pointer transition-all"
-                  >
-                    <span className="w-2 h-2 rounded-full bg-[#E0A96D] animate-pulse" />
-                    <span>Relive Opening 🕯️</span>
                   </button>
                 </div>
               </div>

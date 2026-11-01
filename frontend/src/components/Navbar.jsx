@@ -232,6 +232,7 @@ const Navbar = ({ totalBooks = 0 }) => {
               {/* Community (The Readers' Salon) */}
               <Link
                 to="/community"
+                state={{ fromNavbar: true, triggerTimestamp: Date.now() }}
                 className={`text-xs font-serif tracking-wide px-3 py-1 rounded-full flex items-center gap-1.5 transition-all cute-press ${
                   location.pathname === '/community'
                     ? 'bg-[#7A2134] text-[#FDFBF7] shadow-xs font-semibold'
