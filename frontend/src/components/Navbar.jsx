@@ -335,12 +335,20 @@ const Navbar = ({ totalBooks = 0 }) => {
                   <button
                     type="button"
                     onClick={() => setShowPassport(true)}
-                    title="View Reader Passport"
+                    title="View Reader Passport & Profile"
                     className="flex items-center gap-2 p-1 rounded-lg hover:bg-[#8D263B]/5 transition-colors group cursor-pointer text-left"
                   >
-                    <div className="w-7 h-7 rounded-full bg-[#F0E9DE] text-[#67202F] font-serif font-semibold text-xs flex items-center justify-center flex-shrink-0 border border-[#E8DED1] group-hover:border-[#8D263B]/30 transition-colors">
-                      {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
-                    </div>
+                    {user.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt={user.username}
+                        className="w-7 h-7 rounded-full object-cover border border-[#C59B63] shadow-xs group-hover:scale-105 transition-transform"
+                      />
+                    ) : (
+                      <div className="w-7 h-7 rounded-full bg-[#F0E9DE] text-[#67202F] font-serif font-semibold text-xs flex items-center justify-center flex-shrink-0 border border-[#E8DED1] group-hover:border-[#8D263B]/30 transition-colors">
+                        {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
+                      </div>
+                    )}
 
                     <span className="hidden sm:inline text-xs font-medium text-[#302A27] truncate max-w-[80px] group-hover:text-[#8D263B] transition-colors">
                       {user.username}

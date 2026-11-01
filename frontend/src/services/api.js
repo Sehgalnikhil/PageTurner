@@ -96,6 +96,7 @@ export const authService = {
   getProfile: () => api.get('/auth/me'),
   sendWelcomeEmail: (data) => api.post('/auth/send-welcome-email', data),
   sendLoginAlert: (data) => api.post('/auth/send-login-alert', data),
+  updateAvatar: (avatar) => api.put('/auth/avatar', { avatar }),
   forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
   resetPassword: (data) => api.post('/auth/reset-password', data),
   getEmailPreviewUrl: (username, email) =>

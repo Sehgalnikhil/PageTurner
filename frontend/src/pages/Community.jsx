@@ -29,7 +29,9 @@ import {
   PiMagnifyingGlassBold,
   PiCheckBold,
   PiBookOpenBold,
+  PiCameraBold,
 } from 'react-icons/pi';
+import ChangeAvatarModal from '../components/common/ChangeAvatarModal';
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
 import { communityService } from '../services/api';
@@ -132,6 +134,7 @@ const Community = () => {
   // Modals & Compose State
   const [showCompose, setShowCompose] = useState(false);
   const [showCreateParlourModal, setShowCreateParlourModal] = useState(false);
+  const [showChangeAvatarModal, setShowChangeAvatarModal] = useState(false);
   const [newReflectionText, setNewReflectionText] = useState('');
   const [newQuoteText, setNewQuoteText] = useState('');
   const [newQuoteAuthor, setNewQuoteAuthor] = useState('');
@@ -484,7 +487,7 @@ const Community = () => {
       _id: tempCommentId,
       author: authorName,
       handle: authorHandle,
-      avatar: '/images/eleanor-avatar.jpg',
+      avatar: user?.avatar || 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80',
       text,
       time: 'Just now',
     };
@@ -572,7 +575,7 @@ const Community = () => {
       _id: tempPostId,
       author: authorName,
       handle: authorHandle,
-      avatar: '/images/eleanor-avatar.jpg',
+      avatar: user?.avatar || 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80',
       time: 'Just now',
       parlour: selectedComposeParlour,
       parlourTitle: selectedComposeParlour,
@@ -737,6 +740,9 @@ const Community = () => {
   };
 
   const readerName = user?.username || 'Nikhil Sehgal';
+  const userAvatar =
+    user?.avatar ||
+    'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80';
 
   // Filtered posts for feed
   const filteredPosts = posts.filter((p) => {
@@ -1147,6 +1153,12 @@ const Community = () => {
               <div className="flex -space-x-2 overflow-hidden items-center">
                 <img
                   className="inline-block h-6 w-6 rounded-full ring-2 ring-[#EFE8DA] object-cover"
+                  src={userAvatar}
+                  alt={readerName}
+                  title={`You (${readerName})`}
+                />
+                <img
+                  className="inline-block h-6 w-6 rounded-full ring-2 ring-[#EFE8DA] object-cover"
                   src="/images/eleanor-avatar.jpg"
                   alt="Eleanor Vance"
                 />
@@ -1373,13 +1385,42 @@ const Community = () => {
                     <span className="text-xs text-[#7A6A5E]">ⓘ</span>
                   </div>
 
-                  {/* Circular Profile Avatar */}
-                  <div className="relative w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-2 border-[#D9C4A6] shadow-inner bg-[#2C231E]">
+                  {/* Circular Profile Avatar with Real-Time PFP & Edit Action */}
+                  <div className="relative w-20 h-20 mx-auto mb-1.5 rounded-full overflow-hidden border-2 border-[#D9C4A6] shadow-inner bg-[#2C231E] group/avatar relative">
                     <img
-                      src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80"
+                      src={userAvatar}
                       alt={readerName}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover/avatar:scale-105 transition-transform"
                     />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        playPaperUnwrap();
+                        setShowChangeAvatarModal(true);
+                      }}
+                      title="Change Profile Picture"
+                      className="absolute inset-0 bg-black/50 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[9px] font-mono cursor-pointer"
+                    >
+                      <PiCameraBold className="text-base text-[#F7D8A4]" />
+                      <span>Edit PFP</span>
+                    </button>
+                  </div>
+
+                  {/* Change PFP Quick Pill */}
+                  <div className="mb-2">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        playPaperUnwrap();
+                        setShowChangeAvatarModal(true);
+                      }}
+                      className="text-[10px] font-mono font-semibold text-[#7D2235] hover:text-[#92283F] inline-flex items-center gap-1 hover:underline cursor-pointer"
+                    >
+                      <PiCameraBold className="text-xs" />
+                      <span>Change PFP</span>
+                    </button>
                   </div>
 
                   {/* Reader Identity */}
@@ -1526,7 +1567,11 @@ const Community = () => {
                   <div className="flex items-center justify-between mb-3.5">
                     <div className="flex items-center gap-2.5">
                       <img
-                        src={post.avatar}
+                        src={
+                          post.author === readerName || post.author === user?.username
+                            ? userAvatar
+                            : post.avatar || '/images/eleanor-avatar.jpg'
+                        }
                         alt={post.author}
                         className="w-9 h-9 rounded-full object-cover border border-[#D8CCB8] shadow-2xs"
                       />
@@ -1684,10 +1729,21 @@ const Community = () => {
                         {post.commentsList.map((c) => (
                           <div key={c.id} className="p-2.5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8] text-xs">
                             <div className="flex items-center justify-between mb-1">
-                              <span className="font-serif font-bold text-[#2F2620]">{c.author}</span>
+                              <div className="flex items-center gap-1.5">
+                                <img
+                                  src={
+                                    c.author === readerName || c.author === user?.username
+                                      ? userAvatar
+                                      : c.avatar || '/images/eleanor-avatar.jpg'
+                                  }
+                                  alt={c.author}
+                                  className="w-4 h-4 rounded-full object-cover border border-[#DECDB8]"
+                                />
+                                <span className="font-serif font-bold text-[#2F2620]">{c.author}</span>
+                              </div>
                               <span className="text-[10px] text-[#7A6A5E]">{c.time}</span>
                             </div>
-                            <p className="text-[#3E3228] leading-snug">{c.text}</p>
+                            <p className="text-[#3E3228] leading-snug pl-5.5">{c.text}</p>
                           </div>
                         ))}
                       </div>
@@ -2380,13 +2436,39 @@ const Community = () => {
                 <PiXBold className="text-sm" />
               </button>
 
-              <div className="w-16 h-16 rounded-full mx-auto overflow-hidden border-2 border-[#C6A16B] shadow-md">
+              <div className="relative w-16 h-16 rounded-full mx-auto overflow-hidden border-2 border-[#C6A16B] shadow-md group/dossier">
                 <img
-                  src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80"
+                  src={userAvatar}
                   alt={readerName}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover/dossier:scale-105 transition-transform"
                 />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowPassportDossier(false);
+                    playPaperUnwrap();
+                    setShowChangeAvatarModal(true);
+                  }}
+                  className="absolute inset-0 bg-black/50 opacity-0 group-hover/dossier:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[9px] font-mono cursor-pointer"
+                  title="Change Reader Portrait"
+                >
+                  <PiCameraBold className="text-sm text-[#F7D8A4]" />
+                  <span>Edit</span>
+                </button>
               </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPassportDossier(false);
+                  playPaperUnwrap();
+                  setShowChangeAvatarModal(true);
+                }}
+                className="text-[10px] font-mono font-semibold text-[#7D2235] hover:text-[#92283F] inline-flex items-center gap-1 hover:underline cursor-pointer"
+              >
+                <PiCameraBold className="text-xs" />
+                <span>Change Portrait / PFP</span>
+              </button>
 
               <div>
                 <h3 className="font-serif font-bold text-xl text-[#2F2620]">
@@ -2483,6 +2565,12 @@ const Community = () => {
             </div>
           </div>
         )}
+
+        {/* Change Reader Portrait / PFP Modal */}
+        <ChangeAvatarModal
+          isOpen={showChangeAvatarModal}
+          onClose={() => setShowChangeAvatarModal(false)}
+        />
 
       </main>
 

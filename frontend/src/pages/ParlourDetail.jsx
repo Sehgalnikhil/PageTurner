@@ -490,6 +490,7 @@ const ParlourDetail = () => {
 
     const authorName = user?.username || user?.name || 'Nikhil Sehgal';
     const authorHandle = (user?.username || user?.name || 'nikhil_sehgal').toLowerCase().replace(/\s+/g, '_');
+    const userAvatar = user?.avatar || 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80';
     const tempPostId = `d-${Date.now()}`;
 
     const newPost = {
@@ -497,7 +498,7 @@ const ParlourDetail = () => {
       _id: tempPostId,
       author: authorName,
       handle: authorHandle,
-      avatar: '/images/eleanor-avatar.jpg',
+      avatar: userAvatar,
       time: 'Just now',
       tag: newNoteTag,
       quote: newQuoteText.trim() ? `“${newQuoteText.trim()}”` : null,
@@ -521,7 +522,7 @@ const ParlourDetail = () => {
         parlourTitle: parlour.title,
         author: authorName,
         handle: authorHandle,
-        avatar: '/images/eleanor-avatar.jpg',
+        avatar: userAvatar,
         tag: newNoteTag,
         quote: newPost.quote,
         content: newPost.text,
@@ -585,10 +586,11 @@ const ParlourDetail = () => {
     try {
       const target = discussions.find((d) => d.id === discussionId || d._id === discussionId);
       const postDocId = target?._id || target?.id || discussionId;
+      const userAvatar = user?.avatar || 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80';
       const res = await communityService.addComment(postDocId, {
         author: authorName,
         handle: authorHandle,
-        avatar: '/images/eleanor-avatar.jpg',
+        avatar: userAvatar,
         text,
       });
 
@@ -927,7 +929,11 @@ const ParlourDetail = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                       <img
-                        src={d.avatar}
+                        src={
+                          d.author === (user?.username || 'Nikhil Sehgal')
+                            ? (user?.avatar || 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80')
+                            : d.avatar || '/images/eleanor-avatar.jpg'
+                        }
                         alt={d.author}
                         className="w-8 h-8 rounded-full object-cover border border-[#D8C7B0]"
                       />

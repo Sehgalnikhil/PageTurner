@@ -21,7 +21,9 @@ import {
   PiDesktopBold,
   PiLockBold,
   PiSealCheckBold,
+  PiCameraBold,
 } from 'react-icons/pi';
+import ChangeAvatarModal from './common/ChangeAvatarModal';
 import { authService } from '../services/api';
 import { useSnackbar } from 'notistack';
 import {
@@ -73,6 +75,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
   const [customEmail, setCustomEmail] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [lastDispatched, setLastDispatched] = useState(null);
+  const [showChangeAvatar, setShowChangeAvatar] = useState(false);
 
   // Inspector tab state
   const [inspectorType, setInspectorType] = useState('welcome'); // 'welcome' | 'login' | 'reset'
@@ -372,21 +375,49 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
 
                 {/* Identity Layout: Avatar Medallion + Typography */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-                  {/* Circular Portrait Frame */}
-                  <div className="relative flex-shrink-0">
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#E2D4C0] to-[#C9B59C] p-1 border-2 border-[#C59B63] shadow-md">
-                      <div className="w-full h-full rounded-xl overflow-hidden bg-[#2D241E]">
+                  {/* Circular Portrait Frame with Change PFP Action */}
+                  <div className="relative flex-shrink-0 flex flex-col items-center">
+                    <div
+                      onClick={() => {
+                        playPaperUnwrap();
+                        setShowChangeAvatar(true);
+                      }}
+                      className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#E2D4C0] to-[#C9B59C] p-1 border-2 border-[#C59B63] shadow-md cursor-pointer group/portrait relative"
+                      title="Click to Change Reader Portrait / PFP"
+                    >
+                      <div className="w-full h-full rounded-xl overflow-hidden bg-[#2D241E] relative">
                         <img
-                          src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80"
+                          src={
+                            activeUser.avatar ||
+                            'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80'
+                          }
                           alt={activeUser.username}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover group-hover/portrait:scale-105 transition-transform"
                         />
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/portrait:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[9px] font-mono gap-0.5">
+                          <PiCameraBold className="text-sm text-[#F7D8A4]" />
+                          <span>Edit PFP</span>
+                        </div>
+                      </div>
+
+                      {/* Small Wax Medallion Badge */}
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#7D2235] border-2 border-[#FAF5EB] flex items-center justify-center text-[#F7D8A4] text-[10px] shadow-sm font-serif">
+                        ❦
                       </div>
                     </div>
-                    {/* Small Wax Medallion Badge */}
-                    <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#7D2235] border-2 border-[#FAF5EB] flex items-center justify-center text-[#F7D8A4] text-[10px] shadow-sm font-serif">
-                      ❦
-                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playPaperUnwrap();
+                        setShowChangeAvatar(true);
+                      }}
+                      className="mt-1.5 text-[10px] font-mono font-semibold text-[#7D2235] hover:text-[#92283F] flex items-center gap-1 hover:underline cursor-pointer"
+                    >
+                      <PiCameraBold className="text-xs" />
+                      <span>Change PFP</span>
+                    </button>
                   </div>
 
                   {/* Reader Details */}
@@ -968,6 +999,12 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
           )}
         </div>
       </div>
+
+      {/* Change Portrait / PFP Modal */}
+      <ChangeAvatarModal
+        isOpen={showChangeAvatar}
+        onClose={() => setShowChangeAvatar(false)}
+      />
     </div>
   );
 };

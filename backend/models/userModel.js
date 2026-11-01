@@ -21,6 +21,10 @@ const userSchema = mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    avatar: {
+      type: String,
+      default: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80',
+    },
     resetPasswordToken: {
       type: String,
     },

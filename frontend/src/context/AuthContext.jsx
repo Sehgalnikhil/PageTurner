@@ -46,6 +46,26 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const updateAvatar = async (newAvatar) => {
+    // 1. Optimistic instant local update
+    const updated = {
+      ...(user || {}),
+      avatar: newAvatar,
+    };
+    setUser(updated);
+    localStorage.setItem('userInfo', JSON.stringify(updated));
+
+    // 2. Persist to backend if token exists
+    if (user?.token) {
+      try {
+        await authService.updateAvatar(newAvatar);
+      } catch (err) {
+        console.error('Failed to sync avatar with backend:', err);
+      }
+    }
+    return true;
+  };
+
   const isAdmin = user?.role === 'admin';
 
   return (
@@ -56,6 +76,7 @@ export const AuthProvider = ({ children }) => {
         isAdmin,
         login,
         logout,
+        updateAvatar,
       }}
     >
       {children}

@@ -67,6 +67,7 @@ router.post('/register', async (req, res) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        avatar: user.avatar,
         token: generateToken(user._id),
       });
     } else {
@@ -101,6 +102,7 @@ router.post('/login', async (req, res) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        avatar: user.avatar || 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80',
         token: generateToken(user._id),
       });
     } else {
@@ -109,6 +111,38 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// @route   PUT /auth/avatar
+// @desc    Update current reader's avatar / portrait
+// @access  Private
+router.put('/avatar', protect, async (req, res) => {
+  try {
+    const { avatar } = req.body;
+    if (!avatar) {
+      return res.status(400).json({ message: 'Avatar image URL or data is required' });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.avatar = avatar;
+    await user.save();
+
+    res.json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      avatar: user.avatar,
+      message: 'Avatar updated successfully',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error updating avatar' });
   }
 });
 
