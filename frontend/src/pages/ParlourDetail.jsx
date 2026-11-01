@@ -1071,7 +1071,7 @@ const ParlourDetail = () => {
           <div className="lg:col-span-4 space-y-5">
             
             {/* 1. Silent Reading Sprint Station & Binaural Atmosphere */}
-            <AmbientSoundboard parlourSlug={parlourId} parlourTitle={parlour.title} />
+            <AmbientSoundboard parlourSlug={parlour.id || id || 'gothic'} parlourTitle={parlour.title} />
 
             {/* 2. Readers Gathered In this Parlour */}
             <div className="p-5 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm">
