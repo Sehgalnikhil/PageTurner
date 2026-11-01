@@ -167,16 +167,13 @@ const Navbar = ({ totalBooks = 0 }) => {
             
             {/* 1. BRAND SECTION (LEFT) */}
             <div className="flex items-center flex-shrink-0">
-              <Link to="/" className="group flex items-center gap-3 py-0.5" title="PageTurner — Return to Sanctuary">
+              <Link to="/" className="group flex items-center py-0.5" title="PageTurner — Return to Sanctuary">
                 {/* Official Full PageTurner Logo Artwork & Typography */}
                 <img
                   src="/images/pageturner-full-transparent.png"
                   alt="PageTurner"
                   className="h-[54px] sm:h-[64px] w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_8px_rgba(60,30,15,0.12)]"
                 />
-                <span className="hidden xl:inline font-serif italic text-xs text-[#81766D] pl-3 border-l border-[#D9CCB7] leading-tight">
-                  A Curated Literary Sanctuary
-                </span>
               </Link>
             </div>
 
