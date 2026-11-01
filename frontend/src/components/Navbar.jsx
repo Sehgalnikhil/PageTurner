@@ -253,28 +253,28 @@ const Navbar = ({ totalBooks = 0 }) => {
               )}
             </nav>
 
-            {/* 3. INTEGRATED SEARCH UTILITY (Pill with ⌘K) */}
-            <div className="hidden md:flex items-center flex-1 max-w-[210px] lg:max-w-[250px] min-w-[140px] mx-1">
+            {/* 3. INTEGRATED SEARCH UTILITY (Classic Oval Capsule matching reference) */}
+            <div className="hidden md:flex items-center flex-1 max-w-[220px] lg:max-w-[260px] min-w-[150px] mx-1">
               <button
                 type="button"
                 onClick={() => setShowCommandK(true)}
                 title="Omnisearch (⌘K)"
-                className="w-full h-8.5 rounded-full border border-[#DFCBB5] bg-[#FFFDF9] hover:border-[#C6A16B]/60 hover:bg-[#FDFBF7] px-3.5 flex items-center justify-between text-left transition-all duration-150 cursor-pointer shadow-2xs group"
+                className="w-full h-8.5 rounded-full border border-[#DFCBB5] bg-[#FFFDF9] hover:border-[#C6A16B] hover:bg-[#FDFBF7] px-3.5 flex items-center justify-between text-left transition-all duration-150 cursor-pointer shadow-2xs group"
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <PiMagnifyingGlassBold className="text-[#81766D] group-hover:text-[#8D263B] text-xs flex-shrink-0 transition-colors" />
-                  <span className="text-[12.5px] font-sans text-[#7E7066] group-hover:text-[#302A27] font-normal truncate transition-colors">
-                    Search books, authors, ideas...
+                  <span className="text-[13px] font-serif text-[#7E7066] group-hover:text-[#302A27] font-normal truncate transition-colors">
+                    Search b...
                   </span>
                 </div>
-                <kbd className="px-1.5 py-0.5 rounded-full bg-[#F0E9DE]/70 border border-[#DFCBB5] text-[9.5px] font-mono text-[#7E7066] font-medium leading-none flex-shrink-0 ml-1.5">
+                <kbd className="px-1.5 py-0.5 rounded-full bg-[#F0E9DE]/80 border border-[#DFCBB5] text-[10px] font-mono text-[#7E7066] font-medium leading-none flex-shrink-0 ml-1.5 shadow-2xs">
                   ⌘K
                 </kbd>
               </button>
             </div>
 
-            {/* 4. RIGHT ACTIONS (Sound Vibes, Notification Bell, + Add Book, Profile, Mobile Toggles) */}
-            <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
+            {/* 4. RIGHT ACTIONS (Sound Vibes, + Add Book, Profile, Mobile Toggles) */}
+            <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
 
               {/* Optional Search icon on small screens where search input is hidden */}
               <button
@@ -287,13 +287,13 @@ const Navbar = ({ totalBooks = 0 }) => {
                 <PiMagnifyingGlassBold className="text-lg" />
               </button>
 
-              {/* Atmospheric Soundscape: Tactile Cute Charm Button ("Vibes") */}
+              {/* Atmospheric Soundscape: Classic Tactile Charm Button ("Vibes") */}
               {user && (
                 <button
                   type="button"
                   onClick={handleCycleAmbient}
                   title={`Atmospheric Soundscape: ${ambientSound === 'off' ? 'Off (Click to play)' : ambientSound.charAt(0).toUpperCase() + ambientSound.slice(1)}`}
-                  className={`hidden sm:flex items-center gap-1.5 h-8.5 px-3 rounded-full border transition-all duration-200 cursor-pointer shadow-2xs flex-shrink-0 text-[12.5px] font-sans font-medium ${ambientSound !== 'off'
+                  className={`hidden sm:flex items-center gap-1.5 h-8.5 px-3.5 rounded-full border transition-all duration-200 cursor-pointer shadow-2xs flex-shrink-0 ${ambientSound !== 'off'
                     ? 'border-[#8D263B] bg-[#8D263B]/10 text-[#8D263B] shadow-xs'
                     : 'border-[#DFCBB5] bg-[#FFFDF9] hover:bg-[#F7F3EC] text-[#5C4F46] hover:text-[#302A27]'
                     }`}
@@ -301,42 +301,32 @@ const Navbar = ({ totalBooks = 0 }) => {
                   {ambientSound === 'rain' ? (
                     <>
                       <PiCloudRainBold className="text-sm text-[#8D263B] animate-pulse" />
-                      <span className="capitalize">Rain</span>
+                      <span className="text-[13px] font-serif capitalize">Rain</span>
                     </>
                   ) : ambientSound === 'fireplace' ? (
                     <>
                       <PiFlameBold className="text-sm text-[#8D263B] animate-pulse" />
-                      <span className="capitalize">Hearth</span>
+                      <span className="text-[13px] font-serif capitalize">Hearth</span>
                     </>
                   ) : ambientSound === 'clock' ? (
                     <>
                       <PiClockBold className="text-sm text-[#8D263B] animate-pulse" />
-                      <span className="capitalize">Clock</span>
+                      <span className="text-[13px] font-serif capitalize">Clock</span>
                     </>
                   ) : (
                     <>
-                      <PiSpeakerHighBold className="text-sm text-[#81766D]" />
-                      <span>Vibes</span>
+                      <PiSpeakerHighBold className="text-sm text-[#7E7066]" />
+                      <span className="text-[13px] font-serif text-[#5C4F46]">Vibes</span>
                     </>
                   )}
                 </button>
               )}
 
-              {/* Notification Bell Icon */}
-              <button
-                type="button"
-                onClick={() => setShowPassport(true)}
-                title="Sanctuary Notices & Announcements"
-                className="w-8.5 h-8.5 rounded-full border border-[#DFCBB5] bg-[#FFFDF9] hover:bg-[#F7F3EC] text-[#5C4F46] hover:text-[#8D263B] transition-all flex items-center justify-center cursor-pointer shadow-2xs flex-shrink-0"
-              >
-                <PiBellBold className="text-sm" />
-              </button>
-
               {/* + Add Book Primary CTA: Solid Crimson Rounded Capsule */}
               {user && (
                 <Link
                   to="/books/create"
-                  className="h-8.5 px-4 flex items-center gap-1.5 rounded-full bg-[#8D263B] hover:bg-[#731D2E] text-[#FFFDF9] text-[12.5px] font-sans font-medium transition-all shadow-xs active:scale-95 flex-shrink-0 group/addbtn"
+                  className="h-8.5 px-4 flex items-center gap-1.5 rounded-full bg-[#8D263B] hover:bg-[#731D2E] text-[#FFFDF9] text-[13px] font-serif font-medium transition-all shadow-xs active:scale-95 flex-shrink-0 group/addbtn"
                 >
                   <PiPlusBold className="text-xs transition-transform duration-300 group-hover/addbtn:rotate-90" />
                   <span>Add Book</span>
