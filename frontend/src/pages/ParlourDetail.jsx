@@ -28,6 +28,8 @@ import {
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
 import { communityService } from '../services/api';
+import AmbientSoundboard from '../components/common/AmbientSoundboard';
+import SocraticDebateLectern from '../components/common/SocraticDebateLectern';
 import { CHAPTER_EXCERPTS } from '../data/bookExcerpts';
 import {
   playWaxSealCrack,
@@ -854,6 +856,9 @@ const ParlourDetail = () => {
               </div>
             </div>
 
+            {/* Socratic Debate Lectern */}
+            <SocraticDebateLectern />
+
             {/* 3. Inscribe Discussion Note Composer */}
             {showCompose && (
               <div className="p-5 sm:p-6 rounded-2xl bg-[#FAF5EB] border-2 border-[#7D2235]/40 shadow-lg animate-drawer-spring">
@@ -1065,61 +1070,8 @@ const ParlourDetail = () => {
               ============================================================ */}
           <div className="lg:col-span-4 space-y-5">
             
-            {/* 1. Silent Reading Sprint Station */}
-            <div className="p-5 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-serif font-bold text-sm text-[#2F2620] flex items-center gap-1.5">
-                  <PiClockBold className="text-[#7D2235]" />
-                  <span>Parlour Silent Sprint</span>
-                </span>
-                <span className="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-                  Live
-                </span>
-              </div>
-              <p className="text-xs text-[#7A6A5E] mb-3">
-                Focus reading session alongside {parlour.activeNow} members.
-              </p>
-              <div className="p-3.5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8] text-center mb-3">
-                <span className="font-mono text-3xl font-bold text-[#2F2620] tracking-wider">
-                  {String(Math.floor(timerSeconds / 60)).padStart(2, '0')}:
-                  {String(timerSeconds % 60).padStart(2, '0')}
-                </span>
-                <span className="text-[10px] text-[#7A6A5E] block mt-0.5">
-                  {timerRunning ? '🕯️ Focus sprint in progress (ticking)' : 'Sprint paused • 25:00 goal'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    playWaxSealCrack();
-                    setTimerRunning((prev) => !prev);
-                  }}
-                  className={`flex-1 py-2 rounded-full text-xs font-semibold shadow-xs cute-press cursor-pointer select-none transition-all ${
-                    timerRunning
-                      ? 'bg-amber-800 hover:bg-amber-900 text-white'
-                      : 'bg-[#7D2235] hover:bg-[#92283F] text-white'
-                  }`}
-                >
-                  {timerRunning ? 'Pause Sprint' : 'Begin 25-Min Sprint'}
-                </button>
-                {timerSeconds < 25 * 60 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playPaperUnwrap();
-                      setTimerRunning(false);
-                      setTimerSeconds(25 * 60);
-                    }}
-                    className="px-3 py-2 rounded-full border border-[#D8CCB8] text-xs font-semibold text-[#6E5F53] hover:bg-[#EBE2D3] cute-press cursor-pointer select-none"
-                    title="Reset sprint timer"
-                  >
-                    Reset
-                  </button>
-                )}
-              </div>
-            </div>
+            {/* 1. Silent Reading Sprint Station & Binaural Atmosphere */}
+            <AmbientSoundboard parlourSlug={parlourId} parlourTitle={parlour.title} />
 
             {/* 2. Readers Gathered In this Parlour */}
             <div className="p-5 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm">

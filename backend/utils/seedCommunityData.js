@@ -1,5 +1,9 @@
 import { Parlour } from '../models/parlourModel.js';
 import { CommunityPost } from '../models/communityPostModel.js';
+import { Marginalia } from '../models/marginaliaModel.js';
+import { SocraticDebate } from '../models/socraticDebateModel.js';
+import { LiteraryLetter } from '../models/literaryLetterModel.js';
+import { ReadingSprint } from '../models/readingSprintModel.js';
 
 export const initialParlours = [
   {
@@ -260,6 +264,141 @@ export const initialPosts = [
   },
 ];
 
+export const initialMarginalia = [
+  {
+    bookTitle: 'The Picture of Dorian Gray',
+    bookAuthor: 'Oscar Wilde',
+    chapter: 'Chapter IV: The Studio of Basil Hallward',
+    quote: '“Behind every exquisite thing that existed, there was something tragic.”',
+    annotation:
+      'Wilde captures this ache so perfectly. How often do we trade authentic contentment for the aesthetic illusion of it? Basil\'s art was pure until it became possessive.',
+    author: 'Eleanor Vance',
+    authorHandle: 'eleanor_reads',
+    authorAvatar: '/images/eleanor-avatar.jpg',
+    authorEmail: 'eleanor@pageturner.io',
+    parlourSlug: 'gothic',
+    waxReactions: {
+      profound: ['eleanor_reads', 'nikhilsehgal1806@gmail.com'],
+      poetic: ['clara_books'],
+      provocative: [],
+    },
+  },
+  {
+    bookTitle: '1984',
+    bookAuthor: 'George Orwell',
+    chapter: 'Part II, Chapter IX',
+    quote: '“The best books... are those that tell you what you know already.”',
+    annotation:
+      'Rereading Part Two this morning under soft rain. What terrifies me most isn\'t the torture; it\'s the quiet compliance of collective forgetting.',
+    author: 'Arthur Pendelton',
+    authorHandle: 'arthur_scribe',
+    authorAvatar: '/images/arthur-avatar.jpg',
+    authorEmail: 'arthur@pageturner.io',
+    parlourSlug: 'slow',
+    waxReactions: {
+      profound: ['eleanor_reads'],
+      poetic: [],
+      provocative: ['stoic_night'],
+    },
+  },
+  {
+    bookTitle: 'The Myth of Sisyphus',
+    bookAuthor: 'Albert Camus',
+    chapter: 'An Absurd Reasoning',
+    quote: '“There is no sun without shadow, and it is essential to know the night.”',
+    annotation:
+      'Camus transforms suffering into sovereignty. When Sisyphus turns to walk down the hill, in that very pause, he is superior to his fate.',
+    author: 'Marcus Aurel',
+    authorHandle: 'stoic_night',
+    authorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
+    authorEmail: 'marcus@pageturner.io',
+    parlourSlug: 'midnight',
+    waxReactions: {
+      profound: ['arthur_scribe', 'eleanor_reads'],
+      poetic: ['clara_books'],
+      provocative: ['nikhilsehgal1806@gmail.com'],
+    },
+  },
+];
+
+export const initialDebates = [
+  {
+    topic: 'Aestheticism vs. Moral Truth in 19th-Century Decadence',
+    book: 'The Picture of Dorian Gray by Oscar Wilde',
+    motion: 'Resolved: The pursuit of pure aesthetic beauty without moral tether leads inevitably to spiritual destruction.',
+    context:
+      'In the 1891 preface, Wilde famously stated: "There is no such thing as a moral or an immoral book. Books are well written, or badly written. That is all." Yet Dorian\'s portrait rots in exact synchronization with his moral decay.',
+    active: true,
+    thesisLabel: 'Thesis: Aestheticism is the Supreme Spiritual Devotion',
+    antithesisLabel: 'Antithesis: Unchecked Aestheticism is Moral Cowardice',
+    thesisVotes: ['eleanor_reads', 'clara_books'],
+    antithesisVotes: ['arthur_scribe', 'nikhilsehgal1806@gmail.com'],
+    arguments: [
+      {
+        author: 'Eleanor Vance',
+        authorHandle: 'eleanor_reads',
+        authorAvatar: '/images/eleanor-avatar.jpg',
+        stance: 'thesis',
+        text: 'Wilde is not condemning beauty; he is condemning the hypocritical Victorian demand that art must preach a sermon. Art exists for the transfiguration of consciousness, free from utilitarian shackles.',
+        votes: ['clara_books'],
+      },
+      {
+        author: 'Arthur Pendelton',
+        authorHandle: 'arthur_scribe',
+        authorAvatar: '/images/arthur-avatar.jpg',
+        stance: 'antithesis',
+        text: 'Dorian does not celebrate art; he consumes it as a narcotic to numb guilt. The portrait is not a triumph of aestheticism—it is Wilde\'s piercing warning that human conscience cannot be locked in an attic without poisoning the soul.',
+        votes: ['eleanor_reads', 'nikhilsehgal1806@gmail.com'],
+      },
+    ],
+  },
+];
+
+export const initialLetters = [
+  {
+    senderName: 'Eleanor Vance',
+    senderHandle: 'eleanor_reads',
+    senderAvatar: '/images/eleanor-avatar.jpg',
+    senderEmail: 'eleanor@pageturner.io',
+    recipientName: 'Curator & Chief Librarian',
+    recipientEmail: 'nikhilsehgal1806@gmail.com',
+    subject: 'A Welcome Inscription to the Curators\' Sanctum',
+    body:
+      'Kindred reader,\n\nI noticed your margin notes on Basil Hallward\'s tragic devotion. There are few minds today who linger on the cadence of a sentence rather than rushing to its conclusion.\n\nWhenever the dusk settles, you will find a candle lit for you in The Gothic Study. Bring whatever volume haunts you most.\n\nYours in ink and parchment,\nEleanor Vance',
+    waxSealColor: '#7D2235',
+    waxSealEmblem: '❦',
+    opened: false,
+  },
+  {
+    senderName: 'Arthur Pendelton',
+    senderHandle: 'arthur_scribe',
+    senderAvatar: '/images/arthur-avatar.jpg',
+    senderEmail: 'arthur@pageturner.io',
+    recipientName: 'Curator & Chief Librarian',
+    recipientEmail: 'nikhilsehgal1806@gmail.com',
+    subject: 'Marginalia Note on Orwell\'s Principles of Newspeak',
+    body:
+      'Greetings from the slow reading alcove,\n\nI have transcribed several marginal notes from the Appendix of 1984 into our shared archives. Pay particular attention to how the reduction of vocabulary constrains the boundaries of thought itself.\n\nI welcome your counter-arguments at your leisure.\n\nRespectfully,\nArthur Pendelton',
+    waxSealColor: '#4A3728',
+    waxSealEmblem: '✒',
+    opened: false,
+  },
+  {
+    senderName: 'Eleanor Vance',
+    senderHandle: 'eleanor_reads',
+    senderAvatar: '/images/eleanor-avatar.jpg',
+    senderEmail: 'eleanor@pageturner.io',
+    recipientName: 'Admin Demo',
+    recipientEmail: 'admin@pageturner.io',
+    subject: 'A Welcome Inscription to the Curators\' Sanctum',
+    body:
+      'Kindred reader,\n\nI noticed your margin notes on Basil Hallward\'s tragic devotion. There are few minds today who linger on the cadence of a sentence rather than rushing to its conclusion.\n\nWhenever the dusk settles, you will find a candle lit for you in The Gothic Study. Bring whatever volume haunts you most.\n\nYours in ink and parchment,\nEleanor Vance',
+    waxSealColor: '#7D2235',
+    waxSealEmblem: '❦',
+    opened: false,
+  },
+];
+
 export const seedCommunityData = async () => {
   try {
     const parlourCount = await Parlour.countDocuments();
@@ -274,6 +413,61 @@ export const seedCommunityData = async () => {
       console.log('Seeding initial Community Posts into MongoDB...');
       await CommunityPost.insertMany(initialPosts);
       console.log(`✅ Seeded ${initialPosts.length} Community Posts`);
+    }
+
+    const marginaliaCount = await Marginalia.countDocuments();
+    if (marginaliaCount === 0) {
+      console.log('Seeding initial Marginalia into MongoDB...');
+      await Marginalia.insertMany(initialMarginalia);
+      console.log(`✅ Seeded ${initialMarginalia.length} Marginalia Inscriptions`);
+    }
+
+    const debateCount = await SocraticDebate.countDocuments();
+    if (debateCount === 0) {
+      console.log('Seeding initial Socratic Debate into MongoDB...');
+      await SocraticDebate.insertMany(initialDebates);
+      console.log(`✅ Seeded ${initialDebates.length} Socratic Debate`);
+    }
+
+    const letterCount = await LiteraryLetter.countDocuments();
+    if (letterCount === 0) {
+      console.log('Seeding initial Literary Letters into MongoDB...');
+      await LiteraryLetter.insertMany(initialLetters);
+      console.log(`✅ Seeded ${initialLetters.length} Literary Letters`);
+    }
+
+    const sprintCount = await ReadingSprint.countDocuments();
+    if (sprintCount === 0) {
+      console.log('Seeding initial Reading Sprint into MongoDB...');
+      await ReadingSprint.create({
+        parlourSlug: 'gothic',
+        parlourTitle: 'The Gothic Study',
+        hostName: 'Eleanor Vance',
+        hostAvatar: '/images/eleanor-avatar.jpg',
+        durationMinutes: 25,
+        status: 'active',
+        startedAt: new Date(),
+        expiresAt: new Date(Date.now() + 25 * 60 * 1000),
+        participants: [
+          {
+            name: 'Eleanor Vance',
+            avatar: '/images/eleanor-avatar.jpg',
+            email: 'eleanor@pageturner.io',
+            currentBook: 'The Picture of Dorian Gray (Ch. IV)',
+            joinedAt: new Date(),
+            completed: false,
+          },
+          {
+            name: 'Arthur Pendelton',
+            avatar: '/images/arthur-avatar.jpg',
+            email: 'arthur@pageturner.io',
+            currentBook: '1984 (Part II)',
+            joinedAt: new Date(),
+            completed: false,
+          },
+        ],
+      });
+      console.log('✅ Seeded active Reading Sprint');
     }
   } catch (err) {
     console.error('Error seeding community data:', err);

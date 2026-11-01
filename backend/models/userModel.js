@@ -25,6 +25,22 @@ const userSchema = mongoose.Schema(
       type: String,
       default: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80',
     },
+    sanctuaryXp: {
+      type: Number,
+      default: 1240,
+    },
+    sanctuaryLevel: {
+      type: Number,
+      default: 4,
+    },
+    badges: {
+      type: [String],
+      default: ['Night Owl Reader', 'Marginalia Scribe', 'Classics Initiate'],
+    },
+    dailyInspirationClaimedAt: {
+      type: Date,
+      default: null,
+    },
     resetPasswordToken: {
       type: String,
     },

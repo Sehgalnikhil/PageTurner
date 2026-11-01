@@ -152,4 +152,25 @@ export const communityService = {
   toggleBookmarkPost: (id, username) => api.post(`/community/posts/${id}/bookmark`, { username }),
   addComment: (id, data) => api.post(`/community/posts/${id}/comments`, data),
   getCommunityReaders: () => api.get('/community/readers'),
+  // 1. Marginalia Exchange
+  getMarginalia: (params) => api.get('/community/marginalia', { params }),
+  createMarginalia: (data) => api.post('/community/marginalia', data),
+  reactMarginalia: (id, reactionType, userIdentifier) =>
+    api.post(`/community/marginalia/${id}/react`, { reactionType, userIdentifier }),
+  // 2. Literary Mailbox & Letters
+  getLetters: (email) => api.get('/community/letters', { params: { email } }),
+  sendLetter: (data) => api.post('/community/letters', data),
+  openLetter: (id) => api.patch(`/community/letters/${id}/open`),
+  // 3. Socratic Debate
+  getDebate: () => api.get('/community/debate'),
+  voteDebate: (side, userIdentifier) =>
+    api.post('/community/debate/vote', { side, userIdentifier }),
+  addDebateArgument: (data) => api.post('/community/debate/argument', data),
+  // 4. Silent Reading Sprints
+  getSprint: (slug) => api.get(`/community/sprint/${slug}`),
+  joinSprint: (slug, data) => api.post(`/community/sprint/${slug}/join`, data),
+  completeSprint: (slug, data) => api.post(`/community/sprint/${slug}/complete`, data),
+  // 5. Sanctuary XP & Progression
+  claimDailyXp: (data) => api.post('/community/claim-daily-xp', data),
+  getUserProgress: (email) => api.get(`/community/user-progress/${encodeURIComponent(email)}`),
 };

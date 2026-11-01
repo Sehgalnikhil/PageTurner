@@ -32,6 +32,10 @@ import {
   PiCameraBold,
 } from 'react-icons/pi';
 import ChangeAvatarModal from '../components/common/ChangeAvatarModal';
+import LiteraryLetterModal from '../components/common/LiteraryLetterModal';
+import SocraticDebateLectern from '../components/common/SocraticDebateLectern';
+import AmbientSoundboard from '../components/common/AmbientSoundboard';
+import MarginaliaBoard from '../components/common/MarginaliaBoard';
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
 import { communityService } from '../services/api';
@@ -124,8 +128,20 @@ const Community = () => {
   const [activeExcerptKey, setActiveExcerptKey] = useState(null);
   const [showPassportDossier, setShowPassportDossier] = useState(false);
   const [readingFontSize, setReadingFontSize] = useState('base');
-  const [passportXP, setPassportXP] = useState(1240);
+  const [passportXP, setPassportXP] = useState(user?.sanctuaryXp || 1240);
   const [claimedDailyXP, setClaimedDailyXP] = useState(false);
+
+  // Literary Letter Dispatch State
+  const [showLetterModal, setShowLetterModal] = useState(false);
+  const [letterRecipient, setLetterRecipient] = useState(null);
+  const [letterSubject, setLetterSubject] = useState('');
+
+  const handleInitiateLetter = (reader, defaultSubj = '') => {
+    playWaxSealCrack();
+    setLetterRecipient(reader?.email || `${reader?.handle || 'reader'}@pageturner.io`);
+    setLetterSubject(defaultSubj || `Affinity Inscription from ${readerName}`);
+    setShowLetterModal(true);
+  };
 
   // Parlours Tab Search and Category
   const [parlourCategory, setParlourCategory] = useState('All');
@@ -1132,6 +1148,20 @@ const Community = () => {
                     <PiPlusBold className="text-xs text-[#EADBCC]" />
                     <span>Create a Parlour</span>
                   </button>
+
+                  {/* Frosted Glass Button: ✉️ Poste Restante (Mailbox) */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playWaxSealCrack();
+                      setShowLetterModal(true);
+                    }}
+                    className="h-10 px-4 rounded-full bg-black/40 hover:bg-black/60 text-[#F7D8A4] text-xs sm:text-sm font-medium tracking-wide flex items-center gap-1.5 backdrop-blur-md border border-[#D1B898]/30 shadow-sm cute-press cursor-pointer transition-all"
+                    title="Open your Literary Mailbox & Dispatched Wax Letters"
+                  >
+                    <span>✉️</span>
+                    <span>Poste Restante</span>
+                  </button>
                 </div>
               </div>
 
@@ -1668,6 +1698,9 @@ const Community = () => {
                 </div>
               </div>
 
+              {/* Weekly Socratic Debate Lectern */}
+              <SocraticDebateLectern />
+
               {/* Posts Cards */}
               {sortedPosts.map((post) => (
                 <article
@@ -2165,150 +2198,24 @@ const Community = () => {
         )}
 
         {/* ============================================================
-            TAB 3: READING ROOMS (LIVE AMBIENT TIMER & SOUND AMBIANCE)
+            TAB 3: READING ROOMS (LIVE SYNCHRONOUS CHAMBER)
             ============================================================ */}
         {activeTab === 'rooms' && (
-          <div className="mb-8 p-6 rounded-2xl bg-[#FAF5EB] border-2 border-[#D8C7B0] shadow-sm text-left animate-fade-in">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#E5D7C2] gap-3">
-              <div>
-                <h3 className="font-serif text-xl font-bold text-[#2F2620] flex items-center gap-2">
-                  <PiHeadphonesBold className="text-[#7D2235]" />
-                  <span>The Grand Silent Reading Room</span>
-                </h3>
-                <p className="text-xs text-[#7A6A5E] mt-0.5">
-                  Synchronous deep reading chamber. No talking; only pages turning and ambient solace.
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    playWaxSealCrack();
-                    setReadingTimerRunning((prev) => !prev);
-                  }}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-xs cute-press cursor-pointer ${
-                    readingTimerRunning
-                      ? 'bg-amber-800 text-white'
-                      : 'bg-[#7D2235] hover:bg-[#92283F] text-white'
-                  }`}
-                >
-                  <PiClockBold className="text-sm" />
-                  <span>{readingTimerRunning ? 'Pause Session' : 'Begin Reading Session'}</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-5">
-              {/* Timer Display */}
-              <div className="p-5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8] text-center flex flex-col justify-center items-center">
-                <span className="text-xs font-mono uppercase text-[#7A6A5E] tracking-wider">
-                  Session Duration
-                </span>
-                <span className="font-mono text-3xl font-bold text-[#2F2620] my-2">
-                  {Math.floor(readingSeconds / 60)}:
-                  {String(readingSeconds % 60).padStart(2, '0')}
-                </span>
-                <span className="text-[11px] text-[#7A6A5E]">
-                  {readingTimerRunning ? '🟢 Deep focus active' : 'Session paused'}
-                </span>
-              </div>
-
-              {/* Sound Ambiance Selector */}
-              <div className="p-5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8]">
-                <span className="text-xs font-serif font-bold text-[#2F2620] block mb-2">
-                  Sanctuary Ambiance
-                </span>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <button
-                    type="button"
-                    onClick={() => handleToggleAmbiance('rain')}
-                    className={`p-2.5 rounded-lg border flex items-center gap-1.5 transition-all text-left ${
-                      activeAmbiance === 'rain'
-                        ? 'bg-[#7D2235] text-white border-[#7D2235]'
-                        : 'bg-[#FAF5EB] text-[#2F2620] border-[#D8C7B0] hover:bg-white'
-                    }`}
-                  >
-                    <PiCloudRainBold />
-                    <span className="text-[11px] font-medium">Cathedral Rain</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleToggleAmbiance('fireplace')}
-                    className={`p-2.5 rounded-lg border flex items-center gap-1.5 transition-all text-left ${
-                      activeAmbiance === 'fireplace'
-                        ? 'bg-[#7D2235] text-white border-[#7D2235]'
-                        : 'bg-[#FAF5EB] text-[#2F2620] border-[#D8C7B0] hover:bg-white'
-                    }`}
-                  >
-                    <PiFlameBold />
-                    <span className="text-[11px] font-medium">Hearth Fire</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Readers Present */}
-              <div className="p-5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8]">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-serif font-bold text-[#2F2620]">
-                    Readers in Sanctum
-                  </span>
-                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-                    {allAvailableReaders.length} Registered Readers
-                  </span>
-                </div>
-                <div className="space-y-2 max-h-36 overflow-y-auto pr-1 text-xs">
-                  {allAvailableReaders.slice(0, 6).map((r) => (
-                    <div key={r.id || r.username} className="flex items-center justify-between text-[#2F2620] py-1 border-b border-[#E8DAC7]/50 last:border-0">
-                      <div className="flex items-center gap-2">
-                        <img src={r.avatar} alt={r.name} className="w-5 h-5 rounded-full object-cover border border-[#D5C2AC]" />
-                        <span className="font-medium">{r.name}</span>
-                      </div>
-                      <span className="text-[10px] text-[#7A6A5E] italic truncate max-w-[110px]">{r.currentBook}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+          <div className="mb-8 space-y-6 animate-fade-in">
+            <AmbientSoundboard parlourSlug="gothic" parlourTitle="The Grand Silent Reading Room" />
           </div>
         )}
 
         {/* ============================================================
-            TAB 4: MARGINALIA EXCHANGE
+            TAB 4: MARGINALIA EXCHANGE (REAL DATABASE SCRIBES)
             ============================================================ */}
         {activeTab === 'marginalia' && (
-          <div className="mb-8 p-6 rounded-2xl bg-[#FAF5EB] border-2 border-[#D8C7B0] shadow-sm text-left animate-fade-in">
-            <h3 className="font-serif text-xl font-bold text-[#2F2620] mb-1 flex items-center gap-2">
-              <PiNotePencilBold className="text-[#7D2235]" />
-              <span>Marginalia & Scribe Exchange</span>
-            </h3>
-            <p className="text-xs text-[#7A6A5E] mb-5">
-              Explore authentic handwritten annotations, ink notes, and marginal comments left by real registered readers in classic editions.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-xl bg-[#F0E6D5] border border-[#DECDB8]">
-                <span className="text-[10px] uppercase font-mono tracking-wider text-[#7D2235] font-bold">
-                  The Picture of Dorian Gray &bull; Chapter IV
-                </span>
-                <p className="font-serif italic text-sm text-[#2F2620] mt-1">
-                  “Youth! Youth! There is absolutely nothing in the world but youth!”
-                </p>
-                <div className="mt-2.5 p-2.5 rounded-lg bg-[#FAF5EB] border border-[#D8C7B0] text-xs text-[#52443A]">
-                  <em>Note by krish garg (@krish_garg):</em> Notice how Lord Henry sells youth as a currency Dorian never knew he was spending until this exact moment.
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#F0E6D5] border border-[#DECDB8]">
-                <span className="text-[10px] uppercase font-mono tracking-wider text-[#7D2235] font-bold">
-                  Crime and Punishment &bull; Part I, Ch. 2
-                </span>
-                <p className="font-serif italic text-sm text-[#2F2620] mt-1">
-                  “Poverty is not a vice, that’s a true saying. But destitution, sir, destitution is a vice.”
-                </p>
-                <div className="mt-2.5 p-2.5 rounded-lg bg-[#FAF5EB] border border-[#D8C7B0] text-xs text-[#52443A]">
-                  <em>Note by manan (@manan):</em> Marmeladov’s distinction between poverty and degradation. Here Dostoevsky lays the philosophical groundwork for Raskolnikov’s collapse.
-                </div>
-              </div>
-            </div>
+          <div className="mb-8 animate-fade-in">
+            <MarginaliaBoard
+              onOpenLetterModal={(email, subj) =>
+                handleInitiateLetter({ email, name: 'Kindred Reader' }, subj)
+              }
+            />
           </div>
         )}
 
@@ -2372,14 +2279,11 @@ const Community = () => {
 
                   <button
                     type="button"
-                    onClick={() => {
-                      playPaperUnwrap();
-                      enqueueSnackbar(`Marginalia exchange request dispatched to ${m.name}! ✉️`, { variant: 'success' });
-                    }}
+                    onClick={() => handleInitiateLetter(m)}
                     className="mt-4 w-full py-2 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold cute-press cursor-pointer shadow-xs flex items-center justify-center gap-1.5 transition-all"
                   >
                     <PiPaperPlaneRightBold className="text-xs text-[#F7D8A4]" />
-                    <span>Initiate Marginalia Exchange</span>
+                    <span>Inscribe Wax Letter ✉️</span>
                   </button>
                 </div>
               ))}
@@ -2661,11 +2565,19 @@ const Community = () => {
               <button
                 type="button"
                 disabled={claimedDailyXP}
-                onClick={() => {
+                onClick={async () => {
                   playWaxSealCrack();
                   setClaimedDailyXP(true);
                   setPassportXP((x) => x + 25);
-                  enqueueSnackbar('✨ Claimed Daily Salon Inspiration: +25 Sanctuary XP awarded! 🕯️', {
+                  try {
+                    const res = await communityService.claimDailyXp({ email: user?.email });
+                    if (res.data?.sanctuaryXp) {
+                      setPassportXP(res.data.sanctuaryXp);
+                    }
+                  } catch (err) {
+                    console.warn('Could not sync daily XP with database:', err);
+                  }
+                  enqueueSnackbar('✨ Claimed Daily Salon Inspiration: +25 Sanctuary XP saved to database! 🕯️', {
                     variant: 'success',
                   });
                 }}
@@ -2686,6 +2598,14 @@ const Community = () => {
         <ChangeAvatarModal
           isOpen={showChangeAvatarModal}
           onClose={() => setShowChangeAvatarModal(false)}
+        />
+
+        {/* Literary Letter / Poste Restante Modal */}
+        <LiteraryLetterModal
+          isOpen={showLetterModal}
+          onClose={() => setShowLetterModal(false)}
+          initialRecipient={letterRecipient}
+          initialSubject={letterSubject}
         />
 
       </main>

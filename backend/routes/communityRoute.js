@@ -2,6 +2,10 @@ import express from 'express';
 import { Parlour } from '../models/parlourModel.js';
 import { CommunityPost } from '../models/communityPostModel.js';
 import { User } from '../models/userModel.js';
+import { Marginalia } from '../models/marginaliaModel.js';
+import { SocraticDebate } from '../models/socraticDebateModel.js';
+import { LiteraryLetter } from '../models/literaryLetterModel.js';
+import { ReadingSprint } from '../models/readingSprintModel.js';
 import { seedCommunityData, initialParlours, initialPosts } from '../utils/seedCommunityData.js';
 
 const router = express.Router();
@@ -437,6 +441,482 @@ router.post('/posts/:id/comments', async (req, res, next) => {
       post: post.toJSON(),
       comment: added,
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ============================================================
+// 1. MARGINALIA EXCHANGE (TEXT-ANNOTATIONS & QUOTE INSCRIPTIONS)
+// ============================================================
+
+// @route   GET /community/marginalia
+// @desc    Get all marginalia annotations from the sanctuary database
+// @access  Public
+router.get('/marginalia', async (req, res, next) => {
+  try {
+    const { parlourSlug, search } = req.query;
+    let query = {};
+    if (parlourSlug && parlourSlug !== 'all') {
+      query.parlourSlug = parlourSlug;
+    }
+    if (search) {
+      query.$or = [
+        { bookTitle: { $regex: search, $options: 'i' } },
+        { quote: { $regex: search, $options: 'i' } },
+        { annotation: { $regex: search, $options: 'i' } },
+        { author: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    const items = await Marginalia.find(query).sort({ createdAt: -1 });
+    res.json(items);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   POST /community/marginalia
+// @desc    Inscribe a new margin note on a classical volume
+// @access  Public
+router.post('/marginalia', async (req, res, next) => {
+  try {
+    const {
+      bookTitle,
+      bookAuthor,
+      chapter,
+      quote,
+      annotation,
+      author,
+      authorHandle,
+      authorAvatar,
+      authorEmail,
+      parlourSlug,
+    } = req.body;
+
+    if (!bookTitle || !quote || !annotation || !author) {
+      return res.status(400).json({
+        message: 'Book title, quote, annotation, and author name are required',
+      });
+    }
+
+    const newMarginalia = await Marginalia.create({
+      bookTitle: bookTitle.trim(),
+      bookAuthor: (bookAuthor || 'Classical Canon').trim(),
+      chapter: (chapter || 'Chapter I').trim(),
+      quote: quote.trim(),
+      annotation: annotation.trim(),
+      author: author.trim(),
+      authorHandle: (authorHandle || 'reader').trim(),
+      authorAvatar: authorAvatar || '/images/eleanor-avatar.jpg',
+      authorEmail: authorEmail || '',
+      parlourSlug: parlourSlug || 'gothic',
+      waxReactions: {
+        profound: [],
+        poetic: [],
+        provocative: [],
+      },
+    });
+
+    // Optionally award 15 XP to user for inscribing marginalia
+    if (authorEmail) {
+      await User.findOneAndUpdate(
+        { email: authorEmail },
+        { $inc: { sanctuaryXp: 15 } }
+      ).catch(() => {});
+    }
+
+    res.status(201).json(newMarginalia);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   POST /community/marginalia/:id/react
+// @desc    Toggle a wax seal reaction (profound, poetic, provocative)
+// @access  Public
+router.post('/marginalia/:id/react', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { reactionType, userIdentifier } = req.body;
+
+    if (!['profound', 'poetic', 'provocative'].includes(reactionType)) {
+      return res.status(400).json({ message: 'Invalid wax seal reaction type' });
+    }
+
+    const item = await Marginalia.findById(id);
+    if (!item) {
+      return res.status(404).json({ message: 'Marginalia entry not found' });
+    }
+
+    const userId = userIdentifier || 'reader';
+    const reactionList = item.waxReactions[reactionType] || [];
+    const existingIndex = reactionList.indexOf(userId);
+
+    if (existingIndex > -1) {
+      reactionList.splice(existingIndex, 1);
+    } else {
+      reactionList.push(userId);
+    }
+
+    item.waxReactions[reactionType] = reactionList;
+    item.markModified('waxReactions');
+    await item.save();
+
+    res.json({
+      success: true,
+      waxReactions: item.waxReactions,
+      hasReacted: existingIndex === -1,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ============================================================
+// 2. LITERARY LETTERS (POSTE RESTANTE & LITERARY MAILBOX)
+// ============================================================
+
+// @route   GET /community/letters
+// @desc    Fetch letters sent to or from a reader
+// @access  Public
+router.get('/letters', async (req, res, next) => {
+  try {
+    const { email } = req.query;
+    let query = {};
+    if (email) {
+      query.$or = [{ recipientEmail: email }, { senderEmail: email }];
+    }
+
+    const letters = await LiteraryLetter.find(query).sort({ createdAt: -1 });
+    res.json(letters);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   POST /community/letters
+// @desc    Dispatch a sealed wax letter to another reader
+// @access  Public
+router.post('/letters', async (req, res, next) => {
+  try {
+    const {
+      senderName,
+      senderHandle,
+      senderAvatar,
+      senderEmail,
+      recipientName,
+      recipientEmail,
+      subject,
+      body,
+      waxSealColor,
+      waxSealEmblem,
+    } = req.body;
+
+    if (!senderEmail || !recipientEmail || !body) {
+      return res.status(400).json({ message: 'Sender email, recipient email, and letter body are required' });
+    }
+
+    const letter = await LiteraryLetter.create({
+      senderName: senderName || 'Sanctuary Scribe',
+      senderHandle: senderHandle || 'scribe',
+      senderAvatar: senderAvatar || '/images/eleanor-avatar.jpg',
+      senderEmail,
+      recipientName: recipientName || 'Kindred Reader',
+      recipientEmail,
+      subject: subject || 'A Dispatched Inscription from Kindred Hands',
+      body,
+      waxSealColor: waxSealColor || '#7D2235',
+      waxSealEmblem: waxSealEmblem || '❦',
+      opened: false,
+    });
+
+    res.status(201).json(letter);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   PATCH /community/letters/:id/open
+// @desc    Break wax seal and read a letter
+// @access  Public
+router.patch('/letters/:id/open', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const letter = await LiteraryLetter.findById(id);
+    if (!letter) {
+      return res.status(404).json({ message: 'Letter not found' });
+    }
+
+    letter.opened = true;
+    letter.openedAt = new Date();
+    await letter.save();
+
+    res.json({ success: true, letter });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ============================================================
+// 3. SOCRATIC DEBATE LECTERN
+// ============================================================
+
+// @route   GET /community/debate
+// @desc    Get active weekly Socratic debate
+// @access  Public
+router.get('/debate', async (req, res, next) => {
+  try {
+    let debate = await SocraticDebate.findOne({ active: true }).sort({ createdAt: -1 });
+    if (!debate) {
+      debate = await SocraticDebate.create(initialDebates[0]);
+    }
+    res.json(debate);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   POST /community/debate/vote
+// @desc    Vote for Thesis or Antithesis
+// @access  Public
+router.post('/debate/vote', async (req, res, next) => {
+  try {
+    const { side, userIdentifier } = req.body;
+    if (!['thesis', 'antithesis'].includes(side)) {
+      return res.status(400).json({ message: 'Side must be thesis or antithesis' });
+    }
+
+    const debate = await SocraticDebate.findOne({ active: true }).sort({ createdAt: -1 });
+    if (!debate) {
+      return res.status(404).json({ message: 'No active debate found' });
+    }
+
+    const userId = userIdentifier || 'reader';
+
+    // Remove from other side if present
+    debate.thesisVotes = debate.thesisVotes.filter((id) => id !== userId);
+    debate.antithesisVotes = debate.antithesisVotes.filter((id) => id !== userId);
+
+    if (side === 'thesis') {
+      debate.thesisVotes.push(userId);
+    } else {
+      debate.antithesisVotes.push(userId);
+    }
+
+    await debate.save();
+
+    res.json({
+      success: true,
+      thesisVotes: debate.thesisVotes,
+      antithesisVotes: debate.antithesisVotes,
+      votedSide: side,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   POST /community/debate/argument
+// @desc    Inscribe an argument to the Socratic Lectern
+// @access  Public
+router.post('/debate/argument', async (req, res, next) => {
+  try {
+    const { author, authorHandle, authorAvatar, stance, text } = req.body;
+    if (!stance || !text || !text.trim()) {
+      return res.status(400).json({ message: 'Stance and argument text are required' });
+    }
+
+    const debate = await SocraticDebate.findOne({ active: true }).sort({ createdAt: -1 });
+    if (!debate) {
+      return res.status(404).json({ message: 'No active debate found' });
+    }
+
+    const newArg = {
+      author: author || 'Sanctuary Scribe',
+      authorHandle: authorHandle || 'reader',
+      authorAvatar: authorAvatar || '/images/eleanor-avatar.jpg',
+      stance,
+      text: text.trim(),
+      votes: [],
+    };
+
+    debate.arguments.push(newArg);
+    await debate.save();
+
+    res.status(201).json({
+      success: true,
+      argument: debate.arguments[debate.arguments.length - 1],
+      debate,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ============================================================
+// 4. SILENT READING SPRINTS
+// ============================================================
+
+// @route   GET /community/sprint/:parlourSlug
+// @desc    Get active silent sprint for a parlour
+// @access  Public
+router.get('/sprint/:parlourSlug', async (req, res, next) => {
+  try {
+    const { parlourSlug } = req.params;
+    let sprint = await ReadingSprint.findOne({
+      parlourSlug,
+      status: 'active',
+      expiresAt: { $gt: new Date() },
+    });
+
+    if (!sprint) {
+      // Create fresh 25-min sprint
+      sprint = await ReadingSprint.create({
+        parlourSlug,
+        parlourTitle: parlourSlug.charAt(0).toUpperCase() + parlourSlug.slice(1) + ' Study',
+        hostName: 'Eleanor Vance',
+        hostAvatar: '/images/eleanor-avatar.jpg',
+        durationMinutes: 25,
+        status: 'active',
+        startedAt: new Date(),
+        expiresAt: new Date(Date.now() + 25 * 60 * 1000),
+        participants: [
+          {
+            name: 'Eleanor Vance',
+            avatar: '/images/eleanor-avatar.jpg',
+            email: 'eleanor@pageturner.io',
+            currentBook: 'The Picture of Dorian Gray',
+            joinedAt: new Date(),
+            completed: false,
+          },
+        ],
+      });
+    }
+
+    res.json(sprint);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   POST /community/sprint/:parlourSlug/join
+// @desc    Join an active reading sprint
+// @access  Public
+router.post('/sprint/:parlourSlug/join', async (req, res, next) => {
+  try {
+    const { parlourSlug } = req.params;
+    const { name, avatar, email, currentBook } = req.body;
+
+    const sprint = await ReadingSprint.findOne({
+      parlourSlug,
+      status: 'active',
+      expiresAt: { $gt: new Date() },
+    });
+
+    if (!sprint) {
+      return res.status(404).json({ message: 'No active sprint found in this parlour' });
+    }
+
+    const participantEmail = email || `${(name || 'reader').toLowerCase().replace(/\s+/g, '')}@pageturner.io`;
+    const existingIndex = sprint.participants.findIndex((p) => p.email === participantEmail);
+
+    if (existingIndex === -1) {
+      sprint.participants.push({
+        name: name || 'Sanctuary Reader',
+        avatar: avatar || '/images/eleanor-avatar.jpg',
+        email: participantEmail,
+        currentBook: currentBook || 'Classical Volume',
+        joinedAt: new Date(),
+        completed: false,
+      });
+      await sprint.save();
+    }
+
+    res.json({ success: true, sprint });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   POST /community/sprint/:parlourSlug/complete
+// @desc    Complete silent sprint and claim +50 Sanctuary XP in database
+// @access  Public
+router.post('/sprint/:parlourSlug/complete', async (req, res, next) => {
+  try {
+    const { parlourSlug } = req.params;
+    const { email } = req.body;
+
+    if (email) {
+      const user = await User.findOne({ email });
+      if (user) {
+        user.sanctuaryXp = (user.sanctuaryXp || 1240) + 50;
+        user.sanctuaryLevel = Math.floor(user.sanctuaryXp / 300) + 1;
+        await user.save();
+        return res.json({
+          success: true,
+          awardedXp: 50,
+          totalXp: user.sanctuaryXp,
+          level: user.sanctuaryLevel,
+        });
+      }
+    }
+
+    res.json({ success: true, awardedXp: 50, totalXp: 1290, level: 4 });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ============================================================
+// 5. PROGRESSION & DAILY INSPIRATION CLAIM
+// ============================================================
+
+// @route   POST /community/claim-daily-xp
+// @desc    Claim daily salon inspiration (+25 XP)
+// @access  Public
+router.post('/claim-daily-xp', async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    let user = null;
+    if (email) {
+      user = await User.findOne({ email });
+    }
+    if (!user) {
+      user = (await User.findOne({ email: 'admin@pageturner.io' })) || (await User.findOne({}));
+    }
+
+    if (user) {
+      user.sanctuaryXp = (user.sanctuaryXp || 1240) + 25;
+      user.sanctuaryLevel = Math.floor(user.sanctuaryXp / 300) + 1;
+      user.dailyInspirationClaimedAt = new Date();
+      await user.save();
+
+      return res.json({
+        success: true,
+        sanctuaryXp: user.sanctuaryXp,
+        sanctuaryLevel: user.sanctuaryLevel,
+        claimedAt: user.dailyInspirationClaimedAt,
+      });
+    }
+
+    res.json({ success: true, sanctuaryXp: 1265, sanctuaryLevel: 4 });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   GET /community/user-progress/:email
+// @desc    Get user progression from database
+// @access  Public
+router.get('/user-progress/:email', async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    const user = await User.findOne({ email }).select('username email avatar sanctuaryXp sanctuaryLevel badges dailyInspirationClaimedAt');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
   } catch (error) {
     next(error);
   }
