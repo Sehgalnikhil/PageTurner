@@ -78,10 +78,12 @@ const Register = () => {
       );
       navigate('/');
     } catch (error) {
-      enqueueSnackbar(
-        error.customMessage || error.response?.data?.message || 'Registration failed',
-        { variant: 'error' }
-      );
+      const serverMsg = error.response?.data?.message || error.customMessage || 'Registration failed';
+      const serverField = error.response?.data?.field;
+      if (serverField) {
+        setErrors((prev) => ({ ...prev, [serverField]: serverMsg }));
+      }
+      enqueueSnackbar(serverMsg, { variant: 'error' });
     } finally {
       setLoading(false);
     }

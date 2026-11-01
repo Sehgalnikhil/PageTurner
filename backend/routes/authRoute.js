@@ -33,14 +33,34 @@ router.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
-      return res.status(400).json({ message: 'Please add all fields' });
+      return res.status(400).json({ message: 'Please provide all required fields' });
     }
 
-    // Check if user exists
-    const userExists = await User.findOne({ email });
+    const trimmedUsername = username.trim();
+    const trimmedEmail = email.trim().toLowerCase();
 
-    if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+    // 1. Check if email already registered (case-insensitive)
+    const emailExists = await User.findOne({
+      email: { $regex: new RegExp(`^${trimmedEmail.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') },
+    });
+
+    if (emailExists) {
+      return res.status(400).json({
+        message: 'A reader account with this email address already exists. Please sign in or use another email.',
+        field: 'email',
+      });
+    }
+
+    // 2. Check if username / reader handle already taken (case-insensitive)
+    const usernameExists = await User.findOne({
+      username: { $regex: new RegExp(`^${trimmedUsername.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') },
+    });
+
+    if (usernameExists) {
+      return res.status(400).json({
+        message: `The reader handle "@${trimmedUsername}" is already taken. Please choose another username.`,
+        field: 'username',
+      });
     }
 
     // Hash password
@@ -52,15 +72,17 @@ router.post('/register', async (req, res) => {
     const role = isFirstUser ? 'admin' : 'user';
 
     const user = await User.create({
-      username,
-      email,
+      username: trimmedUsername,
+      email: trimmedEmail,
       password: hashedPassword,
       role,
     });
 
     if (user) {
       // Send beautiful welcome email asynchronously in background (non-blocking)
-      sendWelcomeEmail(user.email, user.username);
+      sendWelcomeEmail(user.email, user.username).catch((err) => {
+        console.warn('Welcome email background send note:', err.message);
+      });
 
       res.status(201).json({
         _id: user.id,
@@ -71,11 +93,20 @@ router.post('/register', async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
-      res.status(400).json({ message: 'Invalid user data' });
+      res.status(400).json({ message: 'Invalid reader data' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Registration error:', error);
+    if (error.code === 11000) {
+      const isUsername = error.keyPattern?.username || error.message?.includes('username');
+      return res.status(400).json({
+        message: isUsername
+          ? 'The reader handle / username is already taken. Please choose another.'
+          : 'A reader account with this email already exists. Please sign in.',
+        field: isUsername ? 'username' : 'email',
+      });
+    }
+    res.status(500).json({ message: error.message || 'Server error during registration' });
   }
 });
 
