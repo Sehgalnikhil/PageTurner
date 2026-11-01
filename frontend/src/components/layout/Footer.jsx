@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { PiBooksBold, PiFileArrowDownBold, PiBookmarkSimpleBold, PiSparkleBold, PiHeartBold } from 'react-icons/pi';
-import { systemService } from '../../services/api';
+import { systemService, bookService } from '../../services/api';
 import { ReadingListContext } from '../../context/ReadingListContext';
 
 const Footer = () => {
@@ -63,16 +63,16 @@ const Footer = () => {
                 </button>
               </li>
               <li>
-                <a
-                  href="#curated-collections"
+                <Link
+                  to="/#curated-collections"
                   className="text-[#81766D] hover:text-[#8D263B] transition-colors"
                 >
                   Curated Moodboards
-                </a>
+                </Link>
               </li>
               <li>
                 <a 
-                  href="http://localhost:5555/books/export/csv" 
+                  href={bookService.getExportCsvUrl()} 
                   download 
                   className="text-[#81766D] hover:text-[#8D263B] transition-colors flex items-center gap-1.5"
                 >

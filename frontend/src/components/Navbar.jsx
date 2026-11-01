@@ -23,17 +23,19 @@ import {
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { ReadingListContext } from '../context/ReadingListContext';
-import { adminService } from '../services/api';
+import { adminService, bookService } from '../services/api';
 import { startAmbientSound, stopAmbientSound } from '../utils/soundEffects';
 import CommandKModal from './common/CommandKModal';
 import BookplateModal from './home/BookplateModal';
 import ReaderPassportModal from './ReaderPassportModal';
+import AtmosphereDrawer from './common/AtmosphereDrawer';
 
 const Navbar = ({ totalBooks = 0 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showCommandK, setShowCommandK] = useState(false);
   const [showBookplate, setShowBookplate] = useState(false);
   const [showPassport, setShowPassport] = useState(false);
+  const [showAtmosphereDrawer, setShowAtmosphereDrawer] = useState(false);
   const [ambientSound, setAmbientSound] = useState('off'); // 'off' | 'rain' | 'fireplace' | 'clock'
   const [announcement, setAnnouncement] = useState(null);
   const [announcementDismissed, setAnnouncementDismissed] = useState(false);
@@ -205,13 +207,15 @@ const Navbar = ({ totalBooks = 0 }) => {
                 )}
               </button>
 
-              {/* Collections */}
-              <a
-                href="#curated-collections"
-                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-colors py-1"
+              {/* Collections — Opens Curated Atmospheric Anthologies Drawer */}
+              <button
+                type="button"
+                onClick={() => setShowAtmosphereDrawer(true)}
+                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-colors py-1 cursor-pointer flex items-center gap-1 group/col"
+                title="Explore Curated Atmospheric Anthologies"
               >
-                Collections
-              </a>
+                <span>Collections</span>
+              </button>
 
               {/* Bookplates */}
               <button
@@ -425,14 +429,17 @@ const Navbar = ({ totalBooks = 0 }) => {
                 )}
               </button>
 
-              <a
-                href="#curated-collections"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#302A27] hover:bg-[#8D263B]/5 flex items-center gap-2.5 transition-colors"
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setShowAtmosphereDrawer(true);
+                }}
+                className="w-full px-4 py-2.5 rounded-full text-xs font-medium text-[#302A27] hover:bg-[#8D263B]/5 flex items-center gap-2.5 transition-colors cursor-pointer text-left"
               >
                 <PiStackBold className="text-base text-[#81766D]" />
-                <span>Collections</span>
-              </a>
+                <span>Collections &amp; Atmospheres</span>
+              </button>
 
               <button
                 type="button"
@@ -461,7 +468,7 @@ const Navbar = ({ totalBooks = 0 }) => {
               </button>
 
               <a
-                href="http://localhost:5555/books/export/csv"
+                href={bookService.getExportCsvUrl()}
                 download
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-4 py-2.5 rounded-full text-xs font-medium text-[#302A27] hover:bg-[#8D263B]/5 flex items-center gap-2.5 transition-colors"
@@ -560,6 +567,12 @@ const Navbar = ({ totalBooks = 0 }) => {
 
       {/* Official Reader Passport & Welcome Package Modal */}
       <ReaderPassportModal isOpen={showPassport} onClose={() => setShowPassport(false)} user={user} />
+
+      {/* Curated Atmospheric Anthologies Drawer */}
+      <AtmosphereDrawer
+        isOpen={showAtmosphereDrawer}
+        onClose={() => setShowAtmosphereDrawer(false)}
+      />
     </>
   );
 };

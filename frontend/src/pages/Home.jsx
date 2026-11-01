@@ -8,7 +8,7 @@ import BookSpineShelf from '../components/home/BookSpineShelf';
 import CuratedCollectionTiles from '../components/home/CuratedCollectionTiles';
 import BlindDateBanner from '../components/home/BlindDateBanner';
 import BlindDateModal from '../components/home/BlindDateModal';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   PiMagnifyingGlassBold,
   PiListBulletsBold,
@@ -38,6 +38,18 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalBooks, setTotalBooks] = useState(0);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash === '#curated-collections' || location.search.includes('curated-collections')) {
+      setTimeout(() => {
+        const el = document.getElementById('curated-collections');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 200);
+    }
+  }, [location]);
   const [showBlindDate, setShowBlindDate] = useState(false);
 
   const { user } = useContext(AuthContext);
