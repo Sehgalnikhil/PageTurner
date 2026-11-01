@@ -312,3 +312,4 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
 };
 
 export default ChangeAvatarModal;
+

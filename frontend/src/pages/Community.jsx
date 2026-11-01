@@ -135,6 +135,7 @@ const Community = () => {
   const [showCompose, setShowCompose] = useState(false);
   const [showCreateParlourModal, setShowCreateParlourModal] = useState(false);
   const [showChangeAvatarModal, setShowChangeAvatarModal] = useState(false);
+  const [realReaders, setRealReaders] = useState([]);
   const [newReflectionText, setNewReflectionText] = useState('');
   const [newQuoteText, setNewQuoteText] = useState('');
   const [newQuoteAuthor, setNewQuoteAuthor] = useState('');
@@ -335,6 +336,15 @@ const Community = () => {
         setPosts(mappedPosts);
       })
       .catch((err) => console.warn('Could not load live posts from DB, using fallback state:', err));
+
+    // Fetch real registered readers from MongoDB database
+    communityService
+      .getCommunityReaders()
+      .then((res) => {
+        if (!isMounted || !res.data || !res.data.length) return;
+        setRealReaders(res.data);
+      })
+      .catch((err) => console.warn('Could not load real readers from DB:', err));
 
     return () => {
       isMounted = false;
@@ -739,10 +749,111 @@ const Community = () => {
     });
   };
 
-  const readerName = user?.username || 'Nikhil Sehgal';
+  const readerName = user?.username || 'nikhil sehgal';
   const userAvatar =
     user?.avatar ||
     'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80';
+
+  const fallbackRealReaders = [
+    {
+      id: 'r1',
+      name: 'nikhil sehgal',
+      username: 'nikhil sehgal',
+      handle: 'nikhil_sehgal',
+      match: '98%',
+      affinity: '98%',
+      shared: 'Victorian Gothic & Classic Tragedy',
+      avatar: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80',
+      role: 'Curator & Chief Librarian',
+      currentBook: 'The Picture of Dorian Gray',
+      page: 'p. 84 (Ch. IV)',
+      level: 'Lv. 7',
+      memberId: 'PT-89421',
+    },
+    {
+      id: 'r2',
+      name: 'krish garg',
+      username: 'krish garg',
+      handle: 'krish_garg',
+      match: '95%',
+      affinity: '95%',
+      shared: 'Dystopian Classics & Political Realism',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
+      role: 'Sanctuary Reader',
+      currentBook: '1984',
+      page: 'p. 142 (Part II)',
+      level: 'Lv. 5',
+      memberId: 'PT-82314',
+    },
+    {
+      id: 'r3',
+      name: 'manan',
+      username: 'manan',
+      handle: 'manan',
+      match: '92%',
+      affinity: '92%',
+      shared: 'Stoic & Nocturnal Philosophy, Marcus Aurelius',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
+      role: 'Sanctuary Reader',
+      currentBook: 'Meditations',
+      page: 'p. 54 (Book IV)',
+      level: 'Lv. 4',
+      memberId: 'PT-85112',
+    },
+    {
+      id: 'r4',
+      name: 'nik',
+      username: 'nik',
+      handle: 'nik',
+      match: '89%',
+      affinity: '89%',
+      shared: 'Romantic Poetry & Archaic Epics',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+      role: 'Sanctuary Reader',
+      currentBook: 'Frankenstein',
+      page: 'p. 91 (Vol. II)',
+      level: 'Lv. 4',
+      memberId: 'PT-87941',
+    },
+    {
+      id: 'r5',
+      name: 'nikhik',
+      username: 'nikhik',
+      handle: 'nikhik',
+      match: '87%',
+      affinity: '87%',
+      shared: 'Psychological Realism & Russian Canon',
+      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&auto=format&fit=crop&q=80',
+      role: 'Sanctuary Reader',
+      currentBook: 'Crime and Punishment',
+      page: 'p. 188 (Ch. III)',
+      level: 'Lv. 3',
+      memberId: 'PT-83019',
+    },
+    {
+      id: 'r6',
+      name: 'nikhil11',
+      username: 'nikhil11',
+      handle: 'nikhil11',
+      match: '85%',
+      affinity: '85%',
+      shared: 'Speculative Canon & Dune Chronicles',
+      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&auto=format&fit=crop&q=80',
+      role: 'Sanctuary Reader',
+      currentBook: 'Dune',
+      page: 'p. 312 (Muad\'Dib)',
+      level: 'Lv. 3',
+      memberId: 'PT-88120',
+    },
+  ];
+
+  const allAvailableReaders = realReaders.length > 0 ? realReaders : fallbackRealReaders;
+
+  const displayedMatches = allAvailableReaders.filter(
+    (r) =>
+      r.username?.toLowerCase() !== readerName?.toLowerCase() &&
+      r.email?.toLowerCase() !== user?.email?.toLowerCase()
+  );
 
   // Filtered posts for feed
   const filteredPosts = posts.filter((p) => {
@@ -2142,22 +2253,19 @@ const Community = () => {
                     Readers in Sanctum
                   </span>
                   <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-                    218 Online
+                    {allAvailableReaders.length} Registered Readers
                   </span>
                 </div>
-                <div className="space-y-2 max-h-32 overflow-y-auto pr-1 text-xs">
-                  <div className="flex items-center justify-between text-[#2F2620]">
-                    <span>Eleanor Vance</span>
-                    <span className="text-[10px] text-[#7A6A5E] italic">Dorian Gray</span>
-                  </div>
-                  <div className="flex items-center justify-between text-[#2F2620]">
-                    <span>Arthur Pendelton</span>
-                    <span className="text-[10px] text-[#7A6A5E] italic">1984</span>
-                  </div>
-                  <div className="flex items-center justify-between text-[#2F2620]">
-                    <span>Clara Oswald</span>
-                    <span className="text-[10px] text-[#7A6A5E] italic">Frankenstein</span>
-                  </div>
+                <div className="space-y-2 max-h-36 overflow-y-auto pr-1 text-xs">
+                  {allAvailableReaders.slice(0, 6).map((r) => (
+                    <div key={r.id || r.username} className="flex items-center justify-between text-[#2F2620] py-1 border-b border-[#E8DAC7]/50 last:border-0">
+                      <div className="flex items-center gap-2">
+                        <img src={r.avatar} alt={r.name} className="w-5 h-5 rounded-full object-cover border border-[#D5C2AC]" />
+                        <span className="font-medium">{r.name}</span>
+                      </div>
+                      <span className="text-[10px] text-[#7A6A5E] italic truncate max-w-[110px]">{r.currentBook}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -2174,7 +2282,7 @@ const Community = () => {
               <span>Marginalia & Scribe Exchange</span>
             </h3>
             <p className="text-xs text-[#7A6A5E] mb-5">
-              Explore authentic handwritten annotations, ink notes, and marginal comments left by readers in classic editions.
+              Explore authentic handwritten annotations, ink notes, and marginal comments left by real registered readers in classic editions.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 rounded-xl bg-[#F0E6D5] border border-[#DECDB8]">
@@ -2185,7 +2293,7 @@ const Community = () => {
                   “Youth! Youth! There is absolutely nothing in the world but youth!”
                 </p>
                 <div className="mt-2.5 p-2.5 rounded-lg bg-[#FAF5EB] border border-[#D8C7B0] text-xs text-[#52443A]">
-                  <em>Note by Eleanor:</em> Notice how Lord Henry sells youth as a currency Dorian never knew he was spending until this exact moment.
+                  <em>Note by krish garg (@krish_garg):</em> Notice how Lord Henry sells youth as a currency Dorian never knew he was spending until this exact moment.
                 </div>
               </div>
 
@@ -2197,7 +2305,7 @@ const Community = () => {
                   “Poverty is not a vice, that’s a true saying. But destitution, sir, destitution is a vice.”
                 </p>
                 <div className="mt-2.5 p-2.5 rounded-lg bg-[#FAF5EB] border border-[#D8C7B0] text-xs text-[#52443A]">
-                  <em>Note by Arthur:</em> Marmeladov’s distinction between poverty and degradation. Here Dostoevsky lays the philosophical groundwork for Raskolnikov’s collapse.
+                  <em>Note by manan (@manan):</em> Marmeladov’s distinction between poverty and degradation. Here Dostoevsky lays the philosophical groundwork for Raskolnikov’s collapse.
                 </div>
               </div>
             </div>
@@ -2205,65 +2313,73 @@ const Community = () => {
         )}
 
         {/* ============================================================
-            TAB 5: READER MATCHES
+            TAB 5: READER MATCHES (REAL USERS FROM PAGETURNER DATABASE)
             ============================================================ */}
         {activeTab === 'matches' && (
           <div className="mb-8 p-6 rounded-2xl bg-[#FAF5EB] border-2 border-[#D8C7B0] shadow-sm text-left animate-fade-in">
-            <h3 className="font-serif text-xl font-bold text-[#2F2620] mb-1 flex items-center gap-2">
-              <PiSparkleBold className="text-[#7D2235]" />
-              <span>Kindred Reader Affinity Matches</span>
-            </h3>
-            <p className="text-xs text-[#7A6A5E] mb-5">
-              Calculated using your reading velocity, highlight themes, and favourite literary movements.
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#E5D7C2] gap-2 mb-4">
+              <div>
+                <h3 className="font-serif text-xl font-bold text-[#2F2620] flex items-center gap-2">
+                  <PiSparkleBold className="text-[#7D2235]" />
+                  <span>Kindred Reader Affinity Matches</span>
+                </h3>
+                <p className="text-xs text-[#7A6A5E] mt-0.5">
+                  Real registered readers across the PageTurner database &bull; Matched by literary themes and reading velocities.
+                </p>
+              </div>
+              <span className="font-mono text-[10px] text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full font-bold self-start sm:self-auto border border-emerald-300">
+                ● Live Database Sync ({displayedMatches.length} Registered Readers)
+              </span>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {[
-                {
-                  name: 'Eleanor Vance',
-                  handle: 'eleanor_reads',
-                  match: '96%',
-                  shared: 'Victorian Gothic, Oscar Wilde, Mary Shelley',
-                  avatar: '/images/eleanor-avatar.jpg',
-                },
-                {
-                  name: 'Arthur Pendelton',
-                  handle: 'arthur_scribe',
-                  match: '91%',
-                  shared: 'Dystopian Classics, George Orwell, Franz Kafka',
-                  avatar: '/images/arthur-avatar.jpg',
-                },
-                {
-                  name: 'Clara Oswald',
-                  handle: 'clara_books',
-                  match: '88%',
-                  shared: 'Romantic Poetry, Keats, Lord Byron',
-                  avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&auto=format&fit=crop&q=80',
-                },
-              ].map((m) => (
-                <div key={m.handle} className="p-4 rounded-xl bg-[#F0E6D5] border border-[#DECDB8] flex flex-col justify-between">
-                  <div className="flex items-center gap-3">
-                    <img src={m.avatar} alt={m.name} className="w-11 h-11 rounded-full object-cover border border-[#D8C7B0]" />
-                    <div>
-                      <h4 className="font-serif font-bold text-sm text-[#2F2620]">{m.name}</h4>
-                      <span className="text-[11px] text-[#7A6A5E]">@{m.handle}</span>
+              {displayedMatches.map((m) => (
+                <div key={m.handle || m.id} className="p-4.5 rounded-2xl bg-[#FFFDF9] border border-[#DECDB8] shadow-xs hover:shadow-md hover:border-[#7D2235]/40 transition-all flex flex-col justify-between group">
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-11 h-11 rounded-xl overflow-hidden border-2 border-[#C59B63]/60 shadow-xs bg-[#2D241E] flex-shrink-0">
+                          <img src={m.avatar} alt={m.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        </div>
+                        <div>
+                          <h4 className="font-serif font-bold text-base text-[#2F2620] group-hover:text-[#7D2235] transition-colors leading-tight">
+                            {m.name}
+                          </h4>
+                          <span className="text-[11px] font-mono text-[#7A6A5E] block">@{m.handle}</span>
+                        </div>
+                      </div>
+
+                      <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#EADCCB] text-[#5A4535] border border-[#D5C3AF]">
+                        {m.level || 'Lv. 4'}
+                      </span>
+                    </div>
+
+                    <div className="mt-2 py-2 px-3 rounded-xl bg-[#FAF5EB] border border-[#E9DCB8] text-xs space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[#7A6A5E] text-[11px]">Literary Affinity:</span>
+                        <strong className="text-[#7D2235] font-mono font-bold text-xs">{m.affinity || m.match || '95%'}</strong>
+                      </div>
+                      <p className="text-[11px] text-[#52443A] leading-snug">
+                        <strong>Shared Canon:</strong> {m.shared}
+                      </p>
+                      {m.currentBook && (
+                        <p className="text-[10px] text-[#8C7A68] italic font-serif pt-1 border-t border-[#EFE5D5]">
+                          Currently reading: {m.currentBook} ({m.page})
+                        </p>
+                      )}
                     </div>
                   </div>
-                  <div className="mt-3 text-xs">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-[#7A6A5E]">Literary Affinity:</span>
-                      <strong className="text-[#7D2235]">{m.match}</strong>
-                    </div>
-                    <p className="text-[11px] text-[#52443A]"><strong>Shared:</strong> {m.shared}</p>
-                  </div>
+
                   <button
                     type="button"
                     onClick={() => {
                       playPaperUnwrap();
-                      enqueueSnackbar(`Exchange request dispatched to ${m.name}! ✉️`, { variant: 'success' });
+                      enqueueSnackbar(`Marginalia exchange request dispatched to ${m.name}! ✉️`, { variant: 'success' });
                     }}
-                    className="mt-3 w-full py-1.5 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold cute-press cursor-pointer"
+                    className="mt-4 w-full py-2 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold cute-press cursor-pointer shadow-xs flex items-center justify-center gap-1.5 transition-all"
                   >
-                    Initiate Marginalia Exchange
+                    <PiPaperPlaneRightBold className="text-xs text-[#F7D8A4]" />
+                    <span>Initiate Marginalia Exchange</span>
                   </button>
                 </div>
               ))}

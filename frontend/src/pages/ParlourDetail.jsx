@@ -360,6 +360,18 @@ const ParlourDetail = () => {
     };
   }, [id, user]);
 
+  // Real Database Readers State
+  const [realReaders, setRealReaders] = useState([]);
+
+  useEffect(() => {
+    communityService
+      .getCommunityReaders()
+      .then((res) => {
+        if (res.data?.length) setRealReaders(res.data);
+      })
+      .catch((err) => console.warn('Could not load real readers:', err));
+  }, []);
+
   // New Note state
   const [newNoteText, setNewNoteText] = useState('');
   const [newQuoteText, setNewQuoteText] = useState('');
@@ -1119,107 +1131,78 @@ const ParlourDetail = () => {
                 <span className="text-[10px] text-[#7A6A5E] italic">Tap reader for dossier</span>
               </div>
               <div className="space-y-2 text-xs">
-                <div
-                  onClick={() => {
-                    playPaperUnwrap();
-                    setSelectedMemberProfile({
-                      id: '8492',
-                      name: 'Eleanor Vance',
-                      role: 'Archival Host & Victorian Curator',
-                      avatar: '/images/eleanor-avatar.jpg',
-                      page: 'p. 84 (Chapter IV)',
-                      canon: 'The Picture of Dorian Gray',
-                      level: 'Lv. 7 Scribe Sovereign',
-                      quote: 'Beauty without moral consequence is the greatest seduction of modern literature.',
-                    });
-                  }}
-                  className="p-2 rounded-xl hover:bg-[#F0E6D5] transition-colors cursor-pointer flex items-center justify-between cute-press border border-transparent hover:border-[#D8C7B0]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <img
-                      src="/images/eleanor-avatar.jpg"
-                      alt="Eleanor"
-                      className="w-7 h-7 rounded-full object-cover border border-[#D8C7B0]"
-                    />
-                    <div>
-                      <span className="font-serif font-bold text-[#2F2620] block leading-tight">
-                        Eleanor Vance
+                {(realReaders.length > 0
+                  ? realReaders
+                  : [
+                      {
+                        id: 'r1',
+                        name: 'krish garg',
+                        role: 'Archival Fellow',
+                        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
+                        page: 'p. 84 (Ch. IV)',
+                        canon: parlour.currentBook,
+                        level: 'Lv. 5 Fellow',
+                        quote: 'Close reading is the only safeguard against ideological forgetting.',
+                      },
+                      {
+                        id: 'r2',
+                        name: 'manan',
+                        role: 'Senior Scribe',
+                        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
+                        page: 'p. 62 (Part II)',
+                        canon: parlour.currentBook,
+                        level: 'Lv. 4 Scribe',
+                        quote: 'Every book leaves a physical fingerprint on the mind that opened it.',
+                      },
+                      {
+                        id: 'r3',
+                        name: 'nikhil sehgal',
+                        role: 'Curator & Chief Librarian',
+                        avatar: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80',
+                        page: 'p. 112 (Ch. V)',
+                        canon: parlour.currentBook,
+                        level: 'Lv. 7 Curator',
+                        quote: 'Beauty without moral consequence is the greatest seduction of modern literature.',
+                      },
+                    ]
+                )
+                  .slice(0, 5)
+                  .map((m) => (
+                    <div
+                      key={m.id || m.username}
+                      onClick={() => {
+                        playPaperUnwrap();
+                        setSelectedMemberProfile({
+                          id: m.id || m.username,
+                          name: m.name || m.username,
+                          role: m.role || 'Sanctuary Reader',
+                          avatar: m.avatar,
+                          page: m.page || 'p. 84',
+                          canon: m.currentBook || parlour.currentBook,
+                          level: m.level || 'Lv. 5',
+                          quote: m.quote || `Active reader in ${parlour.title}.`,
+                        });
+                      }}
+                      className="p-2 rounded-xl hover:bg-[#F0E6D5] transition-colors cursor-pointer flex items-center justify-between cute-press border border-transparent hover:border-[#D8C7B0]"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <img
+                          src={m.avatar}
+                          alt={m.name || m.username}
+                          className="w-7 h-7 rounded-full object-cover border border-[#D8C7B0]"
+                        />
+                        <div>
+                          <span className="font-serif font-bold text-[#2F2620] block leading-tight">
+                            {m.name || m.username}
+                          </span>
+                          <span className="text-[10px] text-[#7A6A5E]">{m.role}</span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-mono text-[#7D2235] bg-[#F7ECD8] px-2 py-0.5 rounded-full font-semibold">
+                        {m.page || 'p. 84'}
                       </span>
-                      <span className="text-[10px] text-[#7A6A5E]">Archival Host</span>
                     </div>
-                  </div>
-                  <span className="text-[10px] font-mono text-[#7D2235] bg-[#F7ECD8] px-2 py-0.5 rounded-full font-semibold">
-                    p. 84
-                  </span>
-                </div>
-
-                <div
-                  onClick={() => {
-                    playPaperUnwrap();
-                    setSelectedMemberProfile({
-                      id: '3921',
-                      name: 'Arthur Pendelton',
-                      role: 'Senior Scribe & Close Reader',
-                      avatar: '/images/arthur-avatar.jpg',
-                      page: 'p. 62 (Part II)',
-                      canon: '1984 & Modern Dystopian Canon',
-                      level: 'Lv. 5 Close Reader Initiate',
-                      quote: 'Close reading is the only safeguard against ideological forgetting.',
-                    });
-                  }}
-                  className="p-2 rounded-xl hover:bg-[#F0E6D5] transition-colors cursor-pointer flex items-center justify-between cute-press border border-transparent hover:border-[#D8C7B0]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <img
-                      src="/images/arthur-avatar.jpg"
-                      alt="Arthur"
-                      className="w-7 h-7 rounded-full object-cover border border-[#D8C7B0]"
-                    />
-                    <div>
-                      <span className="font-serif font-bold text-[#2F2620] block leading-tight">
-                        Arthur Pendelton
-                      </span>
-                      <span className="text-[10px] text-[#7A6A5E]">Scribe</span>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-mono text-[#7D2235] bg-[#F7ECD8] px-2 py-0.5 rounded-full font-semibold">
-                    p. 62
-                  </span>
-                </div>
-
-                <div
-                  onClick={() => {
-                    playPaperUnwrap();
-                    setSelectedMemberProfile({
-                      id: '5023',
-                      name: 'Clara Oswald',
-                      role: 'Passionate Canon Voyager',
-                      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
-                      page: 'p. 91 (Act III)',
-                      canon: 'Romantic & Russian Realism',
-                      level: 'Lv. 4 Attentive Reader',
-                      quote: 'Every book leaves a physical fingerprint on the mind that opened it.',
-                    });
-                  }}
-                  className="p-2 rounded-xl hover:bg-[#F0E6D5] transition-colors cursor-pointer flex items-center justify-between cute-press border border-transparent hover:border-[#D8C7B0]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <img
-                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
-                      alt="Clara"
-                      className="w-7 h-7 rounded-full object-cover border border-[#D8C7B0]"
-                    />
-                    <div>
-                      <span className="font-serif font-bold text-[#2F2620] block leading-tight">
-                        Clara Oswald
-                      </span>
-                      <span className="text-[10px] text-[#7A6A5E]">Reader</span>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-mono text-[#7D2235] bg-[#F7ECD8] px-2 py-0.5 rounded-full font-semibold">
-                    p. 91
-                  </span>
-                </div>
+                  ))}
               </div>
             </div>
 

@@ -73,7 +73,7 @@ export const bookService = {
       .then((res) => {
         bookDetailCache.set(id, res.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   },
   create: (formData) =>
     api.post('/books', formData, {
@@ -97,6 +97,8 @@ export const authService = {
   sendWelcomeEmail: (data) => api.post('/auth/send-welcome-email', data),
   sendLoginAlert: (data) => api.post('/auth/send-login-alert', data),
   updateAvatar: (avatar) => api.put('/auth/avatar', { avatar }),
+  getRealUsers: () => api.get('/auth/real-users'),
+  switchAccount: (data) => api.post('/auth/switch-account', data),
   forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
   resetPassword: (data) => api.post('/auth/reset-password', data),
   getEmailPreviewUrl: (username, email) =>
@@ -146,4 +148,5 @@ export const communityService = {
   toggleLikePost: (id, username) => api.post(`/community/posts/${id}/like`, { username }),
   toggleBookmarkPost: (id, username) => api.post(`/community/posts/${id}/bookmark`, { username }),
   addComment: (id, data) => api.post(`/community/posts/${id}/comments`, data),
+  getCommunityReaders: () => api.get('/community/readers'),
 };

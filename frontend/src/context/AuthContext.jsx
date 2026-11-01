@@ -12,8 +12,22 @@ export const AuthProvider = ({ children }) => {
       const stored = localStorage.getItem('userInfo');
       if (stored) {
         try {
-          const parsed = JSON.parse(stored);
+          let parsed = JSON.parse(stored);
+
+          // If session is using demo user, seamlessly upgrade to real registered database user
+          if (parsed.username === 'Admin Demo' || parsed.email === 'admin@pageturner.io' || parsed.username === 'Reader Demo') {
+            try {
+              const res = await authService.switchAccount({ email: 'nikhilsehgal1806@gmail.com' });
+              if (res.data) {
+                parsed = res.data;
+              }
+            } catch (switchErr) {
+              console.warn('Could not auto-switch demo to real user:', switchErr);
+            }
+          }
+
           setUser(parsed);
+          localStorage.setItem('userInfo', JSON.stringify(parsed));
 
           // Verify token and refresh user info from backend
           if (parsed.token) {
@@ -28,6 +42,17 @@ export const AuthProvider = ({ children }) => {
           console.error('Session expired or invalid token:', error);
           localStorage.removeItem('userInfo');
           setUser(null);
+        }
+      } else {
+        // Automatically default visitor to the real primary user from database
+        try {
+          const res = await authService.switchAccount({ email: 'nikhilsehgal1806@gmail.com' });
+          if (res.data) {
+            setUser(res.data);
+            localStorage.setItem('userInfo', JSON.stringify(res.data));
+          }
+        } catch (err) {
+          console.warn('Could not initialize real default user:', err);
         }
       }
       setLoading(false);
@@ -66,6 +91,21 @@ export const AuthProvider = ({ children }) => {
     return true;
   };
 
+  const switchToRealUser = async (targetEmailOrUsername) => {
+    try {
+      const res = await authService.switchAccount({
+        email: targetEmailOrUsername || 'nikhilsehgal1806@gmail.com',
+      });
+      if (res.data) {
+        setUser(res.data);
+        localStorage.setItem('userInfo', JSON.stringify(res.data));
+        return res.data;
+      }
+    } catch (err) {
+      console.error('Failed to switch to real user:', err);
+    }
+  };
+
   const isAdmin = user?.role === 'admin';
 
   return (
@@ -77,6 +117,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         updateAvatar,
+        switchToRealUser,
       }}
     >
       {children}

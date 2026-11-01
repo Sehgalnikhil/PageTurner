@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   PiXBold,
   PiEnvelopeSimpleBold,
@@ -24,6 +24,7 @@ import {
   PiCameraBold,
 } from 'react-icons/pi';
 import ChangeAvatarModal from './common/ChangeAvatarModal';
+import { AuthContext } from '../context/AuthContext';
 import { authService } from '../services/api';
 import { useSnackbar } from 'notistack';
 import {
@@ -77,7 +78,20 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
   const [lastDispatched, setLastDispatched] = useState(null);
   const [showChangeAvatar, setShowChangeAvatar] = useState(false);
 
-  // Inspector tab state
+  const { switchToRealUser } = useContext(AuthContext);
+  const [realDbUsers, setRealDbUsers] = useState([]);
+  const [showUserSwitcher, setShowUserSwitcher] = useState(false);
+
+  useEffect(() => {
+    authService
+      .getRealUsers()
+      .then((res) => {
+        if (res.data?.length) {
+          setRealDbUsers(res.data.filter((u) => !u.username.includes('Demo')));
+        }
+      })
+      .catch((err) => console.warn('Could not load real users:', err));
+  }, []);
   const [inspectorType, setInspectorType] = useState('welcome'); // 'welcome' | 'login' | 'reset'
   const [inspectorDevice, setInspectorDevice] = useState('desktop'); // 'desktop' | 'mobile'
 
@@ -427,9 +441,50 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                         <span className="font-mono text-[10px] uppercase text-[#7A6A5E] tracking-wider block">
                           Reader Name
                         </span>
-                        <h4 className="font-serif font-bold text-lg sm:text-xl text-[#2F2620] leading-tight">
-                          {activeUser.username}
-                        </h4>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="font-serif font-bold text-lg sm:text-xl text-[#2F2620] leading-tight">
+                            {activeUser.username}
+                          </h4>
+                          {realDbUsers.length > 0 && (
+                            <div className="relative">
+                              <button
+                                type="button"
+                                onClick={() => setShowUserSwitcher(!showUserSwitcher)}
+                                className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#EFE5D5] hover:bg-[#E5D7C2] text-[#7D2235] border border-[#D5C2AC] font-semibold cursor-pointer shadow-2xs flex items-center gap-1"
+                                title="Switch between real database users"
+                              >
+                                <span>Switch Reader ▾</span>
+                              </button>
+                              {showUserSwitcher && (
+                                <div className="absolute left-0 top-full mt-1 w-52 bg-[#FAF4EA] rounded-xl shadow-xl border border-[#D8C7B0] py-1 z-50 text-xs text-left animate-fade-in">
+                                  <div className="px-3 py-1 text-[10px] font-mono uppercase text-[#7A6A5E] border-b border-[#E8DAC7]">
+                                    Database Users:
+                                  </div>
+                                  <div className="max-h-48 overflow-y-auto">
+                                    {realDbUsers.map((u) => (
+                                      <button
+                                        key={u._id}
+                                        type="button"
+                                        onClick={async () => {
+                                          playWaxSealCrack();
+                                          if (switchToRealUser) await switchToRealUser(u.email);
+                                          setShowUserSwitcher(false);
+                                          enqueueSnackbar(`Active profile switched to ${u.username}! 🕯️`, { variant: 'success' });
+                                        }}
+                                        className={`w-full text-left px-3 py-1.5 hover:bg-[#EFE5D5] text-[#2F2620] flex items-center justify-between cursor-pointer ${
+                                          activeUser.email === u.email ? 'bg-[#EADCCB] font-bold text-[#7D2235]' : ''
+                                        }`}
+                                      >
+                                        <span className="font-semibold truncate max-w-[120px]">{u.username}</span>
+                                        <span className="text-[9px] text-[#7A6A5E] font-mono">{u.role}</span>
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <div>

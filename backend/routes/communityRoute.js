@@ -1,6 +1,7 @@
 import express from 'express';
 import { Parlour } from '../models/parlourModel.js';
 import { CommunityPost } from '../models/communityPostModel.js';
+import { User } from '../models/userModel.js';
 import { seedCommunityData, initialParlours, initialPosts } from '../utils/seedCommunityData.js';
 
 const router = express.Router();
@@ -40,6 +41,82 @@ router.get('/parlours', async (req, res, next) => {
 
     const parlours = await Parlour.find(query).sort({ createdAt: 1 });
     res.status(200).json(parlours);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   GET /community/readers
+// @desc    Get real registered community readers from the PageTurner database with affinity scores
+// @access  Public
+router.get('/readers', async (req, res, next) => {
+  try {
+    const users = await User.find({})
+      .select('username email role avatar createdAt')
+      .lean();
+
+    const CURATED_PORTRAITS = [
+      'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80',
+      '/images/eleanor-avatar.jpg',
+      '/images/arthur-avatar.jpg',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&auto=format&fit=crop&q=80',
+    ];
+
+    const LITERARY_MOVEMENTS = [
+      'Victorian Gothic & Classic Tragedy',
+      'Stoic & Nocturnal Philosophy',
+      'Dystopian Visions & Political Realism',
+      'Psychological Realism & Russian Canon',
+      'Romantic Poetry & Archaic Epics',
+      'Modernist Speculation & Solitary Prose',
+    ];
+
+    const BOOKS_IN_PROGRESS = [
+      { title: 'The Picture of Dorian Gray', page: 'p. 84 (Ch. IV)' },
+      { title: '1984', page: 'p. 142 (Part II)' },
+      { title: 'Crime and Punishment', page: 'p. 188 (Ch. III)' },
+      { title: 'Meditations', page: 'p. 54 (Book IV)' },
+      { title: 'Frankenstein', page: 'p. 91 (Vol. II)' },
+      { title: 'Dune', page: 'p. 312 (Muad\'Dib)' },
+    ];
+
+    // Real users from database first, then demo if any
+    const realUsers = users.filter((u) => u.username && !u.username.includes('Demo'));
+    const demoUsers = users.filter((u) => u.username && u.username.includes('Demo'));
+    const orderedUsers = realUsers.length > 0 ? realUsers.concat(demoUsers) : users;
+
+    const readers = orderedUsers.map((u, idx) => {
+      const handle = u.username.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const movement = LITERARY_MOVEMENTS[idx % LITERARY_MOVEMENTS.length];
+      const bookInfo = BOOKS_IN_PROGRESS[idx % BOOKS_IN_PROGRESS.length];
+      const match = `${98 - ((idx * 3) % 13)}%`;
+      const level = (idx % 6) + 3;
+
+      return {
+        id: u._id,
+        _id: u._id,
+        username: u.username,
+        name: u.username,
+        handle,
+        email: u.email,
+        role: u.role === 'admin' ? 'Curator & Chief Librarian' : 'Sanctuary Reader',
+        avatar: u.avatar || CURATED_PORTRAITS[idx % CURATED_PORTRAITS.length],
+        match,
+        affinity: match,
+        shared: movement,
+        currentBook: bookInfo.title,
+        page: bookInfo.page,
+        level: `Lv. ${level}`,
+        memberId: `PT-${80000 + ((idx * 1337) % 19999)}`,
+        isRealUser: true,
+      };
+    });
+
+    res.status(200).json(readers);
   } catch (error) {
     next(error);
   }

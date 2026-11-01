@@ -159,6 +159,55 @@ router.get('/me', protect, async (req, res) => {
   }
 });
 
+// @route   GET /auth/real-users
+// @desc    List all real users from the PageTurner database for instant reader switching
+// @access  Public
+router.get('/real-users', async (req, res) => {
+  try {
+    const users = await User.find({})
+      .select('username email role avatar createdAt')
+      .lean();
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error fetching real users' });
+  }
+});
+
+// @route   POST /auth/switch-account
+// @desc    Switch to a real registered user from the database
+// @access  Public
+router.post('/switch-account', async (req, res) => {
+  try {
+    const { email, username, id } = req.body;
+    let user = null;
+    if (id) user = await User.findById(id);
+    else if (email) user = await User.findOne({ email });
+    else if (username) user = await User.findOne({ username });
+
+    if (!user) {
+      // Pick the primary real admin user in DB
+      user = await User.findOne({ email: 'nikhilsehgal1806@gmail.com' });
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found in database' });
+    }
+
+    res.json({
+      _id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      avatar: user.avatar || 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80',
+      token: generateToken(user._id),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error switching account' });
+  }
+});
+
 // @route   GET /auth/email/preview
 // @desc    Interactive live browser preview of the PageTurner Welcome Email & Reader Passport
 // @access  Public
