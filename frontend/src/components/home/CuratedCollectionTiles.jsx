@@ -12,7 +12,7 @@ const COLLECTIONS_DATA = [
     keywords: ['secret history', 'dorian', 'villains', 'babel', 'crime and punishment', 'frankenstein'],
     fallbackCategory: 'Fiction',
     theme: 'dark',
-    bgImage: '/images/parlour-gothic.jpg',
+    bgImage: '/images/salon-hero-backdrop.jpg',
   },
   {
     id: 'mind-bending',
@@ -22,7 +22,7 @@ const COLLECTIONS_DATA = [
     keywords: ['dune', '1984', 'brave new world', 'fahrenheit', 'klara', 'solitude'],
     fallbackCategory: 'Sci-Fi',
     theme: 'dark',
-    bgImage: '/images/parlour-midnight.jpg',
+    bgImage: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1200&q=85',
   },
   {
     id: 'comforting-stories',
@@ -32,7 +32,7 @@ const COLLECTIONS_DATA = [
     keywords: ['pride and prejudice', 'hobbit', 'before the coffee', 'alchemist', 'little women', 'gentle reminder'],
     fallbackCategory: 'Fiction',
     theme: 'dark',
-    bgImage: '/images/parlour-slow.jpg',
+    bgImage: '/images/editorial/moodboard_open_book.jpg',
   },
   {
     id: 'perspective-shifts',
@@ -62,7 +62,7 @@ const COLLECTIONS_DATA = [
     keywords: ['atomic habits', 'steve jobs', 'educated', 'thinking', 'beyond good and evil', 'alchemist'],
     fallbackCategory: 'Non-Fiction',
     theme: 'dark',
-    bgImage: '/images/editorial/moodboard_reading_nook.jpg',
+    bgImage: '/images/signup-desk-scene-hd.jpg',
   },
 ];
 
