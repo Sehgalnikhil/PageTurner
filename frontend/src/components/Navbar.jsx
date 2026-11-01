@@ -178,13 +178,13 @@ const Navbar = ({ totalBooks = 0 }) => {
             </div>
 
             {/* 2. NAVIGATION ROW (Matches Mockup) */}
-            <nav className="hidden lg:flex items-center gap-4 xl:gap-5 flex-shrink-0" aria-label="Main Navigation">
+            <nav className="hidden lg:flex items-center gap-1 xl:gap-2 flex-shrink-0" aria-label="Main Navigation">
               {/* Discover with soft pill background */}
               <Link
                 to="/"
-                className={`text-xs font-serif transition-all duration-150 px-3 py-1 rounded-full flex items-center gap-1.5 ${isDiscoverActive
+                className={`text-[13px] font-sans transition-all duration-150 px-3.5 py-1.5 rounded-full flex items-center gap-1.5 ${isDiscoverActive
                   ? 'bg-[#EAE0D2] text-[#2C1E18] font-semibold border border-[#D5C4B0] shadow-2xs'
-                  : 'text-[#675C54] hover:text-[#8D263B] hover:bg-[#8D263B]/5'
+                  : 'text-[#5C4F46] hover:text-[#8D263B] hover:bg-[#8D263B]/5 font-medium'
                   }`}
               >
                 <PiHouseBold className="text-xs text-[#8D263B]" />
@@ -195,11 +195,11 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(true)}
-                className="text-xs font-serif text-[#675C54] hover:text-[#8D263B] transition-colors flex items-center gap-1 cursor-pointer py-1 group/shelf"
+                className="text-[13px] font-sans font-medium text-[#5C4F46] hover:text-[#8D263B] transition-colors flex items-center gap-1.5 cursor-pointer py-1.5 px-2.5 rounded-full hover:bg-[#8D263B]/5 group/shelf"
                 title="Open My Personal Reading Shelf"
               >
                 <span>My Shelf</span>
-                <span className="w-4 h-4 rounded-full bg-[#7D1D2D] text-white text-[9.5px] font-mono font-bold flex items-center justify-center shadow-2xs ml-0.5">
+                <span className="w-4 h-4 rounded-full bg-[#7D1D2D] text-white text-[10px] font-mono font-bold flex items-center justify-center shadow-2xs">
                   {bookmarkCount > 0 ? bookmarkCount : 6}
                 </span>
               </button>
@@ -208,7 +208,7 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 type="button"
                 onClick={() => setShowAtmosphereDrawer(true)}
-                className="text-xs font-serif text-[#675C54] hover:text-[#8D263B] transition-colors py-1 cursor-pointer"
+                className="text-[13px] font-sans font-medium text-[#5C4F46] hover:text-[#8D263B] transition-colors py-1.5 px-2.5 rounded-full hover:bg-[#8D263B]/5 cursor-pointer"
                 title="Explore 6 Curated Atmospheric Anthologies"
               >
                 Collections
@@ -218,7 +218,7 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 type="button"
                 onClick={() => setShowBookplate(true)}
-                className="text-xs font-serif text-[#675C54] hover:text-[#8D263B] transition-colors py-1 cursor-pointer"
+                className="text-[13px] font-sans font-medium text-[#5C4F46] hover:text-[#8D263B] transition-colors py-1.5 px-2.5 rounded-full hover:bg-[#8D263B]/5 cursor-pointer"
                 title="Create Custom Vintage Ex-Libris Bookplates"
               >
                 Bookplates
@@ -228,9 +228,9 @@ const Navbar = ({ totalBooks = 0 }) => {
               <Link
                 to="/community"
                 state={{ fromNavbar: true, triggerTimestamp: Date.now() }}
-                className={`text-xs font-serif tracking-wide py-1 flex items-center gap-1.5 transition-colors ${location.pathname === '/community'
-                  ? 'text-[#8D263B] font-semibold'
-                  : 'text-[#675C54] hover:text-[#8D263B]'
+                className={`text-[13px] font-sans py-1.5 px-2.5 rounded-full flex items-center gap-1.5 transition-colors ${location.pathname === '/community'
+                  ? 'text-[#8D263B] font-semibold bg-[#8D263B]/5'
+                  : 'text-[#5C4F46] hover:text-[#8D263B] hover:bg-[#8D263B]/5 font-medium'
                   }`}
               >
                 <PiColumnsBold className="text-xs text-[#8D263B]" />
@@ -241,33 +241,33 @@ const Navbar = ({ totalBooks = 0 }) => {
               {isAdmin && (
                 <Link
                   to="/admin"
-                  className={`text-xs font-serif transition-colors flex items-center gap-1 py-1 ${location.pathname === '/admin'
-                    ? 'text-[#8D263B] font-semibold'
-                    : 'text-[#C6A16B] hover:text-[#8D263B]'
+                  className={`text-[13px] font-sans transition-colors flex items-center gap-1.5 py-1.5 px-2.5 rounded-full ${location.pathname === '/admin'
+                    ? 'text-[#8D263B] font-semibold bg-[#8D263B]/5'
+                    : 'text-[#9E7A3E] hover:text-[#8D263B] hover:bg-[#8D263B]/5 font-medium'
                     }`}
                   title="Curator Studio & Admin Desk"
                 >
-                  <PiSparkleBold className="text-xs text-[#C6A16B]" />
-                  <span className="text-[#C6A16B] font-medium">Curator Desk</span>
+                  <PiCrownBold className="text-xs text-[#C6A16B]" />
+                  <span>Curator Desk</span>
                 </Link>
               )}
             </nav>
 
             {/* 3. INTEGRATED SEARCH UTILITY (Pill with ⌘K) */}
-            <div className="hidden md:flex items-center flex-1 max-w-[200px] lg:max-w-[240px] min-w-[130px] mx-1">
+            <div className="hidden md:flex items-center flex-1 max-w-[210px] lg:max-w-[250px] min-w-[140px] mx-1">
               <button
                 type="button"
                 onClick={() => setShowCommandK(true)}
                 title="Omnisearch (⌘K)"
-                className="w-full h-8 rounded-full border border-[#DFCBB5] bg-[#FFFDF9] hover:border-[#C6A16B]/60 hover:bg-[#FDFBF7] px-3 flex items-center justify-between text-left transition-all duration-150 cursor-pointer shadow-2xs group"
+                className="w-full h-8.5 rounded-full border border-[#DFCBB5] bg-[#FFFDF9] hover:border-[#C6A16B]/60 hover:bg-[#FDFBF7] px-3.5 flex items-center justify-between text-left transition-all duration-150 cursor-pointer shadow-2xs group"
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <PiMagnifyingGlassBold className="text-[#81766D] group-hover:text-[#8D263B] text-xs flex-shrink-0 transition-colors" />
-                  <span className="text-xs text-[#81766D] group-hover:text-[#302A27] font-normal truncate transition-colors">
+                  <span className="text-[12.5px] font-sans text-[#7E7066] group-hover:text-[#302A27] font-normal truncate transition-colors">
                     Search books, authors, ideas...
                   </span>
                 </div>
-                <kbd className="px-1.5 py-0.5 rounded-full bg-[#F0E9DE]/60 border border-[#DFCBB5] text-[9.5px] font-mono text-[#81766D] font-medium leading-none flex-shrink-0 ml-1.5">
+                <kbd className="px-1.5 py-0.5 rounded-full bg-[#F0E9DE]/70 border border-[#DFCBB5] text-[9.5px] font-mono text-[#7E7066] font-medium leading-none flex-shrink-0 ml-1.5">
                   ⌘K
                 </kbd>
               </button>
@@ -293,30 +293,30 @@ const Navbar = ({ totalBooks = 0 }) => {
                   type="button"
                   onClick={handleCycleAmbient}
                   title={`Atmospheric Soundscape: ${ambientSound === 'off' ? 'Off (Click to play)' : ambientSound.charAt(0).toUpperCase() + ambientSound.slice(1)}`}
-                  className={`hidden sm:flex items-center gap-1.5 h-8 px-3 rounded-full border transition-all duration-200 cursor-pointer shadow-2xs cute-press flex-shrink-0 ${ambientSound !== 'off'
-                    ? 'border-[#8D263B] bg-[#8D263B]/10 text-[#8D263B] font-medium shadow-xs'
-                    : 'border-[#DFCBB5] bg-[#FFFDF9] hover:bg-[#F7F3EC] text-[#675C54] hover:text-[#302A27]'
+                  className={`hidden sm:flex items-center gap-1.5 h-8.5 px-3 rounded-full border transition-all duration-200 cursor-pointer shadow-2xs flex-shrink-0 text-[12.5px] font-sans font-medium ${ambientSound !== 'off'
+                    ? 'border-[#8D263B] bg-[#8D263B]/10 text-[#8D263B] shadow-xs'
+                    : 'border-[#DFCBB5] bg-[#FFFDF9] hover:bg-[#F7F3EC] text-[#5C4F46] hover:text-[#302A27]'
                     }`}
                 >
                   {ambientSound === 'rain' ? (
                     <>
                       <PiCloudRainBold className="text-sm text-[#8D263B] animate-pulse" />
-                      <span className="text-xs font-serif capitalize">Rain</span>
+                      <span className="capitalize">Rain</span>
                     </>
                   ) : ambientSound === 'fireplace' ? (
                     <>
                       <PiFlameBold className="text-sm text-[#8D263B] animate-pulse" />
-                      <span className="text-xs font-serif capitalize">Hearth</span>
+                      <span className="capitalize">Hearth</span>
                     </>
                   ) : ambientSound === 'clock' ? (
                     <>
                       <PiClockBold className="text-sm text-[#8D263B] animate-pulse" />
-                      <span className="text-xs font-serif capitalize">Clock</span>
+                      <span className="capitalize">Clock</span>
                     </>
                   ) : (
                     <>
                       <PiSpeakerHighBold className="text-sm text-[#81766D]" />
-                      <span className="text-xs font-serif text-[#675C54]">Vibes</span>
+                      <span>Vibes</span>
                     </>
                   )}
                 </button>
@@ -327,7 +327,7 @@ const Navbar = ({ totalBooks = 0 }) => {
                 type="button"
                 onClick={() => setShowPassport(true)}
                 title="Sanctuary Notices & Announcements"
-                className="w-8 h-8 rounded-full border border-[#DFCBB5] bg-[#FFFDF9] hover:bg-[#F7F3EC] text-[#675C54] hover:text-[#8D263B] transition-all flex items-center justify-center cursor-pointer shadow-2xs flex-shrink-0"
+                className="w-8.5 h-8.5 rounded-full border border-[#DFCBB5] bg-[#FFFDF9] hover:bg-[#F7F3EC] text-[#5C4F46] hover:text-[#8D263B] transition-all flex items-center justify-center cursor-pointer shadow-2xs flex-shrink-0"
               >
                 <PiBellBold className="text-sm" />
               </button>
@@ -336,7 +336,7 @@ const Navbar = ({ totalBooks = 0 }) => {
               {user && (
                 <Link
                   to="/books/create"
-                  className="h-8 px-4 flex items-center gap-1.5 rounded-full bg-[#8D263B] hover:bg-[#731D2E] text-[#FFFDF9] text-xs font-serif font-medium transition-all shadow-xs active:scale-95 flex-shrink-0 group/addbtn"
+                  className="h-8.5 px-4 flex items-center gap-1.5 rounded-full bg-[#8D263B] hover:bg-[#731D2E] text-[#FFFDF9] text-[12.5px] font-sans font-medium transition-all shadow-xs active:scale-95 flex-shrink-0 group/addbtn"
                 >
                   <PiPlusBold className="text-xs transition-transform duration-300 group-hover/addbtn:rotate-90" />
                   <span>Add Book</span>
@@ -345,12 +345,12 @@ const Navbar = ({ totalBooks = 0 }) => {
 
               {/* User Profile with Avatar, Name & Down Caret */}
               {user ? (
-                <div className="flex items-center gap-1 pl-1 border-l border-[#DFCBB5]">
+                <div className="flex items-center gap-1 pl-1.5 border-l border-[#DFCBB5]">
                   <button
                     type="button"
                     onClick={() => setShowPassport(true)}
                     title="View Reader Passport & Profile"
-                    className="flex items-center gap-1.5 p-1 rounded-full hover:bg-[#8D263B]/5 transition-colors group cursor-pointer text-left"
+                    className="flex items-center gap-2 p-1 rounded-full hover:bg-[#8D263B]/5 transition-colors group cursor-pointer text-left"
                   >
                     {user.avatar ? (
                       <img
@@ -359,12 +359,12 @@ const Navbar = ({ totalBooks = 0 }) => {
                         className="w-7 h-7 rounded-full object-cover ring-1 ring-[#C59B63]/60 shadow-xs group-hover:scale-105 transition-transform"
                       />
                     ) : (
-                      <div className="w-7 h-7 rounded-full bg-[#F0E9DE] text-[#67202F] font-serif font-semibold text-xs flex items-center justify-center flex-shrink-0 border border-[#DFCBB5]">
+                      <div className="w-7 h-7 rounded-full bg-[#F0E9DE] text-[#67202F] font-sans font-semibold text-xs flex items-center justify-center flex-shrink-0 border border-[#DFCBB5]">
                         {user.username ? user.username.charAt(0).toUpperCase() : 'N'}
                       </div>
                     )}
 
-                    <span className="hidden sm:inline text-xs font-serif font-medium text-[#2C1E18] truncate max-w-[90px] group-hover:text-[#8D263B] transition-colors">
+                    <span className="hidden sm:inline text-[13px] font-sans font-medium text-[#2C1E18] truncate max-w-[95px] group-hover:text-[#8D263B] transition-colors">
                       {user.username}
                     </span>
                     <PiCaretDownBold className="text-[10px] text-[#81766D] group-hover:text-[#2C1E18] transition-colors" />
