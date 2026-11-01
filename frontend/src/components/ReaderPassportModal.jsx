@@ -6,22 +6,19 @@ import {
   PiCheckBold,
   PiSpinnerGapBold,
   PiBooksBold,
-  PiShieldCheckFill,
   PiPaperPlaneTiltBold,
   PiKeyBold,
   PiShieldCheckBold,
-  PiIdentificationCardBold,
-  PiTrayBold,
   PiCopyBold,
   PiEyeBold,
-  PiArrowsClockwiseBold,
   PiSparkleBold,
   PiBookOpenBold,
   PiDeviceMobileBold,
   PiDesktopBold,
   PiLockBold,
-  PiSealCheckBold,
   PiCameraBold,
+  PiHeartFill,
+  PiBookmarkSimpleBold,
 } from 'react-icons/pi';
 import ChangeAvatarModal from './common/ChangeAvatarModal';
 import { AuthContext } from '../context/AuthContext';
@@ -41,7 +38,7 @@ const STARTER_BOOKS = [
     author: 'Oscar Wilde',
     movement: 'Gothic Aestheticism',
     coverImage: '/images/dorian-open-book-spread.jpg',
-    tagColor: 'bg-[#7D2235]/15 text-[#7D2235] border-[#7D2235]/30',
+    tagColor: 'bg-[#8D263B]/10 text-[#8D263B] border-[#8D263B]/20',
     quote: 'Behind every exquisite thing that existed, there was something tragic.',
     readTime: '6 hrs',
   },
@@ -51,8 +48,8 @@ const STARTER_BOOKS = [
     author: 'Marcus Aurelius',
     movement: 'Stoic Philosophy',
     coverImage: '/images/covers/meditations.jpg',
-    tagColor: 'bg-[#9C5A20]/15 text-[#9C5A20] border-[#9C5A20]/30',
-    quote: 'You have power over your mind - not outside events. Realise this, and you will find strength.',
+    tagColor: 'bg-[#A67C4A]/10 text-[#7D5428] border-[#A67C4A]/20',
+    quote: 'You have power over your mind - not outside events.',
     readTime: '4 hrs',
   },
   {
@@ -61,10 +58,17 @@ const STARTER_BOOKS = [
     author: 'Frank Herbert',
     movement: 'Speculative Epic',
     coverImage: '/images/covers/dune.jpg',
-    tagColor: 'bg-[#2E5A36]/15 text-[#2E5A36] border-[#2E5A36]/30',
-    quote: 'I must not fear. Fear is the mind-killer. Fear is the little-death that brings total obliteration.',
+    tagColor: 'bg-[#43644B]/10 text-[#2D4D35] border-[#43644B]/20',
+    quote: 'I must not fear. Fear is the mind-killer.',
     readTime: '18 hrs',
   },
+];
+
+const PASSPORT_STAMPS = [
+  { icon: '☕', title: 'Quiet Mornings', desc: 'Coffee & warm pages' },
+  { icon: '🌙', title: 'Midnight Reader', desc: 'Reading past 12am' },
+  { icon: '🕯️', title: 'Curator Circle', desc: 'Thoughtful reflections' },
+  { icon: '🎁', title: 'Mystery Parcels', desc: 'Blind dates with books' },
 ];
 
 const ReaderPassportModal = ({ isOpen, onClose, user }) => {
@@ -92,6 +96,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
       })
       .catch((err) => console.warn('Could not load real users:', err));
   }, []);
+
   const [inspectorType, setInspectorType] = useState('welcome'); // 'welcome' | 'login' | 'reset'
   const [inspectorDevice, setInspectorDevice] = useState('desktop'); // 'desktop' | 'mobile'
 
@@ -103,7 +108,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
     role: 'reader',
   };
 
-  // Deterministic passport number
+  // Deterministic cute passport ID
   let hash = 0;
   const name = activeUser.username || 'Reader';
   for (let i = 0; i < name.length; i++) {
@@ -125,7 +130,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
   const handleSendWelcomeEmail = async (targetEmail) => {
     const emailToSend = targetEmail || activeUser.email;
     if (!emailToSend) {
-      enqueueSnackbar('No dispatch address provided', { variant: 'error' });
+      enqueueSnackbar('No email address provided', { variant: 'error' });
       return;
     }
 
@@ -140,13 +145,13 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
 
       if (res.data?.success) {
         playRevealChime();
-        setLastDispatched({ type: 'Welcome Package & Passport', email: emailToSend });
-        enqueueSnackbar(`✉️ Welcome package dispatched to ${emailToSend}!`, {
+        setLastDispatched({ type: 'Welcome Letter & Passport', email: emailToSend });
+        enqueueSnackbar(`💌 Welcome package dispatched to ${emailToSend}!`, {
           variant: 'success',
         });
         if (customEmail) setCustomEmail('');
       } else {
-        enqueueSnackbar(res.data?.message || 'Could not send dispatch', { variant: 'error' });
+        enqueueSnackbar(res.data?.message || 'Could not send letter', { variant: 'error' });
       }
     } catch (err) {
       enqueueSnackbar(err.customMessage || err.message || 'Failed to dispatch email', {
@@ -160,7 +165,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
   const handleSendLoginAlert = async (targetEmail) => {
     const emailToSend = targetEmail || activeUser.email;
     if (!emailToSend) {
-      enqueueSnackbar('No dispatch address provided', { variant: 'error' });
+      enqueueSnackbar('No email address provided', { variant: 'error' });
       return;
     }
 
@@ -175,12 +180,12 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
 
       if (res.data?.success) {
         playRevealChime();
-        setLastDispatched({ type: 'Session Security Alert', email: emailToSend });
-        enqueueSnackbar(`🛡️ Session security notification dispatched to ${emailToSend}!`, {
+        setLastDispatched({ type: 'Security Notice', email: emailToSend });
+        enqueueSnackbar(`🛡️ Security notification sent to ${emailToSend}!`, {
           variant: 'success',
         });
       } else {
-        enqueueSnackbar(res.data?.message || 'Could not send security alert', { variant: 'error' });
+        enqueueSnackbar(res.data?.message || 'Could not send notice', { variant: 'error' });
       }
     } catch (err) {
       enqueueSnackbar(err.customMessage || err.message || 'Failed to dispatch alert', {
@@ -194,7 +199,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
   const handleSendPasswordReset = async (targetEmail) => {
     const emailToSend = targetEmail || activeUser.email;
     if (!emailToSend) {
-      enqueueSnackbar('No dispatch address provided', { variant: 'error' });
+      enqueueSnackbar('No email address provided', { variant: 'error' });
       return;
     }
 
@@ -206,7 +211,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
       if (res.data?.success) {
         playRevealChime();
         setLastDispatched({ type: 'Password Recovery Token', email: emailToSend });
-        enqueueSnackbar(`🗝️ Password recovery dispatch sent to ${emailToSend}!`, {
+        enqueueSnackbar(`🗝️ Recovery letter sent to ${emailToSend}!`, {
           variant: 'success',
         });
       } else {
@@ -224,74 +229,74 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
   const copyToClipboard = (text, label) => {
     playPaperUnwrap();
     navigator.clipboard?.writeText(text);
-    enqueueSnackbar(`${label} copied to clipboard!`, { variant: 'info', autoHideDuration: 2200 });
+    enqueueSnackbar(`${label} copied to clipboard!`, { variant: 'info', autoHideDuration: 2000 });
   };
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-md transition-opacity animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-3xl bg-[#FAF5EB] rounded-3xl border-2 border-[#D8C7B0] shadow-[0_25px_80px_rgba(20,15,10,0.55)] overflow-hidden text-[#2F2620] my-auto flex flex-col max-h-[92vh] select-none"
+        className="relative w-full max-w-2xl bg-[#FCFAF5] rounded-3xl border border-[#DECDB8] shadow-[0_24px_70px_rgba(40,25,15,0.25)] overflow-hidden text-[#2C1E18] my-auto flex flex-col max-h-[90vh] select-none"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ============================================================
-            1. BESPOKE LEATHER-BOUND CRIMSON HEADER BANNER
+            1. COZY VINTAGE LETTERHEAD HEADER
             ============================================================ */}
-        <div className="relative bg-gradient-to-r from-[#4A0E18] via-[#7B1826] to-[#4A0E18] px-6 py-4 text-white flex items-center justify-between flex-shrink-0 border-b-2 border-[#C59B63]/40 shadow-inner">
-          {/* Subtle gold filigree accent line at top */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#F7D8A4]/70 to-transparent" />
-
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#8D263B] to-[#3B0810] border-2 border-[#E9C38B]/80 flex items-center justify-center text-[#F7D8A4] text-base shadow-md">
-              ❦
+        <div className="relative px-6 sm:px-8 pt-6 pb-4 bg-gradient-to-b from-[#FAF4EA] to-[#FCFAF5] border-b border-[#EFE5D5] flex items-center justify-between flex-shrink-0">
+          <div className="flex items-center gap-3.5">
+            {/* Cute Wax Stamp Badge */}
+            <div className="w-10 h-10 rounded-full bg-[#8D263B] text-white flex items-center justify-center shadow-sm flex-shrink-0 border-2 border-[#FAF4EA] ring-1 ring-[#C59B63]/50">
+              <span className="font-serif text-lg leading-none">❦</span>
             </div>
+
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-serif text-lg sm:text-xl font-bold tracking-tight text-[#FFFDF8] leading-none">
-                  Ex-Libris Passport &amp; Literary Mailbox
+                <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#2A1E17]">
+                  Reader&rsquo;s Passport
                 </h3>
-                <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 text-[#F7D8A4] text-[10px] font-mono font-medium border border-white/15">
-                  <PiSealCheckBold className="text-xs" />
-                  Verified Folio
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#8D263B]/10 text-[#8D263B] text-[10px] font-sans font-medium">
+                  <PiHeartFill className="text-[10px] text-[#8D263B]" />
+                  <span>Sanctuary Edition</span>
                 </span>
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-[#E9C38B]/80 mt-1">
-                PAGETURNER ARCHIVAL GUILD &bull; ISSUE NO. 24 &bull; DISPATCH HUB
+              <p className="font-serif text-xs text-[#7A6C60] italic mt-0.5">
+                Your personal library keepsake &amp; postal dispatches
               </p>
             </div>
           </div>
 
+          {/* Sweet Rounded Close Button */}
           <button
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-[#FAF5EB] hover:text-white flex items-center justify-center transition-all cursor-pointer border border-white/15 hover:rotate-90"
+            className="w-8 h-8 rounded-full bg-[#F3ECE0] hover:bg-[#EAE0D0] text-[#675C54] hover:text-[#8D263B] flex items-center justify-center transition-all cursor-pointer border border-[#E5DACB]"
           >
-            <PiXBold className="text-sm" />
+            <PiXBold className="text-xs" />
           </button>
         </div>
 
         {/* ============================================================
-            2. REFINED TAB NAVIGATION RIBBON & SMTP STATUS
+            2. CUTE NAVIGATION PILLS
             ============================================================ */}
-        <div className="px-5 sm:px-6 py-2.5 bg-[#EFE8DA] border-b border-[#D8C7B0] flex items-center justify-between flex-wrap gap-2 flex-shrink-0">
-          <div className="flex items-center gap-1.5 p-1 bg-[#E3D7C3] rounded-xl border border-[#D0C0A8]">
+        <div className="px-6 sm:px-8 py-3 bg-[#FCFAF5] border-b border-[#EFE5D5] flex items-center justify-between flex-wrap gap-2 flex-shrink-0">
+          <div className="inline-flex p-1 rounded-full bg-[#F3ECE0] border border-[#E5DACB]">
             <button
               type="button"
               onClick={() => {
                 playPageFlipSound();
                 setActiveTab('passport');
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-serif transition-all cursor-pointer ${
                 activeTab === 'passport'
-                  ? 'bg-[#7D2235] text-white shadow-xs font-bold'
-                  : 'text-[#645548] hover:text-[#2F2620]'
+                  ? 'bg-[#8D263B] text-white font-medium shadow-xs'
+                  : 'text-[#675C54] hover:text-[#2A1E17]'
               }`}
             >
-              <PiIdentificationCardBold className="text-sm" />
-              <span>Reader Passport</span>
+              <span>🌸</span>
+              <span>My Passport</span>
             </button>
 
             <button
@@ -300,14 +305,14 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                 playPageFlipSound();
                 setActiveTab('mailbox');
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-serif transition-all cursor-pointer ${
                 activeTab === 'mailbox'
-                  ? 'bg-[#7D2235] text-white shadow-xs font-bold'
-                  : 'text-[#645548] hover:text-[#2F2620]'
+                  ? 'bg-[#8D263B] text-white font-medium shadow-xs'
+                  : 'text-[#675C54] hover:text-[#2A1E17]'
               }`}
             >
-              <PiTrayBold className="text-sm" />
-              <span>Literary Mailbox (3 Dispatches)</span>
+              <span>💌</span>
+              <span>Letters (3)</span>
             </button>
 
             <button
@@ -316,110 +321,62 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                 playPageFlipSound();
                 setActiveTab('inspector');
               }}
-              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-serif transition-all cursor-pointer ${
                 activeTab === 'inspector'
-                  ? 'bg-[#7D2235] text-white shadow-xs font-bold'
-                  : 'text-[#645548] hover:text-[#2F2620]'
+                  ? 'bg-[#8D263B] text-white font-medium shadow-xs'
+                  : 'text-[#675C54] hover:text-[#2A1E17]'
               }`}
             >
-              <PiEyeBold className="text-sm" />
-              <span>Live Inspector</span>
+              <span>📖</span>
+              <span>Email Preview</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-2 font-mono text-[11px] text-[#695D53]">
-            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#E5DBCB] border border-[#D5C6AF]">
-              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-              <span>SMTP Live: <strong className="text-[#2F2620]">Gmail Cloud</strong></span>
-            </span>
+          {/* Cute subtle ID tag */}
+          <div className="hidden sm:flex items-center gap-1.5 font-mono text-[11px] text-[#7A6C60] bg-[#FAF5EB] px-3 py-1 rounded-full border border-[#E8DEC9]">
+            <span>Registry:</span>
+            <strong className="text-[#8D263B] font-bold">{passportNumber}</strong>
           </div>
         </div>
 
         {/* ============================================================
             3. SCROLLABLE BODY CONTENT
             ============================================================ */}
-        <div className="p-5 sm:p-6 space-y-6 overflow-y-auto flex-1 text-left">
+        <div className="p-6 sm:p-8 space-y-6 overflow-y-auto flex-1 text-left">
           {/* ------------------------------------------------------------
-              TAB 1: OFFICIAL READER PASSPORT & STARTER BOOKS
+              TAB 1: PASSPORT & STARTER COMPANIONS
               ------------------------------------------------------------ */}
           {activeTab === 'passport' && (
             <div className="space-y-6 animate-fade-in">
-              {/* AUTHENTIC ARCHIVAL PASSPORT CERTIFICATE */}
-              <div className="relative rounded-2xl bg-gradient-to-b from-[#FFFDF9] via-[#FAF4EA] to-[#F3E9DA] border-2 border-[#D1BFA8] p-5 sm:p-6 shadow-[0_8px_25px_rgba(40,30,20,0.06)] overflow-hidden">
-                {/* Vintage Washi Tape Top Tab */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-4.5 bg-[#8D263B]/25 rounded-xs transform -rotate-1 border-x border-dashed border-[#8D263B]/40 shadow-xs pointer-events-none" />
+              {/* VINTAGE BOOKPLATE PASSPORT CARD */}
+              <div className="relative rounded-2xl bg-white border border-[#E5DACB] p-5 sm:p-6 shadow-xs overflow-hidden">
+                {/* Delicate Corner Accents */}
+                <div className="absolute top-2 left-2 w-2.5 h-2.5 border-t border-l border-[#C59B63]/60 pointer-events-none" />
+                <div className="absolute top-2 right-2 w-2.5 h-2.5 border-t border-r border-[#C59B63]/60 pointer-events-none" />
+                <div className="absolute bottom-2 left-2 w-2.5 h-2.5 border-b border-l border-[#C59B63]/60 pointer-events-none" />
+                <div className="absolute bottom-2 right-2 w-2.5 h-2.5 border-b border-r border-[#C59B63]/60 pointer-events-none" />
 
-                {/* Gilded Corner Filigrees */}
-                <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#C59B63]/60 pointer-events-none" />
-                <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#C59B63]/60 pointer-events-none" />
-                <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#C59B63]/60 pointer-events-none" />
-                <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#C59B63]/60 pointer-events-none" />
-
-                {/* Archival Library Accession Rubber Stamp Impression */}
-                <div className="absolute -bottom-2 right-4 pointer-events-none opacity-60 mix-blend-multiply rotate-[-8deg] hidden sm:block">
-                  <img
-                    src="/images/login-passport-stamp-clean.png"
-                    alt="Accession Stamp"
-                    className="w-28 h-auto object-contain filter sepia"
-                  />
-                </div>
-
-                {/* Top Certificate Header */}
-                <div className="flex items-center justify-between border-b border-[#DFCBB5] pb-3 mb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold text-[#7D2235] flex items-center gap-1.5">
-                      <PiShieldCheckFill className="text-sm text-[#7D2235]" />
-                      Verified Library Member
-                    </span>
-                    <span className="w-1 h-1 rounded-full bg-[#C59B63]" />
-                    <span className="font-mono text-[10px] text-[#817265] hidden sm:inline">
-                      Cathedral Registry No. 8924
-                    </span>
-                  </div>
-
-                  {/* Passport Number with One-Click Copy */}
-                  <button
-                    type="button"
-                    onClick={() => copyToClipboard(passportNumber, 'Passport ID')}
-                    title="Click to copy Passport ID"
-                    className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-[#EADBC8] text-[#4A392C] border border-[#D5C2AC] flex items-center gap-1.5 hover:bg-[#DFCDB8] transition-colors cursor-pointer group"
-                  >
-                    <span>{passportNumber}</span>
-                    <PiCopyBold className="text-xs text-[#817265] group-hover:text-[#7D2235]" />
-                  </button>
-                </div>
-
-                {/* Identity Layout: Avatar Medallion + Typography */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-                  {/* Circular Portrait Frame with Change PFP Action */}
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
+                  {/* Portrait with cute scalloped ring */}
                   <div className="relative flex-shrink-0 flex flex-col items-center">
                     <div
                       onClick={() => {
                         playPaperUnwrap();
                         setShowChangeAvatar(true);
                       }}
-                      className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#E2D4C0] to-[#C9B59C] p-1 border-2 border-[#C59B63] shadow-md cursor-pointer group/portrait relative"
-                      title="Click to Change Reader Portrait / PFP"
+                      className="w-18 h-18 rounded-2xl p-1 bg-[#FAF4EA] border-2 border-[#C59B63]/60 shadow-xs cursor-pointer group/portrait relative overflow-hidden"
+                      title="Click to Change Portrait"
                     >
-                      <div className="w-full h-full rounded-xl overflow-hidden bg-[#2D241E] relative">
-                        <img
-                          src={
-                            activeUser.avatar ||
-                            'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80'
-                          }
-                          alt={activeUser.username}
-                          className="w-full h-full object-cover group-hover/portrait:scale-105 transition-transform"
-                        />
-                        {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/portrait:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[9px] font-mono gap-0.5">
-                          <PiCameraBold className="text-sm text-[#F7D8A4]" />
-                          <span>Edit PFP</span>
-                        </div>
-                      </div>
-
-                      {/* Small Wax Medallion Badge */}
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#7D2235] border-2 border-[#FAF5EB] flex items-center justify-center text-[#F7D8A4] text-[10px] shadow-sm font-serif">
-                        ❦
+                      <img
+                        src={
+                          activeUser.avatar ||
+                          'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80'
+                        }
+                        alt={activeUser.username}
+                        className="w-full h-full object-cover rounded-xl group-hover/portrait:scale-105 transition-transform"
+                      />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/portrait:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-serif rounded-xl">
+                        <span>Edit</span>
                       </div>
                     </div>
 
@@ -429,40 +386,37 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                         playPaperUnwrap();
                         setShowChangeAvatar(true);
                       }}
-                      className="mt-1.5 text-[10px] font-mono font-semibold text-[#7D2235] hover:text-[#92283F] flex items-center gap-1 hover:underline cursor-pointer"
+                      className="mt-1.5 text-[11px] font-serif italic text-[#8D263B] hover:text-[#631422] flex items-center gap-1 cursor-pointer"
                     >
                       <PiCameraBold className="text-xs" />
-                      <span>Change PFP</span>
+                      <span>Change photo</span>
                     </button>
                   </div>
 
-                  {/* Reader Details */}
-                  <div className="flex-1 space-y-2">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                  {/* Reader Identity Details */}
+                  <div className="flex-1 text-center sm:text-left space-y-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
-                        <span className="font-mono text-[10px] uppercase text-[#7A6A5E] tracking-wider block">
-                          Reader Name
-                        </span>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h4 className="font-serif font-bold text-lg sm:text-xl text-[#2F2620] leading-tight">
+                        <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+                          <h4 className="font-serif font-bold text-xl text-[#2A1E17] leading-tight">
                             {activeUser.username}
                           </h4>
                           {realDbUsers.length > 0 && (
-                            <div className="relative">
+                            <div className="relative inline-block">
                               <button
                                 type="button"
                                 onClick={() => setShowUserSwitcher(!showUserSwitcher)}
-                                className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#EFE5D5] hover:bg-[#E5D7C2] text-[#7D2235] border border-[#D5C2AC] font-semibold cursor-pointer shadow-2xs flex items-center gap-1"
-                                title="Switch between real database users"
+                                className="text-[10px] font-sans px-2 py-0.5 rounded-full bg-[#F3ECE0] hover:bg-[#EAE0D0] text-[#8D263B] border border-[#DFCBB5] font-medium cursor-pointer shadow-2xs"
+                                title="Switch reader profile"
                               >
-                                <span>Switch Reader ▾</span>
+                                Switch ▾
                               </button>
                               {showUserSwitcher && (
-                                <div className="absolute left-0 top-full mt-1 w-52 bg-[#FAF4EA] rounded-xl shadow-xl border border-[#D8C7B0] py-1 z-50 text-xs text-left animate-fade-in">
-                                  <div className="px-3 py-1 text-[10px] font-mono uppercase text-[#7A6A5E] border-b border-[#E8DAC7]">
-                                    Database Users:
+                                <div className="absolute left-0 top-full mt-1 w-48 bg-[#FFFDF9] rounded-xl shadow-lg border border-[#DFCBB5] py-1 z-50 text-xs text-left animate-fade-in">
+                                  <div className="px-3 py-1 text-[10px] font-sans text-[#7A6C60] border-b border-[#F0E9DE]">
+                                    Readers:
                                   </div>
-                                  <div className="max-h-48 overflow-y-auto">
+                                  <div className="max-h-40 overflow-y-auto">
                                     {realDbUsers.map((u) => (
                                       <button
                                         key={u._id}
@@ -471,14 +425,14 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                                           playWaxSealCrack();
                                           if (switchToRealUser) await switchToRealUser(u.email);
                                           setShowUserSwitcher(false);
-                                          enqueueSnackbar(`Active profile switched to ${u.username}! 🕯️`, { variant: 'success' });
+                                          enqueueSnackbar(`Switched to ${u.username}! 🌸`, { variant: 'success' });
                                         }}
-                                        className={`w-full text-left px-3 py-1.5 hover:bg-[#EFE5D5] text-[#2F2620] flex items-center justify-between cursor-pointer ${
-                                          activeUser.email === u.email ? 'bg-[#EADCCB] font-bold text-[#7D2235]' : ''
+                                        className={`w-full text-left px-3 py-1.5 hover:bg-[#FAF4EA] text-[#2A1E17] flex items-center justify-between cursor-pointer ${
+                                          activeUser.email === u.email ? 'bg-[#FAF4EA] font-semibold text-[#8D263B]' : ''
                                         }`}
                                       >
-                                        <span className="font-semibold truncate max-w-[120px]">{u.username}</span>
-                                        <span className="text-[9px] text-[#7A6A5E] font-mono">{u.role}</span>
+                                        <span className="truncate">{u.username}</span>
+                                        <span className="text-[9px] text-[#7A6C60]">{u.role}</span>
                                       </button>
                                     ))}
                                   </div>
@@ -487,72 +441,65 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                             </div>
                           )}
                         </div>
-                      </div>
 
-                      <div>
-                        <span className="font-mono text-[10px] uppercase text-[#7A6A5E] tracking-wider block">
-                          Member Tier
-                        </span>
-                        <p className="font-serif font-bold text-sm text-[#7D2235] leading-tight flex items-center gap-1.5">
-                          <span>
-                            {activeUser.role === 'admin'
-                              ? 'Curator & Chief Librarian'
-                              : 'Verified Founding Reader'}
-                          </span>
+                        <p className="font-serif italic text-xs text-[#8D263B] mt-0.5">
+                          {activeUser.role === 'admin'
+                            ? '⚜️ Chief Curator & Librarian'
+                            : '🌸 Founding Reader of the Sanctuary'}
                         </p>
                       </div>
-                    </div>
 
-                    <div>
-                      <span className="font-mono text-[10px] uppercase text-[#7A6A5E] tracking-wider block">
-                        Dispatch Address
-                      </span>
-                      <p className="font-mono text-xs text-[#3D3128] mt-0.5 flex items-center gap-1.5">
-                        <PiLockBold className="text-xs text-emerald-700" />
-                        <span>{activeUser.email || 'admin@pageturner.io'}</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Active Privileges Strip */}
-                <div className="mt-4 pt-3 border-t border-[#DFCBB5] text-xs">
-                  <span className="font-mono text-[10px] uppercase text-[#7A6A5E] font-bold block mb-2">
-                    Active Archival Privileges:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {[
-                      { icon: '📌', label: 'Unlimited Shelf Pins' },
-                      { icon: '🎁', label: 'Mystery Parcel Blind Dates' },
-                      { icon: '📜', label: 'Full CSV Catalog Export' },
-                      { icon: '🎧', label: 'Ambient Cathedral Solace' },
-                      { icon: '🛡️', label: 'Instant Session Alerts' },
-                    ].map((priv, idx) => (
-                      <span
-                        key={idx}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EFE5D5] text-[#3D3128] text-[11px] font-sans font-medium border border-[#D9C8B0]"
+                      {/* Passport Badge with One-Click Copy */}
+                      <button
+                        type="button"
+                        onClick={() => copyToClipboard(passportNumber, 'Passport ID')}
+                        title="Copy Passport ID"
+                        className="self-center sm:self-start inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF5EB] hover:bg-[#F3ECE0] border border-[#E5DACB] text-[11px] font-mono font-medium text-[#675C54] transition-colors cursor-pointer"
                       >
-                        <span>{priv.icon}</span>
-                        <span>{priv.label}</span>
-                      </span>
-                    ))}
+                        <span>{passportNumber}</span>
+                        <PiCopyBold className="text-xs text-[#8D263B]" />
+                      </button>
+                    </div>
+
+                    <p className="text-xs font-sans text-[#675C54] flex items-center justify-center sm:justify-start gap-1.5 pt-0.5">
+                      <PiEnvelopeSimpleBold className="text-xs text-[#8D263B]" />
+                      <span>{activeUser.email || 'reader@pageturner.io'}</span>
+                    </p>
+
+                    {/* Cute Passport Stamps Grid */}
+                    <div className="pt-3 mt-3 border-t border-[#F0E9DE] grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {PASSPORT_STAMPS.map((stamp, idx) => (
+                        <div
+                          key={idx}
+                          className="p-2 rounded-xl bg-[#FAF6F0] border border-[#EFE5D8] flex items-center gap-2"
+                        >
+                          <span className="text-base">{stamp.icon}</span>
+                          <div className="min-w-0">
+                            <span className="block font-serif text-[11.5px] font-bold text-[#2A1E17] truncate leading-tight">
+                              {stamp.title}
+                            </span>
+                            <span className="block font-serif italic text-[10px] text-[#7A6C60] truncate">
+                              {stamp.desc}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* ------------------------------------------------------------
-                  STARTER PACK BOOKS INCLUDED IN YOUR PACKAGE (3 CURATED VOLUMES)
-                  ------------------------------------------------------------ */}
+              {/* STARTER PACK BOOKS (3 CURATED COMPANIONS) */}
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <PiBooksBold className="text-lg text-[#7D2235]" />
-                    <h4 className="font-serif text-base font-bold text-[#2F2620]">
-                      Starter Pack Books Bound to Your Registry
+                    <PiBookOpenBold className="text-base text-[#8D263B]" />
+                    <h4 className="font-serif text-sm sm:text-base font-bold text-[#2A1E17]">
+                      Curated Companion Starter Books
                     </h4>
                   </div>
-                  <span className="font-mono text-[10px] text-[#7A6A5E] uppercase tracking-wider bg-[#EAE0D0] px-2.5 py-0.5 rounded-full border border-[#D5C6AF]">
-                    3 Curated Volumes
+                  <span className="font-serif italic text-xs text-[#7A6C60]">
+                    Bound to your registry
                   </span>
                 </div>
 
@@ -560,23 +507,10 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                   {STARTER_BOOKS.map((book) => (
                     <div
                       key={book.id}
-                      className="group p-3 rounded-2xl bg-[#FFFDF9] border border-[#DECDB8] shadow-xs hover:shadow-md hover:border-[#7D2235]/40 transition-all flex flex-col justify-between text-left relative overflow-hidden"
+                      className="p-3 rounded-2xl bg-white border border-[#E5DACB] shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between text-left group"
                     >
-                      {/* Top Genre Badge & Read Time */}
-                      <div className="flex items-center justify-between mb-2">
-                        <span
-                          className={`text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${book.tagColor}`}
-                        >
-                          {book.movement}
-                        </span>
-                        <span className="font-mono text-[10px] text-[#8C7A68]">
-                          {book.readTime}
-                        </span>
-                      </div>
-
-                      {/* Cover Thumbnail & Metadata */}
-                      <div className="flex items-center gap-3 my-1">
-                        <div className="w-12 h-16 rounded-md overflow-hidden shadow-sm flex-shrink-0 border border-[#D9CCB7] bg-[#2E2520]">
+                      <div className="flex items-center gap-3">
+                        <div className="w-11 h-15 rounded-lg overflow-hidden shadow-2xs flex-shrink-0 border border-[#E5DACB] bg-[#2E2520]">
                           <img
                             src={book.coverImage}
                             alt={book.title}
@@ -584,48 +518,47 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                           />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h5 className="font-serif font-bold text-xs sm:text-sm text-[#2F2620] truncate group-hover:text-[#7D2235] transition-colors">
+                          <span
+                            className={`inline-block text-[9px] font-sans font-semibold px-2 py-0.5 rounded-full border mb-1 ${book.tagColor}`}
+                          >
+                            {book.movement}
+                          </span>
+                          <h5 className="font-serif font-bold text-xs text-[#2A1E17] truncate group-hover:text-[#8D263B] transition-colors">
                             {book.title}
                           </h5>
-                          <p className="text-[11px] text-[#7A6A5E] italic truncate">
+                          <p className="text-[11px] text-[#7A6C60] font-serif italic truncate">
                             {book.author}
                           </p>
-                          <span className="text-[10px] font-mono text-[#8C7A68] block mt-1">
-                            Chapter Excerpt Ready
-                          </span>
                         </div>
                       </div>
 
-                      {/* Quote Snippet */}
-                      <p className="text-[10px] text-[#645548] font-serif italic line-clamp-2 mt-2 pt-2 border-t border-[#EFE5D5]">
-                        “{book.quote}”
+                      <p className="text-[10.5px] text-[#675C54] font-serif italic line-clamp-2 mt-2 pt-2 border-t border-[#F5EFE6]">
+                        &ldquo;{book.quote}&rdquo;
                       </p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* ------------------------------------------------------------
-                  DISPATCH ACTION BAR
-                  ------------------------------------------------------------ */}
-              <div className="pt-3 border-t border-[#DFCBB5] space-y-3">
-                <div className="flex items-center gap-3 flex-wrap">
+              {/* DISPATCH ACTION BAR */}
+              <div className="pt-3 border-t border-[#EFE5D5] space-y-3">
+                <div className="flex items-center gap-2.5 flex-wrap">
                   {/* Primary Dispatch Button */}
                   <button
                     type="button"
                     onClick={() => handleSendWelcomeEmail(activeUser.email)}
                     disabled={loadingType === 'welcome' || !activeUser.email}
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#6A1624] via-[#7D2235] to-[#5C101B] hover:brightness-105 text-[#FFFDF8] text-xs sm:text-sm font-semibold shadow-md active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#8D263B] hover:bg-[#731D2E] text-white text-xs sm:text-[13px] font-serif font-medium shadow-xs hover:shadow-md active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
                   >
                     {loadingType === 'welcome' ? (
                       <>
-                        <PiSpinnerGapBold className="text-base animate-spin text-[#F7D8A4]" />
-                        <span>Dispatching Folio to Mailbox...</span>
+                        <PiSpinnerGapBold className="text-sm animate-spin" />
+                        <span>Sending your keepsake...</span>
                       </>
                     ) : (
                       <>
-                        <PiEnvelopeSimpleBold className="text-base text-[#F7D8A4]" />
-                        <span>Send Welcome Package to My Inbox</span>
+                        <PiEnvelopeSimpleBold className="text-sm" />
+                        <span>Send Welcome Keepsake to My Inbox</span>
                       </>
                     )}
                   </button>
@@ -638,10 +571,10 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                       setActiveTab('inspector');
                       setInspectorType('welcome');
                     }}
-                    className="inline-flex items-center gap-1.5 px-4 py-3 rounded-full bg-[#EFE5D5] hover:bg-[#E5D7C2] text-[#2F2620] text-xs font-semibold border border-[#D5C2AC] transition-colors shadow-2xs cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#F3ECE0] hover:bg-[#EAE0D0] text-[#2A1E17] text-xs font-serif transition-colors border border-[#DFCBB5] cursor-pointer"
                   >
-                    <PiEyeBold className="text-sm text-[#7D2235]" />
-                    <span>Live Preview</span>
+                    <PiEyeBold className="text-xs text-[#8D263B]" />
+                    <span>Preview Letter</span>
                   </button>
 
                   {/* External Tab Link */}
@@ -649,10 +582,10 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                     href={welcomePreviewUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    title="Open full inspector in new tab"
-                    className="p-3 rounded-full bg-[#EFE5D5] hover:bg-[#E5D7C2] text-[#2F2620] border border-[#D5C2AC] transition-colors shadow-2xs"
+                    title="Open standalone preview in new tab"
+                    className="p-2.5 rounded-full bg-[#F3ECE0] hover:bg-[#EAE0D0] text-[#675C54] hover:text-[#8D263B] border border-[#DFCBB5] transition-colors"
                   >
-                    <PiArrowSquareOutBold className="text-sm text-[#7D2235]" />
+                    <PiArrowSquareOutBold className="text-xs" />
                   </a>
                 </div>
 
@@ -661,32 +594,32 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                   <button
                     type="button"
                     onClick={() => setShowCustomInput(!showCustomInput)}
-                    className="text-[11px] font-mono text-[#7A6A5E] hover:text-[#7D2235] hover:underline transition-colors cursor-pointer"
+                    className="text-[11.5px] font-serif italic text-[#7A6C60] hover:text-[#8D263B] hover:underline transition-colors cursor-pointer"
                   >
                     {showCustomInput
-                      ? '▲ Hide custom address dispatch'
-                      : '▼ Send a copy to another email address'}
+                      ? '▲ Hide custom address'
+                      : '▾ Send a copy to another email address'}
                   </button>
                 </div>
 
                 {/* Custom Dispatch Drawer */}
                 {showCustomInput && (
-                  <div className="flex items-center gap-2 pt-1 animate-fade-in bg-[#EFE6D7] p-2.5 rounded-2xl border border-[#D9C8B0]">
+                  <div className="flex items-center gap-2 pt-1 animate-fade-in bg-[#FAF5EB] p-2 rounded-2xl border border-[#E5DACB]">
                     <input
                       type="email"
-                      placeholder="Enter recipient email (e.g. kindred@example.com)"
+                      placeholder="Enter recipient email (e.g. friend@readingnook.com)"
                       value={customEmail}
                       onChange={(e) => setCustomEmail(e.target.value)}
-                      className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-white border border-[#D8C7B0] focus:outline-none focus:border-[#7D2235] text-[#2F2620]"
+                      className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-white border border-[#DFCBB5] focus:outline-none focus:border-[#8D263B] text-[#2A1E17] font-sans"
                     />
                     <button
                       type="button"
                       onClick={() => handleSendWelcomeEmail(customEmail)}
                       disabled={loadingType === 'welcome' || !customEmail.trim()}
-                      className="px-4 py-2 rounded-xl bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-40 cursor-pointer shadow-xs"
+                      className="px-4 py-2 rounded-xl bg-[#8D263B] hover:bg-[#731D2E] text-white text-xs font-serif font-medium flex items-center gap-1.5 transition-colors disabled:opacity-40 cursor-pointer shadow-xs"
                     >
                       <PiPaperPlaneTiltBold className="text-xs" />
-                      <span>Dispatch</span>
+                      <span>Send</span>
                     </button>
                   </div>
                 )}
@@ -698,60 +631,49 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
               TAB 2: LITERARY MAILBOX (3 HANDCRAFTED TEMPLATES)
               ------------------------------------------------------------ */}
           {activeTab === 'mailbox' && (
-            <div className="space-y-5 animate-fade-in">
-              <div className="flex items-center justify-between pb-3 border-b border-[#DFCBB5]">
-                <div>
-                  <h4 className="font-serif text-lg font-bold text-[#2F2620]">
-                    The PageTurner Postal Archive
-                  </h4>
-                  <p className="text-xs text-[#7A6A5E] font-serif italic mt-0.5">
-                    Three handcrafted epistolary dispatches styled with deckled vellum, classical typography, and wax seals.
-                  </p>
-                </div>
-                <span className="font-mono text-[10px] uppercase font-bold text-[#7D2235] px-2.5 py-1 bg-[#7D2235]/10 rounded-full border border-[#7D2235]/20">
-                  Gmail SMTP Active
-                </span>
+            <div className="space-y-4 animate-fade-in">
+              <div className="pb-3 border-b border-[#EFE5D5]">
+                <h4 className="font-serif text-lg font-bold text-[#2A1E17]">
+                  Postal Letters &amp; Dispatches
+                </h4>
+                <p className="text-xs text-[#7A6C60] font-serif italic mt-0.5">
+                  Three handcrafted epistolary letters sealed with deckled edges and literary typography.
+                </p>
               </div>
 
               {/* 3 Postal Letters Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
                 {/* LETTER 01: WELCOME & PASSPORT */}
-                <div className="relative rounded-2xl bg-[#FFFDF9] border border-[#DECDB8] p-4.5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-3 bg-[#7D2235]/20 rounded-xs transform -rotate-1 pointer-events-none" />
-
+                <div className="rounded-2xl bg-white border border-[#E5DACB] p-4 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between group">
                   <div>
-                    <div className="flex items-center justify-between mb-2 mt-1">
-                      <span className="font-mono text-[9px] uppercase font-bold text-[#7D2235] tracking-wider bg-[#7D2235]/10 px-2 py-0.5 rounded-full">
-                        Letter No. 01
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-sans font-semibold text-[#8D263B] bg-[#8D263B]/10 px-2.5 py-0.5 rounded-full">
+                        Letter 01
                       </span>
-                      <span className="text-xs">📜</span>
+                      <span className="text-sm">📜</span>
                     </div>
 
-                    <h5 className="font-serif font-bold text-sm text-[#2F2620] group-hover:text-[#7D2235] transition-colors">
-                      Welcome &amp; Passport Folio
+                    <h5 className="font-serif font-bold text-sm text-[#2A1E17] group-hover:text-[#8D263B] transition-colors">
+                      Welcome Folio
                     </h5>
-                    <p className="text-[11px] text-[#695D53] font-serif italic mt-1 leading-relaxed">
-                      Librarian greeting, member ID badge, and 3 starter pack classics.
+                    <p className="text-[11px] text-[#675C54] font-serif italic mt-1 leading-relaxed">
+                      Librarian greeting, member ID badge, and 3 companion classics.
                     </p>
-
-                    <div className="mt-3 py-1.5 px-2 rounded-lg bg-[#FAF4EA] border border-[#E9DCB8] text-[10px] font-mono text-[#7A6A5E]">
-                      Trigger: <strong>New Account Sign-up</strong>
-                    </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-[#EFE5D5] space-y-2">
+                  <div className="mt-4 pt-3 border-t border-[#F5EFE6] space-y-1.5">
                     <button
                       type="button"
                       onClick={() => handleSendWelcomeEmail(activeUser.email)}
                       disabled={loadingType === 'welcome'}
-                      className="w-full py-1.5 px-3 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
+                      className="w-full py-1.5 px-3 rounded-full bg-[#8D263B] hover:bg-[#731D2E] text-white text-xs font-serif font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
                     >
                       {loadingType === 'welcome' ? (
                         <PiSpinnerGapBold className="text-xs animate-spin" />
                       ) : (
                         <PiPaperPlaneTiltBold className="text-xs" />
                       )}
-                      <span>Dispatch Copy</span>
+                      <span>Send to Inbox</span>
                     </button>
 
                     <button
@@ -761,51 +683,45 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                         setActiveTab('inspector');
                         setInspectorType('welcome');
                       }}
-                      className="w-full py-1.5 px-3 rounded-full bg-[#EFE5D5] hover:bg-[#E5D7C2] text-[#2F2620] text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors border border-[#D5C2AC] cursor-pointer"
+                      className="w-full py-1.5 px-3 rounded-full bg-[#F3ECE0] hover:bg-[#EAE0D0] text-[#2A1E17] text-xs font-serif flex items-center justify-center gap-1.5 transition-colors border border-[#DFCBB5] cursor-pointer"
                     >
-                      <PiEyeBold className="text-xs text-[#7D2235]" />
-                      <span>Inspect Template</span>
+                      <PiEyeBold className="text-xs text-[#8D263B]" />
+                      <span>Preview</span>
                     </button>
                   </div>
                 </div>
 
                 {/* LETTER 02: LOGIN ALERT */}
-                <div className="relative rounded-2xl bg-[#FFFDF9] border border-[#DECDB8] p-4.5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-3 bg-[#2E5A36]/20 rounded-xs transform rotate-1 pointer-events-none" />
-
+                <div className="rounded-2xl bg-white border border-[#E5DACB] p-4 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between group">
                   <div>
-                    <div className="flex items-center justify-between mb-2 mt-1">
-                      <span className="font-mono text-[9px] uppercase font-bold text-[#2E5A36] tracking-wider bg-[#2E5A36]/10 px-2 py-0.5 rounded-full">
-                        Letter No. 02
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-sans font-semibold text-[#3D5A45] bg-[#3D5A45]/10 px-2.5 py-0.5 rounded-full">
+                        Letter 02
                       </span>
-                      <span className="text-xs">🛡️</span>
+                      <span className="text-sm">🛡️</span>
                     </div>
 
-                    <h5 className="font-serif font-bold text-sm text-[#2F2620] group-hover:text-[#2E5A36] transition-colors">
-                      Session Login Alert
+                    <h5 className="font-serif font-bold text-sm text-[#2A1E17] group-hover:text-[#3D5A45] transition-colors">
+                      Security Notice
                     </h5>
-                    <p className="text-[11px] text-[#695D53] font-serif italic mt-1 leading-relaxed">
-                      Instant security receipt with device, origin IP, timestamp, and lock trigger.
+                    <p className="text-[11px] text-[#675C54] font-serif italic mt-1 leading-relaxed">
+                      Instant session receipt with device, origin, and time.
                     </p>
-
-                    <div className="mt-3 py-1.5 px-2 rounded-lg bg-[#FAF4EA] border border-[#E9DCB8] text-[10px] font-mono text-[#7A6A5E]">
-                      Trigger: <strong>Every Session Login</strong>
-                    </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-[#EFE5D5] space-y-2">
+                  <div className="mt-4 pt-3 border-t border-[#F5EFE6] space-y-1.5">
                     <button
                       type="button"
                       onClick={() => handleSendLoginAlert(activeUser.email)}
                       disabled={loadingType === 'login'}
-                      className="w-full py-1.5 px-3 rounded-full bg-[#2E5A36] hover:bg-[#234529] text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
+                      className="w-full py-1.5 px-3 rounded-full bg-[#3D5A45] hover:bg-[#2C4433] text-white text-xs font-serif font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
                     >
                       {loadingType === 'login' ? (
                         <PiSpinnerGapBold className="text-xs animate-spin" />
                       ) : (
                         <PiShieldCheckBold className="text-xs" />
                       )}
-                      <span>Dispatch Alert</span>
+                      <span>Send Notice</span>
                     </button>
 
                     <button
@@ -815,51 +731,45 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                         setActiveTab('inspector');
                         setInspectorType('login');
                       }}
-                      className="w-full py-1.5 px-3 rounded-full bg-[#EFE5D5] hover:bg-[#E5D7C2] text-[#2F2620] text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors border border-[#D5C2AC] cursor-pointer"
+                      className="w-full py-1.5 px-3 rounded-full bg-[#F3ECE0] hover:bg-[#EAE0D0] text-[#2A1E17] text-xs font-serif flex items-center justify-center gap-1.5 transition-colors border border-[#DFCBB5] cursor-pointer"
                     >
-                      <PiEyeBold className="text-xs text-[#2E5A36]" />
-                      <span>Inspect Template</span>
+                      <PiEyeBold className="text-xs text-[#3D5A45]" />
+                      <span>Preview</span>
                     </button>
                   </div>
                 </div>
 
                 {/* LETTER 03: PASSWORD RECOVERY */}
-                <div className="relative rounded-2xl bg-[#FFFDF9] border border-[#DECDB8] p-4.5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-3 bg-[#9C5A20]/20 rounded-xs transform -rotate-1 pointer-events-none" />
-
+                <div className="rounded-2xl bg-white border border-[#E5DACB] p-4 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between group">
                   <div>
-                    <div className="flex items-center justify-between mb-2 mt-1">
-                      <span className="font-mono text-[9px] uppercase font-bold text-[#9C5A20] tracking-wider bg-[#9C5A20]/10 px-2 py-0.5 rounded-full">
-                        Letter No. 03
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-sans font-semibold text-[#8C6239] bg-[#8C6239]/10 px-2.5 py-0.5 rounded-full">
+                        Letter 03
                       </span>
-                      <span className="text-xs">🗝️</span>
+                      <span className="text-sm">🗝️</span>
                     </div>
 
-                    <h5 className="font-serif font-bold text-sm text-[#2F2620] group-hover:text-[#9C5A20] transition-colors">
-                      Cryptographic Recovery Key
+                    <h5 className="font-serif font-bold text-sm text-[#2A1E17] group-hover:text-[#8C6239] transition-colors">
+                      Recovery Key
                     </h5>
-                    <p className="text-[11px] text-[#695D53] font-serif italic mt-1 leading-relaxed">
-                      Wax-sealed 60-minute cryptographic recovery token with instant access link.
+                    <p className="text-[11px] text-[#675C54] font-serif italic mt-1 leading-relaxed">
+                      Wax-sealed 60-minute token with instant sanctuary link.
                     </p>
-
-                    <div className="mt-3 py-1.5 px-2 rounded-lg bg-[#FAF4EA] border border-[#E9DCB8] text-[10px] font-mono text-[#7A6A5E]">
-                      Trigger: <strong>Forgot Password Request</strong>
-                    </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-[#EFE5D5] space-y-2">
+                  <div className="mt-4 pt-3 border-t border-[#F5EFE6] space-y-1.5">
                     <button
                       type="button"
                       onClick={() => handleSendPasswordReset(activeUser.email)}
                       disabled={loadingType === 'reset'}
-                      className="w-full py-1.5 px-3 rounded-full bg-[#9C5A20] hover:bg-[#7D4616] text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
+                      className="w-full py-1.5 px-3 rounded-full bg-[#8C6239] hover:bg-[#704E2B] text-white text-xs font-serif font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
                     >
                       {loadingType === 'reset' ? (
                         <PiSpinnerGapBold className="text-xs animate-spin" />
                       ) : (
                         <PiKeyBold className="text-xs" />
                       )}
-                      <span>Request Reset</span>
+                      <span>Send Recovery</span>
                     </button>
 
                     <button
@@ -869,33 +779,33 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                         setActiveTab('inspector');
                         setInspectorType('reset');
                       }}
-                      className="w-full py-1.5 px-3 rounded-full bg-[#EFE5D5] hover:bg-[#E5D7C2] text-[#2F2620] text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors border border-[#D5C2AC] cursor-pointer"
+                      className="w-full py-1.5 px-3 rounded-full bg-[#F3ECE0] hover:bg-[#EAE0D0] text-[#2A1E17] text-xs font-serif flex items-center justify-center gap-1.5 transition-colors border border-[#DFCBB5] cursor-pointer"
                     >
-                      <PiEyeBold className="text-xs text-[#9C5A20]" />
-                      <span>Inspect Template</span>
+                      <PiEyeBold className="text-xs text-[#8C6239]" />
+                      <span>Preview</span>
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* Postal Sandbox Console */}
-              <div className="p-4 rounded-2xl bg-[#EFE6D7] border border-[#D9C8B0] text-xs">
-                <span className="font-mono text-[10px] uppercase font-bold text-[#645548] block mb-2">
-                  Postal Dispatch Sandbox &bull; Deliver Any Template to Custom Address:
+              {/* Postal Sandbox Box */}
+              <div className="p-4 rounded-2xl bg-[#FAF5EB] border border-[#E5DACB] text-xs">
+                <span className="font-serif font-bold text-[#2A1E17] block mb-1.5">
+                  Deliver Any Template to a Custom Email:
                 </span>
                 <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                   <input
                     type="email"
                     value={customEmail}
                     onChange={(e) => setCustomEmail(e.target.value)}
-                    placeholder="Enter recipient (e.g. librarian@sanctuary.org)"
-                    className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-white border border-[#D8C7B0] focus:outline-none focus:border-[#7D2235] text-[#2F2620]"
+                    placeholder="Enter recipient (e.g. companion@sanctuary.org)"
+                    className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-white border border-[#DFCBB5] focus:outline-none focus:border-[#8D263B] text-[#2A1E17]"
                   />
                   <button
                     type="button"
                     onClick={() => handleSendWelcomeEmail(customEmail)}
                     disabled={!customEmail.trim() || !!loadingType}
-                    className="px-3 py-2 rounded-xl bg-white hover:bg-[#F2ECE1] text-[#2F2620] border border-[#D5C2AC] text-xs font-semibold disabled:opacity-40 cursor-pointer transition-colors"
+                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#FAF4EA] text-[#2A1E17] border border-[#DFCBB5] text-xs font-serif disabled:opacity-40 cursor-pointer transition-colors"
                   >
                     Welcome
                   </button>
@@ -903,7 +813,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                     type="button"
                     onClick={() => handleSendLoginAlert(customEmail)}
                     disabled={!customEmail.trim() || !!loadingType}
-                    className="px-3 py-2 rounded-xl bg-white hover:bg-[#F2ECE1] text-[#2F2620] border border-[#D5C2AC] text-xs font-semibold disabled:opacity-40 cursor-pointer transition-colors"
+                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#FAF4EA] text-[#2A1E17] border border-[#DFCBB5] text-xs font-serif disabled:opacity-40 cursor-pointer transition-colors"
                   >
                     Alert
                   </button>
@@ -911,7 +821,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                     type="button"
                     onClick={() => handleSendPasswordReset(customEmail)}
                     disabled={!customEmail.trim() || !!loadingType}
-                    className="px-3.5 py-2 rounded-xl bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold disabled:opacity-40 cursor-pointer transition-colors shadow-2xs"
+                    className="px-3.5 py-2 rounded-xl bg-[#8D263B] hover:bg-[#731D2E] text-white text-xs font-serif font-medium disabled:opacity-40 cursor-pointer transition-colors shadow-2xs"
                   >
                     Reset
                   </button>
@@ -921,24 +831,24 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
           )}
 
           {/* ------------------------------------------------------------
-              TAB 3: IN-SANCTUM LIVE EMAIL INSPECTOR
+              TAB 3: LIVE EMAIL INSPECTOR
               ------------------------------------------------------------ */}
           {activeTab === 'inspector' && (
             <div className="space-y-4 animate-fade-in">
               {/* Controls Header */}
-              <div className="p-3.5 rounded-2xl bg-[#EFE5D5] border border-[#D8C7B0] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="p-3.5 rounded-2xl bg-[#FAF5EB] border border-[#E5DACB] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 {/* Template Selector */}
-                <div className="flex items-center gap-1.5 p-1 bg-[#E3D7C3] rounded-xl border border-[#D0C0A8]">
+                <div className="inline-flex p-1 rounded-full bg-[#F3ECE0] border border-[#DFCBB5]">
                   <button
                     type="button"
                     onClick={() => {
                       playPaperUnwrap();
                       setInspectorType('welcome');
                     }}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    className={`px-3 py-1 rounded-full text-xs font-serif transition-all cursor-pointer ${
                       inspectorType === 'welcome'
-                        ? 'bg-[#7D2235] text-white shadow-xs font-bold'
-                        : 'text-[#645548] hover:text-[#2F2620]'
+                        ? 'bg-[#8D263B] text-white font-medium shadow-xs'
+                        : 'text-[#675C54] hover:text-[#2A1E17]'
                     }`}
                   >
                     Welcome Folio
@@ -950,13 +860,13 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                       playPaperUnwrap();
                       setInspectorType('login');
                     }}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    className={`px-3 py-1 rounded-full text-xs font-serif transition-all cursor-pointer ${
                       inspectorType === 'login'
-                        ? 'bg-[#2E5A36] text-white shadow-xs font-bold'
-                        : 'text-[#645548] hover:text-[#2F2620]'
+                        ? 'bg-[#3D5A45] text-white font-medium shadow-xs'
+                        : 'text-[#675C54] hover:text-[#2A1E17]'
                     }`}
                   >
-                    Security Alert
+                    Security Notice
                   </button>
 
                   <button
@@ -965,10 +875,10 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                       playPaperUnwrap();
                       setInspectorType('reset');
                     }}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    className={`px-3 py-1 rounded-full text-xs font-serif transition-all cursor-pointer ${
                       inspectorType === 'reset'
-                        ? 'bg-[#9C5A20] text-white shadow-xs font-bold'
-                        : 'text-[#645548] hover:text-[#2F2620]'
+                        ? 'bg-[#8C6239] text-white font-medium shadow-xs'
+                        : 'text-[#675C54] hover:text-[#2A1E17]'
                     }`}
                   >
                     Recovery Key
@@ -977,15 +887,15 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
 
                 {/* Device & External Controls */}
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center p-1 bg-[#E3D7C3] rounded-lg border border-[#D0C0A8]">
+                  <div className="flex items-center p-0.5 bg-[#F3ECE0] rounded-full border border-[#DFCBB5]">
                     <button
                       type="button"
                       onClick={() => setInspectorDevice('desktop')}
-                      title="Desktop Width View"
-                      className={`p-1.5 rounded-md text-xs cursor-pointer ${
+                      title="Desktop view"
+                      className={`p-1.5 rounded-full text-xs cursor-pointer ${
                         inspectorDevice === 'desktop'
-                          ? 'bg-white text-[#7D2235] shadow-xs'
-                          : 'text-[#645548]'
+                          ? 'bg-white text-[#8D263B] shadow-2xs'
+                          : 'text-[#675C54]'
                       }`}
                     >
                       <PiDesktopBold className="text-sm" />
@@ -993,11 +903,11 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                     <button
                       type="button"
                       onClick={() => setInspectorDevice('mobile')}
-                      title="Mobile Width View"
-                      className={`p-1.5 rounded-md text-xs cursor-pointer ${
+                      title="Mobile view"
+                      className={`p-1.5 rounded-full text-xs cursor-pointer ${
                         inspectorDevice === 'mobile'
-                          ? 'bg-white text-[#7D2235] shadow-xs'
-                          : 'text-[#645548]'
+                          ? 'bg-white text-[#8D263B] shadow-2xs'
+                          : 'text-[#675C54]'
                       }`}
                     >
                       <PiDeviceMobileBold className="text-sm" />
@@ -1008,21 +918,21 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
                     href={getActiveInspectorUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#FAF5EB] hover:bg-white text-[#2F2620] text-xs font-semibold border border-[#D5C2AC] shadow-2xs"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white hover:bg-[#FAF4EA] text-[#2A1E17] text-xs font-serif border border-[#DFCBB5] shadow-2xs"
                   >
-                    <span>Open Standalone</span>
-                    <PiArrowSquareOutBold className="text-xs text-[#7D2235]" />
+                    <span>Full Tab</span>
+                    <PiArrowSquareOutBold className="text-xs text-[#8D263B]" />
                   </a>
                 </div>
               </div>
 
-              {/* Iframe Frame Viewport */}
-              <div className="rounded-2xl border-2 border-[#D8C7B0] bg-[#2E2520] p-2 sm:p-4 shadow-inner flex justify-center overflow-hidden">
+              {/* Iframe Viewport */}
+              <div className="rounded-2xl border border-[#DFCBB5] bg-[#FAF5EB] p-2 sm:p-4 shadow-inner flex justify-center overflow-hidden">
                 <div
-                  className={`transition-all duration-300 bg-white rounded-xl shadow-2xl overflow-hidden border border-[#D5C2AC] ${
+                  className={`transition-all duration-300 bg-white rounded-xl shadow-md overflow-hidden border border-[#E5DACB] ${
                     inspectorDevice === 'mobile' ? 'w-[375px]' : 'w-full'
                   }`}
-                  style={{ height: '420px' }}
+                  style={{ height: '400px' }}
                 >
                   <iframe
                     key={`${inspectorType}-${inspectorDevice}`}
@@ -1037,7 +947,7 @@ const ReaderPassportModal = ({ isOpen, onClose, user }) => {
 
           {/* Persistent Dispatched Banner */}
           {lastDispatched && (
-            <div className="text-[11px] font-mono text-emerald-900 bg-emerald-50 border border-emerald-200 px-3.5 py-2.5 rounded-xl flex items-center justify-between gap-2 shadow-xs">
+            <div className="text-xs font-serif text-emerald-900 bg-emerald-50 border border-emerald-200 px-4 py-2.5 rounded-2xl flex items-center justify-between gap-2 shadow-2xs">
               <span className="flex items-center gap-2">
                 <PiCheckBold className="text-sm text-emerald-600 font-bold" />
                 <span>
