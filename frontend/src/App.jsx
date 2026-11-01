@@ -18,6 +18,7 @@ const EditBook = lazy(() => import('./pages/EditBook'));
 const DeleteBook = lazy(() => import('./pages/DeleteBook'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const Community = lazy(() => import('./pages/Community'));
+const ParlourDetail = lazy(() => import('./pages/ParlourDetail'));
 
 const App = () => {
   return (
@@ -34,6 +35,8 @@ const App = () => {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/books/details/:id" element={<ShowBook />} />
             <Route path="/community" element={<Community />} />
+            <Route path="/community/parlour/:id" element={<ParlourDetail />} />
+            <Route path="/parlour/:id" element={<ParlourDetail />} />
 
             {/* Create Book Route */}
             <Route

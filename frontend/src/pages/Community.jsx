@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/layout/Footer';
 import {
@@ -41,8 +42,14 @@ import {
 } from '../utils/soundEffects';
 
 const Community = () => {
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const { enqueueSnackbar } = useSnackbar();
+
+  const handleEnterParlour = (parlourId) => {
+    playBookSpineSlide();
+    navigate(`/community/parlour/${parlourId}`);
+  };
 
   // Navigation Tab State
   const [activeTab, setActiveTab] = useState('feed'); // 'feed' | 'parlours' | 'rooms' | 'marginalia' | 'matches'
@@ -1169,7 +1176,8 @@ const Community = () => {
               {parlours.slice(0, 3).map((parlour) => (
                 <div
                   key={parlour.id}
-                  className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm flex items-start gap-3.5 group hover:border-[#7D2235]/40 transition-all text-left"
+                  onClick={() => handleEnterParlour(parlour.id)}
+                  className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm flex items-start gap-3.5 group hover:border-[#7D2235]/40 transition-all text-left cursor-pointer"
                 >
                   <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#D8C7B0] flex-shrink-0 shadow-2xs">
                     <img
@@ -1180,7 +1188,7 @@ const Community = () => {
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-serif font-bold text-xs sm:text-[13px] text-[#2F2620] leading-snug">
+                    <h4 className="font-serif font-bold text-xs sm:text-[13px] text-[#2F2620] leading-snug group-hover:text-[#7D2235] transition-colors">
                       {parlour.title}
                     </h4>
                     <p className="text-[11px] text-[#7A6A5E] mt-0.5 line-clamp-2 leading-tight font-sans">
@@ -1194,14 +1202,13 @@ const Community = () => {
 
                       <button
                         type="button"
-                        onClick={() => handleToggleJoin(parlour.id)}
-                        className={`px-3 py-1 rounded-full text-[10.5px] font-semibold transition-all cute-press cursor-pointer ${
-                          parlour.joined
-                            ? 'bg-[#EAE0CF] text-[#4A3D34] border border-[#D5C2A5]'
-                            : 'bg-[#7D2235] hover:bg-[#92283F] text-white shadow-xs'
-                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEnterParlour(parlour.id);
+                        }}
+                        className="px-3 py-1 rounded-full text-[10.5px] font-semibold transition-all cute-press cursor-pointer bg-[#7D2235] hover:bg-[#92283F] text-white shadow-xs"
                       >
-                        {parlour.joined ? '✓ Entered' : 'Enter →'}
+                        Enter →
                       </button>
                     </div>
                   </div>
@@ -1254,13 +1261,17 @@ const Community = () => {
                   </span>
                   <div className="flex items-center gap-2 flex-wrap">
                     {joinedParlours.map((p) => (
-                      <span
+                      <button
                         key={p.id}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF5EB] text-[#2F2620] text-xs font-medium border border-[#D8C7B0]"
+                        type="button"
+                        onClick={() => handleEnterParlour(p.id)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF5EB] hover:bg-white text-[#2F2620] hover:text-[#7D2235] text-xs font-medium border border-[#D8C7B0] transition-colors cursor-pointer"
+                        title={`Step into ${p.title}`}
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-[#7D2235]" />
-                        {p.title}
-                      </span>
+                        <span>{p.title}</span>
+                        <span className="text-[10px] text-[#7A6A5E]">→</span>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -1318,7 +1329,8 @@ const Community = () => {
               {filteredParloursList.map((p) => (
                 <div
                   key={p.id}
-                  className="p-5 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm flex flex-col justify-between group hover:border-[#7D2235]/50 transition-all text-left"
+                  onClick={() => handleEnterParlour(p.id)}
+                  className="p-5 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm flex flex-col justify-between group hover:border-[#7D2235]/50 transition-all text-left cursor-pointer"
                 >
                   <div>
                     {/* Header Image with Tag */}
@@ -1338,7 +1350,7 @@ const Community = () => {
                     </div>
 
                     {/* Title & Desc */}
-                    <h3 className="font-serif font-bold text-base text-[#2F2620] leading-snug">
+                    <h3 className="font-serif font-bold text-base text-[#2F2620] leading-snug group-hover:text-[#7D2235] transition-colors">
                       {p.title}
                     </h3>
                     <p className="text-xs text-[#6F6054] mt-1 leading-relaxed line-clamp-2">
@@ -1379,21 +1391,13 @@ const Community = () => {
 
                     <button
                       type="button"
-                      onClick={() => handleToggleJoin(p.id)}
-                      className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cute-press cursor-pointer flex items-center gap-1.5 ${
-                        p.joined
-                          ? 'bg-[#EAE0CF] text-[#4A3D34] border border-[#D5C2A5]'
-                          : 'bg-[#7D2235] hover:bg-[#92283F] text-white shadow-xs'
-                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEnterParlour(p.id);
+                      }}
+                      className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all cute-press cursor-pointer bg-[#7D2235] hover:bg-[#92283F] text-white shadow-xs flex items-center gap-1.5"
                     >
-                      {p.joined ? (
-                        <>
-                          <PiCheckBold className="text-xs text-[#7D2235]" />
-                          <span>Entered</span>
-                        </>
-                      ) : (
-                        <span>Enter Parlour →</span>
-                      )}
+                      <span>Enter Parlour →</span>
                     </button>
                   </div>
                 </div>
