@@ -93,11 +93,11 @@ const CuratedCollectionTiles = ({
   };
 
   return (
-    <section id="curated-collections" className="mb-12 scroll-mt-24">
+    <section id="curated-collections" className="mb-14 scroll-mt-24">
       {/* 1. SECTION HEADER: Title, Metadata, Actions, & Carousel Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-2">
-          <h2 className="font-serif text-2xl sm:text-[26px] font-bold text-[#2A1E17] tracking-tight flex items-center gap-1.5">
+          <h2 className="font-serif text-2xl sm:text-[28px] font-bold text-[#2A1E17] tracking-tight flex items-center gap-1.5">
             <span>Curated Atmospheres</span>
             <span className="text-base text-[#7B8B6F]">🌿</span>
           </h2>
@@ -121,13 +121,13 @@ const CuratedCollectionTiles = ({
 
           <Link
             to="/books/create"
-            className="h-8 px-4 rounded-full bg-[#7D1D2D] hover:bg-[#631422] text-[#FFFDF9] text-xs font-medium flex items-center gap-1.5 transition-all shadow-xs group"
+            className="h-8 px-4 rounded-full bg-gradient-to-r from-[#7D1D2D] to-[#6B1829] hover:from-[#8D263B] hover:to-[#7B1D30] text-[#FFFDF9] text-xs font-medium flex items-center gap-1.5 transition-all shadow-[0_2px_8px_rgba(125,29,45,0.25)] hover:shadow-[0_4px_12px_rgba(125,29,45,0.35)] group"
           >
             <PiPlusBold className="text-xs transition-transform duration-300 group-hover:rotate-90" />
             <span>Add Story</span>
           </Link>
 
-          <div className="h-8 px-3 rounded-full bg-[#FFFDF9] border border-[#DFCBB5] text-xs font-serif text-[#302A27] flex items-center gap-1.5 shadow-2xs cursor-pointer hover:border-[#8D263B]/50">
+          <div className="h-8 px-3 rounded-full bg-[#FFFDF9] border border-[#DFCBB5] text-xs font-serif text-[#302A27] flex items-center gap-1.5 shadow-2xs cursor-pointer hover:border-[#8D263B]/50 hover:bg-[#FAF8F5]">
             <span className="font-medium text-[#2C1E18]">50 works</span>
             <PiCaretRight className="text-xs text-[#81766D] rotate-90" />
           </div>
@@ -167,11 +167,10 @@ const CuratedCollectionTiles = ({
               key={col.id}
               type="button"
               onClick={() => onSelectMood(col)}
-              className={`group relative overflow-hidden rounded-2xl text-left h-[225px] sm:h-[235px] p-4 sm:p-5 flex flex-col justify-between transition-all duration-300 ease-out border shadow-sm w-[250px] sm:w-[270px] lg:w-auto flex-shrink-0 snap-start cursor-pointer ${
-                isSelected
+              className={`group relative overflow-hidden rounded-2xl text-left h-[225px] sm:h-[235px] p-4 sm:p-5 flex flex-col justify-between transition-all duration-300 ease-out border shadow-sm w-[250px] sm:w-[270px] lg:w-auto flex-shrink-0 snap-start cursor-pointer ${isSelected
                   ? 'ring-2 ring-[#C6A16B] ring-offset-2 ring-offset-[#F7F3EC] border-[#8D263B] -translate-y-1.5 shadow-[0_14px_32px_rgba(141,38,59,0.28)]'
                   : 'border-[#E2D5C3] hover:-translate-y-1.5 hover:border-[#8D263B]/60 hover:shadow-[0_12px_28px_rgba(40,25,15,0.2)] active:translate-y-0'
-              }`}
+                }`}
             >
               {/* Background Imagery with Subtle Smooth Hover Zoom */}
               <div
@@ -201,11 +200,10 @@ const CuratedCollectionTiles = ({
 
                 {/* Circular Arrow Button */}
                 <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 transition-all duration-300 border ${
-                    isSelected
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 transition-all duration-300 border ${isSelected
                       ? 'bg-[#8D263B] text-white border-[#C6A16B] shadow-sm'
                       : 'bg-black/50 border-white/30 text-white group-hover:bg-[#8D263B] group-hover:border-[#C6A16B] group-hover:scale-110'
-                  }`}
+                    }`}
                 >
                   <PiArrowRightBold />
                 </div>

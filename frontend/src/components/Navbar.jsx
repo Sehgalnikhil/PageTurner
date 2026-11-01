@@ -57,7 +57,7 @@ const Navbar = ({ totalBooks = 0 }) => {
           setAnnouncement(res.data.announcement);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Global Command-K keyboard shortcut
@@ -95,19 +95,17 @@ const Navbar = ({ totalBooks = 0 }) => {
       {/* 0. SITE-WIDE BROADCAST BANNER (CURATOR ANNOUNCEMENTS) */}
       {announcement?.active && !announcementDismissed && (
         <div
-          className={`w-full py-2 px-4 text-xs flex items-center justify-between relative transition-all duration-300 z-50 ${
-            announcement.tone === 'burgundy'
-              ? 'bg-gradient-to-r from-[#67202F] via-[#8D263B] to-[#67202F] text-[#FFFDFA] border-b border-[#521724]/40 shadow-xs'
-              : announcement.tone === 'amber'
+          className={`w-full py-2 px-4 text-xs flex items-center justify-between relative transition-all duration-300 z-50 ${announcement.tone === 'burgundy'
+            ? 'bg-gradient-to-r from-[#67202F] via-[#8D263B] to-[#67202F] text-[#FFFDFA] border-b border-[#521724]/40 shadow-xs'
+            : announcement.tone === 'amber'
               ? 'bg-[#FAF5ED] text-[#302A27] border-b border-[#E8DED1] shadow-2xs'
               : 'bg-gradient-to-r from-[#141118] via-[#1E1924] to-[#141118] text-[#EDE4D8] border-b border-[#352D3C] shadow-xs'
-          }`}
+            }`}
         >
           <div className="flex-1 flex items-center justify-center gap-2 sm:gap-2.5 text-center min-w-0 px-2">
             <PiSparkleBold
-              className={`text-[11px] flex-shrink-0 ${
-                announcement.tone === 'amber' ? 'text-[#8D263B]' : 'text-[#C6A16B]'
-              }`}
+              className={`text-[11px] flex-shrink-0 ${announcement.tone === 'amber' ? 'text-[#8D263B]' : 'text-[#C6A16B]'
+                }`}
             />
 
             {/* Primary Announcement Message */}
@@ -119,16 +117,14 @@ const Navbar = ({ totalBooks = 0 }) => {
             {announcement.subtext && (
               <span className="hidden md:inline-flex items-center gap-2">
                 <span
-                  className={`text-[9px] select-none ${
-                    announcement.tone === 'amber' ? 'text-[#8D263B]/60' : 'text-[#C6A16B]'
-                  }`}
+                  className={`text-[9px] select-none ${announcement.tone === 'amber' ? 'text-[#8D263B]/60' : 'text-[#C6A16B]'
+                    }`}
                 >
                   ✦
                 </span>
                 <span
-                  className={`font-serif italic text-[11.5px] sm:text-[12px] truncate ${
-                    announcement.tone === 'amber' ? 'text-[#81766D]' : 'text-[#FAF5ED]/85'
-                  }`}
+                  className={`font-serif italic text-[11.5px] sm:text-[12px] truncate ${announcement.tone === 'amber' ? 'text-[#81766D]' : 'text-[#FAF5ED]/85'
+                    }`}
                 >
                   {announcement.subtext}
                 </span>
@@ -139,11 +135,10 @@ const Navbar = ({ totalBooks = 0 }) => {
             {announcement.link && (
               <a
                 href={announcement.link}
-                className={`hidden lg:inline-flex items-center gap-1 text-[11px] font-sans font-medium underline underline-offset-4 ml-1 transition-colors ${
-                  announcement.tone === 'amber'
-                    ? 'text-[#8D263B] hover:text-[#67202F]'
-                    : 'text-[#C6A16B] hover:text-white'
-                }`}
+                className={`hidden lg:inline-flex items-center gap-1 text-[11px] font-sans font-medium underline underline-offset-4 ml-1 transition-colors ${announcement.tone === 'amber'
+                  ? 'text-[#8D263B] hover:text-[#67202F]'
+                  : 'text-[#C6A16B] hover:text-white'
+                  }`}
               >
                 <span>Read More</span>
                 <PiArrowRightBold className="text-[9px]" />
@@ -155,11 +150,10 @@ const Navbar = ({ totalBooks = 0 }) => {
           <button
             type="button"
             onClick={() => setAnnouncementDismissed(true)}
-            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all cursor-pointer flex-shrink-0 ${
-              announcement.tone === 'amber'
-                ? 'text-[#81766D] hover:text-[#302A27] hover:bg-black/5'
-                : 'text-white/60 hover:text-white hover:bg-white/15'
-            }`}
+            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all cursor-pointer flex-shrink-0 ${announcement.tone === 'amber'
+              ? 'text-[#81766D] hover:text-[#302A27] hover:bg-black/5'
+              : 'text-white/60 hover:text-white hover:bg-white/15'
+              }`}
             title="Dismiss notification"
           >
             <PiXBold className="text-[10px]" />
@@ -170,7 +164,7 @@ const Navbar = ({ totalBooks = 0 }) => {
       <header className="sticky top-0 z-40 bg-[#F7F3EC]/95 backdrop-blur-md border-b border-[#E8DED1] transition-colors duration-150 w-full overflow-x-clip">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-[72px] sm:h-[78px] gap-3">
-            
+
             {/* 1. BRAND SECTION (LEFT) */}
             <div className="flex items-center flex-shrink-0">
               <Link to="/" className="group flex items-center py-0.5" title="PageTurner — Return to Sanctuary">
@@ -188,11 +182,10 @@ const Navbar = ({ totalBooks = 0 }) => {
               {/* Discover with soft pill background */}
               <Link
                 to="/"
-                className={`text-xs font-serif transition-all duration-150 px-3 py-1 rounded-full flex items-center gap-1.5 ${
-                  isDiscoverActive
-                    ? 'bg-[#EAE0D2] text-[#2C1E18] font-semibold border border-[#D5C4B0] shadow-2xs'
-                    : 'text-[#675C54] hover:text-[#8D263B] hover:bg-[#8D263B]/5'
-                }`}
+                className={`text-xs font-serif transition-all duration-150 px-3 py-1 rounded-full flex items-center gap-1.5 ${isDiscoverActive
+                  ? 'bg-[#EAE0D2] text-[#2C1E18] font-semibold border border-[#D5C4B0] shadow-2xs'
+                  : 'text-[#675C54] hover:text-[#8D263B] hover:bg-[#8D263B]/5'
+                  }`}
               >
                 <PiHouseBold className="text-xs text-[#8D263B]" />
                 <span>Discover</span>
@@ -235,11 +228,10 @@ const Navbar = ({ totalBooks = 0 }) => {
               <Link
                 to="/community"
                 state={{ fromNavbar: true, triggerTimestamp: Date.now() }}
-                className={`text-xs font-serif tracking-wide py-1 flex items-center gap-1.5 transition-colors ${
-                  location.pathname === '/community'
-                    ? 'text-[#8D263B] font-semibold'
-                    : 'text-[#675C54] hover:text-[#8D263B]'
-                }`}
+                className={`text-xs font-serif tracking-wide py-1 flex items-center gap-1.5 transition-colors ${location.pathname === '/community'
+                  ? 'text-[#8D263B] font-semibold'
+                  : 'text-[#675C54] hover:text-[#8D263B]'
+                  }`}
               >
                 <PiColumnsBold className="text-xs text-[#8D263B]" />
                 <span>The Salon</span>
@@ -249,11 +241,10 @@ const Navbar = ({ totalBooks = 0 }) => {
               {isAdmin && (
                 <Link
                   to="/admin"
-                  className={`text-xs font-serif transition-colors flex items-center gap-1 py-1 ${
-                    location.pathname === '/admin'
-                      ? 'text-[#8D263B] font-semibold'
-                      : 'text-[#C6A16B] hover:text-[#8D263B]'
-                  }`}
+                  className={`text-xs font-serif transition-colors flex items-center gap-1 py-1 ${location.pathname === '/admin'
+                    ? 'text-[#8D263B] font-semibold'
+                    : 'text-[#C6A16B] hover:text-[#8D263B]'
+                    }`}
                   title="Curator Studio & Admin Desk"
                 >
                   <PiSparkleBold className="text-xs text-[#C6A16B]" />
@@ -284,7 +275,7 @@ const Navbar = ({ totalBooks = 0 }) => {
 
             {/* 4. RIGHT ACTIONS (Sound Vibes, Notification Bell, + Add Book, Profile, Mobile Toggles) */}
             <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
-              
+
               {/* Optional Search icon on small screens where search input is hidden */}
               <button
                 type="button"
@@ -302,11 +293,10 @@ const Navbar = ({ totalBooks = 0 }) => {
                   type="button"
                   onClick={handleCycleAmbient}
                   title={`Atmospheric Soundscape: ${ambientSound === 'off' ? 'Off (Click to play)' : ambientSound.charAt(0).toUpperCase() + ambientSound.slice(1)}`}
-                  className={`hidden sm:flex items-center gap-1.5 h-8 px-3 rounded-full border transition-all duration-200 cursor-pointer shadow-2xs cute-press flex-shrink-0 ${
-                    ambientSound !== 'off'
-                      ? 'border-[#8D263B] bg-[#8D263B]/10 text-[#8D263B] font-medium shadow-xs'
-                      : 'border-[#DFCBB5] bg-[#FFFDF9] hover:bg-[#F7F3EC] text-[#675C54] hover:text-[#302A27]'
-                  }`}
+                  className={`hidden sm:flex items-center gap-1.5 h-8 px-3 rounded-full border transition-all duration-200 cursor-pointer shadow-2xs cute-press flex-shrink-0 ${ambientSound !== 'off'
+                    ? 'border-[#8D263B] bg-[#8D263B]/10 text-[#8D263B] font-medium shadow-xs'
+                    : 'border-[#DFCBB5] bg-[#FFFDF9] hover:bg-[#F7F3EC] text-[#675C54] hover:text-[#302A27]'
+                    }`}
                 >
                   {ambientSound === 'rain' ? (
                     <>
@@ -425,11 +415,10 @@ const Navbar = ({ totalBooks = 0 }) => {
               <Link
                 to="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-4 py-2 rounded-full text-xs font-medium flex items-center justify-between ${
-                  isDiscoverActive
-                    ? 'text-[#8D263B] bg-[#8D263B]/10 font-semibold'
-                    : 'text-[#302A27] hover:bg-[#8D263B]/5'
-                }`}
+                className={`px-4 py-2 rounded-full text-xs font-medium flex items-center justify-between ${isDiscoverActive
+                  ? 'text-[#8D263B] bg-[#8D263B]/10 font-semibold'
+                  : 'text-[#302A27] hover:bg-[#8D263B]/5'
+                  }`}
               >
                 <div className="flex items-center gap-2.5">
                   <PiCompassBold className="text-base text-[#8D263B]" />

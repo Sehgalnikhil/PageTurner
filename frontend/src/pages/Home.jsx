@@ -162,36 +162,26 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent transition-colors duration-300 relative overflow-x-hidden">
-      {/* Decorative Botanical Branch flourish in top-left matching Mockup */}
-      <div className="absolute top-16 left-0 w-36 h-64 pointer-events-none select-none z-0 opacity-80 hidden sm:block">
-        <img
-          src="/images/botanical_branch_clean.png"
-          alt=""
-          className="w-full h-full object-contain object-left-top"
-          aria-hidden="true"
-        />
-      </div>
-
       <Navbar totalBooks={totalBooks} />
 
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
         {/* Seamlessly Integrated Editorial Masthead Banner matching Mockup */}
-        <header className="mb-4 rounded-2xl sm:rounded-3xl border border-[#DFCBB5] overflow-hidden shadow-[0_12px_36px_rgba(40,25,15,0.08)] relative group bg-[#F5EFE6]">
+        <header className="mb-6 rounded-2xl sm:rounded-3xl border border-[#DFCBB5] overflow-hidden shadow-[0_12px_36px_rgba(40,25,15,0.08)] relative group bg-[#FAF5EE]">
           {/* Right Window Scene with Sleeping Cat, Warm Lamp, Mug, Books, & Pinned Note */}
-          <div className="absolute inset-y-0 right-0 w-full sm:w-[60%] md:w-[54%] lg:w-[50%] overflow-hidden pointer-events-none select-none">
+          <div className="absolute inset-y-0 right-0 w-full sm:w-[50%] md:w-[48%] lg:w-[46%] overflow-hidden pointer-events-none select-none">
             <img
-              src="/images/hero_window_scene_2x.jpg"
+              src="/images/clean_hero_window.jpg"
               alt="Window with sleeping cat, warm lamp, and autumn foliage"
-              className="w-full h-full object-cover object-right sm:object-center opacity-95 group-hover:scale-102 transition-transform duration-700"
+              className="w-full h-full object-cover object-left-top opacity-95 group-hover:scale-102 transition-transform duration-700"
             />
-            {/* Soft feathered blend so the deckle paper edge transitions smoothly */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#F5EFE6] via-[#F5EFE6]/60 to-transparent pointer-events-none sm:via-transparent" />
+            {/* Soft feathered blend so the paper background transitions seamlessly into the window */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FAF5EE] via-[#FAF5EE]/30 to-transparent pointer-events-none" />
           </div>
 
           {/* Left Content Column with Deckle-Edge Parchment feel */}
-          <div className="relative z-10 p-6 sm:p-8 lg:p-10 max-w-xl xl:max-w-2xl min-h-[200px] sm:min-h-[220px] lg:min-h-[240px] flex flex-col justify-center">
+          <div className="relative z-10 p-8 sm:p-10 lg:p-12 max-w-xl xl:max-w-2xl min-h-[220px] sm:min-h-[240px] lg:min-h-[260px] flex flex-col justify-center">
             {/* Archival Tag */}
-            <div className="flex items-center gap-2 mb-2 sm:mb-2.5">
+            <div className="flex items-center gap-2 mb-3 sm:mb-3.5">
               <span className="h-[1px] w-6 bg-[#C6A16B]" />
               <span className="text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-[0.24em] text-[#8D263B]">
                 Digital Reading Journal &bull; Issue No. 24
@@ -199,24 +189,24 @@ const Home = () => {
             </div>
 
             {/* Serif Headline with Italic Crimson Accent */}
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[44px] font-bold text-[#2A1E17] tracking-tight leading-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[48px] font-bold text-[#2A1E17] tracking-tight leading-tight mb-2">
               Fall into <span className="italic font-normal text-[#8D263B]">another world.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xs sm:text-[13px] text-[#7A6C60] font-serif italic mt-1.5 mb-5 leading-relaxed max-w-lg">
+            <p className="text-xs sm:text-[13px] text-[#7A6C60] font-serif italic mt-0 mb-6 leading-relaxed max-w-lg">
               Stories to cherish. Ideas to collect. Worlds to get lost in.
             </p>
 
             {/* Start Exploring Button & Curated Universe Subtext */}
-            <div className="flex items-center gap-4 sm:gap-5 flex-wrap pt-0.5">
+            <div className="flex items-center gap-4 sm:gap-5 flex-wrap">
               <button
                 type="button"
                 onClick={() => {
                   const el = document.getElementById('curated-collections');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#7D1D2D] hover:bg-[#631422] text-[#FFFDF9] font-serif text-xs sm:text-[13px] font-medium tracking-wide shadow-xs hover:shadow-md transition-all duration-200 active:scale-95 cursor-pointer"
+                className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#7D1D2D] to-[#6B1829] hover:from-[#8D263B] hover:to-[#7B1D30] text-[#FFFDF9] font-serif text-xs sm:text-[13px] font-medium tracking-wide shadow-[0_4px_12px_rgba(125,29,45,0.3)] hover:shadow-[0_6px_16px_rgba(125,29,45,0.4)] transition-all duration-200 active:scale-95 cursor-pointer"
               >
                 <span>Start Exploring</span>
                 <PiArrowRightBold className="text-xs transition-transform duration-200 group-hover:translate-x-1" />
@@ -232,9 +222,9 @@ const Home = () => {
           </div>
 
           {/* Crimson Wax Seal pinned at the seam */}
-          <div className="hidden md:block absolute bottom-4 sm:bottom-6 left-[48%] lg:left-[49%] -translate-x-1/2 z-20 pointer-events-none select-none">
+          <div className="hidden md:block absolute bottom-5 sm:bottom-7 left-[50%] lg:left-[52%] -translate-x-1/2 z-20 pointer-events-none select-none">
             <img
-              src="/images/crimson_wax_seal.png"
+              src="/images/clean_wax_seal.png"
               alt="PageTurner Crimson Wax Seal"
               className="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-[0_4px_12px_rgba(40,10,15,0.4)]"
             />
@@ -268,11 +258,10 @@ const Home = () => {
               <button
                 type="button"
                 onClick={() => setMainTab('discover')}
-                className={`px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-150 cute-pill-hover cursor-pointer ${
-                  mainTab === 'discover'
-                    ? 'bg-[#302A27] text-[#FFFDFA] shadow-subtle'
-                    : 'bg-[#FFFDFA] text-[#302A27] hover:text-[#8D263B] border border-[#E8DED1]'
-                }`}
+                className={`px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-150 cute-pill-hover cursor-pointer ${mainTab === 'discover'
+                  ? 'bg-[#302A27] text-[#FFFDFA] shadow-subtle'
+                  : 'bg-[#FFFDFA] text-[#302A27] hover:text-[#8D263B] border border-[#E8DED1]'
+                  }`}
               >
                 All Stories
               </button>
@@ -280,25 +269,22 @@ const Home = () => {
               <button
                 type="button"
                 onClick={() => setMainTab('shelf')}
-                className={`group px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-150 flex items-center gap-1.5 cute-pill-hover cursor-pointer ${
-                  mainTab === 'shelf'
-                    ? 'bg-[#8D263B] text-[#FFFDFA] shadow-subtle'
-                    : 'bg-[#FFFDFA] text-[#302A27] hover:text-[#8D263B] border border-[#E8DED1]'
-                }`}
+                className={`group px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-150 flex items-center gap-1.5 cute-pill-hover cursor-pointer ${mainTab === 'shelf'
+                  ? 'bg-[#8D263B] text-[#FFFDFA] shadow-subtle'
+                  : 'bg-[#FFFDFA] text-[#302A27] hover:text-[#8D263B] border border-[#E8DED1]'
+                  }`}
               >
                 <PiBookmarkSimpleFill
-                  className={`${
-                    mainTab === 'shelf' ? 'text-[#C6A16B]' : 'text-[#8D263B]'
-                  } text-xs`}
+                  className={`${mainTab === 'shelf' ? 'text-[#C6A16B]' : 'text-[#8D263B]'
+                    } text-xs`}
                 />
                 <span>My Shelf</span>
                 {savedCount > 0 && (
                   <span
-                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-medium ${
-                      mainTab === 'shelf'
-                        ? 'bg-white/20 text-white'
-                        : 'bg-[#8D263B] text-white'
-                    }`}
+                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-medium ${mainTab === 'shelf'
+                      ? 'bg-white/20 text-white'
+                      : 'bg-[#8D263B] text-white'
+                      }`}
                   >
                     {savedCount}
                   </span>
@@ -371,11 +357,10 @@ const Home = () => {
                   type="button"
                   onClick={() => setShowType('masonry')}
                   title="Gallery"
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
-                    showType === 'masonry'
-                      ? 'bg-[#302A27] text-[#FFFDFA] shadow-subtle'
-                      : 'text-[#81766D] hover:text-[#302A27]'
-                  }`}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${showType === 'masonry'
+                    ? 'bg-[#302A27] text-[#FFFDFA] shadow-subtle'
+                    : 'text-[#81766D] hover:text-[#302A27]'
+                    }`}
                 >
                   <PiSquaresFourBold className="text-sm" />
                   <span className="hidden md:inline">Gallery</span>
@@ -384,11 +369,10 @@ const Home = () => {
                   type="button"
                   onClick={() => setShowType('shelf')}
                   title="Oak Hardwood Bookshelf"
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    showType === 'shelf'
-                      ? 'bg-[#292522] text-white shadow-2xs'
-                      : 'text-[#827870] hover:text-[#292522]'
-                  }`}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${showType === 'shelf'
+                    ? 'bg-[#292522] text-white shadow-2xs'
+                    : 'text-[#827870] hover:text-[#292522]'
+                    }`}
                 >
                   <PiBooksBold className="text-sm text-amber-500" />
                   <span className="hidden md:inline">Oak Shelf</span>
@@ -397,11 +381,10 @@ const Home = () => {
                   type="button"
                   onClick={() => setShowType('table')}
                   title="Bibliographic Table View"
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    showType === 'table'
-                      ? 'bg-[#292522] text-white shadow-2xs'
-                      : 'text-[#827870] hover:text-[#292522]'
-                  }`}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${showType === 'table'
+                    ? 'bg-[#292522] text-white shadow-2xs'
+                    : 'text-[#827870] hover:text-[#292522]'
+                    }`}
                 >
                   <PiListBulletsBold className="text-sm" />
                   <span className="hidden md:inline">Table</span>

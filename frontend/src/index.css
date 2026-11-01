@@ -83,8 +83,24 @@
 
   h1, h2, h3, h4, .font-serif {
     font-family: 'Playfair Display', 'Fraunces', 'Cormorant Garamond', Georgia, serif;
-    letter-spacing: -0.018em;
+    letter-spacing: -0.02em;
     text-wrap: balance;
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  h2 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 
   .font-cormorant {
@@ -268,18 +284,243 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 0.875rem;
-  box-shadow: 0 2px 8px -2px rgba(48, 42, 39, 0.03);
+  box-shadow: 0 2px 8px -2px rgba(48, 42, 39, 0.04), 0 1px 3px 0 rgba(48, 42, 39, 0.02);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.2s ease,
+              border-color 0.2s ease;
+}
+
+.editorial-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(48, 42, 39, 0.08), 0 2px 6px -2px rgba(48, 42, 39, 0.04);
+  border-color: #D9C4B0;
+}
+
+/* Enhanced Shadow Utilities */
+.shadow-premium {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.shadow-elevated {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-floating {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-premium-lg {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Improved spacing utilities */
+@layer utilities {
+  .container-narrow {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .container-wide {
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, select, textarea {
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Focus ring improvements */
+*:focus-visible {
+  outline: 2px solid #C6A16B;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Improved text readability */
+.text-pretty {
+  text-wrap: pretty;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Modern scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F0E9DE;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C6A16B;
+  border-radius: 4px;
+  border: 2px solid #F0E9DE;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A68350;
+}
+
+/* Subtle fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Smooth scale animation */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Staggered animation delays */
+.animate-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animate-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animate-delay-400 {
+  animation-delay: 0.4s;
+}
+
+/* Improved link hover effect */
+a {
+  position: relative;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: currentColor;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Image hover effect */
+img {
+  transition: transform 0.3s ease;
+}
+
+/* Card hover lift effect */
+.card-lift {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.3s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -4px rgba(48, 42, 39, 0.12), 0 4px 8px -2px rgba(48, 42, 39, 0.06);
+}
+
+/* Smooth color transitions */
+.text-smooth {
+  transition: color 0.2s ease;
+}
+
+.bg-smooth {
+  transition: background-color 0.2s ease;
+}
+
+.border-smooth {
+  transition: border-color 0.2s ease;
 }
 
 /* Refined Editorial Buttons with tactile feedback */
 .btn-burgundy {
-  background-color: #8D263B;
+  background: linear-gradient(135deg, #8D263B 0%, #7A1F33 100%);
   color: #FFFDFA;
-  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), 
-              background-color 0.2s ease, 
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background 0.2s ease,
               box-shadow 0.2s ease;
   font-weight: 500;
   letter-spacing: -0.01em;
+  box-shadow: 0 2px 8px -2px rgba(141, 38, 59, 0.3), 0 1px 3px 0 rgba(141, 38, 59, 0.15);
+}
+
+.btn-burgundy:hover {
+  background: linear-gradient(135deg, #9E2B42 0%, #8D263B 100%);
+  box-shadow: 0 4px 12px -2px rgba(141, 38, 59, 0.4), 0 2px 6px 0 rgba(141, 38, 59, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-burgundy:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px -1px rgba(141, 38, 59, 0.3), 0 1px 2px 0 rgba(141, 38, 59, 0.15);
+}
+
+.btn-paper {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  box-shadow: 0 1px 4px -1px rgba(48, 42, 39, 0.04), 0 1px 2px 0 rgba(48, 42, 39, 0.02);
+}
+
+.btn-paper:hover {
+  background-color: #FAF8F5;
+  border-color: #D9C4B0;
+  box-shadow: 0 2px 8px -2px rgba(48, 42, 39, 0.08), 0 1px 3px 0 rgba(48, 42, 39, 0.04);
+  transform: translateY(-1px);
+}
+
+.btn-paper:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px -1px rgba(48, 42, 39, 0.06), 0 1px 2px 0 rgba(48, 42, 39, 0.03);
 }
 
 .btn-burgundy:hover {

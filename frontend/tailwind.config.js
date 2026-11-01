@@ -82,6 +82,12 @@ export default {
         'book-hover': '0 20px 40px -8px rgba(48, 42, 39, 0.20), 0 6px 14px -2px rgba(48, 42, 39, 0.08)',
         'paper': '0 1px 4px 0 rgba(48, 42, 39, 0.03)',
         'paper-hover': '0 8px 20px -4px rgba(48, 42, 39, 0.08)',
+        'premium': '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)',
+        'elevated': '0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06)',
+        'floating': '0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05)',
+        'premium-lg': '0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1)',
+        'glow': '0 0 20px rgba(198, 161, 107, 0.3)',
+        'glow-burgundy': '0 0 20px rgba(141, 38, 59, 0.3)',
       },
       borderRadius: {
         'boutique': '0.875rem',
