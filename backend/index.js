@@ -9,9 +9,11 @@ import booksRoute from './routes/booksRoute.js';
 import authRoute from './routes/authRoute.js';
 import systemRoute from './routes/systemRoute.js';
 import adminRoute from './routes/adminRoute.js';
+import communityRoute from './routes/communityRoute.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import { seedDemoUsers } from './utils/seedDemoUsers.js';
 import { seedComprehensiveBooks } from './utils/seedComprehensiveBooks.js';
+import { seedCommunityData } from './utils/seedCommunityData.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -78,6 +80,7 @@ app.use('/books', booksRoute);
 app.use('/auth', authRoute);
 app.use('/system', systemRoute);
 app.use('/admin', adminRoute);
+app.use('/community', communityRoute);
 
 // Centralized error handling
 app.use(notFound);
@@ -90,6 +93,7 @@ mongoose
     console.log('✅ Connected to MongoDB database');
     await seedDemoUsers();
     await seedComprehensiveBooks();
+    await seedCommunityData();
     const server = app.listen(PORT, () => {
       console.log(`🚀 PageTurner server listening on port: ${PORT}`);
     });

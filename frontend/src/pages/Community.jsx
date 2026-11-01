@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/layout/Footer';
@@ -32,6 +32,7 @@ import {
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
+import { communityService } from '../services/api';
 import {
   playWaxSealCrack,
   playPaperUnwrap,
@@ -40,6 +41,20 @@ import {
   startAmbientSound,
   stopAmbientSound,
 } from '../utils/soundEffects';
+
+const formatTimeAgo = (dateStr) => {
+  if (!dateStr) return 'Just now';
+  const now = new Date();
+  const past = new Date(dateStr);
+  const diffMs = now - past;
+  if (isNaN(diffMs) || diffMs < 60000) return 'Just now';
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 60) return `${diffMins}m ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours}h ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays}d ago`;
+};
 
 const Community = () => {
   const navigate = useNavigate();
@@ -218,80 +233,218 @@ const Community = () => {
 
   const [commentInputs, setCommentInputs] = useState({});
 
-  const handleToggleJoin = (id) => {
+  // Live Database Synchronizer with Seamless Fallback
+  useEffect(() => {
+    let isMounted = true;
+    const username = user?.username || user?.name || 'Admin Demo';
+    const userHandle = username.toLowerCase().replace(/\s+/g, '_');
+
+    // Fetch parlours from DB
+    communityService
+      .getParlours()
+      .then((res) => {
+        if (!isMounted || !res.data || !res.data.length) return;
+        const mappedParlours = res.data.map((p) => ({
+          ...p,
+          id: p.slug || p.id || p._id,
+          joined:
+            p.membersList?.includes(userHandle) ||
+            p.membersList?.includes(username) ||
+            p.slug === 'gothic',
+        }));
+        setParlours(mappedParlours);
+      })
+      .catch((err) => console.warn('Could not load live parlours from DB, using fallback state:', err));
+
+    // Fetch common room posts from DB
+    communityService
+      .getPosts({ parlourSlug: 'common-room' })
+      .then((res) => {
+        if (!isMounted || !res.data || !res.data.length) return;
+        const mappedPosts = res.data.map((p) => ({
+          ...p,
+          id: p.id || p._id,
+          parlour: p.parlourTitle || p.parlourSlug || 'The Gothic Study',
+          time: formatTimeAgo(p.createdAt),
+          liked: p.likedBy?.includes(userHandle) || p.likedBy?.includes(username) || false,
+          bookmarked:
+            p.bookmarkedBy?.includes(userHandle) || p.bookmarkedBy?.includes(username) || false,
+          showComments: false,
+          commentsCount: p.commentsList ? p.commentsList.length : 0,
+          commentsList: (p.commentsList || []).map((c) => ({
+            ...c,
+            id: c.id || c._id,
+            time: formatTimeAgo(c.createdAt),
+          })),
+        }));
+        setPosts(mappedPosts);
+      })
+      .catch((err) => console.warn('Could not load live posts from DB, using fallback state:', err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
+
+  // Optimistic Toggle Join Parlour with MongoDB Synchronization
+  const handleToggleJoin = async (id) => {
     playBookSpineSlide();
+    const target = parlours.find((p) => p.id === id || p.slug === id || p._id === id);
+    if (!target) return;
+    const nextJoined = !target.joined;
+
+    // Instant optimistic state update (0ms UI latency)
     setParlours((prev) =>
       prev.map((p) => {
-        if (p.id === id) {
-          const next = !p.joined;
-          enqueueSnackbar(next ? `Entered ${p.title} 🕯️` : `Departed ${p.title}`, {
-            variant: next ? 'success' : 'info',
+        if (p.id === id || p.slug === id || p._id === id) {
+          enqueueSnackbar(nextJoined ? `Entered ${p.title} 🕯️` : `Departed ${p.title}`, {
+            variant: nextJoined ? 'success' : 'info',
           });
-          return { ...p, joined: next, members: next ? p.members + 1 : p.members - 1 };
+          return {
+            ...p,
+            joined: nextJoined,
+            members: nextJoined ? (p.members || 0) + 1 : Math.max(0, (p.members || 0) - 1),
+          };
         }
         return p;
       })
     );
+
+    // Background sync to MongoDB
+    try {
+      const slug = target.slug || target.id;
+      const username = user?.username || user?.name || 'Admin Demo';
+      await communityService.toggleJoinParlour(slug, username);
+    } catch (err) {
+      console.error('Failed to sync parlour join status:', err);
+      // Rollback on failure
+      setParlours((prev) =>
+        prev.map((p) => {
+          if (p.id === id || p.slug === id || p._id === id) {
+            return {
+              ...p,
+              joined: !nextJoined,
+              members: !nextJoined ? (p.members || 0) + 1 : Math.max(0, (p.members || 0) - 1),
+            };
+          }
+          return p;
+        })
+      );
+      enqueueSnackbar('Could not sync parlour membership. Changes reverted.', { variant: 'error' });
+    }
   };
 
-  const handleLike = (id) => {
+  // Optimistic Like with MongoDB Synchronization
+  const handleLike = async (id) => {
     playWaxSealCrack();
+    const target = posts.find((p) => p.id === id || p._id === id);
+    if (!target) return;
+    const nextLiked = !target.liked;
+
+    // Instant optimistic UI update
     setPosts((prev) =>
       prev.map((p) => {
-        if (p.id === id) {
-          const next = !p.liked;
-          return { ...p, liked: next, likes: next ? p.likes + 1 : p.likes - 1 };
+        if (p.id === id || p._id === id) {
+          return {
+            ...p,
+            liked: nextLiked,
+            likes: nextLiked ? (p.likes || 0) + 1 : Math.max(0, (p.likes || 0) - 1),
+          };
         }
         return p;
       })
     );
+
+    // Background MongoDB sync
+    try {
+      const username = user?.username || user?.name || 'Admin Demo';
+      await communityService.toggleLikePost(target._id || target.id, username);
+    } catch (err) {
+      console.error('Failed to sync like:', err);
+      // Rollback
+      setPosts((prev) =>
+        prev.map((p) => {
+          if (p.id === id || p._id === id) {
+            return {
+              ...p,
+              liked: !nextLiked,
+              likes: !nextLiked ? (p.likes || 0) + 1 : Math.max(0, (p.likes || 0) - 1),
+            };
+          }
+          return p;
+        })
+      );
+    }
   };
 
-  const handleBookmark = (id) => {
+  // Optimistic Bookmark with MongoDB Synchronization
+  const handleBookmark = async (id) => {
     playPageFlipSound();
+    const target = posts.find((p) => p.id === id || p._id === id);
+    if (!target) return;
+    const nextBookmarked = !target.bookmarked;
+
     setPosts((prev) =>
       prev.map((p) => {
-        if (p.id === id) {
-          const next = !p.bookmarked;
+        if (p.id === id || p._id === id) {
           enqueueSnackbar(
-            next
+            nextBookmarked
               ? 'Saved reflection to your marginalia archive 📖'
               : 'Removed reflection from saved archive',
             { variant: 'info' }
           );
-          return { ...p, bookmarked: next };
+          return { ...p, bookmarked: nextBookmarked };
         }
         return p;
       })
     );
+
+    try {
+      const username = user?.username || user?.name || 'Admin Demo';
+      await communityService.toggleBookmarkPost(target._id || target.id, username);
+    } catch (err) {
+      console.error('Failed to sync bookmark:', err);
+      setPosts((prev) =>
+        prev.map((p) => (p.id === id || p._id === id ? { ...p, bookmarked: !nextBookmarked } : p))
+      );
+    }
   };
 
   const toggleComments = (postId) => {
     playPaperUnwrap();
     setPosts((prev) =>
-      prev.map((p) => (p.id === postId ? { ...p, showComments: !p.showComments } : p))
+      prev.map((p) => (p.id === postId || p._id === postId ? { ...p, showComments: !p.showComments } : p))
     );
   };
 
-  const handleAddComment = (postId) => {
+  // Optimistic Add Comment with MongoDB Synchronization
+  const handleAddComment = async (postId) => {
     const text = commentInputs[postId]?.trim();
     if (!text) return;
 
     playPageFlipSound();
-    const authorName = user?.username || 'Nikhil Sehgal';
+    const authorName = user?.username || user?.name || 'Nikhil Sehgal';
+    const authorHandle = (user?.username || user?.name || 'nikhil_sehgal').toLowerCase().replace(/\s+/g, '_');
+    const tempCommentId = `c-${Date.now()}`;
+
+    const newComment = {
+      id: tempCommentId,
+      _id: tempCommentId,
+      author: authorName,
+      handle: authorHandle,
+      avatar: '/images/eleanor-avatar.jpg',
+      text,
+      time: 'Just now',
+    };
+
+    // Instant optimistic UI update
     setPosts((prev) =>
       prev.map((p) => {
-        if (p.id === postId) {
-          const newC = {
-            id: `c-${Date.now()}`,
-            author: authorName,
-            text,
-            time: 'Just now',
-          };
+        if (p.id === postId || p._id === postId) {
           return {
             ...p,
-            commentsCount: p.commentsCount + 1,
-            commentsList: [...p.commentsList, newC],
+            commentsCount: (p.commentsCount || 0) + 1,
+            commentsList: [...(p.commentsList || []), newComment],
           };
         }
         return p;
@@ -300,23 +453,80 @@ const Community = () => {
 
     setCommentInputs((prev) => ({ ...prev, [postId]: '' }));
     enqueueSnackbar('Marginalia inscribed ✒️', { variant: 'success' });
+
+    // Background sync to MongoDB
+    try {
+      const target = posts.find((p) => p.id === postId || p._id === postId);
+      const postDocId = target?._id || target?.id || postId;
+      const res = await communityService.addComment(postDocId, {
+        author: authorName,
+        handle: authorHandle,
+        avatar: '/images/eleanor-avatar.jpg',
+        text,
+      });
+
+      if (res.data?.comment) {
+        setPosts((prev) =>
+          prev.map((p) => {
+            if (p.id === postId || p._id === postId) {
+              return {
+                ...p,
+                commentsList: p.commentsList.map((c) =>
+                  c.id === tempCommentId
+                    ? {
+                        ...c,
+                        id: res.data.comment.id || res.data.comment._id,
+                        _id: res.data.comment._id,
+                      }
+                    : c
+                ),
+              };
+            }
+            return p;
+          })
+        );
+      }
+    } catch (err) {
+      console.error('Failed to post comment to database:', err);
+      // Rollback comment on error
+      setPosts((prev) =>
+        prev.map((p) => {
+          if (p.id === postId || p._id === postId) {
+            return {
+              ...p,
+              commentsCount: Math.max(0, (p.commentsCount || 0) - 1),
+              commentsList: (p.commentsList || []).filter((c) => c.id !== tempCommentId),
+            };
+          }
+          return p;
+        })
+      );
+      enqueueSnackbar('Could not save marginalia note. Please retry.', { variant: 'error' });
+    }
   };
 
-  const handlePublishReflection = (e) => {
+  // Optimistic Publish Reflection with MongoDB Persistence
+  const handlePublishReflection = async (e) => {
     e.preventDefault();
     if (!newReflectionText.trim()) return;
 
     playWaxSealCrack();
-    const authorName = user?.username || 'Nikhil Sehgal';
+    const authorName = user?.username || user?.name || 'Nikhil Sehgal';
+    const authorHandle = (user?.username || user?.name || 'nikhil_sehgal').toLowerCase().replace(/\s+/g, '_');
+    const tempPostId = `post-${Date.now()}`;
+
     const newPost = {
-      id: `post-${Date.now()}`,
+      id: tempPostId,
+      _id: tempPostId,
       author: authorName,
-      handle: authorName.toLowerCase().replace(/\s+/g, '_'),
+      handle: authorHandle,
       avatar: '/images/eleanor-avatar.jpg',
       time: 'Just now',
       parlour: selectedComposeParlour,
+      parlourTitle: selectedComposeParlour,
+      parlourSlug: 'common-room',
       quote: newQuoteText.trim() ? `“${newQuoteText.trim()}”` : null,
-      quoteAuthor: newQuoteAuthor.trim() || 'Author',
+      quoteAuthor: newQuoteAuthor.trim() || null,
       quoteImg: newQuoteText.trim() ? '/images/dorian-open-book-spread.jpg' : null,
       content: newReflectionText.trim(),
       likes: 1,
@@ -327,24 +537,73 @@ const Community = () => {
       commentsList: [],
     };
 
+    // Instant optimistic update
     setPosts([newPost, ...posts]);
     setNewReflectionText('');
     setNewQuoteText('');
     setNewQuoteAuthor('');
     setShowCompose(false);
     enqueueSnackbar('Reflection inscribed to the Common Room ✒️', { variant: 'success' });
+
+    // Background DB persistence
+    try {
+      const res = await communityService.createPost({
+        parlourSlug: 'common-room',
+        parlourTitle: selectedComposeParlour,
+        author: authorName,
+        handle: authorHandle,
+        avatar: '/images/eleanor-avatar.jpg',
+        tag: 'Community Reflection',
+        quote: newPost.quote,
+        quoteAuthor: newPost.quoteAuthor,
+        quoteImg: newPost.quoteImg,
+        content: newPost.content,
+      });
+
+      if (res.data) {
+        setPosts((prev) =>
+          prev.map((p) =>
+            p.id === tempPostId
+              ? {
+                  ...p,
+                  id: res.data.id || res.data._id,
+                  _id: res.data._id,
+                  liked: true,
+                }
+              : p
+          )
+        );
+      }
+    } catch (err) {
+      console.error('Failed to persist reflection to database:', err);
+      enqueueSnackbar('Note: Reflection saved locally.', {
+        variant: 'warning',
+      });
+    }
   };
 
-  const handleCreateParlour = (e) => {
+  // Optimistic Create Parlour with MongoDB Persistence
+  const handleCreateParlour = async (e) => {
     e.preventDefault();
     if (!newParlourTitle.trim()) return;
 
     playWaxSealCrack();
+    const authorName = user?.username || user?.name || 'Nikhil Sehgal';
+    const authorHandle = (user?.username || user?.name || 'nikhil_sehgal').toLowerCase().replace(/\s+/g, '_');
+    const tempParlourId = `parlour-${Date.now()}`;
+    const generatedSlug = newParlourTitle.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
     const newParlour = {
-      id: `parlour-${Date.now()}`,
+      id: generatedSlug || tempParlourId,
+      _id: tempParlourId,
+      slug: generatedSlug,
       title: newParlourTitle.trim(),
       category: newParlourCategory,
       desc: newParlourDesc.trim() || 'A new literary parlour for kindred minds.',
+      longDesc: newParlourDesc.trim() || 'A sanctuary for close reading and deep textual reflection.',
+      curator: authorName,
+      curatorHandle: authorHandle,
+      curatorAvatar: '/images/eleanor-avatar.jpg',
       members: 1,
       activeNow: 1,
       joined: true,
@@ -362,6 +621,43 @@ const Community = () => {
     enqueueSnackbar(`Literary Parlour "${newParlour.title}" established! 🕯️`, {
       variant: 'success',
     });
+
+    try {
+      const res = await communityService.createParlour({
+        title: newParlour.title,
+        category: newParlour.category,
+        desc: newParlour.desc,
+        longDesc: newParlour.longDesc,
+        curator: newParlour.curator,
+        curatorHandle: newParlour.curatorHandle,
+        curatorAvatar: newParlour.curatorAvatar,
+        img: newParlour.img,
+        currentBook: newParlour.currentBook,
+        currentBookAuthor: newParlour.currentBookAuthor,
+        currentBookCover: newParlour.currentBookCover,
+        prompt: newParlour.prompt,
+      });
+
+      if (res.data) {
+        setParlours((prev) =>
+          prev.map((p) =>
+            p.id === tempParlourId || p.id === generatedSlug
+              ? {
+                  ...p,
+                  id: res.data.slug || res.data.id || res.data._id,
+                  _id: res.data._id,
+                  slug: res.data.slug,
+                }
+              : p
+          )
+        );
+      }
+    } catch (err) {
+      console.error('Failed to persist parlour to database:', err);
+      enqueueSnackbar('Note: Parlour created locally.', {
+        variant: 'warning',
+      });
+    }
   };
 
   const handleToggleAmbiance = (type) => {

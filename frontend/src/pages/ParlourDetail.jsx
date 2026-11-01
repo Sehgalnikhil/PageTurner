@@ -25,6 +25,7 @@ import {
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
+import { communityService } from '../services/api';
 import {
   playWaxSealCrack,
   playPaperUnwrap,
@@ -33,6 +34,20 @@ import {
   startAmbientSound,
   stopAmbientSound,
 } from '../utils/soundEffects';
+
+const formatTimeAgo = (dateStr) => {
+  if (!dateStr) return 'Just now';
+  const now = new Date();
+  const past = new Date(dateStr);
+  const diffMs = now - past;
+  if (isNaN(diffMs) || diffMs < 60000) return 'Just now';
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 60) return `${diffMins}m ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours}h ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays}d ago`;
+};
 
 // Parlour database with rich thematic details
 const PARLOURS_DATA = {
@@ -278,12 +293,69 @@ const ParlourDetail = () => {
   const { user } = useContext(AuthContext);
   const { enqueueSnackbar } = useSnackbar();
 
-  // Find parlour or fallback to gothic
-  const parlour = PARLOURS_DATA[id] || PARLOURS_DATA['gothic'];
+  // Initial state with instant local cache fallback
+  const initialData = PARLOURS_DATA[id] || PARLOURS_DATA['gothic'];
+  const [parlour, setParlour] = useState(initialData);
+  const [isJoined, setIsJoined] = useState(initialData.id === 'gothic');
+  const [memberCount, setMemberCount] = useState(initialData.members);
+  const [discussions, setDiscussions] = useState(initialData.initialDiscussions || []);
 
-  const [isJoined, setIsJoined] = useState(parlour.id === 'gothic');
-  const [memberCount, setMemberCount] = useState(parlour.members);
-  const [discussions, setDiscussions] = useState(parlour.initialDiscussions);
+  // Fetch live parlour details & discussion thread from MongoDB
+  useEffect(() => {
+    let isMounted = true;
+    const username = user?.username || user?.name || 'Admin Demo';
+    const userHandle = username.toLowerCase().replace(/\s+/g, '_');
+
+    communityService
+      .getParlourBySlug(id || 'gothic')
+      .then((res) => {
+        if (!isMounted || !res.data) return;
+        const pData = res.data;
+        setParlour((prev) => ({
+          ...prev,
+          ...pData,
+          id: pData.slug || pData.id || id,
+        }));
+        const joinedStatus =
+          pData.membersList?.includes(userHandle) ||
+          pData.membersList?.includes(username) ||
+          pData.slug === 'gothic';
+        setIsJoined(joinedStatus);
+        setMemberCount(pData.members || 0);
+
+        if (pData.discussions && pData.discussions.length > 0) {
+          const mappedDiscussions = pData.discussions.map((d) => ({
+            id: d.id || d._id,
+            _id: d._id,
+            author: d.author,
+            handle: d.handle,
+            avatar: d.avatar,
+            time: formatTimeAgo(d.createdAt),
+            tag: d.tag,
+            quote: d.quote,
+            text: d.content || d.text,
+            likes: d.likes || 0,
+            liked:
+              d.likedBy?.includes(userHandle) || d.likedBy?.includes(username) || false,
+            replies: (d.commentsList || []).map((r) => ({
+              id: r.id || r._id,
+              author: r.author,
+              handle: r.handle,
+              time: formatTimeAgo(r.createdAt),
+              text: r.text,
+            })),
+          }));
+          setDiscussions(mappedDiscussions);
+        }
+      })
+      .catch((err) => {
+        console.warn('Could not fetch parlour details from DB, using fallback:', err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id, user]);
 
   // New Note state
   const [newNoteText, setNewNoteText] = useState('');
@@ -313,46 +385,88 @@ const ParlourDetail = () => {
     };
   }, []);
 
-  const handleToggleJoin = () => {
+  // Optimistic Toggle Join Parlour with MongoDB Persistence
+  const handleToggleJoin = async () => {
     playBookSpineSlide();
     const next = !isJoined;
     setIsJoined(next);
-    setMemberCount((c) => (next ? c + 1 : c - 1));
+    setMemberCount((c) => (next ? c + 1 : Math.max(0, c - 1)));
     enqueueSnackbar(
       next ? `Welcome to ${parlour.title} 🕯️` : `Departed ${parlour.title}`,
       { variant: next ? 'success' : 'info' }
     );
+
+    try {
+      const username = user?.username || user?.name || 'Admin Demo';
+      await communityService.toggleJoinParlour(parlour.slug || parlour.id || id, username);
+    } catch (err) {
+      console.error('Failed to sync join status:', err);
+      // Rollback on network failure
+      setIsJoined(!next);
+      setMemberCount((c) => (!next ? c + 1 : Math.max(0, c - 1)));
+      enqueueSnackbar('Could not sync parlour membership. Changes reverted.', { variant: 'error' });
+    }
   };
 
-  const handleLike = (postDocId) => {
+  // Optimistic Like Discussion with MongoDB Persistence
+  const handleLike = async (postDocId) => {
     playWaxSealCrack();
+    const target = discussions.find((d) => d.id === postDocId || d._id === postDocId);
+    if (!target) return;
+    const nextLiked = !target.liked;
+
+    // Instant optimistic update
     setDiscussions((prev) =>
       prev.map((d) => {
-        if (d.id === postDocId) {
-          const nextLiked = !d.liked;
+        if (d.id === postDocId || d._id === postDocId) {
           return {
             ...d,
             liked: nextLiked,
-            likes: nextLiked ? d.likes + 1 : d.likes - 1,
+            likes: nextLiked ? (d.likes || 0) + 1 : Math.max(0, (d.likes || 0) - 1),
           };
         }
         return d;
       })
     );
+
+    try {
+      const username = user?.username || user?.name || 'Admin Demo';
+      await communityService.toggleLikePost(target._id || target.id, username);
+    } catch (err) {
+      console.error('Failed to sync like in parlour:', err);
+      // Rollback
+      setDiscussions((prev) =>
+        prev.map((d) => {
+          if (d.id === postDocId || d._id === postDocId) {
+            return {
+              ...d,
+              liked: !nextLiked,
+              likes: !nextLiked ? (d.likes || 0) + 1 : Math.max(0, (d.likes || 0) - 1),
+            };
+          }
+          return d;
+        })
+      );
+    }
   };
 
-  const handleAddPost = (e) => {
+  // Optimistic Add Note to Parlour with MongoDB Persistence
+  const handleAddPost = async (e) => {
     e.preventDefault();
     if (!newNoteText.trim()) return;
 
     playWaxSealCrack();
     playPaperUnwrap();
 
-    const authorName = user?.username || 'Nikhil Sehgal';
+    const authorName = user?.username || user?.name || 'Nikhil Sehgal';
+    const authorHandle = (user?.username || user?.name || 'nikhil_sehgal').toLowerCase().replace(/\s+/g, '_');
+    const tempPostId = `d-${Date.now()}`;
+
     const newPost = {
-      id: `d-${Date.now()}`,
+      id: tempPostId,
+      _id: tempPostId,
       author: authorName,
-      handle: authorName.toLowerCase().replace(/\s+/g, '_'),
+      handle: authorHandle,
       avatar: '/images/eleanor-avatar.jpg',
       time: 'Just now',
       tag: newNoteTag,
@@ -370,29 +484,65 @@ const ParlourDetail = () => {
     enqueueSnackbar('Marginalia inscribed to parlour discourse ✒️', {
       variant: 'success',
     });
+
+    try {
+      const res = await communityService.createPost({
+        parlourSlug: parlour.slug || parlour.id || id,
+        parlourTitle: parlour.title,
+        author: authorName,
+        handle: authorHandle,
+        avatar: '/images/eleanor-avatar.jpg',
+        tag: newNoteTag,
+        quote: newPost.quote,
+        content: newPost.text,
+      });
+
+      if (res.data) {
+        setDiscussions((prev) =>
+          prev.map((d) =>
+            d.id === tempPostId
+              ? {
+                  ...d,
+                  id: res.data.id || res.data._id,
+                  _id: res.data._id,
+                }
+              : d
+          )
+        );
+      }
+    } catch (err) {
+      console.error('Failed to persist discussion note to DB:', err);
+      enqueueSnackbar('Note: Saved locally. Check network connection for server sync.', {
+        variant: 'warning',
+      });
+    }
   };
 
-  const handleAddReply = (discussionId) => {
+  // Optimistic Add Reply to Discussion with MongoDB Persistence
+  const handleAddReply = async (discussionId) => {
     const text = replyInputs[discussionId]?.trim();
     if (!text) return;
 
     playPageFlipSound();
-    const authorName = user?.username || 'Nikhil Sehgal';
+    const authorName = user?.username || user?.name || 'Nikhil Sehgal';
+    const authorHandle = (user?.username || user?.name || 'nikhil_sehgal').toLowerCase().replace(/\s+/g, '_');
+    const tempReplyId = `r-${Date.now()}`;
+
+    const newReply = {
+      id: tempReplyId,
+      _id: tempReplyId,
+      author: authorName,
+      handle: authorHandle,
+      time: 'Just now',
+      text,
+    };
+
     setDiscussions((prev) =>
       prev.map((d) => {
-        if (d.id === discussionId) {
+        if (d.id === discussionId || d._id === discussionId) {
           return {
             ...d,
-            replies: [
-              ...d.replies,
-              {
-                id: `r-${Date.now()}`,
-                author: authorName,
-                handle: authorName.toLowerCase().replace(/\s+/g, '_'),
-                time: 'Just now',
-                text,
-              },
-            ],
+            replies: [...(d.replies || []), newReply],
           };
         }
         return d;
@@ -401,6 +551,42 @@ const ParlourDetail = () => {
 
     setReplyInputs((prev) => ({ ...prev, [discussionId]: '' }));
     enqueueSnackbar('Reply posted', { variant: 'info' });
+
+    try {
+      const target = discussions.find((d) => d.id === discussionId || d._id === discussionId);
+      const postDocId = target?._id || target?.id || discussionId;
+      const res = await communityService.addComment(postDocId, {
+        author: authorName,
+        handle: authorHandle,
+        avatar: '/images/eleanor-avatar.jpg',
+        text,
+      });
+
+      if (res.data?.comment) {
+        setDiscussions((prev) =>
+          prev.map((d) => {
+            if (d.id === discussionId || d._id === discussionId) {
+              return {
+                ...d,
+                replies: d.replies.map((r) =>
+                  r.id === tempReplyId
+                    ? {
+                        ...r,
+                        id: res.data.comment.id || res.data.comment._id,
+                        _id: res.data.comment._id,
+                      }
+                    : r
+                ),
+              };
+            }
+            return d;
+          })
+        );
+      }
+    } catch (err) {
+      console.error('Failed to persist reply:', err);
+      enqueueSnackbar('Could not save reply to database.', { variant: 'error' });
+    }
   };
 
   const handleAmbiance = (soundType) => {
@@ -992,3 +1178,4 @@ const ParlourDetail = () => {
 };
 
 export default ParlourDetail;
+

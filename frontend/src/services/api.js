@@ -134,3 +134,15 @@ export const adminService = {
   getBackupJsonUrl: () => `${API_BASE_URL}/admin/backup/json`,
   getExportCsvUrl: () => `${API_BASE_URL}/books/export/csv`,
 };
+
+export const communityService = {
+  getParlours: (params) => api.get('/community/parlours', { params }),
+  getParlourBySlug: (slug) => api.get(`/community/parlours/${slug}`),
+  createParlour: (data) => api.post('/community/parlours', data),
+  toggleJoinParlour: (slug, username) => api.post(`/community/parlours/${slug}/join`, { username }),
+  getPosts: (params) => api.get('/community/posts', { params }),
+  createPost: (data) => api.post('/community/posts', data),
+  toggleLikePost: (id, username) => api.post(`/community/posts/${id}/like`, { username }),
+  toggleBookmarkPost: (id, username) => api.post(`/community/posts/${id}/bookmark`, { username }),
+  addComment: (id, data) => api.post(`/community/posts/${id}/comments`, data),
+};
