@@ -22,10 +22,13 @@ import {
   PiSparkleBold,
   PiQuotesBold,
   PiCalendarBlankBold,
+  PiXBold,
+  PiArrowClockwiseBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
 import { communityService } from '../services/api';
+import { CHAPTER_EXCERPTS } from '../data/bookExcerpts';
 import {
   playWaxSealCrack,
   playPaperUnwrap,
@@ -363,18 +366,40 @@ const ParlourDetail = () => {
   const [newNoteTag, setNewNoteTag] = useState('Chapter Discussion');
   const [showCompose, setShowCompose] = useState(false);
 
+  // Interactive Lectern Excerpt Reader Modal State
+  const [showExcerptModal, setShowExcerptModal] = useState(false);
+  const [readingFontSize, setReadingFontSize] = useState('base'); // 'sm' | 'base' | 'lg'
+  const excerptData = CHAPTER_EXCERPTS[id] || CHAPTER_EXCERPTS['gothic'];
+
+  // Member Profile Card Popover State
+  const [selectedMemberProfile, setSelectedMemberProfile] = useState(null);
+
   // Reply state per post
   const [replyInputs, setReplyInputs] = useState({});
   const [activeAmbiance, setActiveAmbiance] = useState('off');
 
-  // Reading Sprint Timer
+  // Real 25-Minute Reading Sprint Pomodoro Station
   const [timerRunning, setTimerRunning] = useState(false);
-  const [timerSeconds, setTimerSeconds] = useState(0);
+  const [timerSeconds, setTimerSeconds] = useState(25 * 60);
+  const [completedSprints, setCompletedSprints] = useState(1);
 
   useEffect(() => {
     let int = null;
     if (timerRunning) {
-      int = setInterval(() => setTimerSeconds((s) => s + 1), 1000);
+      int = setInterval(() => {
+        setTimerSeconds((prev) => {
+          if (prev <= 1) {
+            playWaxSealCrack();
+            setTimerRunning(false);
+            setCompletedSprints((c) => c + 1);
+            enqueueSnackbar('🔔 Silent Reading Sprint Completed! +50 Sanctuary XP awarded 🕯️', {
+              variant: 'success',
+            });
+            return 25 * 60;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
     return () => clearInterval(int);
   }, [timerRunning]);
@@ -384,6 +409,11 @@ const ParlourDetail = () => {
       stopAmbientSound();
     };
   }, []);
+
+  const handleOpenExcerpt = () => {
+    playBookSpineSlide();
+    setShowExcerptModal(true);
+  };
 
   // Optimistic Toggle Join Parlour with MongoDB Persistence
   const handleToggleJoin = async () => {
@@ -775,13 +805,8 @@ const ParlourDetail = () => {
               <div className="flex flex-col gap-2 w-full sm:w-auto">
                 <button
                   type="button"
-                  onClick={() => {
-                    playBookSpineSlide();
-                    enqueueSnackbar('Opening Chapter Excerpt from archives...', {
-                      variant: 'info',
-                    });
-                  }}
-                  className="px-4 py-2 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold shadow-xs cute-press cursor-pointer flex items-center justify-center gap-1.5"
+                  onClick={handleOpenExcerpt}
+                  className="select-none px-4 py-2 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold shadow-xs cute-press cursor-pointer flex items-center justify-center gap-1.5 focus:outline-none transition-transform hover:scale-[1.02]"
                 >
                   <PiBookOpenBold className="text-sm" />
                   <span>Read Chapter Excerpt</span>
@@ -1029,7 +1054,8 @@ const ParlourDetail = () => {
                   <PiClockBold className="text-[#7D2235]" />
                   <span>Parlour Silent Sprint</span>
                 </span>
-                <span className="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
                   Live
                 </span>
               </div>
@@ -1037,39 +1063,73 @@ const ParlourDetail = () => {
                 Focus reading session alongside {parlour.activeNow} members.
               </p>
               <div className="p-3.5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8] text-center mb-3">
-                <span className="font-mono text-2xl font-bold text-[#2F2620]">
-                  {Math.floor(timerSeconds / 60)}:
+                <span className="font-mono text-3xl font-bold text-[#2F2620] tracking-wider">
+                  {String(Math.floor(timerSeconds / 60)).padStart(2, '0')}:
                   {String(timerSeconds % 60).padStart(2, '0')}
                 </span>
                 <span className="text-[10px] text-[#7A6A5E] block mt-0.5">
-                  {timerRunning ? 'Session active' : 'Session paused'}
+                  {timerRunning ? '🕯️ Focus sprint in progress (ticking)' : 'Sprint paused • 25:00 goal'}
                 </span>
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  playWaxSealCrack();
-                  setTimerRunning((prev) => !prev);
-                }}
-                className={`w-full py-2 rounded-full text-xs font-semibold shadow-xs cute-press cursor-pointer ${
-                  timerRunning
-                    ? 'bg-amber-800 text-white'
-                    : 'bg-[#7D2235] hover:bg-[#92283F] text-white'
-                }`}
-              >
-                {timerRunning ? 'Pause Reading Sprint' : 'Begin 25-Min Sprint'}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    playWaxSealCrack();
+                    setTimerRunning((prev) => !prev);
+                  }}
+                  className={`flex-1 py-2 rounded-full text-xs font-semibold shadow-xs cute-press cursor-pointer select-none transition-all ${
+                    timerRunning
+                      ? 'bg-amber-800 hover:bg-amber-900 text-white'
+                      : 'bg-[#7D2235] hover:bg-[#92283F] text-white'
+                  }`}
+                >
+                  {timerRunning ? 'Pause Sprint' : 'Begin 25-Min Sprint'}
+                </button>
+                {timerSeconds < 25 * 60 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playPaperUnwrap();
+                      setTimerRunning(false);
+                      setTimerSeconds(25 * 60);
+                    }}
+                    className="px-3 py-2 rounded-full border border-[#D8CCB8] text-xs font-semibold text-[#6E5F53] hover:bg-[#EBE2D3] cute-press cursor-pointer select-none"
+                    title="Reset sprint timer"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* 2. Readers Gathered In this Parlour */}
             <div className="p-5 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm">
-              <h4 className="font-serif font-bold text-sm text-[#2F2620] mb-3 flex items-center gap-2">
-                <PiUsersBold className="text-[#7D2235]" />
-                <span>Gathered in this Room</span>
-              </h4>
-              <div className="space-y-2.5 text-xs">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="font-serif font-bold text-sm text-[#2F2620] flex items-center gap-2">
+                  <PiUsersBold className="text-[#7D2235]" />
+                  <span>Gathered in this Room</span>
+                </h4>
+                <span className="text-[10px] text-[#7A6A5E] italic">Tap reader for dossier</span>
+              </div>
+              <div className="space-y-2 text-xs">
+                <div
+                  onClick={() => {
+                    playPaperUnwrap();
+                    setSelectedMemberProfile({
+                      id: '8492',
+                      name: 'Eleanor Vance',
+                      role: 'Archival Host & Victorian Curator',
+                      avatar: '/images/eleanor-avatar.jpg',
+                      page: 'p. 84 (Chapter IV)',
+                      canon: 'The Picture of Dorian Gray',
+                      level: 'Lv. 7 Scribe Sovereign',
+                      quote: 'Beauty without moral consequence is the greatest seduction of modern literature.',
+                    });
+                  }}
+                  className="p-2 rounded-xl hover:bg-[#F0E6D5] transition-colors cursor-pointer flex items-center justify-between cute-press border border-transparent hover:border-[#D8C7B0]"
+                >
+                  <div className="flex items-center gap-2.5">
                     <img
                       src="/images/eleanor-avatar.jpg"
                       alt="Eleanor"
@@ -1082,11 +1142,28 @@ const ParlourDetail = () => {
                       <span className="text-[10px] text-[#7A6A5E]">Archival Host</span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono text-[#7D2235]">p. 84</span>
+                  <span className="text-[10px] font-mono text-[#7D2235] bg-[#F7ECD8] px-2 py-0.5 rounded-full font-semibold">
+                    p. 84
+                  </span>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                <div
+                  onClick={() => {
+                    playPaperUnwrap();
+                    setSelectedMemberProfile({
+                      id: '3921',
+                      name: 'Arthur Pendelton',
+                      role: 'Senior Scribe & Close Reader',
+                      avatar: '/images/arthur-avatar.jpg',
+                      page: 'p. 62 (Part II)',
+                      canon: '1984 & Modern Dystopian Canon',
+                      level: 'Lv. 5 Close Reader Initiate',
+                      quote: 'Close reading is the only safeguard against ideological forgetting.',
+                    });
+                  }}
+                  className="p-2 rounded-xl hover:bg-[#F0E6D5] transition-colors cursor-pointer flex items-center justify-between cute-press border border-transparent hover:border-[#D8C7B0]"
+                >
+                  <div className="flex items-center gap-2.5">
                     <img
                       src="/images/arthur-avatar.jpg"
                       alt="Arthur"
@@ -1099,14 +1176,33 @@ const ParlourDetail = () => {
                       <span className="text-[10px] text-[#7A6A5E]">Scribe</span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono text-[#7D2235]">p. 62</span>
+                  <span className="text-[10px] font-mono text-[#7D2235] bg-[#F7ECD8] px-2 py-0.5 rounded-full font-semibold">
+                    p. 62
+                  </span>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-[#7D2235] text-white flex items-center justify-center text-[10px] font-bold">
-                      CO
-                    </div>
+                <div
+                  onClick={() => {
+                    playPaperUnwrap();
+                    setSelectedMemberProfile({
+                      id: '5023',
+                      name: 'Clara Oswald',
+                      role: 'Passionate Canon Voyager',
+                      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+                      page: 'p. 91 (Act III)',
+                      canon: 'Romantic & Russian Realism',
+                      level: 'Lv. 4 Attentive Reader',
+                      quote: 'Every book leaves a physical fingerprint on the mind that opened it.',
+                    });
+                  }}
+                  className="p-2 rounded-xl hover:bg-[#F0E6D5] transition-colors cursor-pointer flex items-center justify-between cute-press border border-transparent hover:border-[#D8C7B0]"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <img
+                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
+                      alt="Clara"
+                      className="w-7 h-7 rounded-full object-cover border border-[#D8C7B0]"
+                    />
                     <div>
                       <span className="font-serif font-bold text-[#2F2620] block leading-tight">
                         Clara Oswald
@@ -1114,7 +1210,9 @@ const ParlourDetail = () => {
                       <span className="text-[10px] text-[#7A6A5E]">Reader</span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono text-[#7D2235]">p. 91</span>
+                  <span className="text-[10px] font-mono text-[#7D2235] bg-[#F7ECD8] px-2 py-0.5 rounded-full font-semibold">
+                    p. 91
+                  </span>
                 </div>
               </div>
             </div>
@@ -1171,6 +1269,226 @@ const ParlourDetail = () => {
         </div>
 
       </main>
+
+      {/* ============================================================
+          INTERACTIVE LECTERN CHAPTER EXCERPT READER MODAL
+          ============================================================ */}
+      {showExcerptModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-3xl max-h-[90vh] flex flex-col bg-[#FAF4EA] rounded-2xl border-2 border-[#C6A16B]/50 shadow-[0_25px_60px_rgba(0,0,0,0.55)] overflow-hidden">
+            {/* Modal Antique Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#D8C7B0] bg-[#F2E7D5]/80 select-none">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#7D2235] text-white flex items-center justify-center text-sm shadow-xs">
+                  <PiBookOpenBold />
+                </div>
+                <div>
+                  <h3 className="font-serif font-bold text-base sm:text-lg text-[#2F241C] leading-tight">
+                    {excerptData.bookTitle}
+                  </h3>
+                  <span className="text-[11px] text-[#7A6A5E] font-serif italic block">
+                    by {excerptData.author} &bull; {excerptData.era}
+                  </span>
+                </div>
+              </div>
+
+              {/* Controls: Font Size, Ambiance, Close */}
+              <div className="flex items-center gap-2">
+                {/* Font Size Toggle */}
+                <div className="flex items-center bg-[#E5D7C2] rounded-full p-0.5 border border-[#D5C2A5] text-[11px] font-serif font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setReadingFontSize('sm')}
+                    className={`px-2 py-0.5 rounded-full ${readingFontSize === 'sm' ? 'bg-[#7D2235] text-white shadow-xs' : 'text-[#6E5F53] hover:text-black'}`}
+                  >
+                    A-
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setReadingFontSize('base')}
+                    className={`px-2 py-0.5 rounded-full ${readingFontSize === 'base' ? 'bg-[#7D2235] text-white shadow-xs' : 'text-[#6E5F53] hover:text-black'}`}
+                  >
+                    A
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setReadingFontSize('lg')}
+                    className={`px-2 py-0.5 rounded-full ${readingFontSize === 'lg' ? 'bg-[#7D2235] text-white shadow-xs' : 'text-[#6E5F53] hover:text-black'}`}
+                  >
+                    A+
+                  </button>
+                </div>
+
+                {/* Sound Toggle */}
+                <button
+                  type="button"
+                  onClick={() => handleAmbiance(excerptData.audioPreset || 'rain')}
+                  title="Toggle Sanctuary Reading Sound"
+                  className={`p-2 rounded-full border transition-all cute-press ${
+                    activeAmbiance !== 'off'
+                      ? 'bg-[#7D2235] text-white border-[#7D2235] shadow-xs'
+                      : 'bg-[#E5D7C2] text-[#6E5F53] border-[#D5C2A5] hover:text-black'
+                  }`}
+                >
+                  <PiCloudRainBold className="text-sm" />
+                </button>
+
+                {/* Close Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowExcerptModal(false)}
+                  className="p-1.5 rounded-full bg-[#E5D7C2] hover:bg-[#D5C2A5] text-[#2F241C] border border-[#D5C2A5] cute-press transition-colors"
+                  title="Close Lectern"
+                >
+                  <PiXBold className="text-sm" />
+                </button>
+              </div>
+            </div>
+
+            {/* Scrollable Parchment Folio Reading Surface */}
+            <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-6 font-serif select-text">
+              <div className="text-center pb-4 border-b border-[#E5D7C2]">
+                <span className="font-mono text-[11px] uppercase tracking-widest text-[#7D2235] block mb-1">
+                  Active Sanctuary Reading Focus
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#2F241C] italic tracking-wide">
+                  {excerptData.chapterTitle}
+                </h2>
+              </div>
+
+              {/* Classical Illuminated Drop Cap on First Paragraph */}
+              <div
+                className={`text-[#2F241C] leading-relaxed transition-all ${
+                  readingFontSize === 'sm'
+                    ? 'text-sm'
+                    : readingFontSize === 'lg'
+                    ? 'text-lg leading-loose'
+                    : 'text-base sm:text-lg'
+                }`}
+              >
+                {excerptData.textParagraphs.map((para, idx) => (
+                  <p key={idx} className="mb-5 indent-6 first-of-type:indent-0">
+                    {idx === 0 ? (
+                      <>
+                        <span className="float-left text-5xl sm:text-6xl font-serif text-[#7D2235] leading-none pr-3 pt-1 font-bold">
+                          {para.charAt(0)}
+                        </span>
+                        {para.slice(1)}
+                      </>
+                    ) : (
+                      para
+                    )}
+                  </p>
+                ))}
+              </div>
+
+              {/* Scribe's Margin Notes Box */}
+              {excerptData.marginaliaNotes && excerptData.marginaliaNotes.length > 0 && (
+                <div className="mt-8 p-4 rounded-xl bg-[#F0E6D5] border-l-4 border-[#7D2235] space-y-3">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-[#7D2235] font-bold block">
+                    Curator’s Margin Annotations
+                  </span>
+                  {excerptData.marginaliaNotes.map((note, nIdx) => (
+                    <div key={nIdx} className="text-xs text-[#4A3B30] font-sans flex items-start gap-2">
+                      <span className="font-mono text-[10px] text-[#7D2235] font-semibold">{note.page}:</span>
+                      <div>
+                        <span className="font-bold font-serif text-[#2F2620]">{note.scribe}</span> — {note.note}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Lectern Bottom Action Bar */}
+            <div className="px-6 py-4 border-t border-[#D8C7B0] bg-[#F2E7D5]/80 flex items-center justify-between flex-wrap gap-3 select-none">
+              <span className="text-xs font-serif italic text-[#7A6A5E]">
+                Finished this section? Inscribe your reflections into the discourse below.
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  playWaxSealCrack();
+                  setShowExcerptModal(false);
+                  setNewQuoteText(excerptData.quoteHighlight || '');
+                  setShowCompose(true);
+                }}
+                className="px-5 py-2 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-medium tracking-wide flex items-center gap-2 shadow-sm cute-press cursor-pointer"
+              >
+                <PiFeatherBold className="text-sm text-[#F7D8A4]" />
+                <span>Inscribe Marginalia on this Passage ✒️</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================
+          GATHERED READER PROFILE DOSSIER MODAL
+          ============================================================ */}
+      {selectedMemberProfile && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="relative w-full max-w-sm bg-[#FAF4EA] rounded-2xl border-2 border-[#D8C7B0] p-6 shadow-2xl text-center space-y-4">
+            <button
+              onClick={() => setSelectedMemberProfile(null)}
+              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-black/5 text-[#7A6A5E]"
+            >
+              <PiXBold className="text-sm" />
+            </button>
+
+            <img
+              src={selectedMemberProfile.avatar}
+              alt={selectedMemberProfile.name}
+              className="w-20 h-20 rounded-full mx-auto object-cover border-2 border-[#C6A16B] shadow-md"
+            />
+
+            <div>
+              <h4 className="font-serif font-bold text-lg text-[#2F2620]">
+                {selectedMemberProfile.name}
+              </h4>
+              <span className="text-xs text-[#7D2235] font-semibold">
+                {selectedMemberProfile.role}
+              </span>
+              <span className="text-[11px] text-[#7A6A5E] block mt-0.5 font-mono">
+                PT-ID: #{selectedMemberProfile.id}
+              </span>
+            </div>
+
+            <p className="text-xs text-[#4A3B30] italic font-serif leading-relaxed px-2">
+              “{selectedMemberProfile.quote}”
+            </p>
+
+            <div className="p-3 rounded-xl bg-[#F0E6D5] text-left text-xs font-sans space-y-1.5">
+              <div className="flex justify-between">
+                <span className="text-[#7A6A5E]">Current Position:</span>
+                <span className="font-bold text-[#7D2235]">{selectedMemberProfile.page}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#7A6A5E]">Favorite Canon:</span>
+                <span className="font-bold">{selectedMemberProfile.canon}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#7A6A5E]">Sanctuary Level:</span>
+                <span className="font-bold text-emerald-800">{selectedMemberProfile.level}</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                playWaxSealCrack();
+                enqueueSnackbar(`Literary greeting sent to ${selectedMemberProfile.name}! ✉️`, {
+                  variant: 'success',
+                });
+                setSelectedMemberProfile(null);
+              }}
+              className="w-full py-2 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold shadow-xs cute-press cursor-pointer"
+            >
+              Send Literary Greeting ✉️
+            </button>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

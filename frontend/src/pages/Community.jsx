@@ -33,6 +33,7 @@ import {
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
 import { communityService } from '../services/api';
+import { CHAPTER_EXCERPTS } from '../data/bookExcerpts';
 import {
   playWaxSealCrack,
   playPaperUnwrap,
@@ -109,6 +110,13 @@ const Community = () => {
   const [filterParlour, setFilterParlour] = useState('All Parlours');
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
   const [parlourDropdownOpen, setParlourDropdownOpen] = useState(false);
+
+  // Interactive Excerpt Reader & Passport Dossier State
+  const [activeExcerptKey, setActiveExcerptKey] = useState(null);
+  const [showPassportDossier, setShowPassportDossier] = useState(false);
+  const [readingFontSize, setReadingFontSize] = useState('base');
+  const [passportXP, setPassportXP] = useState(1240);
+  const [claimedDailyXP, setClaimedDailyXP] = useState(false);
 
   // Parlours Tab Search and Category
   const [parlourCategory, setParlourCategory] = useState('All');
@@ -1353,12 +1361,21 @@ const Community = () => {
                 </div>
 
                 {/* Textured Passport Card */}
-                <div className="relative z-10 bg-[#FAF4EA] rounded-2xl border-2 border-[#D8C7B0] p-6 text-center shadow-[0_8px_30px_rgba(40,30,20,0.08)]">
-                  
+                <div
+                  onClick={() => {
+                    playPaperUnwrap();
+                    setShowPassportDossier(true);
+                  }}
+                  className="relative z-10 bg-[#FAF4EA] rounded-2xl border-2 border-[#D8C7B0] p-6 text-center shadow-[0_8px_30px_rgba(40,30,20,0.08)] cursor-pointer hover:border-[#7D2235]/40 transition-all group"
+                  title="Click to view detailed Reader Dossier & XP Breakdown"
+                >
                   {/* Heading */}
-                  <h3 className="font-serif text-lg font-bold text-[#2F2620] mt-1 mb-4">
-                    My Reader Passport
-                  </h3>
+                  <div className="flex items-center justify-center gap-1.5 mt-1 mb-4">
+                    <h3 className="font-serif text-lg font-bold text-[#2F2620] group-hover:text-[#7D2235] transition-colors">
+                      My Reader Passport
+                    </h3>
+                    <span className="text-xs text-[#7A6A5E]">ⓘ</span>
+                  </div>
 
                   {/* Circular Profile Avatar */}
                   <div className="relative w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-2 border-[#D9C4A6] shadow-inner bg-[#2C231E]">
@@ -1405,10 +1422,13 @@ const Community = () => {
 
                     {/* XP Bar */}
                     <div className="w-full h-2 rounded-full bg-[#E5D7C2] overflow-hidden">
-                      <div className="h-full bg-[#7D2235] rounded-full w-[78%] transition-all duration-500" />
+                      <div
+                        className="h-full bg-[#7D2235] rounded-full transition-all duration-500"
+                        style={{ width: `${Math.min(100, (passportXP / 1500) * 100)}%` }}
+                      />
                     </div>
                     <div className="flex items-center justify-between text-[10px] font-mono text-[#76675B] mt-1.5">
-                      <span>1,240 / 1,500 XP</span>
+                      <span>{passportXP} / 1,500 XP</span>
                       <span>Lv. 4</span>
                     </div>
                   </div>
@@ -1543,18 +1563,41 @@ const Community = () => {
 
                   {/* Highlighted Quote Box with image thumbnail */}
                   {post.quote && (
-                    <div className="p-4 rounded-xl bg-[#F0E6D5] border border-[#D8C7B0] mb-3.5 flex items-center justify-between gap-4">
+                    <div
+                      onClick={() => {
+                        playBookSpineSlide();
+                        const key =
+                          post.parlourSlug === 'slow' || post.parlour?.includes('Slow')
+                            ? 'slow'
+                            : post.parlourSlug === 'midnight' || post.parlour?.includes('Midnight')
+                            ? 'midnight'
+                            : post.parlourSlug === 'poetry' || post.parlour?.includes('Poetry')
+                            ? 'poetry'
+                            : post.parlourSlug === 'dostoevsky' || post.parlour?.includes('Dostoevsky')
+                            ? 'dostoevsky'
+                            : 'gothic';
+                        setActiveExcerptKey(key);
+                      }}
+                      className="p-4 rounded-xl bg-[#F0E6D5] border border-[#D8C7B0] mb-3.5 flex items-center justify-between gap-4 cursor-pointer hover:border-[#7D2235]/50 transition-all group"
+                      title="Click to read chapter excerpt on the lectern 📖"
+                    >
                       <div className="flex-1">
-                        <blockquote className="font-serif italic text-xs sm:text-[13px] text-[#2F2620] leading-relaxed">
+                        <blockquote className="font-serif italic text-xs sm:text-[13px] text-[#2F2620] leading-relaxed group-hover:text-[#7D2235] transition-colors">
                           {post.quote}
                         </blockquote>
-                        <span className="font-serif text-[11px] text-[#7A6A5E] mt-1 block">
-                          — {post.quoteAuthor}
-                        </span>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="font-serif text-[11px] text-[#7A6A5E]">
+                            — {post.quoteAuthor}
+                          </span>
+                          <span className="text-[10.5px] text-[#7D2235] font-semibold underline flex items-center gap-0.5">
+                            <PiBookOpenBold className="text-[11px]" />
+                            <span>Read Excerpt</span>
+                          </span>
+                        </div>
                       </div>
 
                       {post.quoteImg && (
-                        <div className="w-24 h-16 rounded-lg overflow-hidden border border-[#D8C7B0] flex-shrink-0 shadow-2xs">
+                        <div className="w-24 h-16 rounded-lg overflow-hidden border border-[#D8C7B0] flex-shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
                           <img
                             src={post.quoteImg}
                             alt="Open book spread with dried flowers"
@@ -2172,6 +2215,275 @@ const Community = () => {
                   </button>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* ============================================================
+            INTERACTIVE LECTERN CHAPTER EXCERPT READER MODAL
+            ============================================================ */}
+        {activeExcerptKey && CHAPTER_EXCERPTS[activeExcerptKey] && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md animate-fadeIn">
+            <div className="relative w-full max-w-3xl max-h-[90vh] flex flex-col bg-[#FAF4EA] rounded-2xl border-2 border-[#C6A16B]/50 shadow-[0_25px_60px_rgba(0,0,0,0.55)] overflow-hidden">
+              {/* Modal Antique Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-[#D8C7B0] bg-[#F2E7D5]/80 select-none">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#7D2235] text-white flex items-center justify-center text-sm shadow-xs">
+                    <PiBookOpenBold />
+                  </div>
+                  <div>
+                    <h3 className="font-serif font-bold text-base sm:text-lg text-[#2F241C] leading-tight">
+                      {CHAPTER_EXCERPTS[activeExcerptKey].bookTitle}
+                    </h3>
+                    <span className="text-[11px] text-[#7A6A5E] font-serif italic block">
+                      by {CHAPTER_EXCERPTS[activeExcerptKey].author} &bull; {CHAPTER_EXCERPTS[activeExcerptKey].era}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Controls: Font Size, Ambiance, Close */}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center bg-[#E5D7C2] rounded-full p-0.5 border border-[#D5C2A5] text-[11px] font-serif font-bold">
+                    <button
+                      type="button"
+                      onClick={() => setReadingFontSize('sm')}
+                      className={`px-2 py-0.5 rounded-full ${readingFontSize === 'sm' ? 'bg-[#7D2235] text-white shadow-xs' : 'text-[#6E5F53] hover:text-black'}`}
+                    >
+                      A-
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setReadingFontSize('base')}
+                      className={`px-2 py-0.5 rounded-full ${readingFontSize === 'base' ? 'bg-[#7D2235] text-white shadow-xs' : 'text-[#6E5F53] hover:text-black'}`}
+                    >
+                      A
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setReadingFontSize('lg')}
+                      className={`px-2 py-0.5 rounded-full ${readingFontSize === 'lg' ? 'bg-[#7D2235] text-white shadow-xs' : 'text-[#6E5F53] hover:text-black'}`}
+                    >
+                      A+
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleToggleAmbiance(CHAPTER_EXCERPTS[activeExcerptKey].audioPreset || 'rain')}
+                    title="Toggle Sanctuary Reading Sound"
+                    className={`p-2 rounded-full border transition-all cute-press ${
+                      activeAmbiance !== 'off'
+                        ? 'bg-[#7D2235] text-white border-[#7D2235] shadow-xs'
+                        : 'bg-[#E5D7C2] text-[#6E5F53] border-[#D5C2A5] hover:text-black'
+                    }`}
+                  >
+                    <PiCloudRainBold className="text-sm" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveExcerptKey(null)}
+                    className="p-1.5 rounded-full bg-[#E5D7C2] hover:bg-[#D5C2A5] text-[#2F241C] border border-[#D5C2A5] cute-press transition-colors"
+                    title="Close Lectern"
+                  >
+                    <PiXBold className="text-sm" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Scrollable Parchment Folio Reading Surface */}
+              <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-6 font-serif select-text">
+                <div className="text-center pb-4 border-b border-[#E5D7C2]">
+                  <span className="font-mono text-[11px] uppercase tracking-widest text-[#7D2235] block mb-1">
+                    Canonical Lectern Focus
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-[#2F241C] italic tracking-wide">
+                    {CHAPTER_EXCERPTS[activeExcerptKey].chapterTitle}
+                  </h2>
+                </div>
+
+                <div
+                  className={`text-[#2F241C] leading-relaxed transition-all ${
+                    readingFontSize === 'sm'
+                      ? 'text-sm'
+                      : readingFontSize === 'lg'
+                      ? 'text-lg leading-loose'
+                      : 'text-base sm:text-lg'
+                  }`}
+                >
+                  {CHAPTER_EXCERPTS[activeExcerptKey].textParagraphs.map((para, idx) => (
+                    <p key={idx} className="mb-5 indent-6 first-of-type:indent-0">
+                      {idx === 0 ? (
+                        <>
+                          <span className="float-left text-5xl sm:text-6xl font-serif text-[#7D2235] leading-none pr-3 pt-1 font-bold">
+                            {para.charAt(0)}
+                          </span>
+                          {para.slice(1)}
+                        </>
+                      ) : (
+                        para
+                      )}
+                    </p>
+                  ))}
+                </div>
+
+                {CHAPTER_EXCERPTS[activeExcerptKey].marginaliaNotes && (
+                  <div className="mt-8 p-4 rounded-xl bg-[#F0E6D5] border-l-4 border-[#7D2235] space-y-3">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-[#7D2235] font-bold block">
+                      Curator’s Margin Annotations
+                    </span>
+                    {CHAPTER_EXCERPTS[activeExcerptKey].marginaliaNotes.map((note, nIdx) => (
+                      <div key={nIdx} className="text-xs text-[#4A3B30] font-sans flex items-start gap-2">
+                        <span className="font-mono text-[10px] text-[#7D2235] font-semibold">{note.page}:</span>
+                        <div>
+                          <span className="font-bold font-serif text-[#2F2620]">{note.scribe}</span> — {note.note}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Action Bar */}
+              <div className="px-6 py-4 border-t border-[#D8C7B0] bg-[#F2E7D5]/80 flex items-center justify-between flex-wrap gap-3 select-none">
+                <span className="text-xs font-serif italic text-[#7A6A5E]">
+                  Inscribe your thoughts into the Common Room feed below.
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playWaxSealCrack();
+                    const qText = CHAPTER_EXCERPTS[activeExcerptKey].quoteHighlight || '';
+                    const qAuth = CHAPTER_EXCERPTS[activeExcerptKey].author || '';
+                    setActiveExcerptKey(null);
+                    setNewQuoteText(qText);
+                    setNewQuoteAuthor(qAuth);
+                    setShowCompose(true);
+                  }}
+                  className="px-5 py-2 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-medium tracking-wide flex items-center gap-2 shadow-sm cute-press cursor-pointer"
+                >
+                  <PiFeatherBold className="text-sm text-[#F7D8A4]" />
+                  <span>Inscribe Reflection on this Passage ✒️</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ============================================================
+            READER PASSPORT DOSSIER & PROGRESSION MODAL
+            ============================================================ */}
+        {showPassportDossier && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-fadeIn">
+            <div className="relative w-full max-w-md bg-[#FAF4EA] rounded-2xl border-2 border-[#D8C7B0] p-6 shadow-2xl space-y-4 text-center">
+              <button
+                type="button"
+                onClick={() => setShowPassportDossier(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-black/5 text-[#7A6A5E]"
+              >
+                <PiXBold className="text-sm" />
+              </button>
+
+              <div className="w-16 h-16 rounded-full mx-auto overflow-hidden border-2 border-[#C6A16B] shadow-md">
+                <img
+                  src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80"
+                  alt={readerName}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <div>
+                <h3 className="font-serif font-bold text-xl text-[#2F2620]">
+                  {readerName}
+                </h3>
+                <span className="text-xs text-[#7D2235] font-semibold">
+                  Literary Level 4 &bull; The Attentive Reader
+                </span>
+                <span className="text-[11px] text-[#7A6A5E] block font-mono mt-0.5">
+                  Member ID: PT-48127 &bull; Sanctuary Initiate
+                </span>
+              </div>
+
+              {/* XP Progress Bar */}
+              <div className="p-3.5 rounded-xl bg-[#F0E6D5] text-left text-xs font-sans space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[#7A6A5E]">Sanctuary XP Progress:</span>
+                  <span className="font-bold text-[#7D2235]">{passportXP} / 1,500 XP</span>
+                </div>
+                <div className="w-full h-2.5 rounded-full bg-[#DECDB8] overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#7D2235] to-[#C6A16B] rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min(100, (passportXP / 1500) * 100)}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-[10.5px] text-[#7A6A5E]">
+                  <span>Next: Lv. 5 The Scholarly Sage</span>
+                  <span>{1500 - passportXP} XP remaining</span>
+                </div>
+              </div>
+
+              {/* Unlocked Badges Dossier */}
+              <div className="space-y-2 text-left">
+                <span className="font-serif font-bold text-xs text-[#2F2620] block">
+                  Earned Sanctuary Insignias:
+                </span>
+                <div className="space-y-2 text-xs">
+                  <div className="p-2.5 rounded-xl bg-[#F4ECDE] border border-[#DECDB8] flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <PiMoonFill className="text-[#7D2235] text-base" />
+                      <div>
+                        <span className="font-bold block text-[#2F2620]">Night Owl Reader</span>
+                        <span className="text-[10.5px] text-[#7A6A5E]">42 nocturnal reading hours logged</span>
+                      </div>
+                    </div>
+                    <span className="text-emerald-700 font-bold text-[10px]">Active</span>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-[#F4ECDE] border border-[#DECDB8] flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <PiPenNibBold className="text-[#7D2235] text-base" />
+                      <div>
+                        <span className="font-bold block text-[#2F2620]">Marginalia Scribe</span>
+                        <span className="text-[10.5px] text-[#7A6A5E]">28 reflections & textual notes published</span>
+                      </div>
+                    </div>
+                    <span className="text-emerald-700 font-bold text-[10px]">Active</span>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-[#F4ECDE] border border-[#DECDB8] flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <PiColumnsBold className="text-[#7D2235] text-base" />
+                      <div>
+                        <span className="font-bold block text-[#2F2620]">Classics Initiate</span>
+                        <span className="text-[10.5px] text-[#7A6A5E]">6 canonical volumes annotated</span>
+                      </div>
+                    </div>
+                    <span className="text-emerald-700 font-bold text-[10px]">Active</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Daily XP Gift Button */}
+              <button
+                type="button"
+                disabled={claimedDailyXP}
+                onClick={() => {
+                  playWaxSealCrack();
+                  setClaimedDailyXP(true);
+                  setPassportXP((x) => x + 25);
+                  enqueueSnackbar('✨ Claimed Daily Salon Inspiration: +25 Sanctuary XP awarded! 🕯️', {
+                    variant: 'success',
+                  });
+                }}
+                className={`w-full py-2.5 rounded-full text-xs font-semibold shadow-xs cute-press cursor-pointer flex items-center justify-center gap-2 ${
+                  claimedDailyXP
+                    ? 'bg-[#E5D7C2] text-[#8C7A6D] cursor-default'
+                    : 'bg-[#7D2235] hover:bg-[#92283F] text-white'
+                }`}
+              >
+                <PiSparkleBold />
+                <span>{claimedDailyXP ? 'Daily Inspiration Claimed ✓' : 'Claim Daily Salon Inspiration (+25 XP) 🕯️'}</span>
+              </button>
             </div>
           </div>
         )}
