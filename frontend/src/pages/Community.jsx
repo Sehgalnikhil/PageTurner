@@ -1057,17 +1057,18 @@ const Community = () => {
             </div>
 
             {/* Large Intricate Crimson Wax Seal Medallion */}
-            <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-[#9B2C42] via-[#751B2E] to-[#4A101C] shadow-[0_16px_50px_rgba(0,0,0,0.95),0_0_30px_rgba(155,44,66,0.6)] border-4 border-[#C6A16B] flex items-center justify-center cute-press transform hover:scale-105 transition-transform duration-300">
+            <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-[#9B2C42] via-[#751B2E] to-[#4A101C] shadow-[0_16px_50px_rgba(0,0,0,0.95),0_0_30px_rgba(155,44,66,0.6)] border-4 border-[#C6A16B] flex items-center justify-center cute-press transform hover:scale-105 transition-transform duration-300 overflow-hidden">
               {/* Outer Scalloped Wax Ring */}
-              <div className="absolute inset-1.5 rounded-full border border-dashed border-[#F3E5C8]/50 pointer-events-none" />
-              <div className="absolute inset-3 rounded-full border border-[#D4AF37]/40 pointer-events-none" />
+              <div className="absolute inset-1.5 rounded-full border border-dashed border-[#F3E5C8]/50 pointer-events-none z-10" />
+              <div className="absolute inset-3 rounded-full border border-[#D4AF37]/40 pointer-events-none z-10" />
 
-              {/* Embossed Open Book & Feather Monogram */}
-              <div className="flex flex-col items-center text-[#FDF6EA] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-                <PiBookOpenBold className="text-4xl sm:text-5xl text-[#F9E8D0]" />
-                <span className="font-serif italic text-xs sm:text-sm tracking-widest mt-1 font-bold text-[#E5C390]">
-                  P · T
-                </span>
+              {/* Embossed Open Book, Lantern & Cup Illustrated Emblem */}
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-[#F7EFE4] flex items-center justify-center shadow-inner">
+                <img
+                  src="/images/pageturner-emblem.png"
+                  alt="PageTurner Seal"
+                  className="w-full h-full object-cover mix-blend-multiply"
+                />
               </div>
             </div>
 

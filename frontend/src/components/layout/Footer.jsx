@@ -23,10 +23,14 @@ const Footer = () => {
           {/* Brand Colophon */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-3 group/logo cursor-pointer">
-              <div className="w-8 h-8 rounded-lg bg-[#8D263B] text-[#FFFDFA] flex items-center justify-center shadow-subtle group-hover/logo:rotate-[-6deg] group-hover/logo:scale-115 transition-transform duration-300">
-                <PiBooksBold className="text-lg" />
+              <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F7EFE4] border border-[#DECDB8] shadow-subtle group-hover/logo:rotate-[-4deg] group-hover/logo:scale-105 transition-transform duration-300">
+                <img
+                  src="/images/pageturner-emblem.png"
+                  alt="PageTurner"
+                  className="w-full h-full object-cover mix-blend-multiply"
+                />
               </div>
-              <span className="font-serif text-xl font-medium text-[#302A27] tracking-tight group-hover/logo:text-[#8D263B] transition-colors">
+              <span className="font-serif text-2xl font-medium text-[#302A27] tracking-tight group-hover/logo:text-[#8D263B] transition-colors">
                 PageTurner
               </span>
             </div>

@@ -436,3 +436,4 @@ const MarginaliaBoard = ({ onOpenLetterModal = null }) => {
 };
 
 export default MarginaliaBoard;
+

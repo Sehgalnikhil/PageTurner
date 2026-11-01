@@ -75,3 +75,4 @@ socraticDebateSchema.set('toJSON', { virtuals: true });
 socraticDebateSchema.set('toObject', { virtuals: true });
 
 export const SocraticDebate = mongoose.model('SocraticDebate', socraticDebateSchema);
+

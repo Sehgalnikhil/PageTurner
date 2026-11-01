@@ -65,3 +65,4 @@ readingSprintSchema.set('toJSON', { virtuals: true });
 readingSprintSchema.set('toObject', { virtuals: true });
 
 export const ReadingSprint = mongoose.model('ReadingSprint', readingSprintSchema);
+

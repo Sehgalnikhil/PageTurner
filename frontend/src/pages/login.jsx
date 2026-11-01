@@ -131,8 +131,12 @@ const Login = () => {
 
             {/* Top Emblem & Brand Signature */}
             <div className="relative z-10 flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-white/95 text-[#92283F] flex items-center justify-center shadow-md">
-                <PiBooksBold className="text-lg" />
+              <div className="w-9 h-9 rounded-xl overflow-hidden bg-[#F7EFE4] border border-white/60 shadow-md flex items-center justify-center">
+                <img
+                  src="/images/pageturner-emblem.png"
+                  alt="PageTurner"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-base font-semibold tracking-tight text-white/95 leading-none">

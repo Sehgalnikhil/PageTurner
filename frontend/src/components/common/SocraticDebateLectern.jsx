@@ -384,3 +384,4 @@ const SocraticDebateLectern = () => {
 };
 
 export default SocraticDebateLectern;
+

@@ -61,3 +61,4 @@ marginaliaSchema.set('toJSON', { virtuals: true });
 marginaliaSchema.set('toObject', { virtuals: true });
 
 export const Marginalia = mongoose.model('Marginalia', marginaliaSchema);
+

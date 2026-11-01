@@ -64,3 +64,4 @@ literaryLetterSchema.set('toJSON', { virtuals: true });
 literaryLetterSchema.set('toObject', { virtuals: true });
 
 export const LiteraryLetter = mongoose.model('LiteraryLetter', literaryLetterSchema);
+
