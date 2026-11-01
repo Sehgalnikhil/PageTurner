@@ -163,48 +163,46 @@ const Navbar = ({ totalBooks = 0 }) => {
         </div>
       )}
 
-      <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#E5DACB] transition-colors duration-150 w-full overflow-x-clip shadow-xs">
+      <header className="sticky top-0 z-40 bg-[#F7F3EC]/95 backdrop-blur-md border-b border-[#E8DED1] transition-colors duration-150 w-full overflow-x-clip">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[72px] sm:h-[78px] gap-2.5 sm:gap-3">
+          <div className="flex items-center justify-between h-[72px] sm:h-[78px] gap-3">
             
             {/* 1. BRAND SECTION (LEFT) */}
             <div className="flex items-center flex-shrink-0">
               <Link to="/" className="group flex items-center py-0.5" title="PageTurner — Return to Sanctuary">
-                {/* Official Full PageTurner Logo Artwork & Typography with cute tilt & drop shadow */}
+                {/* Official Full PageTurner Logo Artwork & Typography */}
                 <img
                   src="/images/pageturner-full-transparent.png"
                   alt="PageTurner"
-                  className="h-[52px] sm:h-[62px] w-auto object-contain transition-all duration-300 group-hover:scale-105 group-hover:-rotate-1 filter drop-shadow-[0_2px_10px_rgba(60,30,15,0.14)]"
+                  className="h-[54px] sm:h-[64px] w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_8px_rgba(60,30,15,0.12)]"
                 />
               </Link>
             </div>
 
-            {/* 2. NAVIGATION ROW (Pill-shaped cute micro-interactions with literary motifs) */}
-            <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5 flex-shrink-0" aria-label="Main Navigation">
+            {/* 2. NAVIGATION ROW (Clean Editorial Typography) */}
+            <nav className="hidden lg:flex items-center gap-5 xl:gap-7 flex-shrink-0" aria-label="Main Navigation">
               {/* Discover */}
               <Link
                 to="/"
-                className={`text-xs font-medium transition-all duration-200 px-3 py-1.5 rounded-full flex items-center gap-1.5 cute-pill-hover ${
+                className={`text-xs font-medium transition-all duration-150 relative py-1 ${
                   isDiscoverActive
-                    ? 'text-[#8D263B] font-semibold bg-[#8D263B]/10 shadow-2xs'
-                    : 'text-[#675C54] hover:text-[#8D263B] hover:bg-[#8D263B]/5'
+                    ? 'text-[#8D263B] font-semibold after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#8D263B] after:rounded-full'
+                    : 'text-[#675C54] hover:text-[#8D263B]'
                 }`}
               >
-                <PiCompassBold className={`text-xs ${isDiscoverActive ? 'text-[#8D263B]' : 'text-[#81766D]'}`} />
-                <span>Discover</span>
+                Discover
               </Link>
 
-              {/* My Shelf with animated heart badge */}
+              {/* My Shelf with count indicator */}
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(true)}
-                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-all px-3 py-1.5 rounded-full hover:bg-[#8D263B]/5 flex items-center gap-1.5 cursor-pointer group/shelf cute-pill-hover"
+                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-colors flex items-center gap-1.5 cursor-pointer py-1 group/shelf"
                 title="Open My Personal Reading Shelf"
               >
-                <PiBooksBold className="text-xs text-[#81766D] group-hover/shelf:text-[#8D263B] transition-colors" />
                 <span>My Shelf</span>
                 {bookmarkCount > 0 && (
-                  <span className="w-4 h-4 rounded-full bg-[#8D263B] text-white text-[10px] font-mono font-bold flex items-center justify-center shadow-xs animate-heart-cute ml-0.5">
+                  <span className="w-4 h-4 rounded-full bg-[#8D263B] text-white text-[10px] font-sans font-semibold flex items-center justify-center shadow-2xs animate-heart-cute">
                     {bookmarkCount}
                   </span>
                 )}
@@ -214,50 +212,44 @@ const Navbar = ({ totalBooks = 0 }) => {
               <button
                 type="button"
                 onClick={() => setShowAtmosphereDrawer(true)}
-                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-all px-3 py-1.5 rounded-full hover:bg-[#8D263B]/5 cursor-pointer flex items-center gap-1.5 group/col cute-pill-hover"
+                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-colors py-1 cursor-pointer"
                 title="Explore 6 Curated Atmospheric Anthologies"
               >
-                <PiStackBold className="text-xs text-[#81766D] group-hover/col:text-[#8D263B] transition-colors" />
-                <span>Collections</span>
-                <span className="text-[9px] font-mono uppercase bg-[#C6A16B]/20 text-[#8D263B] px-1.5 py-0.2 rounded-full font-bold">
-                  6
-                </span>
+                Collections
               </button>
 
               {/* Bookplates */}
               <button
                 type="button"
                 onClick={() => setShowBookplate(true)}
-                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-all px-3 py-1.5 rounded-full hover:bg-[#8D263B]/5 cursor-pointer flex items-center gap-1.5 group/bp cute-pill-hover"
+                className="text-xs font-medium text-[#675C54] hover:text-[#8D263B] transition-colors py-1 cursor-pointer"
                 title="Create Custom Vintage Ex-Libris Bookplates"
               >
-                <PiTagBold className="text-xs text-[#81766D] group-hover/bp:text-[#8D263B] transition-colors" />
-                <span>Bookplates</span>
+                Bookplates
               </button>
 
               {/* Community (The Readers' Salon) */}
               <Link
                 to="/community"
                 state={{ fromNavbar: true, triggerTimestamp: Date.now() }}
-                className={`text-xs font-serif tracking-wide px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition-all cute-press shadow-2xs ${
+                className={`text-xs font-serif tracking-wide px-3 py-1 rounded-full flex items-center gap-1.5 transition-all cute-press ${
                   location.pathname === '/community'
-                    ? 'bg-gradient-to-r from-[#6E1929] to-[#8D263B] text-[#FDFBF7] shadow-sm font-semibold'
-                    : 'text-[#5A4B42] hover:text-[#8D263B] bg-[#FFFDF9] border border-[#E5DACB] hover:border-[#8D263B]/40'
+                    ? 'bg-[#7A2134] text-[#FDFBF7] shadow-xs font-semibold'
+                    : 'text-[#675C54] hover:text-[#8D263B] hover:bg-[#8D263B]/5'
                 }`}
               >
                 <PiFeatherBold className="text-xs text-[#E8C28A]" />
-                <span className="font-medium">The Salon</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#E8C28A] animate-pulse" />
+                <span>The Salon</span>
               </Link>
 
               {/* Admin Curator Desk Link */}
               {isAdmin && (
                 <Link
                   to="/admin"
-                  className={`text-xs font-medium transition-all px-3 py-1.5 rounded-full flex items-center gap-1.5 cute-pill-hover ${
+                  className={`text-xs font-medium transition-all duration-150 flex items-center gap-1 py-1 ${
                     location.pathname === '/admin'
-                      ? 'text-[#8D263B] font-semibold bg-[#8D263B]/10 shadow-2xs'
-                      : 'text-[#C6A16B] hover:text-[#8D263B] hover:bg-[#8D263B]/5'
+                      ? 'text-[#8D263B] font-semibold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#8D263B] after:rounded-full'
+                      : 'text-[#C6A16B] hover:text-[#8D263B]'
                   }`}
                   title="Curator Studio & Admin Desk"
                 >
@@ -267,13 +259,13 @@ const Navbar = ({ totalBooks = 0 }) => {
               )}
             </nav>
 
-            {/* 3. INTEGRATED SEARCH UTILITY (CENTER - Charming Scroll Capsule) */}
-            <div className="hidden md:flex items-center flex-1 max-w-[250px] min-w-[140px] mx-1">
+            {/* 3. INTEGRATED SEARCH UTILITY (Original Clean Pill) */}
+            <div className="hidden md:flex items-center flex-1 max-w-[240px] min-w-[140px] mx-1">
               <button
                 type="button"
                 onClick={() => setShowCommandK(true)}
-                title="Omnisearch Palette (⌘K)"
-                className="w-full h-8.5 rounded-full border border-[#E5DACB] bg-[#FFFDF9] hover:border-[#C6A16B] hover:bg-[#FFFDFA] px-3.5 flex items-center justify-between text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
+                title="Omnisearch (⌘K)"
+                className="w-full h-8 rounded-full border border-[#E8DED1] bg-[#FFFDFA] hover:border-[#C6A16B]/60 hover:bg-[#FDFBF7] px-3.5 flex items-center justify-between text-left transition-all duration-150 cursor-pointer shadow-2xs group"
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <PiMagnifyingGlassBold className="text-[#81766D] group-hover:text-[#8D263B] text-xs flex-shrink-0 transition-colors" />
@@ -281,13 +273,13 @@ const Navbar = ({ totalBooks = 0 }) => {
                     Search books, authors, ideas...
                   </span>
                 </div>
-                <kbd className="px-1.5 py-0.5 rounded-md bg-[#F0E9DE]/80 border border-[#E2D5C3] text-[9.5px] font-mono text-[#7A6C60] font-semibold leading-none flex-shrink-0 ml-1.5 shadow-2xs">
+                <kbd className="px-1.5 py-0.5 rounded bg-[#F0E9DE]/60 border border-[#E8DED1] text-[9.5px] font-mono text-[#81766D] font-medium leading-none flex-shrink-0 ml-1.5">
                   ⌘K
                 </kbd>
               </button>
             </div>
 
-            {/* 4. RIGHT ACTIONS (Sound Charm, + Add Book, Profile, Logout, Mobile Toggles) */}
+            {/* 4. RIGHT ACTIONS (Sound, + Add Book, Profile, Logout, Mobile Toggles) */}
             <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
               
               {/* Optional Search icon on small screens where search input is hidden */}
@@ -301,109 +293,89 @@ const Navbar = ({ totalBooks = 0 }) => {
                 <PiMagnifyingGlassBold className="text-lg" />
               </button>
 
-              {/* Sound Ambiance: Tactile Cute Charm Button */}
+              {/* Sound Ambiance: Original Clean Circular Icon Button */}
               {user && (
                 <button
                   type="button"
                   onClick={handleCycleAmbient}
-                  title={`Atmospheric Soundscape: ${ambientSound === 'off' ? 'Off (Click to play)' : ambientSound.charAt(0).toUpperCase() + ambientSound.slice(1)}`}
-                  className={`h-8.5 px-2.5 rounded-full border transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-2xs cute-press ${
+                  title={`Soundscape: ${ambientSound === 'off' ? 'Off' : ambientSound.charAt(0).toUpperCase() + ambientSound.slice(1)}`}
+                  className={`w-8 h-8 rounded-full border transition-all flex items-center justify-center cursor-pointer ${
                     ambientSound !== 'off'
-                      ? 'border-[#8D263B] bg-[#8D263B]/10 text-[#8D263B] font-medium shadow-xs'
-                      : 'border-[#E5DACB] bg-[#FFFDF9] hover:bg-[#F7F3EC] text-[#7A6C60] hover:text-[#302A27]'
+                      ? 'border-[#8D263B] bg-[#8D263B]/10 text-[#8D263B]'
+                      : 'border-[#E8DED1] bg-[#FFFDFA] hover:bg-[#F7F3EC] text-[#81766D] hover:text-[#302A27]'
                   }`}
                 >
                   {ambientSound === 'rain' ? (
-                    <>
-                      <PiCloudRainBold className="text-sm text-[#8D263B] animate-pulse" />
-                      <span className="text-[11px] font-serif capitalize hidden xl:inline">Rain</span>
-                    </>
+                    <PiCloudRainBold className="text-sm animate-pulse" />
                   ) : ambientSound === 'fireplace' ? (
-                    <>
-                      <PiFlameBold className="text-sm text-[#8D263B] animate-pulse" />
-                      <span className="text-[11px] font-serif capitalize hidden xl:inline">Hearth</span>
-                    </>
+                    <PiFlameBold className="text-sm animate-pulse" />
                   ) : ambientSound === 'clock' ? (
-                    <>
-                      <PiClockBold className="text-sm text-[#8D263B] animate-pulse" />
-                      <span className="text-[11px] font-serif capitalize hidden xl:inline">Clock</span>
-                    </>
+                    <PiClockBold className="text-sm animate-pulse" />
                   ) : (
-                    <>
-                      <PiSpeakerHighBold className="text-sm text-[#81766D]" />
-                      <span className="text-[11px] font-serif hidden xl:inline text-[#81766D]">Vibes</span>
-                    </>
+                    <PiSpeakerHighBold className="text-sm" />
                   )}
                 </button>
               )}
 
-              {/* + Add Book Primary CTA */}
+              {/* + Add Book Primary CTA: Original Clean Burgundy Capsule */}
               {user && (
                 <Link
                   to="/books/create"
-                  className="flex items-center gap-1.5 h-8.5 px-3.5 sm:px-4 rounded-full bg-gradient-to-r from-[#7D1D2D] to-[#8D263B] hover:from-[#671725] hover:to-[#7D1D2D] text-[#FFFDF9] text-xs font-medium transition-all duration-200 flex-shrink-0 shadow-sm hover:shadow-md active:scale-95 group/addbtn cute-pill-hover border border-[#C6A16B]/30"
+                  className="flex items-center gap-1.5 h-8 px-3.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium transition-all duration-150 flex-shrink-0 shadow-sm active:scale-95 group/addbtn"
                 >
-                  <PiPlusBold className="text-xs text-[#E8C28A] transition-transform duration-300 group-hover/addbtn:rotate-90 group-hover/addbtn:scale-125" />
-                  <span className="font-sans font-medium">Add Book</span>
+                  <PiPlusBold className="text-xs transition-transform duration-300 group-hover/addbtn:rotate-90 group-hover/addbtn:scale-125" />
+                  <span>Add Book</span>
                 </Link>
               )}
 
-              {/* User Profile & Passport Charm */}
+              {/* User Profile & Logout (When Logged In) */}
               {user ? (
-                <div className="flex items-center gap-1.5 pl-2 border-l border-[#E5DACB]">
+                <div className="flex items-center gap-1 pl-1.5 border-l border-[#E8DED1]">
                   <button
                     type="button"
                     onClick={() => setShowPassport(true)}
-                    title="View Reader Passport, Level & Welcome Package"
-                    className="flex items-center gap-2 py-1 px-1.5 rounded-full hover:bg-[#8D263B]/5 border border-transparent hover:border-[#E5DACB] transition-all group cursor-pointer text-left cute-pill-hover"
+                    title="View Reader Passport & Profile"
+                    className="flex items-center gap-2 p-1 rounded-lg hover:bg-[#8D263B]/5 transition-colors group cursor-pointer text-left"
                   >
-                    <div className="relative">
-                      {user.avatar ? (
-                        <img
-                          src={user.avatar}
-                          alt={user.username}
-                          className="w-7 h-7 rounded-full object-cover ring-2 ring-[#C6A16B]/70 ring-offset-1 ring-offset-[#F7F3EC] shadow-2xs group-hover:scale-105 transition-transform"
-                        />
-                      ) : (
-                        <div className="w-7 h-7 rounded-full bg-[#F0E9DE] text-[#67202F] font-serif font-bold text-xs flex items-center justify-center flex-shrink-0 border border-[#C6A16B]/50 group-hover:scale-105 transition-transform">
-                          {user.username ? user.username.charAt(0).toUpperCase() : 'R'}
-                        </div>
-                      )}
-                      <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-1 ring-white" />
-                    </div>
+                    {user.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt={user.username}
+                        className="w-7 h-7 rounded-full object-cover border border-[#C59B63] shadow-xs group-hover:scale-105 transition-transform"
+                      />
+                    ) : (
+                      <div className="w-7 h-7 rounded-full bg-[#F0E9DE] text-[#67202F] font-serif font-semibold text-xs flex items-center justify-center flex-shrink-0 border border-[#E8DED1] group-hover:border-[#8D263B]/30 transition-colors">
+                        {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
+                      </div>
+                    )}
 
-                    <div className="hidden sm:block text-left leading-tight">
-                      <span className="text-xs font-serif font-bold text-[#2A1E17] block truncate max-w-[85px] group-hover:text-[#8D263B] transition-colors">
-                        {user.username}
-                      </span>
-                      <span className="text-[9px] font-mono text-[#8D263B] uppercase tracking-wider block font-semibold">
-                        {isAdmin ? 'Curator' : 'Reader'}
-                      </span>
-                    </div>
+                    <span className="hidden sm:inline text-xs font-medium text-[#302A27] truncate max-w-[80px] group-hover:text-[#8D263B] transition-colors">
+                      {user.username}
+                    </span>
                   </button>
 
                   <button
                     onClick={logout}
-                    title="Sign out of sanctuary"
-                    className="w-7.5 h-7.5 rounded-full text-[#81766D] hover:text-[#8D263B] hover:bg-[#8D263B]/10 flex items-center justify-center transition-colors cursor-pointer"
+                    title="Sign out"
+                    className="w-7 h-7 rounded-full text-[#81766D] hover:text-[#8D263B] hover:bg-[#8D263B]/5 flex items-center justify-center transition-colors cursor-pointer"
                   >
                     <PiSignOutBold className="text-sm" />
                   </button>
                 </div>
               ) : (
-                <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-[#E5DACB]">
+                <div className="hidden sm:flex items-center gap-2 pl-1.5 border-l border-[#E8DED1]">
                   <Link
                     to="/login"
-                    className="px-3 py-1.5 text-xs font-medium text-[#302A27] hover:text-[#8D263B] hover:bg-[#8D263B]/5 rounded-full transition-colors"
+                    className="px-2.5 py-1 text-xs font-medium text-[#302A27] hover:text-[#8D263B] transition-colors"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
-                    className="h-8.5 px-4 flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#7D1D2D] to-[#8D263B] hover:from-[#671725] hover:to-[#7D1D2D] text-[#FFFDFA] text-xs font-medium transition-all shadow-sm active:scale-95 border border-[#C6A16B]/30"
+                    className="h-8 px-4 flex items-center gap-1.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium transition-all shadow-sm active:scale-95"
                   >
                     <span>Join</span>
-                    <PiArrowRightBold className="text-xs text-[#E8C28A]" />
+                    <PiArrowRightBold className="text-xs" />
                   </Link>
                 </div>
               )}
