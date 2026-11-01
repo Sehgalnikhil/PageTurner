@@ -14,41 +14,76 @@ import {
   PiFeatherBold,
   PiCompassBold,
   PiStarFill,
-  PiTagBold,
 } from 'react-icons/pi';
 import { ReadingListContext } from '../../context/ReadingListContext';
 import { bookService } from '../../services/api';
+import { getBookCoverUrl } from '../../utils/imageHelper';
 import { playPaperUnwrap, playWaxSealCrack } from '../../utils/soundEffects';
 import { ambientAudio } from '../../utils/ambientAudioEngine';
 import { useSnackbar } from 'notistack';
 
-// 6 Curated Atmospheric Anthologies with tailored soundscapes, quotes, and canonical works
+// 6 Curated Atmospheric Anthologies with verified local assets, quotes, and soundscapes
 export const ATMOSPHERES_DATA = [
   {
     id: 'dark-academia',
     title: 'Dark Academia',
-    tagline: 'Gothic obsession, grand libraries & intellectual desire.',
+    tagline: 'Gothic obsession, classical libraries & intellectual longing.',
     quote: 'I want to live quietly, secluded from the turmoil of people, with good books.',
     quoteAuthor: 'Donna Tartt, The Secret History',
     soundName: 'Cathedral Rain & Grandfather Clock',
     soundPreset: { rain: 0.5, fireplace: 0.0, clock: 0.3 },
-    bgImage: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80',
+    bgImage: '/images/parlour-gothic.jpg',
     color: '#8D263B',
     accent: '#C6A16B',
-    keywords: ['dorian', 'crime', 'gatsby', 'secret history', 'catcher', 'dracula', 'frankenstein'],
-    fallbackCategory: 'Fiction',
+    keywords: ['secret history', 'dorian', 'villains', 'babel', 'crime and punishment', 'frankenstein'],
     canonicalWorks: [
+      {
+        _id: 'canonical-the-secret-history',
+        title: 'The Secret History',
+        author: 'Donna Tartt',
+        publishYear: 1992,
+        category: 'Fiction',
+        image: '/images/covers/the-secret-history.jpg',
+        excerpt: 'An elite Greek tragedy class entangled in an ancient ritual that unravels into murder.',
+        curatorBadge: 'Academic Canon',
+        readingTime: '9 hrs',
+        averageRating: 4.9,
+      },
       {
         _id: 'canonical-dorian-gray',
         title: 'The Picture of Dorian Gray',
         author: 'Oscar Wilde',
         publishYear: 1890,
         category: 'Fiction',
-        image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80',
+        image: '/images/covers/the-picture-of-dorian-gray.jpg',
         excerpt: 'A Faustian portrait of vanity, aesthetic obsession, and moral rot in Victorian London.',
         curatorBadge: 'Gothic Masterpiece',
         readingTime: '4.5 hrs',
         averageRating: 4.8,
+      },
+      {
+        _id: 'canonical-if-we-were-villains',
+        title: 'If We Were Villains',
+        author: 'M.L. Rio',
+        publishYear: 2017,
+        category: 'Fiction',
+        image: '/images/covers/if-we-were-villains.jpg',
+        excerpt: 'Seven young Shakespearean actors at an elite conservatory play their roles too deeply.',
+        curatorBadge: 'Tragic Theatre',
+        readingTime: '7.5 hrs',
+        averageRating: 4.8,
+      },
+      {
+        _id: 'canonical-babel',
+        title: 'Babel: An Arcane History',
+        author: 'R.F. Kuang',
+        publishYear: 2022,
+        category: 'Fiction',
+        image: '/images/covers/babel.jpg',
+        excerpt: 'Oxford’s Royal Institute of Translation, magical silver-working, and the ethics of empire.',
+        curatorBadge: 'Linguistic Arcana',
+        readingTime: '12 hrs',
+        averageRating: 4.9,
       },
       {
         _id: 'canonical-crime-punishment',
@@ -56,23 +91,23 @@ export const ATMOSPHERES_DATA = [
         author: 'Fyodor Dostoevsky',
         publishYear: 1866,
         category: 'Classic',
-        image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80',
+        image: '/images/covers/crime-and-punishment.jpg',
         excerpt: 'The psychological anatomy of guilt, hubris, and redemption in Saint Petersburg.',
         curatorBadge: 'Psychological Core',
-        readingTime: '12 hrs',
+        readingTime: '14 hrs',
         averageRating: 4.9,
       },
       {
-        _id: 'canonical-secret-history',
-        title: 'The Secret History',
-        author: 'Donna Tartt',
-        publishYear: 1992,
-        category: 'Fiction',
-        image: 'https://images.unsplash.com/photo-1507842229452-772d1c9f80ec?auto=format&fit=crop&w=400&q=80',
-        excerpt: 'An elite Greek tragedy class entangled in an ancient ritual that unravels into murder.',
-        curatorBadge: 'Dark Academic Canon',
-        readingTime: '9 hrs',
-        averageRating: 4.9,
+        _id: 'canonical-frankenstein',
+        title: 'Frankenstein',
+        author: 'Mary Shelley',
+        publishYear: 1818,
+        category: 'Gothic',
+        image: '/images/covers/frankenstein.jpg',
+        excerpt: 'A scientist dares to spark synthetic life, birthing a lonely creature consumed by vengeance.',
+        curatorBadge: 'Gothic Origin',
+        readingTime: '5 hrs',
+        averageRating: 4.8,
       },
     ],
   },
@@ -84,11 +119,10 @@ export const ATMOSPHERES_DATA = [
     quoteAuthor: 'Frank Herbert, Dune',
     soundName: 'Cosmic Rain & Library Whispers',
     soundPreset: { rain: 0.55, fireplace: 0.0, clock: 0.15 },
-    bgImage: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=800&q=80',
+    bgImage: '/images/parlour-midnight.jpg',
     color: '#343A5E',
     accent: '#8AA0DC',
-    keywords: ['dune', '1984', 'brave new world', 'fahrenheit', 'solaris', 'neuromancer', 'three-body'],
-    fallbackCategory: 'Sci-Fi',
+    keywords: ['dune', '1984', 'brave new world', 'fahrenheit', 'klara', 'solitude'],
     canonicalWorks: [
       {
         _id: 'canonical-dune',
@@ -96,8 +130,8 @@ export const ATMOSPHERES_DATA = [
         author: 'Frank Herbert',
         publishYear: 1965,
         category: 'Sci-Fi',
-        image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=400&q=80',
-        excerpt: 'Politics, religion, and ecology collide on Arrakis in an unparalleled space epic.',
+        image: '/images/covers/dune.jpg',
+        excerpt: 'Politics, religion, and ecology collide on Arrakis in an unparalleled desert epic.',
         curatorBadge: 'Cosmic Monument',
         readingTime: '14 hrs',
         averageRating: 4.9,
@@ -108,7 +142,7 @@ export const ATMOSPHERES_DATA = [
         author: 'George Orwell',
         publishYear: 1949,
         category: 'Sci-Fi',
-        image: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=400&q=80',
+        image: '/images/covers/1984.jpg',
         excerpt: 'The chilling portrait of totalitarian surveillance, newspeak, and the loss of truth.',
         curatorBadge: 'Dystopian Benchmark',
         readingTime: '6 hrs',
@@ -120,11 +154,47 @@ export const ATMOSPHERES_DATA = [
         author: 'Aldous Huxley',
         publishYear: 1932,
         category: 'Sci-Fi',
-        image: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=400&q=80',
+        image: '/images/covers/brave-new-world.jpg',
         excerpt: 'A technocratic future that engineered tranquility at the price of human liberty.',
         curatorBadge: 'Prophetic Vision',
         readingTime: '5.5 hrs',
         averageRating: 4.7,
+      },
+      {
+        _id: 'canonical-fahrenheit-451',
+        title: 'Fahrenheit 451',
+        author: 'Ray Bradbury',
+        publishYear: 1953,
+        category: 'Sci-Fi',
+        image: '/images/covers/fahrenheit-451.jpg',
+        excerpt: 'A fireman whose duty is to ignite printed books discovers the insurgent beauty of literature.',
+        curatorBadge: 'Literary Rebirth',
+        readingTime: '4 hrs',
+        averageRating: 4.8,
+      },
+      {
+        _id: 'canonical-klara-and-the-sun',
+        title: 'Klara and the Sun',
+        author: 'Kazuo Ishiguro',
+        publishYear: 2021,
+        category: 'Sci-Fi',
+        image: '/images/covers/klara-and-the-sun.jpg',
+        excerpt: 'An artificial friend with extraordinary observational power contemplates the human heart.',
+        curatorBadge: 'Tender Speculation',
+        readingTime: '6.5 hrs',
+        averageRating: 4.7,
+      },
+      {
+        _id: 'canonical-one-hundred-years',
+        title: 'One Hundred Years of Solitude',
+        author: 'Gabriel García Márquez',
+        publishYear: 1967,
+        category: 'Fiction',
+        image: '/images/covers/one-hundred-years-of-solitude.jpg',
+        excerpt: 'Seven generations of the Buendía family in the mythical town of Macondo.',
+        curatorBadge: 'Magical Realism',
+        readingTime: '11 hrs',
+        averageRating: 4.9,
       },
     ],
   },
@@ -136,11 +206,10 @@ export const ATMOSPHERES_DATA = [
     quoteAuthor: 'Jane Austen, Emma',
     soundName: 'Hearthside Crackle & Herbal Tea',
     soundPreset: { rain: 0.1, fireplace: 0.55, clock: 0.05 },
-    bgImage: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80',
+    bgImage: '/images/parlour-slow.jpg',
     color: '#7A4A28',
     accent: '#D4A373',
-    keywords: ['pride', 'hobbit', 'alchemist', 'fellowship', 'anne', 'little women', 'solace'],
-    fallbackCategory: 'Fiction',
+    keywords: ['pride and prejudice', 'hobbit', 'before the coffee', 'alchemist', 'little women', 'gentle reminder'],
     canonicalWorks: [
       {
         _id: 'canonical-pride-prejudice',
@@ -148,7 +217,7 @@ export const ATMOSPHERES_DATA = [
         author: 'Jane Austen',
         publishYear: 1813,
         category: 'Fiction',
-        image: 'https://images.unsplash.com/photo-1476275466078-4007374efbbe?auto=format&fit=crop&w=400&q=80',
+        image: '/images/covers/pride-and-prejudice.jpg',
         excerpt: 'Witty Regency romantic satire tracing Elizabeth Bennet and Mr. Darcy through misunderstanding.',
         curatorBadge: 'Timeless Warmth',
         readingTime: '7.5 hrs',
@@ -160,11 +229,23 @@ export const ATMOSPHERES_DATA = [
         author: 'J.R.R. Tolkien',
         publishYear: 1937,
         category: 'Fantasy',
-        image: 'https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=400&q=80',
+        image: '/images/covers/the-hobbit.jpg',
         excerpt: 'In a hole in the ground there lived a hobbit. Bilbo Baggins steps beyond the Shire.',
         curatorBadge: 'Pastoral Solace',
         readingTime: '6.5 hrs',
         averageRating: 4.9,
+      },
+      {
+        _id: 'canonical-before-coffee',
+        title: 'Before the Coffee Gets Cold',
+        author: 'Toshikazu Kawaguchi',
+        publishYear: 2015,
+        category: 'Fiction',
+        image: '/images/covers/before-the-coffee-gets-cold.jpg',
+        excerpt: 'In a small Tokyo back alley, a café offers customers the chance to travel back in time.',
+        curatorBadge: 'Gentle Tearjerker',
+        readingTime: '4 hrs',
+        averageRating: 4.8,
       },
       {
         _id: 'canonical-the-alchemist',
@@ -172,11 +253,35 @@ export const ATMOSPHERES_DATA = [
         author: 'Paulo Coelho',
         publishYear: 1988,
         category: 'Fiction',
-        image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80',
+        image: '/images/covers/the-alchemist.jpg',
         excerpt: 'An Andalusian shepherd boy journeys toward the Pyramids in search of worldly treasure.',
-        curatorBadge: 'Gentle Parable',
+        curatorBadge: 'Warm Parable',
         readingTime: '3.5 hrs',
         averageRating: 4.7,
+      },
+      {
+        _id: 'canonical-little-women',
+        title: 'Little Women',
+        author: 'Louisa May Alcott',
+        publishYear: 1868,
+        category: 'Fiction',
+        image: '/images/covers/little-women.jpg',
+        excerpt: 'The heartfelt journey of the four March sisters growing up in Civil War-era New England.',
+        curatorBadge: 'Cozy Hearth',
+        readingTime: '8 hrs',
+        averageRating: 4.8,
+      },
+      {
+        _id: 'canonical-gentle-reminder',
+        title: 'A Gentle Reminder',
+        author: 'Bianca Sparacino',
+        publishYear: 2020,
+        category: 'Poetry',
+        image: '/images/covers/a-gentle-reminder.jpg',
+        excerpt: 'Soulful meditations on healing, soft hearts, and finding peace in turbulent times.',
+        curatorBadge: 'Quiet Solace',
+        readingTime: '2 hrs',
+        averageRating: 4.9,
       },
     ],
   },
@@ -186,13 +291,12 @@ export const ATMOSPHERES_DATA = [
     tagline: 'Philosophy, radical empathy & human experience.',
     quote: 'You have power over your mind - not outside events. Realize this, and you will find strength.',
     quoteAuthor: 'Marcus Aurelius, Meditations',
-    soundName: 'Philosophy Hall & Steady Monastic Tone',
+    soundName: 'Philosophy Hall & Monastic Tone',
     soundPreset: { rain: 0.25, fireplace: 0.1, clock: 0.35 },
-    bgImage: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80',
+    bgImage: '/images/editorial/moodboard_mountain.jpg',
     color: '#284E45',
     accent: '#83B59B',
-    keywords: ['sapiens', 'meaning', 'mockingbird', 'thinking', 'meditations', 'seneca', 'camus'],
-    fallbackCategory: 'Non-Fiction',
+    keywords: ['meditations', 'meaning', 'sapiens', 'mockingbird', 'metamorphosis', 'thinking'],
     canonicalWorks: [
       {
         _id: 'canonical-meditations',
@@ -200,20 +304,20 @@ export const ATMOSPHERES_DATA = [
         author: 'Marcus Aurelius',
         publishYear: 180,
         category: 'Non-Fiction',
-        image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=400&q=80',
+        image: '/images/covers/meditations.jpg',
         excerpt: 'Private journal entries of Rome’s Stoic philosopher-emperor on duty, death, and self-mastery.',
         curatorBadge: 'Stoic Keystone',
         readingTime: '4 hrs',
         averageRating: 4.9,
       },
       {
-        _id: 'canonical-mans-search-for-meaning',
+        _id: 'canonical-mans-search',
         title: "Man's Search for Meaning",
         author: 'Viktor E. Frankl',
         publishYear: 1946,
         category: 'Non-Fiction',
-        image: 'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?auto=format&fit=crop&w=400&q=80',
-        excerpt: 'Psychiatrist Frankl outlines logotherapy and finding enduring purpose amidst the horrors of Auschwitz.',
+        image: '/images/covers/mans-search-for-meaning.jpg',
+        excerpt: 'Psychiatrist Frankl outlines logotherapy and finding enduring purpose amidst adversity.',
         curatorBadge: 'Human Resilience',
         readingTime: '3.5 hrs',
         averageRating: 4.9,
@@ -224,10 +328,46 @@ export const ATMOSPHERES_DATA = [
         author: 'Yuval Noah Harari',
         publishYear: 2011,
         category: 'Non-Fiction',
-        image: 'https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=400&q=80',
+        image: '/images/covers/sapiens.jpg',
         excerpt: 'From cognitive revolution to AI, how an insignificant ape became the ruler of planet Earth.',
         curatorBadge: 'Cosmic Vantage',
         readingTime: '9.5 hrs',
+        averageRating: 4.8,
+      },
+      {
+        _id: 'canonical-mockingbird',
+        title: 'To Kill a Mockingbird',
+        author: 'Harper Lee',
+        publishYear: 1960,
+        category: 'Fiction',
+        image: '/images/covers/to-kill-a-mockingbird.jpg',
+        excerpt: 'Scout Finch witnesses conscience and moral courage in the Jim Crow American South.',
+        curatorBadge: 'Moral Clarity',
+        readingTime: '6 hrs',
+        averageRating: 4.9,
+      },
+      {
+        _id: 'canonical-metamorphosis',
+        title: 'The Metamorphosis',
+        author: 'Franz Kafka',
+        publishYear: 1915,
+        category: 'Fiction',
+        image: '/images/covers/metamorphosis.jpg',
+        excerpt: 'Gregor Samsa awakes to find himself transformed into a monstrous insect.',
+        curatorBadge: 'Existential Icon',
+        readingTime: '2 hrs',
+        averageRating: 4.7,
+      },
+      {
+        _id: 'canonical-thinking-fast-slow',
+        title: 'Thinking, Fast and Slow',
+        author: 'Daniel Kahneman',
+        publishYear: 2011,
+        category: 'Non-Fiction',
+        image: '/images/covers/thinking-fast-and-slow.jpg',
+        excerpt: 'Nobel laureate Kahneman reveals the dual cognitive systems shaping intuition and choice.',
+        curatorBadge: 'Cognitive Depth',
+        readingTime: '9 hrs',
         averageRating: 4.8,
       },
     ],
@@ -240,11 +380,10 @@ export const ATMOSPHERES_DATA = [
     quoteAuthor: 'F. Scott Fitzgerald, The Great Gatsby',
     soundName: 'Midnight Hearth & Quiet Raindrop Tap',
     soundPreset: { rain: 0.45, fireplace: 0.4, clock: 0.15 },
-    bgImage: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80',
+    bgImage: '/images/login-reading-nook-hd.jpg',
     color: '#4B2544',
     accent: '#B884AA',
-    keywords: ['gatsby', 'alchemist', 'dorian', 'dune', 'rebecca', 'shadow', 'night'],
-    fallbackCategory: 'Fiction',
+    keywords: ['great gatsby', 'shadow of the wind', 'norwegian wood', 'bell jar', 'stoner', 'kafka on the shore'],
     canonicalWorks: [
       {
         _id: 'canonical-great-gatsby',
@@ -252,22 +391,10 @@ export const ATMOSPHERES_DATA = [
         author: 'F. Scott Fitzgerald',
         publishYear: 1925,
         category: 'Fiction',
-        image: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=400&q=80',
-        excerpt: 'The shimmering green light of Long Island Sound, roaring decadence, and doomed romantic idealism.',
+        image: '/images/covers/the-great-gatsby.jpg',
+        excerpt: 'The shimmering green light of Long Island Sound, roaring decadence, and doomed idealism.',
         curatorBadge: 'Jazz Age Nocturne',
         readingTime: '3.5 hrs',
-        averageRating: 4.8,
-      },
-      {
-        _id: 'canonical-rebecca',
-        title: 'Rebecca',
-        author: 'Daphne du Maurier',
-        publishYear: 1938,
-        category: 'Fiction',
-        image: 'https://images.unsplash.com/photo-1518373714866-3f1478910cc0?auto=format&fit=crop&w=400&q=80',
-        excerpt: 'Last night I dreamt I went to Manderley again. A haunting psychological gothic romance.',
-        curatorBadge: 'Gothic Thrill',
-        readingTime: '8 hrs',
         averageRating: 4.8,
       },
       {
@@ -276,11 +403,59 @@ export const ATMOSPHERES_DATA = [
         author: 'Carlos Ruiz Zafón',
         publishYear: 2001,
         category: 'Fiction',
-        image: 'https://images.unsplash.com/photo-1474932430478-367dbb6832c1?auto=format&fit=crop&w=400&q=80',
+        image: '/images/covers/the-shadow-of-the-wind.jpg',
         excerpt: 'Barcelona, 1945. A boy is introduced to the secret Cemetery of Forgotten Books.',
-        curatorBadge: 'Literary Labyrinth',
+        curatorBadge: 'Gothic Labyrinth',
         readingTime: '10 hrs',
         averageRating: 4.9,
+      },
+      {
+        _id: 'canonical-norwegian-wood',
+        title: 'Norwegian Wood',
+        author: 'Haruki Murakami',
+        publishYear: 1987,
+        category: 'Fiction',
+        image: '/images/covers/norwegian-wood.jpg',
+        excerpt: 'A nostalgic, atmospheric story of loss, sexuality, and student unrest in 1960s Tokyo.',
+        curatorBadge: 'Nocturnal Melancholy',
+        readingTime: '7 hrs',
+        averageRating: 4.8,
+      },
+      {
+        _id: 'canonical-bell-jar',
+        title: 'The Bell Jar',
+        author: 'Sylvia Plath',
+        publishYear: 1963,
+        category: 'Fiction',
+        image: '/images/covers/the-bell-jar.jpg',
+        excerpt: 'Esther Greenwood navigates New York glamour and the suffocation of personal identity.',
+        curatorBadge: 'Lyrical Rawness',
+        readingTime: '5.5 hrs',
+        averageRating: 4.8,
+      },
+      {
+        _id: 'canonical-stoner',
+        title: 'Stoner',
+        author: 'John Williams',
+        publishYear: 1965,
+        category: 'Fiction',
+        image: '/images/covers/stoner.jpg',
+        excerpt: 'The quiet, deeply moving life of an unassuming academic who finds sanctuary in literature.',
+        curatorBadge: 'Quiet Perfection',
+        readingTime: '6 hrs',
+        averageRating: 4.9,
+      },
+      {
+        _id: 'canonical-kafka-shore',
+        title: 'Kafka on the Shore',
+        author: 'Haruki Murakami',
+        publishYear: 2002,
+        category: 'Fiction',
+        image: '/images/covers/kafka-on-the-shore.jpg',
+        excerpt: 'A teenage runaway and an elderly man who speaks to cats enter a metaphysical realm.',
+        curatorBadge: 'Surreal Odyssey',
+        readingTime: '11 hrs',
+        averageRating: 4.8,
       },
     ],
   },
@@ -292,11 +467,10 @@ export const ATMOSPHERES_DATA = [
     quoteAuthor: 'James Clear, Atomic Habits',
     soundName: 'Precision Clockwork & Fountain Pen Scratch',
     soundPreset: { rain: 0.05, fireplace: 0.0, clock: 0.5 },
-    bgImage: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80',
+    bgImage: '/images/editorial/moodboard_reading_nook.jpg',
     color: '#3B362F',
     accent: '#C59A44',
-    keywords: ['atomic habits', 'thinking, fast', 'educated', 'steve jobs', 'deep work', 'essentialism'],
-    fallbackCategory: 'Non-Fiction',
+    keywords: ['atomic habits', 'steve jobs', 'educated', 'thinking', 'beyond good and evil', 'alchemist'],
     canonicalWorks: [
       {
         _id: 'canonical-atomic-habits',
@@ -304,34 +478,70 @@ export const ATMOSPHERES_DATA = [
         author: 'James Clear',
         publishYear: 2018,
         category: 'Non-Fiction',
-        image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=400&q=80',
-        excerpt: 'An evidence-based framework for tiny behavioral changes that compound into massive life transformations.',
+        image: '/images/covers/atomic-habits.jpg',
+        excerpt: 'An evidence-based framework for tiny behavioral changes that compound into massive transformations.',
         curatorBadge: 'System Architecture',
         readingTime: '5 hrs',
         averageRating: 4.9,
       },
       {
-        _id: 'canonical-deep-work',
-        title: 'Deep Work',
-        author: 'Cal Newport',
-        publishYear: 2016,
-        category: 'Non-Fiction',
-        image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=400&q=80',
-        excerpt: 'Rules for focused success in a distracted world. The superpower of the 21st-century knowledge economy.',
-        curatorBadge: 'Focus Mastery',
-        readingTime: '4.5 hrs',
+        _id: 'canonical-steve-jobs',
+        title: 'Steve Jobs',
+        author: 'Walter Isaacson',
+        publishYear: 2011,
+        category: 'Biography',
+        image: '/images/covers/steve-jobs.jpg',
+        excerpt: 'The unsparing biography of the visionary who revolutionized six technological industries.',
+        curatorBadge: 'Creative Genius',
+        readingTime: '13 hrs',
         averageRating: 4.8,
       },
       {
-        _id: 'canonical-thinking-fast-slow',
+        _id: 'canonical-educated',
+        title: 'Educated',
+        author: 'Tara Westover',
+        publishYear: 2018,
+        category: 'Memoir',
+        image: '/images/covers/educated.jpg',
+        excerpt: 'Raised off-grid in rural Idaho, Westover teaches herself mathematics to enter university at 17.',
+        curatorBadge: 'Transformational',
+        readingTime: '7 hrs',
+        averageRating: 4.9,
+      },
+      {
+        _id: 'canonical-thinking-fast-slow-craft',
         title: 'Thinking, Fast and Slow',
         author: 'Daniel Kahneman',
         publishYear: 2011,
         category: 'Non-Fiction',
-        image: 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?auto=format&fit=crop&w=400&q=80',
-        excerpt: 'Nobel laureate Kahneman reveals the dual cognitive systems shaping intuition, biases, and choices.',
-        curatorBadge: 'Cognitive Depth',
+        image: '/images/covers/thinking-fast-and-slow.jpg',
+        excerpt: 'How intuition, biases, and slow deliberative thinking shape every crucial decision.',
+        curatorBadge: 'Mental Models',
         readingTime: '9 hrs',
+        averageRating: 4.8,
+      },
+      {
+        _id: 'canonical-beyond-good-evil',
+        title: 'Beyond Good and Evil',
+        author: 'Friedrich Nietzsche',
+        publishYear: 1886,
+        category: 'Philosophy',
+        image: '/images/covers/beyond-good-and-evil.jpg',
+        excerpt: 'A scathing philosophical critique of moral dogmatism and the celebration of independent thought.',
+        curatorBadge: 'Philosophic Flame',
+        readingTime: '6 hrs',
+        averageRating: 4.7,
+      },
+      {
+        _id: 'canonical-the-stranger',
+        title: 'The Stranger',
+        author: 'Albert Camus',
+        publishYear: 1942,
+        category: 'Philosophy',
+        image: '/images/covers/the-stranger.jpg',
+        excerpt: 'Through the absurd story of Meursault, Camus explores honesty, alienation, and existence.',
+        curatorBadge: 'Absurdist Pillar',
+        readingTime: '3 hrs',
         averageRating: 4.8,
       },
     ],
@@ -432,25 +642,32 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
     }
   };
 
-  // Compile books for the active atmosphere (matching live DB books + canonical backups)
+  // Compile books for the active atmosphere, prioritizing canonical classics with 100% verified local covers
   const getAtmosphereBooks = () => {
+    const canonical = currentAtmosphere.canonicalWorks || [];
     const keywords = currentAtmosphere.keywords || [];
+
+    // Filter matching books from DB by keyword
     const matchedFromDb = liveBooks.filter((book) => {
-      const titleLower = (book.title || '').toLowerCase();
-      const authorLower = (book.author || '').toLowerCase();
-      const catLower = (book.category || '').toLowerCase();
-      const matchesKeyword = keywords.some(
-        (kw) => titleLower.includes(kw) || authorLower.includes(kw)
-      );
-      const matchesCat = catLower === (currentAtmosphere.fallbackCategory || '').toLowerCase();
-      return matchesKeyword || matchesCat;
+      const text = `${book.title || ''} ${book.description || ''}`.toLowerCase();
+      return keywords.some((kw) => text.includes(kw));
     });
 
-    // Supplement with curated canonical books if DB has fewer than 3
-    const combined = [...matchedFromDb];
-    for (const canonical of currentAtmosphere.canonicalWorks) {
-      if (!combined.some((b) => b.title?.toLowerCase() === canonical.title.toLowerCase())) {
-        combined.push(canonical);
+    // Start with the curated canonical list, then attach any unique database matches
+    const combined = [...canonical];
+    for (const dbBook of matchedFromDb) {
+      const titleLower = dbBook.title?.toLowerCase().trim();
+      const alreadyPresent = combined.some((b) => b.title?.toLowerCase().trim() === titleLower);
+      if (!alreadyPresent) {
+        // Resolve real book cover using imageHelper
+        const resolvedCover = getBookCoverUrl(dbBook.image, dbBook.title, dbBook.isbn);
+        combined.push({
+          ...dbBook,
+          image: resolvedCover || dbBook.image,
+          excerpt: dbBook.description ? `${dbBook.description.slice(0, 100)}...` : 'Curated sanctuary edition.',
+          curatorBadge: dbBook.category || 'Curated Work',
+          averageRating: dbBook.rating || 4.8,
+        });
       }
     }
     return combined.slice(0, 6);
@@ -461,13 +678,15 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
   // Handle Add to Shelf action
   const handleToggleShelf = (book) => {
     playPaperUnwrap();
+    const coverToSave = getBookCoverUrl(book.image, book.title, book.isbn) || book.image;
+
     toggleBook({
       _id: book._id,
       title: book.title,
       author: book.author,
       publishYear: book.publishYear,
       category: book.category,
-      image: book.image,
+      image: coverToSave,
       averageRating: book.averageRating || 5,
     });
 
@@ -510,13 +729,13 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
     >
       {/* 1. BACKDROP OVERLAY */}
       <div
-        className="absolute inset-0 bg-stone-950/50 backdrop-blur-xs transition-opacity duration-300"
+        className="absolute inset-0 bg-stone-950/60 backdrop-blur-xs transition-opacity duration-300"
         onClick={handleClose}
       />
 
       {/* 2. DRAWER CONTAINER */}
       <div className="fixed inset-y-0 right-0 max-w-full flex">
-        <div className="w-screen max-w-[580px] sm:max-w-[620px] bg-[#FAF7F2] border-l border-[#E2D5C3] shadow-2xl flex flex-col relative overflow-hidden text-[#2F2620] animate-drawer-in">
+        <div className="w-screen max-w-[600px] sm:max-w-[650px] bg-[#FAF7F2] border-l border-[#E2D5C3] shadow-2xl flex flex-col relative overflow-hidden text-[#2F2620] animate-drawer-in">
           
           {/* A. EDITORIAL MASTHEAD */}
           <header className="px-6 py-5 bg-[#F6F1E8] border-b border-[#E5DACB] relative flex-shrink-0">
@@ -548,11 +767,8 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
               </button>
             </div>
 
-            {/* B. ATMOSPHERIC HORIZONTAL SELECTOR TABS */}
-            <div
-              className="flex items-center gap-2 overflow-x-auto pt-4 pb-1 scrollbar-none"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
+            {/* B. ATMOSPHERIC SELECTOR PILLS (2-Row Responsive Grid — Zero Cutoffs) */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 pt-3.5">
               {ATMOSPHERES_DATA.map((atm) => {
                 const isActive = atm.id === selectedAtmosphereId;
                 return (
@@ -560,13 +776,14 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
                     key={atm.id}
                     type="button"
                     onClick={() => handleSelectAtmosphere(atm.id)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 cursor-pointer flex-shrink-0 ${
+                    className={`px-3 py-1.5 rounded-full text-[11.5px] font-medium text-center transition-all duration-200 cursor-pointer truncate ${
                       isActive
-                        ? 'bg-[#8D263B] text-[#FFFDF9] shadow-sm font-semibold scale-102'
+                        ? 'bg-[#8D263B] text-[#FFFDF9] shadow-xs font-semibold ring-1 ring-[#8D263B]'
                         : 'bg-[#FFFDF9] text-[#63574E] hover:text-[#8D263B] hover:bg-[#FFFDF9]/80 border border-[#E5DACB]'
                     }`}
+                    title={atm.title}
                   >
-                    <span>{atm.title}</span>
+                    {atm.title}
                   </button>
                 );
               })}
@@ -576,48 +793,51 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
           {/* C. SCROLLABLE ATMOSPHERIC CONTENT BODY */}
           <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
             
-            {/* HERO ATMOSPHERE SHOWCASE CARD */}
-            <div className="relative rounded-2xl overflow-hidden border border-[#E2D5C3] shadow-md bg-[#29221D] text-white">
+            {/* HERO ATMOSPHERE SHOWCASE CARD (Glow Border & High-Res Artwork) */}
+            <div className="relative rounded-2xl overflow-hidden border border-[#C6A16B]/40 shadow-lg bg-[#1B1612] text-white">
               {/* Background Cover Image with Gradient */}
               <div
                 className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out"
                 style={{ backgroundImage: `url(${currentAtmosphere.bgImage})` }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1F1915]/95 via-[#1F1915]/75 to-[#1F1915]/40" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#140F0C] via-[#140F0C]/85 to-[#140F0C]/50" />
 
               {/* Atmosphere Details Overlay */}
-              <div className="relative p-6 z-10 flex flex-col justify-between min-h-[220px]">
+              <div className="relative p-5 sm:p-6 z-10 flex flex-col justify-between min-h-[230px]">
                 <div>
                   <div className="flex items-center justify-between gap-3 mb-2">
-                    <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#E8C28A] font-semibold">
-                      Atmosphere No. {ATMOSPHERES_DATA.findIndex((a) => a.id === currentAtmosphere.id) + 1}
+                    <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-[#E8C28A] font-semibold flex items-center gap-1.5">
+                      <span className="text-[#C6A16B]">✦</span>
+                      <span>Atmosphere No. {ATMOSPHERES_DATA.findIndex((a) => a.id === currentAtmosphere.id) + 1}</span>
                     </span>
 
                     {/* Works Count Badge */}
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/15 text-white/90 border border-white/20">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-black/40 text-white/90 border border-white/20">
                       {booksToDisplay.length} Works Curated
                     </span>
                   </div>
 
-                  <h3 className="font-serif text-2xl font-bold text-white drop-shadow-sm tracking-tight mb-1.5">
+                  <h3 className="font-serif text-2xl sm:text-[26px] font-bold text-white drop-shadow-sm tracking-tight mb-1.5">
                     {currentAtmosphere.title}
                   </h3>
-                  <p className="text-xs text-white/80 font-normal leading-relaxed max-w-md">
+                  <p className="text-xs text-stone-300 font-sans leading-relaxed max-w-md">
                     {currentAtmosphere.tagline}
                   </p>
                 </div>
 
                 {/* Literary Quote & Audio Soundscape Dock */}
-                <div className="pt-4 border-t border-white/15 mt-3 space-y-3">
-                  <blockquote className="text-xs italic font-serif text-[#F8E8CD] leading-snug">
-                    &ldquo;{currentAtmosphere.quote}&rdquo;
-                    <span className="block text-[10px] not-italic font-sans text-white/60 mt-1">
-                      — {currentAtmosphere.quoteAuthor}
+                <div className="pt-3.5 border-t border-white/15 mt-3 space-y-3">
+                  <div className="bg-black/35 rounded-xl p-3 border border-white/10">
+                    <p className="text-xs italic font-serif text-[#F8E8CD] leading-relaxed">
+                      &ldquo;{currentAtmosphere.quote}&rdquo;
+                    </p>
+                    <span className="block text-[10.5px] font-sans text-stone-400 mt-1">
+                      &mdash; {currentAtmosphere.quoteAuthor}
                     </span>
-                  </blockquote>
+                  </div>
 
                   {/* Procedural Soundscape Controller Bar */}
-                  <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-black/40 border border-white/20 backdrop-blur-md">
+                  <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-black/60 border border-[#E8C28A]/30 backdrop-blur-md">
                     <div className="flex items-center gap-2.5 min-w-0">
                       <div
                         className={`w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 transition-colors ${
@@ -632,8 +852,8 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
                         <span className="text-[11px] font-medium text-white block truncate">
                           {currentAtmosphere.soundName}
                         </span>
-                        <span className="text-[9.5px] font-mono text-white/60 block">
-                          Procedural Ambient Audio &bull; Offline Ready
+                        <span className="text-[9.5px] font-mono text-stone-400 block">
+                          Procedural Soundscape &bull; Offline Capable
                         </span>
                       </div>
                     </div>
@@ -675,7 +895,7 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
                   </h4>
                 </div>
                 <span className="text-xs text-[#7A6E64] font-mono">
-                  Direct &ldquo;+ Shelf&rdquo; Access
+                  1-Click &ldquo;+ Shelf&rdquo;
                 </span>
               </div>
 
@@ -687,6 +907,8 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {booksToDisplay.map((book) => {
                     const isSaved = isBookSaved(book._id);
+                    const coverUrl = getBookCoverUrl(book.image, book.title, book.isbn) || '/images/covers/the-picture-of-dorian-gray.jpg';
+
                     return (
                       <div
                         key={book._id || book.title}
@@ -694,18 +916,17 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
                       >
                         {/* Top: Cover + Details */}
                         <div className="flex gap-3">
-                          <div className="w-14 h-20 rounded-md overflow-hidden bg-[#EFE7DC] border border-[#E2D5C3] flex-shrink-0 relative shadow-2xs group-hover:scale-102 transition-transform duration-200">
-                            {book.image ? (
-                              <img
-                                src={book.image}
-                                alt={book.title}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center font-serif text-lg font-bold text-[#8D263B]">
-                                {book.title?.charAt(0)}
-                              </div>
-                            )}
+                          <div className="w-14 h-20 rounded-md overflow-hidden bg-[#EFE7DC] border border-[#E2D5C3] flex-shrink-0 relative shadow-2xs group-hover:scale-103 transition-transform duration-200">
+                            <img
+                              src={coverUrl}
+                              alt={book.title}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = '/images/covers/the-picture-of-dorian-gray.jpg';
+                              }}
+                            />
                           </div>
 
                           <div className="min-w-0 flex-1">
@@ -726,7 +947,7 @@ const AtmosphereDrawer = ({ isOpen, onClose }) => {
                             <div className="flex items-center gap-2 text-[10.5px] font-mono text-[#9C8F85] mt-1.5">
                               <span>{book.publishYear || 'Classic'}</span>
                               <span>&bull;</span>
-                              <span>{book.category || 'Literary'}</span>
+                              <span>{book.readingTime || book.category || 'Literary'}</span>
                             </div>
                           </div>
                         </div>
