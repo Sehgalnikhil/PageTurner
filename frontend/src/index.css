@@ -1528,6 +1528,33 @@ html {
   -webkit-backface-visibility: hidden;
 }
 
+@keyframes candleFlickerRealistic {
+  0%, 100% {
+    transform: scale(1) rotate(-1.5deg);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 16px rgba(243, 156, 18, 0.75));
+  }
+  25% {
+    transform: scale(1.08, 0.95) rotate(1.5deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 26px rgba(243, 156, 18, 0.95));
+  }
+  50% {
+    transform: scale(0.95, 1.06) rotate(-2deg);
+    opacity: 0.88;
+    filter: drop-shadow(0 0 14px rgba(243, 156, 18, 0.65));
+  }
+  75% {
+    transform: scale(1.04, 1.02) rotate(2deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 22px rgba(243, 156, 18, 0.85));
+  }
+}
+
+.animate-candle-flame {
+  animation: candleFlickerRealistic 1.6s ease-in-out infinite;
+}
+
 @keyframes entranceBackdropFade {
   0% { opacity: 1; }
   75% { opacity: 1; }

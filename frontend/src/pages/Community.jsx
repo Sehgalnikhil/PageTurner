@@ -67,13 +67,8 @@ const Community = () => {
   };
 
   // Extraordinary Entrance Animation State ('sealed' | 'opening' | 'revealed')
-  const [entranceStage, setEntranceStage] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const seen = sessionStorage.getItem('salon_entrance_seen');
-      return seen ? 'revealed' : 'sealed';
-    }
-    return 'sealed';
-  });
+  // Automatically triggers every time the reader visits or reloads The Salon
+  const [entranceStage, setEntranceStage] = useState('sealed');
 
   const handleOpenSalon = () => {
     if (entranceStage !== 'sealed') return;
@@ -81,17 +76,15 @@ const Community = () => {
     setEntranceStage('opening');
     setTimeout(() => {
       playPaperUnwrap();
-    }, 250);
+    }, 220);
     setTimeout(() => {
       setEntranceStage('revealed');
-      sessionStorage.setItem('salon_entrance_seen', 'true');
     }, 1300);
   };
 
   const handleSkipEntrance = (e) => {
     if (e) e.stopPropagation();
     setEntranceStage('revealed');
-    sessionStorage.setItem('salon_entrance_seen', 'true');
   };
 
   const handleReplayEntrance = () => {
@@ -99,13 +92,13 @@ const Community = () => {
     setEntranceStage('sealed');
   };
 
-  // Auto-open after 2.4s if reader wants a cinematic passive watch
+  // Automatically start the ceremonial door opening after 1.4s of majestic ambiance
   useEffect(() => {
     let timer = null;
     if (entranceStage === 'sealed') {
       timer = setTimeout(() => {
         handleOpenSalon();
-      }, 2200);
+      }, 1400);
     }
     return () => clearTimeout(timer);
   }, [entranceStage]);
@@ -785,103 +778,156 @@ const Community = () => {
           <button
             type="button"
             onClick={handleSkipEntrance}
-            className="absolute top-6 right-6 z-50 text-xs text-[#D8C7B0]/75 hover:text-[#FAF4E8] bg-black/60 hover:bg-black/85 px-4 py-1.5 rounded-full border border-[#C6A16B]/30 backdrop-blur-md transition-all cute-press cursor-pointer flex items-center gap-1.5 shadow-lg"
+            className="absolute top-6 right-6 z-50 text-xs text-[#D8C7B0]/80 hover:text-[#FAF4E8] bg-black/60 hover:bg-black/90 px-4 py-1.5 rounded-full border border-[#C6A16B]/40 backdrop-blur-md transition-all cute-press cursor-pointer flex items-center gap-1.5 shadow-xl"
           >
             <span>Fast Enter</span>
             <PiXBold className="text-[10px]" />
           </button>
 
-          {/* LEFT FOLIO DOOR */}
+          {/* HORIZONTAL CRIMSON & GOLD RIBBON SASH (Across the seam) */}
+          <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 h-14 z-20 pointer-events-none flex items-center justify-center">
+            <div className="w-full h-10 bg-gradient-to-r from-transparent via-[#701828]/95 to-transparent border-y border-[#D4AF37]/50 shadow-[0_4px_25px_rgba(0,0,0,0.8)]" />
+          </div>
+
+          {/* LEFT GOTHIC FOLIO DOOR */}
           <div
             onClick={handleOpenSalon}
-            className={`door-panel absolute top-0 left-0 w-1/2 h-full cursor-pointer select-none border-r border-[#C6A16B]/40 bg-gradient-to-br from-[#1C140F] via-[#241A13] to-[#140D0A] shadow-[inset_-20px_0_40px_rgba(0,0,0,0.85)] flex flex-col justify-between p-6 sm:p-12 ${
+            className={`door-panel absolute top-0 left-0 w-1/2 h-full cursor-pointer select-none border-r-2 border-[#C6A16B]/50 bg-gradient-to-r from-[#120B07] via-[#1E130B] to-[#160E08] shadow-[inset_-25px_0_50px_rgba(0,0,0,0.92)] flex flex-col justify-between p-6 sm:p-12 ${
               entranceStage === 'opening' ? 'animate-folio-left' : ''
             }`}
           >
-            {/* Antique Corner Plate (Top-Left) */}
-            <div className="w-16 h-16 border-t-2 border-l-2 border-[#C6A16B]/50 rounded-tl-xl relative">
-              <div className="absolute top-1.5 left-1.5 w-2 h-2 rounded-full bg-[#C6A16B]/60" />
+            {/* Ambient Candle Halo for Left Sconce */}
+            <div className="absolute top-1/3 left-1/4 w-72 h-72 rounded-full bg-[#F39C12]/12 filter blur-3xl pointer-events-none" />
+
+            {/* Gothic Arch Inner Wood Frame Molding */}
+            <div className="absolute inset-4 sm:inset-8 border border-[#C6A16B]/25 rounded-l-2xl pointer-events-none" />
+            <div className="absolute inset-6 sm:inset-12 border border-[#8C6D3F]/15 rounded-l-xl pointer-events-none" />
+
+            {/* Antique Brass Corner Plates */}
+            <div className="w-16 h-16 border-t-2 border-l-2 border-[#C6A16B]/60 rounded-tl-xl relative z-10">
+              <div className="absolute top-1.5 left-1.5 w-2.5 h-2.5 rounded-full bg-[#C6A16B]/80 shadow-sm" />
             </div>
 
-            {/* Classical Latin Monogram Inscription on Left Door */}
-            <div className="text-right pr-4 sm:pr-8 opacity-45">
-              <div className="font-serif italic text-lg sm:text-2xl text-[#C6A16B] tracking-wider">
-                Silentium et Sapientia
+            {/* Left Door Mounted Candle Sconce */}
+            <div className="absolute top-1/3 right-8 sm:right-16 flex flex-col items-center z-10">
+              <div className="w-4 h-7 rounded-full bg-gradient-to-t from-[#D35400] via-[#F39C12] to-[#FFF9E6] filter drop-shadow-[0_0_16px_#F39C12] animate-candle-flame" />
+              <div className="w-3 h-14 bg-gradient-to-b from-[#F5E6CC] to-[#D0BE9C] rounded-t-sm shadow-md border-t border-[#FFF]" />
+              <div className="w-9 h-2.5 bg-[#8C6D3F] rounded-full shadow-lg mt-[-2px] border-b border-[#523C1B]" />
+              <div className="w-2.5 h-8 bg-gradient-to-b from-[#634C2B] to-[#362612] rounded-b-sm" />
+            </div>
+
+            {/* Inset Gothic Latin Plaque (Placed high away from the seal) */}
+            <div className="relative z-10 self-start max-w-xs mt-6 pl-2 sm:pl-4 opacity-60">
+              <div className="font-serif italic text-base sm:text-xl text-[#E8D4B8] tracking-widest flex items-center gap-2">
+                <span>❧</span>
+                <span>Silentium et Sapientia</span>
               </div>
-              <div className="font-mono text-[10px] sm:text-xs text-[#A89886] tracking-widest uppercase mt-1">
+              <div className="font-mono text-[9px] sm:text-[11px] text-[#A89886] tracking-widest uppercase mt-1 pl-4">
                 Libri Sunt Amici Vitae
               </div>
             </div>
 
-            {/* Antique Corner Plate (Bottom-Left) */}
-            <div className="w-16 h-16 border-b-2 border-l-2 border-[#C6A16B]/50 rounded-bl-xl relative">
-              <div className="absolute bottom-1.5 left-1.5 w-2 h-2 rounded-full bg-[#C6A16B]/60" />
+            {/* Antique Brass Corner Plate (Bottom-Left) */}
+            <div className="w-16 h-16 border-b-2 border-l-2 border-[#C6A16B]/60 rounded-bl-xl relative z-10">
+              <div className="absolute bottom-1.5 left-1.5 w-2.5 h-2.5 rounded-full bg-[#C6A16B]/80 shadow-sm" />
             </div>
           </div>
 
-          {/* RIGHT FOLIO DOOR */}
+          {/* RIGHT GOTHIC FOLIO DOOR */}
           <div
             onClick={handleOpenSalon}
-            className={`door-panel absolute top-0 right-0 w-1/2 h-full cursor-pointer select-none border-l border-[#C6A16B]/40 bg-gradient-to-bl from-[#1C140F] via-[#241A13] to-[#140D0A] shadow-[inset_20px_0_40px_rgba(0,0,0,0.85)] flex flex-col justify-between p-6 sm:p-12 ${
+            className={`door-panel absolute top-0 right-0 w-1/2 h-full cursor-pointer select-none border-l-2 border-[#C6A16B]/50 bg-gradient-to-l from-[#120B07] via-[#1E130B] to-[#160E08] shadow-[inset_25px_0_50px_rgba(0,0,0,0.92)] flex flex-col justify-between p-6 sm:p-12 ${
               entranceStage === 'opening' ? 'animate-folio-right' : ''
             }`}
           >
-            {/* Antique Corner Plate (Top-Right) */}
-            <div className="self-end w-16 h-16 border-t-2 border-r-2 border-[#C6A16B]/50 rounded-tr-xl relative">
-              <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#C6A16B]/60" />
+            {/* Ambient Candle Halo for Right Sconce */}
+            <div className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full bg-[#F39C12]/12 filter blur-3xl pointer-events-none" />
+
+            {/* Gothic Arch Inner Wood Frame Molding */}
+            <div className="absolute inset-4 sm:inset-8 border border-[#C6A16B]/25 rounded-r-2xl pointer-events-none" />
+            <div className="absolute inset-6 sm:inset-12 border border-[#8C6D3F]/15 rounded-r-xl pointer-events-none" />
+
+            {/* Antique Brass Corner Plates */}
+            <div className="self-end w-16 h-16 border-t-2 border-r-2 border-[#C6A16B]/60 rounded-tr-xl relative z-10">
+              <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-[#C6A16B]/80 shadow-sm" />
             </div>
 
-            {/* Classical Inscription on Right Door */}
-            <div className="text-left pl-4 sm:pl-8 opacity-45">
-              <div className="font-serif italic text-lg sm:text-2xl text-[#C6A16B] tracking-wider">
-                The Readers’ Salon
+            {/* Right Door Mounted Candle Sconce */}
+            <div className="absolute top-1/3 left-8 sm:left-16 flex flex-col items-center z-10">
+              <div className="w-4 h-7 rounded-full bg-gradient-to-t from-[#D35400] via-[#F39C12] to-[#FFF9E6] filter drop-shadow-[0_0_16px_#F39C12] animate-candle-flame [animation-delay:0.4s]" />
+              <div className="w-3 h-14 bg-gradient-to-b from-[#F5E6CC] to-[#D0BE9C] rounded-t-sm shadow-md border-t border-[#FFF]" />
+              <div className="w-9 h-2.5 bg-[#8C6D3F] rounded-full shadow-lg mt-[-2px] border-b border-[#523C1B]" />
+              <div className="w-2.5 h-8 bg-gradient-to-b from-[#634C2B] to-[#362612] rounded-b-sm" />
+            </div>
+
+            {/* Inset Gothic Latin Plaque (Placed high away from the seal) */}
+            <div className="relative z-10 self-end max-w-xs mt-6 pr-2 sm:pr-4 text-right opacity-60">
+              <div className="font-serif italic text-base sm:text-xl text-[#E8D4B8] tracking-widest flex items-center justify-end gap-2">
+                <span>Sanctuarium Litterarum</span>
+                <span>☙</span>
               </div>
-              <div className="font-mono text-[10px] sm:text-xs text-[#A89886] tracking-widest uppercase mt-1">
+              <div className="font-mono text-[9px] sm:text-[11px] text-[#A89886] tracking-widest uppercase mt-1 pr-4">
                 Est. MDCCCLXXXIV
               </div>
             </div>
 
-            {/* Antique Corner Plate (Bottom-Right) */}
-            <div className="self-end w-16 h-16 border-b-2 border-r-2 border-[#C6A16B]/50 rounded-br-xl relative">
-              <div className="absolute bottom-1.5 right-1.5 w-2 h-2 rounded-full bg-[#C6A16B]/60" />
+            {/* Antique Brass Corner Plate (Bottom-Right) */}
+            <div className="self-end w-16 h-16 border-b-2 border-r-2 border-[#C6A16B]/60 rounded-br-xl relative z-10">
+              <div className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-[#C6A16B]/80 shadow-sm" />
             </div>
+          </div>
+
+          {/* ELEGANT TOP CALLIGRAPHIC HEADER (Positioned high above seal, zero overlap) */}
+          <div className="absolute top-10 sm:top-14 left-0 right-0 z-40 text-center pointer-events-none select-none px-4">
+            <div className="font-serif text-[#C6A16B] text-xs sm:text-sm tracking-[0.3em] uppercase opacity-85 flex items-center justify-center gap-3">
+              <span>❦</span>
+              <span>Archivum Litterarum</span>
+              <span>❦</span>
+            </div>
+            <h1 className="font-serif italic text-3xl sm:text-5xl text-[#FDF6EA] tracking-wide mt-2 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
+              The Readers’ Salon
+            </h1>
+            <p className="font-serif italic text-xs sm:text-base text-[#D4AF37] mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] max-w-md mx-auto">
+              A private literary haven for kindred minds & fine bindings
+            </p>
           </div>
 
           {/* CENTERPIECE MONOGRAM WAX SEAL & INVITATION TRIGGER */}
           <div
-            className={`absolute z-30 flex flex-col items-center justify-center text-center px-4 cursor-pointer ${
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center justify-center text-center cursor-pointer ${
               entranceStage === 'opening' ? 'animate-seal-break pointer-events-none' : ''
             }`}
             onClick={handleOpenSalon}
           >
             {/* Glowing Candle Halo */}
-            <div className="absolute w-44 h-44 rounded-full bg-[#F39C12]/25 filter blur-2xl animate-candle-glow pointer-events-none" />
+            <div className="absolute w-56 h-56 rounded-full bg-[#F39C12]/20 filter blur-3xl animate-candle-glow pointer-events-none" />
+
+            {/* Hanging Satin Ribbon Tails */}
+            <div className="absolute top-16 flex items-start gap-3 pointer-events-none">
+              <div className="w-5 h-20 bg-gradient-to-b from-[#8D263B] to-[#58101E] border-x border-[#D4AF37]/40 shadow-lg transform -rotate-6 [clip-path:polygon(0_0,100%_0,100%_100%,50%_80%,0_100%)]" />
+              <div className="w-5 h-24 bg-gradient-to-b from-[#8D263B] to-[#58101E] border-x border-[#D4AF37]/40 shadow-lg transform rotate-6 [clip-path:polygon(0_0,100%_0,100%_100%,50%_80%,0_100%)]" />
+            </div>
 
             {/* Large Intricate Crimson Wax Seal Medallion */}
-            <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-[#8D263B] via-[#6D1B2C] to-[#450E1A] shadow-[0_12px_45px_rgba(0,0,0,0.85),0_0_25px_rgba(141,38,59,0.5)] border-4 border-[#C6A16B]/60 flex items-center justify-center cute-press transform hover:scale-105 transition-transform duration-300">
-              <div className="absolute inset-1 rounded-full border border-dashed border-[#F3E5C8]/40 pointer-events-none" />
+            <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-[#9B2C42] via-[#751B2E] to-[#4A101C] shadow-[0_16px_50px_rgba(0,0,0,0.95),0_0_30px_rgba(155,44,66,0.6)] border-4 border-[#C6A16B] flex items-center justify-center cute-press transform hover:scale-105 transition-transform duration-300">
+              {/* Outer Scalloped Wax Ring */}
+              <div className="absolute inset-1.5 rounded-full border border-dashed border-[#F3E5C8]/50 pointer-events-none" />
+              <div className="absolute inset-3 rounded-full border border-[#D4AF37]/40 pointer-events-none" />
 
-              <div className="flex flex-col items-center text-[#F3E5C8] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                <PiBookOpenBold className="text-3xl sm:text-4xl" />
-                <span className="font-serif italic text-[11px] sm:text-xs tracking-widest mt-1 font-bold">
+              {/* Embossed Open Book & Feather Monogram */}
+              <div className="flex flex-col items-center text-[#FDF6EA] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                <PiBookOpenBold className="text-4xl sm:text-5xl text-[#F9E8D0]" />
+                <span className="font-serif italic text-xs sm:text-sm tracking-widest mt-1 font-bold text-[#E5C390]">
                   P · T
                 </span>
               </div>
             </div>
 
-            {/* Ceremony Calligraphic Typography */}
-            <div className="mt-5 text-center">
-              <h2 className="font-serif italic text-2xl sm:text-3xl text-[#FAF4E8] tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-                The Readers’ Salon
-              </h2>
-              <p className="font-serif text-xs sm:text-sm text-[#C6A16B] italic mt-1 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
-                Step into the private sanctuary of kindred minds
-              </p>
-
-              {/* Pulsating Tap Prompt */}
-              <div className="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/60 border border-[#C6A16B]/40 text-[#FAF4E8] text-xs font-medium backdrop-blur-md cute-press animate-pulse">
-                <PiSparkleBold className="text-[#F39C12] text-xs" />
-                <span>Click to Break Seal & Enter</span>
+            {/* Bottom Ceremony Prompt (Positioned safely below seal) */}
+            <div className="mt-14 text-center">
+              <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-black/75 border border-[#C6A16B]/60 text-[#FAF4E8] text-xs sm:text-sm font-medium backdrop-blur-md cute-press shadow-[0_4px_20px_rgba(0,0,0,0.8)] animate-pulse">
+                <span className="w-2 h-2 rounded-full bg-[#E0A96D] animate-ping" />
+                <span>Doors Parting... Tap to Enter Instantly</span>
                 <span className="text-sm">🕯️</span>
               </div>
             </div>
