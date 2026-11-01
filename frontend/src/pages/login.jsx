@@ -12,7 +12,6 @@ import {
   PiEyeSlashBold,
   PiArrowRightBold,
   PiShieldCheckBold,
-  PiUserBold,
   PiCrownBold,
   PiBooksBold,
   PiUsersBold,
@@ -227,25 +226,6 @@ const Login = () => {
                   <span>✦ 1-Click Access:</span>
                 </span>
                 <div className="flex items-center gap-1.5 w-full sm:w-auto">
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      try {
-                        const { data } = await authService.switchAccount({ email: 'krishgarg0517@gmail.com' });
-                        login(data);
-                        enqueueSnackbar(`Signed in as ${data.username}! ✦`, { variant: 'success' });
-                        navigate(from, { replace: true });
-                      } catch {
-                        fillAndLogin('student@pageturner.io', 'student123', 'Demo Reader');
-                      }
-                    }}
-                    disabled={loading}
-                    className="flex-1 sm:flex-none h-7 px-2.5 rounded-lg border border-[#E9DED0] bg-[#FFFCF7] hover:bg-white text-[11px] font-medium text-[#302722] hover:text-[#92283F] hover:border-[#92283F]/40 flex items-center justify-center gap-1 transition-all cursor-pointer shadow-2xs cute-press group/demobtn"
-                    title="Sign in as krish garg"
-                  >
-                    <PiUserBold className="text-xs text-[#8B9B84] group-hover/demobtn:scale-125 transition-transform" />
-                    <span>krish garg</span>
-                  </button>
                   <button
                     type="button"
                     onClick={async () => {

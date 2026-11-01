@@ -1088,7 +1088,7 @@ const ParlourDetail = () => {
                   : [
                       {
                         id: 'r1',
-                        name: 'krish garg',
+                        name: 'Arthur Pendelton',
                         role: 'Archival Fellow',
                         avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
                         page: 'p. 84 (Ch. IV)',

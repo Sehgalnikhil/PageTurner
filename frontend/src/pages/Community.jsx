@@ -788,9 +788,9 @@ const Community = () => {
     },
     {
       id: 'r2',
-      name: 'krish garg',
-      username: 'krish garg',
-      handle: 'krish_garg',
+      name: 'Arthur Pendelton',
+      username: 'Arthur Pendelton',
+      handle: 'arthur_pendelton',
       match: '95%',
       affinity: '95%',
       shared: 'Dystopian Classics & Political Realism',
