@@ -1518,6 +1518,24 @@ html {
 .perspective-salon {
   perspective: 1400px;
   perspective-origin: center center;
+  transform-style: preserve-3d;
+}
+
+.door-panel {
+  transform-style: preserve-3d;
+  will-change: transform, opacity, box-shadow;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@keyframes entranceBackdropFade {
+  0% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
+
+.animate-entrance-backdrop {
+  animation: entranceBackdropFade 1.35s ease-out forwards;
 }
 
 /* Grand Antique Folio Doors Opening Animation */

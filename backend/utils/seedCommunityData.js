@@ -279,3 +279,4 @@ export const seedCommunityData = async () => {
     console.error('Error seeding community data:', err);
   }
 };
+

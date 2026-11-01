@@ -116,3 +116,4 @@ parlourSchema.set('toJSON', { virtuals: true });
 parlourSchema.set('toObject', { virtuals: true });
 
 export const Parlour = mongoose.model('Parlour', parlourSchema);
+

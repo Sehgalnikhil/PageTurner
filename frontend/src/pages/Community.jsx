@@ -66,6 +66,50 @@ const Community = () => {
     navigate(`/community/parlour/${parlourId}`);
   };
 
+  // Extraordinary Entrance Animation State ('sealed' | 'opening' | 'revealed')
+  const [entranceStage, setEntranceStage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const seen = sessionStorage.getItem('salon_entrance_seen');
+      return seen ? 'revealed' : 'sealed';
+    }
+    return 'sealed';
+  });
+
+  const handleOpenSalon = () => {
+    if (entranceStage !== 'sealed') return;
+    playWaxSealCrack();
+    setEntranceStage('opening');
+    setTimeout(() => {
+      playPaperUnwrap();
+    }, 250);
+    setTimeout(() => {
+      setEntranceStage('revealed');
+      sessionStorage.setItem('salon_entrance_seen', 'true');
+    }, 1300);
+  };
+
+  const handleSkipEntrance = (e) => {
+    if (e) e.stopPropagation();
+    setEntranceStage('revealed');
+    sessionStorage.setItem('salon_entrance_seen', 'true');
+  };
+
+  const handleReplayEntrance = () => {
+    playWaxSealCrack();
+    setEntranceStage('sealed');
+  };
+
+  // Auto-open after 2.4s if reader wants a cinematic passive watch
+  useEffect(() => {
+    let timer = null;
+    if (entranceStage === 'sealed') {
+      timer = setTimeout(() => {
+        handleOpenSalon();
+      }, 2200);
+    }
+    return () => clearTimeout(timer);
+  }, [entranceStage]);
+
   // Navigation Tab State
   const [activeTab, setActiveTab] = useState('feed'); // 'feed' | 'parlours' | 'rooms' | 'marginalia' | 'matches'
   const [sortOption, setSortOption] = useState('Recent');
@@ -713,6 +757,138 @@ const Community = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F6F0E6] text-[#2F2620] selection:bg-[#7D2235]/20 font-sans">
+      {/* ============================================================
+          CINEMATIC OPENING CEREMONY (ANTIQUE 3D FOLIO DOORS & WAX SEAL)
+          ============================================================ */}
+      {entranceStage !== 'revealed' && (
+        <div
+          className={`fixed inset-0 z-[100] perspective-salon flex items-center justify-center overflow-hidden bg-[#0A0706] ${
+            entranceStage === 'opening' ? 'animate-entrance-backdrop pointer-events-none' : ''
+          }`}
+        >
+          {/* Ambient Candle Dust Particles drifting in the dark */}
+          <div className="absolute inset-0 pointer-events-none opacity-40">
+            <div className="absolute top-1/4 left-1/3 w-1.5 h-1.5 rounded-full bg-[#E0A96D] animate-dust-drift filter blur-[0.5px]" />
+            <div className="absolute top-3/4 left-2/3 w-2 h-2 rounded-full bg-[#E0A96D] animate-dust-drift filter blur-[1px] [animation-delay:1.5s]" />
+            <div className="absolute top-1/2 left-1/5 w-1 h-1 rounded-full bg-[#E0A96D] animate-dust-drift filter blur-[0.5px] [animation-delay:3s]" />
+          </div>
+
+          {/* Center Splitting Golden Light Ray Burst during Opening */}
+          {entranceStage === 'opening' && (
+            <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+              <div className="w-12 sm:w-28 h-full bg-gradient-to-r from-transparent via-[#FAD089]/60 to-transparent animate-light-rays filter blur-xl" />
+              <div className="absolute w-[340px] h-[340px] rounded-full bg-[#F39C12]/40 animate-light-rays filter blur-3xl" />
+            </div>
+          )}
+
+          {/* Fast Skip Pill (Top Right) */}
+          <button
+            type="button"
+            onClick={handleSkipEntrance}
+            className="absolute top-6 right-6 z-50 text-xs text-[#D8C7B0]/75 hover:text-[#FAF4E8] bg-black/60 hover:bg-black/85 px-4 py-1.5 rounded-full border border-[#C6A16B]/30 backdrop-blur-md transition-all cute-press cursor-pointer flex items-center gap-1.5 shadow-lg"
+          >
+            <span>Fast Enter</span>
+            <PiXBold className="text-[10px]" />
+          </button>
+
+          {/* LEFT FOLIO DOOR */}
+          <div
+            onClick={handleOpenSalon}
+            className={`door-panel absolute top-0 left-0 w-1/2 h-full cursor-pointer select-none border-r border-[#C6A16B]/40 bg-gradient-to-br from-[#1C140F] via-[#241A13] to-[#140D0A] shadow-[inset_-20px_0_40px_rgba(0,0,0,0.85)] flex flex-col justify-between p-6 sm:p-12 ${
+              entranceStage === 'opening' ? 'animate-folio-left' : ''
+            }`}
+          >
+            {/* Antique Corner Plate (Top-Left) */}
+            <div className="w-16 h-16 border-t-2 border-l-2 border-[#C6A16B]/50 rounded-tl-xl relative">
+              <div className="absolute top-1.5 left-1.5 w-2 h-2 rounded-full bg-[#C6A16B]/60" />
+            </div>
+
+            {/* Classical Latin Monogram Inscription on Left Door */}
+            <div className="text-right pr-4 sm:pr-8 opacity-45">
+              <div className="font-serif italic text-lg sm:text-2xl text-[#C6A16B] tracking-wider">
+                Silentium et Sapientia
+              </div>
+              <div className="font-mono text-[10px] sm:text-xs text-[#A89886] tracking-widest uppercase mt-1">
+                Libri Sunt Amici Vitae
+              </div>
+            </div>
+
+            {/* Antique Corner Plate (Bottom-Left) */}
+            <div className="w-16 h-16 border-b-2 border-l-2 border-[#C6A16B]/50 rounded-bl-xl relative">
+              <div className="absolute bottom-1.5 left-1.5 w-2 h-2 rounded-full bg-[#C6A16B]/60" />
+            </div>
+          </div>
+
+          {/* RIGHT FOLIO DOOR */}
+          <div
+            onClick={handleOpenSalon}
+            className={`door-panel absolute top-0 right-0 w-1/2 h-full cursor-pointer select-none border-l border-[#C6A16B]/40 bg-gradient-to-bl from-[#1C140F] via-[#241A13] to-[#140D0A] shadow-[inset_20px_0_40px_rgba(0,0,0,0.85)] flex flex-col justify-between p-6 sm:p-12 ${
+              entranceStage === 'opening' ? 'animate-folio-right' : ''
+            }`}
+          >
+            {/* Antique Corner Plate (Top-Right) */}
+            <div className="self-end w-16 h-16 border-t-2 border-r-2 border-[#C6A16B]/50 rounded-tr-xl relative">
+              <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#C6A16B]/60" />
+            </div>
+
+            {/* Classical Inscription on Right Door */}
+            <div className="text-left pl-4 sm:pl-8 opacity-45">
+              <div className="font-serif italic text-lg sm:text-2xl text-[#C6A16B] tracking-wider">
+                The Readers’ Salon
+              </div>
+              <div className="font-mono text-[10px] sm:text-xs text-[#A89886] tracking-widest uppercase mt-1">
+                Est. MDCCCLXXXIV
+              </div>
+            </div>
+
+            {/* Antique Corner Plate (Bottom-Right) */}
+            <div className="self-end w-16 h-16 border-b-2 border-r-2 border-[#C6A16B]/50 rounded-br-xl relative">
+              <div className="absolute bottom-1.5 right-1.5 w-2 h-2 rounded-full bg-[#C6A16B]/60" />
+            </div>
+          </div>
+
+          {/* CENTERPIECE MONOGRAM WAX SEAL & INVITATION TRIGGER */}
+          <div
+            className={`absolute z-30 flex flex-col items-center justify-center text-center px-4 cursor-pointer ${
+              entranceStage === 'opening' ? 'animate-seal-break pointer-events-none' : ''
+            }`}
+            onClick={handleOpenSalon}
+          >
+            {/* Glowing Candle Halo */}
+            <div className="absolute w-44 h-44 rounded-full bg-[#F39C12]/25 filter blur-2xl animate-candle-glow pointer-events-none" />
+
+            {/* Large Intricate Crimson Wax Seal Medallion */}
+            <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-[#8D263B] via-[#6D1B2C] to-[#450E1A] shadow-[0_12px_45px_rgba(0,0,0,0.85),0_0_25px_rgba(141,38,59,0.5)] border-4 border-[#C6A16B]/60 flex items-center justify-center cute-press transform hover:scale-105 transition-transform duration-300">
+              <div className="absolute inset-1 rounded-full border border-dashed border-[#F3E5C8]/40 pointer-events-none" />
+
+              <div className="flex flex-col items-center text-[#F3E5C8] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                <PiBookOpenBold className="text-3xl sm:text-4xl" />
+                <span className="font-serif italic text-[11px] sm:text-xs tracking-widest mt-1 font-bold">
+                  P · T
+                </span>
+              </div>
+            </div>
+
+            {/* Ceremony Calligraphic Typography */}
+            <div className="mt-5 text-center">
+              <h2 className="font-serif italic text-2xl sm:text-3xl text-[#FAF4E8] tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                The Readers’ Salon
+              </h2>
+              <p className="font-serif text-xs sm:text-sm text-[#C6A16B] italic mt-1 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                Step into the private sanctuary of kindred minds
+              </p>
+
+              {/* Pulsating Tap Prompt */}
+              <div className="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/60 border border-[#C6A16B]/40 text-[#FAF4E8] text-xs font-medium backdrop-blur-md cute-press animate-pulse">
+                <PiSparkleBold className="text-[#F39C12] text-xs" />
+                <span>Click to Break Seal & Enter</span>
+                <span className="text-sm">🕯️</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Navbar />
 
       <main className="flex-1 w-full max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
@@ -751,8 +927,8 @@ const Community = () => {
                   Join intimate parlours, share reflections, exchange marginalia, and find readers who read the world like you do.
                 </p>
 
-                {/* The Two Authentic Action Buttons */}
-                <div className="flex items-center gap-3 mt-6">
+                {/* The Authentic Action Buttons */}
+                <div className="flex flex-wrap items-center gap-3 mt-6">
                   {/* Primary Burgundy Button: Share a Reflection */}
                   <button
                     type="button"
@@ -777,6 +953,17 @@ const Community = () => {
                   >
                     <PiPlusBold className="text-xs text-[#EADBCC]" />
                     <span>Create a Parlour</span>
+                  </button>
+
+                  {/* Replay Opening Animation Button */}
+                  <button
+                    type="button"
+                    onClick={handleReplayEntrance}
+                    title="Replay opening sanctuary animation"
+                    className="h-10 px-4 rounded-full bg-black/40 hover:bg-black/60 text-[#FDFBF7] text-xs font-medium tracking-wide flex items-center gap-2 backdrop-blur-md border border-[#C6A16B]/40 shadow-sm cute-press cursor-pointer transition-all"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-[#E0A96D] animate-pulse" />
+                    <span>Relive Opening 🕯️</span>
                   </button>
                 </div>
               </div>

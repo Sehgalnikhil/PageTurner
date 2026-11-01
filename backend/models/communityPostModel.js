@@ -96,3 +96,4 @@ communityPostSchema.set('toJSON', { virtuals: true });
 communityPostSchema.set('toObject', { virtuals: true });
 
 export const CommunityPost = mongoose.model('CommunityPost', communityPostSchema);
+
