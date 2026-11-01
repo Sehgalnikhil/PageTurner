@@ -446,8 +446,11 @@ const BlindDateBanner = ({ books = [] }) => {
 
   return (
     <section id="blind-date-section" className="mb-8 sm:mb-10 scroll-mt-24">
-      {/* Immersive Studio Environment Container - Editorial Noir */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#23151B] via-[#1A1015] to-[#120A0E] text-[#FAF5ED] p-6 sm:p-8 lg:p-10 xl:p-12 border border-[#482D3A] shadow-2xl">
+      {/* Immersive Studio Environment Container - Editorial Noir with Gilded Filigree Frame */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#38151D] via-[#240C12] to-[#16070B] text-[#FAF5ED] p-6 sm:p-8 lg:p-10 xl:p-12 border border-[#C6A16B]/40 shadow-[0_20px_60px_rgba(20,5,10,0.5)]">
+        {/* Inner Gilded Hairline Filigree Frame */}
+        <div className="absolute inset-2 sm:inset-3 rounded-[22px] border border-[#C6A16B]/25 pointer-events-none z-10" />
+
         {/* Soft Art-Directed Studio Lighting & Depth Vignettes */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-rose-950/30 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-amber-950/25 rounded-full blur-3xl pointer-events-none" />

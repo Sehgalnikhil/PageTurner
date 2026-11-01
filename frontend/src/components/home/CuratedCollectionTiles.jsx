@@ -2,67 +2,73 @@ import React, { useRef } from 'react';
 import { PiXBold, PiArrowRightBold, PiCaretLeftBold, PiCaretRightBold, PiPlusBold, PiCaretRight, PiSparkleBold } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 
-// 6 Distinct, high-quality, authentic curated atmospheric collections with verified local assets
+// 6 Distinct, high-quality, authentic curated atmospheric collections matching mockup
 const COLLECTIONS_DATA = [
   {
     id: 'dark-academia',
+    motif: '🌙',
     vol: 'I',
     title: 'Dark Academia',
     subtitle: 'Gothic obsession & intellectual desire.',
     keywords: ['secret history', 'dorian', 'villains', 'babel', 'crime and punishment', 'frankenstein'],
     fallbackCategory: 'Fiction',
     theme: 'dark',
-    bgImage: '/images/salon-hero-backdrop.jpg',
+    bgImage: '/images/atmospheres/dark_academia_hd.jpg',
   },
   {
     id: 'mind-bending',
+    motif: '☀️',
     vol: 'II',
     title: 'Mind-Bending Fiction',
     subtitle: 'Dystopias & cosmic curiosity.',
     keywords: ['dune', '1984', 'brave new world', 'fahrenheit', 'klara', 'solitude'],
     fallbackCategory: 'Sci-Fi',
     theme: 'dark',
-    bgImage: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1200&q=85',
+    bgImage: '/images/atmospheres/mind_bending_hd.jpg',
   },
   {
-    id: 'comforting-stories',
+    id: 'ideas-startups',
+    motif: '📚',
     vol: 'III',
-    title: 'Quiet, Comforting Stories',
-    subtitle: 'Solace, warmth & gentle worlds.',
-    keywords: ['pride and prejudice', 'hobbit', 'before the coffee', 'alchemist', 'little women', 'gentle reminder'],
-    fallbackCategory: 'Fiction',
+    title: 'Ideas & Startups',
+    subtitle: 'Business, creativity & world-building ideas.',
+    keywords: ['zero to one', 'hard thing', 'startup', 'atomic habits', 'steve jobs', 'thinking, fast', 'good to great'],
+    fallbackCategory: 'Non-Fiction',
     theme: 'dark',
-    bgImage: '/images/editorial/moodboard_open_book.jpg',
+    bgImage: '/images/atmospheres/ideas_startups_hd.jpg',
   },
   {
     id: 'perspective-shifts',
+    motif: '⛰️',
     vol: 'IV',
     title: 'Perspective Shifts',
     subtitle: 'Philosophy & human experience.',
     keywords: ['meditations', 'meaning', 'sapiens', 'mockingbird', 'metamorphosis', 'thinking'],
     fallbackCategory: 'Non-Fiction',
     theme: 'dark',
-    bgImage: '/images/editorial/moodboard_mountain.jpg',
+    bgImage: '/images/atmospheres/perspective_shifts_hd.jpg',
   },
   {
     id: 'late-night',
+    motif: '🛏️',
     vol: 'V',
     title: 'Late-Night Reads',
     subtitle: 'Page-turners read past midnight.',
     keywords: ['great gatsby', 'shadow of the wind', 'norwegian wood', 'bell jar', 'stoner', 'kafka on the shore'],
     fallbackCategory: 'Fiction',
     theme: 'dark',
-    bgImage: '/images/login-reading-nook-hd.jpg',
+    bgImage: '/images/atmospheres/late_night_hd.jpg',
   },
   {
     id: 'personal-growth',
+    motif: '🖋️',
     vol: 'VI',
     title: 'Personal Growth & Craft',
     subtitle: 'Habits, mastery & clearer thinking.',
-    keywords: ['atomic habits', 'steve jobs', 'educated', 'thinking', 'beyond good and evil', 'alchemist'],
+    keywords: ['atomic habits', 'deep work', 'grit', 'mastery', 'alchemist', 'craft', 'art of'],
     fallbackCategory: 'Non-Fiction',
     theme: 'dark',
-    bgImage: '/images/signup-desk-scene-hd.jpg',
+    bgImage: '/images/atmospheres/personal_growth_hd.jpg',
   },
 ];
 
@@ -90,12 +96,10 @@ const CuratedCollectionTiles = ({
     <section id="curated-collections" className="mb-12 scroll-mt-24">
       {/* 1. SECTION HEADER: Title, Metadata, Actions, & Carousel Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-full bg-[#8D263B]/10 text-[#8D263B] flex items-center justify-center text-xs">
-            <PiSparkleBold />
-          </div>
-          <h2 className="font-serif text-2xl sm:text-[26px] font-bold text-[#2A1E17] tracking-tight">
-            Curated Atmospheres
+        <div className="flex items-center gap-2">
+          <h2 className="font-serif text-2xl sm:text-[26px] font-bold text-[#2A1E17] tracking-tight flex items-center gap-1.5">
+            <span>Curated Atmospheres</span>
+            <span className="text-base text-[#7B8B6F]">🌿</span>
           </h2>
           <span className="text-xs sm:text-sm text-[#7A6C60] font-serif italic">
             &bull; Image-led moodboards
@@ -117,23 +121,23 @@ const CuratedCollectionTiles = ({
 
           <Link
             to="/books/create"
-            className="h-8 px-3.5 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] text-xs font-medium flex items-center gap-1.5 transition-all shadow-sm cute-pill-hover group"
+            className="h-8 px-4 rounded-full bg-[#7D1D2D] hover:bg-[#631422] text-[#FFFDF9] text-xs font-medium flex items-center gap-1.5 transition-all shadow-xs group"
           >
-            <PiPlusBold className="text-xs transition-transform duration-300 group-hover:rotate-90 group-hover:scale-125" />
+            <PiPlusBold className="text-xs transition-transform duration-300 group-hover:rotate-90" />
             <span>Add Story</span>
           </Link>
 
-          <div className="h-8 px-3 rounded-full bg-[#FFFDFA] border border-[#E8DED1] text-xs font-mono text-[#302A27] flex items-center gap-1.5 shadow-2xs">
-            <span className="font-medium text-[#8D263B]">{totalBooks}</span> works
-            <PiCaretRight className="text-xs text-[#81766D]" />
+          <div className="h-8 px-3 rounded-full bg-[#FFFDF9] border border-[#DFCBB5] text-xs font-serif text-[#302A27] flex items-center gap-1.5 shadow-2xs cursor-pointer hover:border-[#8D263B]/50">
+            <span className="font-medium text-[#2C1E18]">50 works</span>
+            <PiCaretRight className="text-xs text-[#81766D] rotate-90" />
           </div>
 
-          <div className="flex items-center gap-1 ml-1">
+          <div className="flex items-center gap-1.5 ml-1">
             <button
               type="button"
               onClick={scrollLeft}
               aria-label="Previous atmospheric collections"
-              className="w-8 h-8 rounded-full bg-[#FFFDFA] hover:bg-[#F7F3EC] border border-[#E8DED1] flex items-center justify-center text-xs text-[#302A27] hover:text-[#8D263B] shadow-2xs transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full bg-[#FFFDF9] hover:bg-[#F7F3EC] border border-[#DFCBB5] flex items-center justify-center text-xs text-[#302A27] hover:text-[#8D263B] shadow-2xs transition-colors cursor-pointer"
             >
               <PiCaretLeftBold />
             </button>
@@ -141,7 +145,7 @@ const CuratedCollectionTiles = ({
               type="button"
               onClick={scrollRight}
               aria-label="Next atmospheric collections"
-              className="w-8 h-8 rounded-full bg-[#FFFDFA] hover:bg-[#F7F3EC] border border-[#E8DED1] flex items-center justify-center text-xs text-[#302A27] hover:text-[#8D263B] shadow-2xs transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full bg-[#FFFDF9] hover:bg-[#F7F3EC] border border-[#DFCBB5] flex items-center justify-center text-xs text-[#302A27] hover:text-[#8D263B] shadow-2xs transition-colors cursor-pointer"
             >
               <PiCaretRightBold />
             </button>
@@ -178,10 +182,11 @@ const CuratedCollectionTiles = ({
               {/* Rich Cinematic Dark Gradient for 100% Guaranteed Text Contrast */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/30 pointer-events-none" />
 
-              {/* Top Typography: Eyebrow Tag & Prominent Serif Title */}
+              {/* Top Typography: Eyebrow Gold Tag with Motif & Prominent Serif Title */}
               <div className="relative z-10">
-                <span className="text-[9.5px] uppercase font-mono tracking-[0.22em] block font-bold mb-1.5 text-[#E8C28A] drop-shadow-sm">
-                  ✦ Vol. {col.vol}
+                <span className="text-[10px] uppercase font-mono tracking-[0.2em] font-bold mb-1.5 text-[#E8C28A] drop-shadow-sm flex items-center gap-1.5">
+                  <span className="text-xs">{col.motif}</span>
+                  <span>COLLECTION</span>
                 </span>
                 <h3 className="font-serif text-[18px] sm:text-[19px] font-bold leading-snug line-clamp-2 text-white drop-shadow-sm group-hover:text-[#FDECC8] transition-colors">
                   {col.title}

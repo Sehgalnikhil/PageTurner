@@ -165,64 +165,79 @@ const Home = () => {
       <Navbar totalBooks={totalBooks} />
 
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
-        {/* Seamlessly Integrated Editorial Masthead Banner */}
-        <header className="mb-9 rounded-2xl bg-[#FFFDF9] border border-[#E2D5C3] overflow-hidden shadow-[0_8px_30px_rgba(40,25,15,0.06)] relative group">
-          {/* Seamlessly Embedded Moodboard Artwork with Feathered Editorial Blend */}
-          <div className="absolute inset-y-0 right-0 w-full sm:w-[65%] md:w-[58%] lg:w-[52%] xl:w-[48%] overflow-hidden pointer-events-none select-none">
+        {/* Seamlessly Integrated Editorial Masthead Banner matching Mockup */}
+        <header className="mb-4 rounded-2xl sm:rounded-3xl border border-[#DFCBB5] overflow-hidden shadow-[0_12px_36px_rgba(40,25,15,0.08)] relative group bg-[#F5EFE6]">
+          {/* Right Window Scene with Sleeping Cat, Warm Lamp, Mug, Books, & Pinned Note */}
+          <div className="absolute inset-y-0 right-0 w-full sm:w-[60%] md:w-[54%] lg:w-[50%] overflow-hidden pointer-events-none select-none">
             <img
-              src="/images/hero-moodboard.jpg"
-              alt="Literary Moodboard - A quieter brighter you"
-              className="w-full h-full object-cover object-right sm:object-center opacity-90 group-hover:scale-102 transition-transform duration-700"
+              src="/images/hero_window_scene_2x.jpg"
+              alt="Window with sleeping cat, warm lamp, and autumn foliage"
+              className="w-full h-full object-cover object-right sm:object-center opacity-95 group-hover:scale-102 transition-transform duration-700"
             />
-            {/* Seamless feathering gradient from surface background to transparent */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FFFDF9] via-[#FFFDF9]/90 sm:via-[#FFFDF9]/50 to-transparent pointer-events-none" />
-            <div className="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-[#FFFDF9]/60 to-transparent pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-[#FFFDF9]/60 to-transparent pointer-events-none" />
+            {/* Soft feathered blend so the deckle paper edge transitions smoothly */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#F5EFE6] via-[#F5EFE6]/60 to-transparent pointer-events-none sm:via-transparent" />
           </div>
 
-          {/* Left Content Column */}
-          <div className="relative z-10 p-6 sm:p-8 lg:p-10 max-w-xl xl:max-w-2xl min-h-[200px] sm:min-h-[210px] lg:min-h-[235px] flex flex-col justify-center">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="h-[1px] w-6 bg-[#C6A16B]"></span>
-              <span className="text-[9.5px] sm:text-[10px] font-mono font-semibold uppercase tracking-[0.24em] text-[#8D263B]">
+          {/* Left Content Column with Deckle-Edge Parchment feel */}
+          <div className="relative z-10 p-6 sm:p-8 lg:p-10 max-w-xl xl:max-w-2xl min-h-[200px] sm:min-h-[220px] lg:min-h-[240px] flex flex-col justify-center">
+            {/* Archival Tag */}
+            <div className="flex items-center gap-2 mb-2 sm:mb-2.5">
+              <span className="h-[1px] w-6 bg-[#C6A16B]" />
+              <span className="text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-[0.24em] text-[#8D263B]">
                 Digital Reading Journal &bull; Issue No. 24
               </span>
             </div>
+
+            {/* Serif Headline with Italic Crimson Accent */}
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-[44px] font-bold text-[#2A1E17] tracking-tight leading-tight">
               Fall into <span className="italic font-normal text-[#8D263B]">another world.</span>
             </h1>
-            <p className="text-xs sm:text-[13px] text-[#81766D] font-serif italic mt-2 mb-5 leading-relaxed max-w-lg">
+
+            {/* Subtitle */}
+            <p className="text-xs sm:text-[13px] text-[#7A6C60] font-serif italic mt-1.5 mb-5 leading-relaxed max-w-lg">
               Stories to cherish. Ideas to collect. Worlds to get lost in.
             </p>
 
             {/* Start Exploring Button & Curated Universe Subtext */}
-            <div className="flex items-center gap-4 sm:gap-5 flex-wrap pt-1">
+            <div className="flex items-center gap-4 sm:gap-5 flex-wrap pt-0.5">
               <button
                 type="button"
                 onClick={() => {
                   const el = document.getElementById('curated-collections');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="group relative inline-flex items-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] font-sans text-xs sm:text-[13px] font-medium tracking-wide shadow-subtle hover:shadow-card cute-press cursor-pointer overflow-hidden"
+                className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#7D1D2D] hover:bg-[#631422] text-[#FFFDF9] font-serif text-xs sm:text-[13px] font-medium tracking-wide shadow-xs hover:shadow-md transition-all duration-200 active:scale-95 cursor-pointer"
               >
-                <PiCompassBold className="text-[#C6A16B] text-sm sm:text-base group-hover:rotate-45 group-hover:scale-125 transition-transform duration-300 relative z-10" />
-                <span className="relative z-10 font-medium">Start Exploring</span>
-
-                {/* Circular badge with gliding arrow */}
-                <span className="relative z-10 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-white transition-all duration-200 group-hover:bg-white group-hover:text-[#8D263B] group-hover:translate-x-1 group-hover:scale-110">
-                  <PiArrowRightBold className="text-[10px]" />
-                </span>
+                <span>Start Exploring</span>
+                <PiArrowRightBold className="text-xs transition-transform duration-200 group-hover:translate-x-1" />
               </button>
 
               <div className="hidden sm:flex items-center gap-3 pl-1">
-                <span className="h-6 w-[1px] bg-[#E8DED1]" aria-hidden="true" />
-                <span className="text-[10px] sm:text-[11px] font-mono text-[#81766D] uppercase tracking-wider max-w-[240px] leading-relaxed">
+                <span className="h-5 w-[1px] bg-[#DFCBB5]" aria-hidden="true" />
+                <span className="text-[9.5px] sm:text-[10.5px] font-mono text-[#7A6C60] uppercase tracking-wider max-w-[240px] leading-relaxed">
                   A curated universe of books, ideas &amp; quieter days.
                 </span>
               </div>
             </div>
           </div>
+
+          {/* Crimson Wax Seal pinned at the seam */}
+          <div className="hidden md:block absolute bottom-4 sm:bottom-6 left-[48%] lg:left-[49%] -translate-x-1/2 z-20 pointer-events-none select-none">
+            <img
+              src="/images/crimson_wax_seal.png"
+              alt="PageTurner Crimson Wax Seal"
+              className="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-[0_4px_12px_rgba(40,10,15,0.4)]"
+            />
+          </div>
         </header>
+
+        {/* Carousel Pagination Dots */}
+        <div className="flex items-center justify-center gap-2.5 mt-2 mb-8" aria-hidden="true">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#3B2219] shadow-2xs" />
+          <span className="w-2 h-2 rounded-full border border-[#8C7667] bg-transparent" />
+          <span className="w-2 h-2 rounded-full border border-[#8C7667] bg-transparent" />
+          <span className="w-2 h-2 rounded-full border border-[#8C7667] bg-transparent" />
+        </div>
 
         {/* Curated Atmospheric Collections: Sophisticated, Image-Led Tiles matching reference screenshot */}
         <CuratedCollectionTiles
