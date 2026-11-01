@@ -3,6 +3,15 @@ import { authService } from '../services/api';
 
 export const AuthContext = createContext();
 
+const safeSetItem = (key, value) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch (e) {
+    // Gracefully handle storage quota exceeded (e.g. large base64 avatar images)
+    console.warn(`[Storage] Could not write ${key}:`, e.message);
+  }
+};
+
 const isDefaultOrPlaceholderAvatar = (url) => {
   if (!url || typeof url !== 'string') return true;
   if (url.includes('photo-1544717305-2782549b5136')) return true;
@@ -48,7 +57,7 @@ export const AuthProvider = ({ children }) => {
 
           // Immediate optimistic state hydration
           setUser(parsed);
-          localStorage.setItem('userInfo', JSON.stringify(parsed));
+          safeSetItem('userInfo', JSON.stringify(parsed));
 
           // Verify token and refresh user info from backend
           if (parsed.token) {
@@ -66,11 +75,11 @@ export const AuthProvider = ({ children }) => {
                   avatar: finalAvatar,
                 };
                 setUser(updated);
-                localStorage.setItem('userInfo', JSON.stringify(updated));
+                safeSetItem('userInfo', JSON.stringify(updated));
                 if (finalAvatar) {
-                  localStorage.setItem('sanctuary_custom_avatar', finalAvatar);
+                  safeSetItem('sanctuary_custom_avatar', finalAvatar);
                   if (userEmail) {
-                    localStorage.setItem(`sanctuary_custom_avatar_${userEmail}`, finalAvatar);
+                    safeSetItem(`sanctuary_custom_avatar_${userEmail}`, finalAvatar);
                   }
                 }
               }
@@ -101,11 +110,11 @@ export const AuthProvider = ({ children }) => {
               avatar: finalAvatar,
             };
             setUser(initialUser);
-            localStorage.setItem('userInfo', JSON.stringify(initialUser));
+            safeSetItem('userInfo', JSON.stringify(initialUser));
             if (finalAvatar) {
-              localStorage.setItem('sanctuary_custom_avatar', finalAvatar);
+              safeSetItem('sanctuary_custom_avatar', finalAvatar);
               if (userEmail) {
-                localStorage.setItem(`sanctuary_custom_avatar_${userEmail}`, finalAvatar);
+                safeSetItem(`sanctuary_custom_avatar_${userEmail}`, finalAvatar);
               }
             }
           }
@@ -143,10 +152,10 @@ export const AuthProvider = ({ children }) => {
       avatar: finalAvatar,
     };
 
-    localStorage.setItem('userInfo', JSON.stringify(finalUserData));
-    localStorage.setItem('sanctuary_custom_avatar', finalAvatar);
+    safeSetItem('userInfo', JSON.stringify(finalUserData));
+    safeSetItem('sanctuary_custom_avatar', finalAvatar);
     if (userEmail) {
-      localStorage.setItem(`sanctuary_custom_avatar_${userEmail}`, finalAvatar);
+      safeSetItem(`sanctuary_custom_avatar_${userEmail}`, finalAvatar);
     }
     setUser(finalUserData);
 
@@ -182,11 +191,11 @@ export const AuthProvider = ({ children }) => {
       avatar: newAvatar,
     };
     setUser(updated);
-    localStorage.setItem('userInfo', JSON.stringify(updated));
-    localStorage.setItem('sanctuary_custom_avatar', newAvatar);
-    localStorage.setItem('sanctuary_avatar_explicit_choice', 'true');
+    safeSetItem('userInfo', JSON.stringify(updated));
+    safeSetItem('sanctuary_custom_avatar', newAvatar);
+    safeSetItem('sanctuary_avatar_explicit_choice', 'true');
     if (userEmail) {
-      localStorage.setItem(`sanctuary_custom_avatar_${userEmail}`, newAvatar);
+      safeSetItem(`sanctuary_custom_avatar_${userEmail}`, newAvatar);
     }
 
     // 2. Persist to backend and sync with MongoDB
@@ -206,10 +215,10 @@ export const AuthProvider = ({ children }) => {
           ...(res.data.token ? { token: res.data.token } : {}),
         };
         setUser(synced);
-        localStorage.setItem('userInfo', JSON.stringify(synced));
-        localStorage.setItem('sanctuary_custom_avatar', syncedAvatar);
+        safeSetItem('userInfo', JSON.stringify(synced));
+        safeSetItem('sanctuary_custom_avatar', syncedAvatar);
         if (userEmail) {
-          localStorage.setItem(`sanctuary_custom_avatar_${userEmail}`, syncedAvatar);
+          safeSetItem(`sanctuary_custom_avatar_${userEmail}`, syncedAvatar);
         }
       }
     } catch (err) {
@@ -238,11 +247,11 @@ export const AuthProvider = ({ children }) => {
           avatar: finalAvatar,
         };
         setUser(switched);
-        localStorage.setItem('userInfo', JSON.stringify(switched));
+        safeSetItem('userInfo', JSON.stringify(switched));
         if (finalAvatar) {
-          localStorage.setItem('sanctuary_custom_avatar', finalAvatar);
+          safeSetItem('sanctuary_custom_avatar', finalAvatar);
           if (userEmail) {
-            localStorage.setItem(`sanctuary_custom_avatar_${userEmail}`, finalAvatar);
+            safeSetItem(`sanctuary_custom_avatar_${userEmail}`, finalAvatar);
           }
         }
         return switched;

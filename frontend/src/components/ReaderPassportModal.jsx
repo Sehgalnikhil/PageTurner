@@ -13,6 +13,7 @@ import {
   PiFireBold,
   PiEnvelopeSimpleBold,
   PiTagBold,
+  PiBookmarkSimpleBold,
 } from 'react-icons/pi';
 import ChangeAvatarModal from './common/ChangeAvatarModal';
 import { AuthContext } from '../context/AuthContext';
