@@ -25,6 +25,9 @@ import {
   PiFlameBold,
   PiCloudRainBold,
   PiPaperPlaneRightBold,
+  PiMagnifyingGlassBold,
+  PiCheckBold,
+  PiBookOpenBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
@@ -48,6 +51,10 @@ const Community = () => {
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
   const [parlourDropdownOpen, setParlourDropdownOpen] = useState(false);
 
+  // Parlours Tab Search and Category
+  const [parlourCategory, setParlourCategory] = useState('All');
+  const [parlourSearch, setParlourSearch] = useState('');
+
   // Modals & Compose State
   const [showCompose, setShowCompose] = useState(false);
   const [showCreateParlourModal, setShowCreateParlourModal] = useState(false);
@@ -59,37 +66,84 @@ const Community = () => {
   // Create Parlour State
   const [newParlourTitle, setNewParlourTitle] = useState('');
   const [newParlourDesc, setNewParlourDesc] = useState('');
+  const [newParlourCategory, setNewParlourCategory] = useState('Gothic & Victorian');
 
   // Silent Reading Room Timer
   const [readingTimerRunning, setReadingTimerRunning] = useState(false);
   const [readingSeconds, setReadingSeconds] = useState(1485);
   const [activeAmbiance, setActiveAmbiance] = useState('off');
 
-  // Parlours State
+  // Comprehensive Parlours State
   const [parlours, setParlours] = useState([
-    {
-      id: 'midnight',
-      title: 'The Midnight Philosophers',
-      desc: 'Late-night classics, existential reflections & quiet tea.',
-      members: 342,
-      joined: false,
-      img: '/images/parlour-midnight.jpg',
-    },
     {
       id: 'gothic',
       title: 'The Gothic Study',
-      desc: 'Candlelight, Victorian mystery & brooding atmospheres.',
+      category: 'Gothic & Victorian',
+      desc: 'Candlelight, Victorian mystery & brooding atmospheres. Delving into Mary Shelley, Bram Stoker, and Oscar Wilde.',
       members: 512,
+      activeNow: 42,
       joined: true,
       img: '/images/parlour-gothic.jpg',
+      currentBook: 'The Picture of Dorian Gray',
+      currentBookAuthor: 'Oscar Wilde',
+      currentBookCover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&auto=format&fit=crop&q=80',
+      prompt: 'Is aestheticism a pursuit of beauty or an escape from moral decay?',
+    },
+    {
+      id: 'midnight',
+      title: 'The Midnight Philosophers',
+      category: 'Nocturnal Philosophy',
+      desc: 'Late-night classics, existential reflections & quiet tea. Sören Kierkegaard, Albert Camus, Jean-Paul Sartre.',
+      members: 342,
+      activeNow: 19,
+      joined: false,
+      img: '/images/parlour-midnight.jpg',
+      currentBook: 'The Myth of Sisyphus',
+      currentBookAuthor: 'Albert Camus',
+      currentBookCover: 'https://images.unsplash.com/photo-1532012164546-f432f2e3777f?w=200&auto=format&fit=crop&q=80',
+      prompt: 'Can one imagine Sisyphus truly happy in our contemporary acceleration?',
     },
     {
       id: 'slow',
       title: 'Slow Readers Society',
-      desc: 'One chapter a week. Close reading & deep conversations.',
+      category: 'Slow Reading',
+      desc: 'One chapter a week. Close reading, deep textual dissection, and marginalia sharing.',
       members: 820,
+      activeNow: 63,
       joined: false,
       img: '/images/parlour-slow.jpg',
+      currentBook: '1984',
+      currentBookAuthor: 'George Orwell',
+      currentBookCover: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=200&auto=format&fit=crop&q=80',
+      prompt: 'The concept of memory holes in an era of digital deletion.',
+    },
+    {
+      id: 'poetry',
+      title: 'The Antiquarian Poetry Cloister',
+      category: 'Romantic Poetry',
+      desc: 'Romantic, Decadent, and Symbolist poetry read aloud under soft lamplight.',
+      members: 275,
+      activeNow: 14,
+      joined: false,
+      img: 'https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?w=600&auto=format&fit=crop&q=80',
+      currentBook: 'Les Fleurs du mal',
+      currentBookAuthor: 'Charles Baudelaire',
+      currentBookCover: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=200&auto=format&fit=crop&q=80',
+      prompt: 'Spleen et Idéal: navigating urban melancholy through verse.',
+    },
+    {
+      id: 'dostoevsky',
+      title: "Dostoevsky's Underground",
+      category: 'Russian Classics',
+      desc: 'Dissecting human frailty, suffering, guilt, and spiritual redemption.',
+      members: 419,
+      activeNow: 28,
+      joined: false,
+      img: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=80',
+      currentBook: 'Crime and Punishment',
+      currentBookAuthor: 'Fyodor Dostoevsky',
+      currentBookCover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&auto=format&fit=crop&q=80',
+      prompt: "Raskolnikov's extraordinary man theory: rationalization vs conscience.",
     },
   ]);
 
@@ -282,10 +336,16 @@ const Community = () => {
     const newParlour = {
       id: `parlour-${Date.now()}`,
       title: newParlourTitle.trim(),
+      category: newParlourCategory,
       desc: newParlourDesc.trim() || 'A new literary parlour for kindred minds.',
       members: 1,
+      activeNow: 1,
       joined: true,
       img: '/images/parlour-midnight.jpg',
+      currentBook: 'Selected Canonical Volume',
+      currentBookAuthor: 'Guild Curator',
+      currentBookCover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&auto=format&fit=crop&q=80',
+      prompt: 'Opening session inquiry awaiting participant discourse.',
     };
 
     setParlours([newParlour, ...parlours]);
@@ -323,6 +383,7 @@ const Community = () => {
 
   const readerName = user?.username || 'Nikhil Sehgal';
 
+  // Filtered posts for feed
   const filteredPosts = posts.filter((p) => {
     if (filterParlour === 'All Parlours') return true;
     return p.parlour === filterParlour;
@@ -333,6 +394,19 @@ const Community = () => {
     if (sortOption === 'Most Discussed') return b.commentsCount - a.commentsCount;
     return 0;
   });
+
+  // Filtered parlours for Literary Parlours tab
+  const filteredParloursList = parlours.filter((p) => {
+    const matchesCat = parlourCategory === 'All' || p.category === parlourCategory;
+    const matchesSearch =
+      !parlourSearch.trim() ||
+      p.title.toLowerCase().includes(parlourSearch.toLowerCase()) ||
+      p.desc.toLowerCase().includes(parlourSearch.toLowerCase()) ||
+      p.currentBook.toLowerCase().includes(parlourSearch.toLowerCase());
+    return matchesCat && matchesSearch;
+  });
+
+  const joinedParlours = parlours.filter((p) => p.joined);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F6F0E6] text-[#2F2620] selection:bg-[#7D2235]/20 font-sans">
@@ -594,6 +668,23 @@ const Community = () => {
 
                 <div>
                   <label className="block text-xs font-serif font-bold text-[#2F2620] mb-1">
+                    Literary Movement / Category
+                  </label>
+                  <select
+                    value={newParlourCategory}
+                    onChange={(e) => setNewParlourCategory(e.target.value)}
+                    className="w-full p-2 rounded-xl border border-[#D9CDB8] bg-[#FFFDF9] text-xs text-[#2F2620] focus:outline-none focus:border-[#7D2235]"
+                  >
+                    <option value="Gothic & Victorian">Gothic & Victorian</option>
+                    <option value="Nocturnal Philosophy">Nocturnal Philosophy</option>
+                    <option value="Slow Reading">Slow Reading</option>
+                    <option value="Romantic Poetry">Romantic Poetry</option>
+                    <option value="Russian Classics">Russian Classics</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-serif font-bold text-[#2F2620] mb-1">
                     Sanctuary Description & Vibe
                   </label>
                   <textarea
@@ -711,7 +802,631 @@ const Community = () => {
         )}
 
         {/* ============================================================
-            TAB VIEW: READING ROOMS (LIVE AMBIENT TIMER & SOUND AMBIANCE)
+            TAB 1: SALON FEED (THE 3-COLUMN SPECIFICATION COMMON ROOM)
+            ============================================================ */}
+        {activeTab === 'feed' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 xl:gap-6 items-start animate-fade-in">
+            
+            {/* LEFT COLUMN (3 COLS): CLIPBOARD "MY READER PASSPORT" */}
+            <div className="lg:col-span-3">
+              <div className="relative pt-4">
+                
+                {/* Metallic Clipboard Binder Clamp */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 w-16 h-7 bg-gradient-to-b from-[#56493F] to-[#2E2520] rounded-t-md shadow-md border border-[#2B231D] flex items-center justify-center">
+                  <div className="w-8 h-2 rounded-full bg-[#1C1714] border border-white/20 shadow-inner" />
+                </div>
+
+                {/* Textured Passport Card */}
+                <div className="relative z-10 bg-[#FAF4EA] rounded-2xl border-2 border-[#D8C7B0] p-6 text-center shadow-[0_8px_30px_rgba(40,30,20,0.08)]">
+                  
+                  {/* Heading */}
+                  <h3 className="font-serif text-lg font-bold text-[#2F2620] mt-1 mb-4">
+                    My Reader Passport
+                  </h3>
+
+                  {/* Circular Profile Avatar */}
+                  <div className="relative w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-2 border-[#D9C4A6] shadow-inner bg-[#2C231E]">
+                    <img
+                      src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80"
+                      alt={readerName}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* Reader Identity */}
+                  <h4 className="font-serif font-bold text-base text-[#2F2620] leading-tight">
+                    {readerName}
+                  </h4>
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-[#817265] block mt-0.5">
+                    PT-48127
+                  </span>
+
+                  {/* Passport Badges */}
+                  <div className="flex flex-wrap gap-1.5 justify-center mt-4">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EFE5D5] text-[#2F2620] text-[10px] font-sans font-medium border border-[#D5C2A5]">
+                      <PiMoonFill className="text-[#7D2235] text-xs" />
+                      <span>Night Owl Reader</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EFE5D5] text-[#2F2620] text-[10px] font-sans font-medium border border-[#D5C2A5]">
+                      <PiPenNibBold className="text-[#7D2235] text-xs" />
+                      <span>Marginalia Scribe</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EFE5D5] text-[#2F2620] text-[10px] font-sans font-medium border border-[#D5C2A5]">
+                      <PiColumnsBold className="text-[#7D2235] text-xs" />
+                      <span>Classics Initiate</span>
+                    </span>
+                  </div>
+
+                  {/* Level Progress Station */}
+                  <div className="mt-5 pt-4 border-t border-[#E5D4BC] text-left text-xs font-sans">
+                    <div className="flex items-center justify-between text-[11px] mb-1">
+                      <span className="text-[#76675B]">Literary Level</span>
+                      <span className="font-bold text-[#7D2235]">Lv. 4</span>
+                    </div>
+                    <div className="text-xs font-serif font-bold text-[#2F2620] mb-2">
+                      The Attentive Reader
+                    </div>
+
+                    {/* XP Bar */}
+                    <div className="w-full h-2 rounded-full bg-[#E5D7C2] overflow-hidden">
+                      <div className="h-full bg-[#7D2235] rounded-full w-[78%] transition-all duration-500" />
+                    </div>
+                    <div className="flex items-center justify-between text-[10px] font-mono text-[#76675B] mt-1.5">
+                      <span>1,240 / 1,500 XP</span>
+                      <span>Lv. 4</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            {/* MIDDLE COLUMN (6 COLS): FROM THE COMMON ROOM (FEED) */}
+            <div className="lg:col-span-6 space-y-4">
+              
+              {/* Header with Sorting & Filtering Dropdowns */}
+              <div className="flex items-center justify-between pb-2 mb-1">
+                <h2 className="font-serif text-lg font-bold text-[#2F2620] flex items-center gap-2 border-b-2 border-[#7D2235] pb-1">
+                  <span>From the Common Room</span>
+                  <PiFeatherBold className="text-sm text-[#7D2235]" />
+                </h2>
+
+                <div className="flex items-center gap-2 text-xs">
+                  {/* Recent Sort Dropdown */}
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSortDropdownOpen((prev) => !prev);
+                        setParlourDropdownOpen(false);
+                      }}
+                      className="px-2.5 py-1 rounded-lg border border-[#D8CCB8] bg-[#FAF5ED] text-[#483B32] font-medium flex items-center gap-1.5 cute-press cursor-pointer"
+                    >
+                      <span>{sortOption}</span>
+                      <PiCaretDownBold className="text-[10px]" />
+                    </button>
+                    {sortDropdownOpen && (
+                      <div className="absolute right-0 top-full mt-1 w-36 bg-[#FAF5ED] rounded-xl shadow-lg border border-[#D8CCB8] py-1 z-30 text-xs">
+                        {['Recent', 'Top Reflections', 'Most Discussed'].map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => {
+                              setSortOption(opt);
+                              setSortDropdownOpen(false);
+                            }}
+                            className={`w-full text-left px-3 py-1.5 hover:bg-[#EFE7D8] text-[#2F2620] ${
+                              sortOption === opt ? 'font-bold text-[#7D2235]' : ''
+                            }`}
+                          >
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* All Parlours Filter Dropdown */}
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setParlourDropdownOpen((prev) => !prev);
+                        setSortDropdownOpen(false);
+                      }}
+                      className="px-2.5 py-1 rounded-lg border border-[#D8CCB8] bg-[#FAF5ED] text-[#483B32] font-medium flex items-center gap-1.5 cute-press cursor-pointer"
+                    >
+                      <span>{filterParlour}</span>
+                      <PiCaretDownBold className="text-[10px]" />
+                    </button>
+                    {parlourDropdownOpen && (
+                      <div className="absolute right-0 top-full mt-1 w-48 bg-[#FAF5ED] rounded-xl shadow-lg border border-[#D8CCB8] py-1 z-30 text-xs">
+                        {['All Parlours', 'The Gothic Study', 'The Midnight Philosophers', 'Slow Readers Society'].map(
+                          (opt) => (
+                            <button
+                              key={opt}
+                              type="button"
+                              onClick={() => {
+                                setFilterParlour(opt);
+                                setParlourDropdownOpen(false);
+                              }}
+                              className={`w-full text-left px-3 py-1.5 hover:bg-[#EFE7D8] text-[#2F2620] ${
+                                filterParlour === opt ? 'font-bold text-[#7D2235]' : ''
+                              }`}
+                            >
+                              {opt}
+                            </button>
+                          )
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Posts Cards */}
+              {sortedPosts.map((post) => (
+                <article
+                  key={post.id}
+                  className="p-5 sm:p-6 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm relative overflow-hidden text-left"
+                >
+                  {/* Author Top Row */}
+                  <div className="flex items-center justify-between mb-3.5">
+                    <div className="flex items-center gap-2.5">
+                      <img
+                        src={post.avatar}
+                        alt={post.author}
+                        className="w-9 h-9 rounded-full object-cover border border-[#D8CCB8] shadow-2xs"
+                      />
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-serif font-bold text-sm text-[#2F2620]">
+                            {post.author}
+                          </span>
+                          <span className="text-[11px] font-sans text-[#7A6A5E]">
+                            @{post.handle}
+                          </span>
+                        </div>
+                        <span className="text-[10.5px] text-[#7A6A5E] block">
+                          {post.time} &bull; in{' '}
+                          <strong className="text-[#7D2235] font-medium">
+                            {post.parlour}
+                          </strong>
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => enqueueSnackbar(`Options for @${post.handle}`, { variant: 'info' })}
+                      className="p-1 rounded-full hover:bg-black/5 text-[#7A6A5E]"
+                    >
+                      <PiDotsThreeBold className="text-base" />
+                    </button>
+                  </div>
+
+                  {/* Highlighted Quote Box with image thumbnail */}
+                  {post.quote && (
+                    <div className="p-4 rounded-xl bg-[#F0E6D5] border border-[#D8C7B0] mb-3.5 flex items-center justify-between gap-4">
+                      <div className="flex-1">
+                        <blockquote className="font-serif italic text-xs sm:text-[13px] text-[#2F2620] leading-relaxed">
+                          {post.quote}
+                        </blockquote>
+                        <span className="font-serif text-[11px] text-[#7A6A5E] mt-1 block">
+                          — {post.quoteAuthor}
+                        </span>
+                      </div>
+
+                      {post.quoteImg && (
+                        <div className="w-24 h-16 rounded-lg overflow-hidden border border-[#D8C7B0] flex-shrink-0 shadow-2xs">
+                          <img
+                            src={post.quoteImg}
+                            alt="Open book spread with dried flowers"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Main Reflection Text */}
+                  <p className="text-xs sm:text-[12.5px] text-[#2F2620] leading-relaxed mb-4 font-sans">
+                    {post.content}
+                  </p>
+
+                  {/* Bottom Interactive Actions */}
+                  <div className="pt-3 border-t border-[#E5D7C2] flex items-center justify-between text-xs text-[#6E5F53]">
+                    <div className="flex items-center gap-4">
+                      {/* Heart Like */}
+                      <button
+                        type="button"
+                        onClick={() => handleLike(post.id)}
+                        className={`flex items-center gap-1.5 transition-colors cute-press cursor-pointer ${
+                          post.liked ? 'text-[#7D2235] font-bold' : 'hover:text-[#7D2235]'
+                        }`}
+                      >
+                        {post.liked ? (
+                          <PiHeartFill className="text-sm text-[#7D2235] animate-jelly-pop" />
+                        ) : (
+                          <PiHeartBold className="text-sm" />
+                        )}
+                        <span>{post.likes}</span>
+                      </button>
+
+                      {/* Comments Toggle */}
+                      <button
+                        type="button"
+                        onClick={() => toggleComments(post.id)}
+                        className={`flex items-center gap-1.5 transition-colors cute-press cursor-pointer ${
+                          post.showComments ? 'text-[#7D2235] font-bold' : 'hover:text-[#2F2620]'
+                        }`}
+                      >
+                        <PiChatCircleBold className="text-sm" />
+                        <span>{post.commentsCount}</span>
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      {/* Bookmark */}
+                      <button
+                        type="button"
+                        onClick={() => handleBookmark(post.id)}
+                        className="p-1 rounded hover:text-[#7D2235] transition-colors cute-press cursor-pointer"
+                        title={post.bookmarked ? 'Saved to marginalia' : 'Save reflection'}
+                      >
+                        {post.bookmarked ? (
+                          <PiBookmarkSimpleFill className="text-sm text-[#7D2235]" />
+                        ) : (
+                          <PiBookmarkSimpleBold className="text-sm" />
+                        )}
+                      </button>
+
+                      {/* Share */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          playPaperUnwrap();
+                          navigator.clipboard?.writeText(window.location.href);
+                          enqueueSnackbar('Copied reflection link to clipboard 📜', { variant: 'info' });
+                        }}
+                        className="flex items-center gap-1 hover:text-[#2F2620] cute-press cursor-pointer text-xs"
+                      >
+                        <PiShareNetworkBold className="text-xs" />
+                        <span>Share</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Expandable Comments Section */}
+                  {post.showComments && (
+                    <div className="mt-4 pt-3 border-t border-[#E5D7C2] space-y-3 animate-fade-in">
+                      <span className="text-[11px] font-serif font-bold text-[#7A6A5E] block">
+                        Common Room Discussion ({post.commentsCount})
+                      </span>
+
+                      {/* Comment list */}
+                      <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
+                        {post.commentsList.map((c) => (
+                          <div key={c.id} className="p-2.5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8] text-xs">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-serif font-bold text-[#2F2620]">{c.author}</span>
+                              <span className="text-[10px] text-[#7A6A5E]">{c.time}</span>
+                            </div>
+                            <p className="text-[#3E3228] leading-snug">{c.text}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Add comment input */}
+                      <div className="flex items-center gap-2 pt-1">
+                        <input
+                          type="text"
+                          value={commentInputs[post.id] || ''}
+                          onChange={(e) =>
+                            setCommentInputs({ ...commentInputs, [post.id]: e.target.value })
+                          }
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleAddComment(post.id);
+                          }}
+                          placeholder="Inscribe a thought..."
+                          className="flex-1 p-2 rounded-xl border border-[#D9CDB8] bg-[#FFFDF9] text-xs text-[#2F2620] focus:outline-none focus:border-[#7D2235]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleAddComment(post.id)}
+                          className="px-3 py-2 rounded-xl bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold cute-press cursor-pointer"
+                        >
+                          <PiPaperPlaneRightBold className="text-xs" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                </article>
+              ))}
+            </div>
+
+            {/* RIGHT COLUMN (3 COLS): FEATURED LITERARY PARLOURS SIDEBAR */}
+            <div className="lg:col-span-3 space-y-4">
+              
+              <div className="flex items-center justify-between pb-2 mb-1">
+                <h3 className="font-serif text-lg font-bold text-[#2F2620]">
+                  Featured Literary Parlours
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playPageFlipSound();
+                    setActiveTab('parlours');
+                  }}
+                  className="text-xs text-[#7D2235] font-semibold hover:underline cursor-pointer"
+                >
+                  View All →
+                </button>
+              </div>
+
+              {/* Parlour Cards */}
+              {parlours.slice(0, 3).map((parlour) => (
+                <div
+                  key={parlour.id}
+                  className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm flex items-start gap-3.5 group hover:border-[#7D2235]/40 transition-all text-left"
+                >
+                  <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#D8C7B0] flex-shrink-0 shadow-2xs">
+                    <img
+                      src={parlour.img}
+                      alt={parlour.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-serif font-bold text-xs sm:text-[13px] text-[#2F2620] leading-snug">
+                      {parlour.title}
+                    </h4>
+                    <p className="text-[11px] text-[#7A6A5E] mt-0.5 line-clamp-2 leading-tight font-sans">
+                      {parlour.desc}
+                    </p>
+
+                    <div className="flex items-center justify-between mt-2 pt-1 border-t border-[#E5D7C2]/60">
+                      <span className="text-[10px] font-mono text-[#7A6A5E]">
+                        {parlour.members} members
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => handleToggleJoin(parlour.id)}
+                        className={`px-3 py-1 rounded-full text-[10.5px] font-semibold transition-all cute-press cursor-pointer ${
+                          parlour.joined
+                            ? 'bg-[#EAE0CF] text-[#4A3D34] border border-[#D5C2A5]'
+                            : 'bg-[#7D2235] hover:bg-[#92283F] text-white shadow-xs'
+                        }`}
+                      >
+                        {parlour.joined ? '✓ Entered' : 'Enter →'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        )}
+
+        {/* ============================================================
+            TAB 2: LITERARY PARLOURS SANCTUARY (DEDICATED EXPLORATION)
+            ============================================================ */}
+        {activeTab === 'parlours' && (
+          <div className="space-y-6 animate-fade-in text-left">
+            
+            {/* Header with Title and Actions */}
+            <div className="p-6 rounded-2xl bg-[#FAF5EB] border border-[#D8C7B0] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <span className="text-[11px] font-mono uppercase tracking-widest text-[#7D2235] font-bold">
+                  Curated Reading Circles
+                </span>
+                <h2 className="font-serif text-2xl font-bold text-[#2F2620] mt-0.5">
+                  Literary Parlours of the Salon
+                </h2>
+                <p className="text-xs text-[#7A6A5E] mt-1 max-w-xl">
+                  Intimate thematic sanctuaries gathered around specific canons, authors, and philosophical inquiries. Join an ongoing parlor or establish your own circle.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  playBookSpineSlide();
+                  setShowCreateParlourModal(true);
+                }}
+                className="self-start md:self-auto px-5 py-2.5 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold shadow-md cute-press cursor-pointer flex items-center gap-1.5"
+              >
+                <PiPlusBold className="text-xs" />
+                <span>+ Establish New Parlour</span>
+              </button>
+            </div>
+
+            {/* My Joined Parlours Quick Bar */}
+            {joinedParlours.length > 0 && (
+              <div className="p-4 rounded-xl bg-[#F0E6D5] border border-[#DECDB8] flex items-center justify-between flex-wrap gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-serif font-bold text-[#2F2620]">
+                    Your Parlour Keyring:
+                  </span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {joinedParlours.map((p) => (
+                      <span
+                        key={p.id}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF5EB] text-[#2F2620] text-xs font-medium border border-[#D8C7B0]"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#7D2235]" />
+                        {p.title}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <span className="text-[11px] text-[#7A6A5E] font-mono">
+                  Active in {joinedParlours.length} sanctuary
+                </span>
+              </div>
+            )}
+
+            {/* Search and Category Filter Ribbon */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#D8CCB8]">
+              {/* Category Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-medium">
+                {[
+                  'All',
+                  'Gothic & Victorian',
+                  'Nocturnal Philosophy',
+                  'Slow Reading',
+                  'Romantic Poetry',
+                  'Russian Classics',
+                ].map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => {
+                      playPageFlipSound();
+                      setParlourCategory(cat);
+                    }}
+                    className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all cute-press cursor-pointer ${
+                      parlourCategory === cat
+                        ? 'bg-[#7D2235] text-white font-semibold shadow-xs'
+                        : 'bg-[#FAF5ED] text-[#645548] hover:text-[#2F2620] border border-[#D8CCB8]'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+
+              {/* Search Bar */}
+              <div className="relative w-full sm:w-64">
+                <PiMagnifyingGlassBold className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#7A6A5E]" />
+                <input
+                  type="text"
+                  value={parlourSearch}
+                  onChange={(e) => setParlourSearch(e.target.value)}
+                  placeholder="Filter parlours..."
+                  className="w-full pl-8 pr-3 py-1.5 rounded-full border border-[#D8CCB8] bg-[#FFFDF9] text-xs text-[#2F2620] focus:outline-none focus:border-[#7D2235]"
+                />
+              </div>
+            </div>
+
+            {/* Parlours Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filteredParloursList.map((p) => (
+                <div
+                  key={p.id}
+                  className="p-5 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm flex flex-col justify-between group hover:border-[#7D2235]/50 transition-all text-left"
+                >
+                  <div>
+                    {/* Header Image with Tag */}
+                    <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden mb-3.5 border border-[#D8C7B0] shadow-inner">
+                      <img
+                        src={p.img}
+                        alt={p.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-2 left-2 px-2.5 py-0.5 rounded-full bg-black/65 backdrop-blur-sm text-[#F7EFE2] text-[10.5px] font-serif font-medium border border-white/20">
+                        {p.category}
+                      </div>
+                      <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-emerald-950/80 text-emerald-300 text-[10px] font-mono backdrop-blur-sm flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        {p.activeNow} online
+                      </div>
+                    </div>
+
+                    {/* Title & Desc */}
+                    <h3 className="font-serif font-bold text-base text-[#2F2620] leading-snug">
+                      {p.title}
+                    </h3>
+                    <p className="text-xs text-[#6F6054] mt-1 leading-relaxed line-clamp-2">
+                      {p.desc}
+                    </p>
+
+                    {/* Current Reading Volume Focus */}
+                    <div className="mt-3.5 p-3 rounded-xl bg-[#F0E6D5] border border-[#DECDB8] flex items-center gap-3">
+                      <img
+                        src={p.currentBookCover}
+                        alt={p.currentBook}
+                        className="w-8 h-12 rounded object-cover border border-[#D8C7B0] flex-shrink-0 shadow-2xs"
+                      />
+                      <div className="min-w-0 flex-1 text-xs">
+                        <span className="text-[9.5px] uppercase font-mono tracking-wider text-[#7D2235] font-bold block">
+                          Current Focus
+                        </span>
+                        <h4 className="font-serif font-bold text-xs text-[#2F2620] truncate">
+                          {p.currentBook}
+                        </h4>
+                        <span className="text-[11px] text-[#7A6A5E] truncate block">
+                          {p.currentBookAuthor}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Weekly Prompt */}
+                    <div className="mt-2.5 px-3 py-2 rounded-lg bg-[#FAF4EA] border border-[#E5D7C2] text-[11px] text-[#52443A] italic font-serif leading-snug">
+                      “{p.prompt}”
+                    </div>
+                  </div>
+
+                  {/* Footer Action */}
+                  <div className="mt-4 pt-3 border-t border-[#E5D7C2] flex items-center justify-between">
+                    <span className="text-xs font-mono text-[#7A6A5E]">
+                      {p.members} Readers
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() => handleToggleJoin(p.id)}
+                      className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cute-press cursor-pointer flex items-center gap-1.5 ${
+                        p.joined
+                          ? 'bg-[#EAE0CF] text-[#4A3D34] border border-[#D5C2A5]'
+                          : 'bg-[#7D2235] hover:bg-[#92283F] text-white shadow-xs'
+                      }`}
+                    >
+                      {p.joined ? (
+                        <>
+                          <PiCheckBold className="text-xs text-[#7D2235]" />
+                          <span>Entered</span>
+                        </>
+                      ) : (
+                        <span>Enter Parlour →</span>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {/* Establish Card */}
+              <div
+                onClick={() => {
+                  playBookSpineSlide();
+                  setShowCreateParlourModal(true);
+                }}
+                className="p-6 rounded-2xl border-2 border-dashed border-[#D5C6AF] hover:border-[#7D2235] bg-[#FAF5EB]/50 flex flex-col items-center justify-center text-center cursor-pointer group transition-all min-h-[300px]"
+              >
+                <div className="w-12 h-12 rounded-full bg-[#EFE5D5] group-hover:bg-[#7D2235] group-hover:text-white text-[#7D2235] flex items-center justify-center transition-all mb-3 shadow-xs">
+                  <PiPlusBold className="text-xl" />
+                </div>
+                <h3 className="font-serif font-bold text-base text-[#2F2620]">
+                  Found a New Parlour
+                </h3>
+                <p className="text-xs text-[#7A6A5E] mt-1 max-w-xs">
+                  Create a dedicated sanctuary for an author, book series, or philosophy reading group.
+                </p>
+                <span className="mt-4 text-xs font-semibold text-[#7D2235] group-hover:underline">
+                  Open Parlour Studio →
+                </span>
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ============================================================
+            TAB 3: READING ROOMS (LIVE AMBIENT TIMER & SOUND AMBIANCE)
             ============================================================ */}
         {activeTab === 'rooms' && (
           <div className="mb-8 p-6 rounded-2xl bg-[#FAF5EB] border-2 border-[#D8C7B0] shadow-sm text-left animate-fade-in">
@@ -822,7 +1537,7 @@ const Community = () => {
         )}
 
         {/* ============================================================
-            TAB VIEW: MARGINALIA EXCHANGE
+            TAB 4: MARGINALIA EXCHANGE
             ============================================================ */}
         {activeTab === 'marginalia' && (
           <div className="mb-8 p-6 rounded-2xl bg-[#FAF5EB] border-2 border-[#D8C7B0] shadow-sm text-left animate-fade-in">
@@ -862,7 +1577,7 @@ const Community = () => {
         )}
 
         {/* ============================================================
-            TAB VIEW: READER MATCHES
+            TAB 5: READER MATCHES
             ============================================================ */}
         {activeTab === 'matches' && (
           <div className="mb-8 p-6 rounded-2xl bg-[#FAF5EB] border-2 border-[#D8C7B0] shadow-sm text-left animate-fade-in">
@@ -928,420 +1643,6 @@ const Community = () => {
           </div>
         )}
 
-        {/* ============================================================
-            2. THE THREE-COLUMN LAYOUT (DIRECTLY UNDER RIBBON BAR)
-            ============================================================ */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 xl:gap-6 items-start">
-          
-          {/* ============================================================
-              LEFT COLUMN (3 COLS): CLIPBOARD "MY READER PASSPORT"
-              ============================================================ */}
-          <div className="lg:col-span-3">
-            <div className="relative pt-4">
-              
-              {/* Metallic Clipboard Binder Clamp */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 w-16 h-7 bg-gradient-to-b from-[#56493F] to-[#2E2520] rounded-t-md shadow-md border border-[#2B231D] flex items-center justify-center">
-                <div className="w-8 h-2 rounded-full bg-[#1C1714] border border-white/20 shadow-inner" />
-              </div>
-
-              {/* Textured Passport Card */}
-              <div className="relative z-10 bg-[#FAF4EA] rounded-2xl border-2 border-[#D8C7B0] p-6 text-center shadow-[0_8px_30px_rgba(40,30,20,0.08)]">
-                
-                {/* Heading */}
-                <h3 className="font-serif text-lg font-bold text-[#2F2620] mt-1 mb-4">
-                  My Reader Passport
-                </h3>
-
-                {/* Circular Profile Avatar */}
-                <div className="relative w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-2 border-[#D9C4A6] shadow-inner bg-[#2C231E]">
-                  <img
-                    src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80"
-                    alt={readerName}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Reader Identity */}
-                <h4 className="font-serif font-bold text-base text-[#2F2620] leading-tight">
-                  {readerName}
-                </h4>
-                <span className="font-mono text-[10px] uppercase tracking-wider text-[#817265] block mt-0.5">
-                  PT-48127
-                </span>
-
-                {/* Passport Badges */}
-                <div className="flex flex-wrap gap-1.5 justify-center mt-4">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EFE5D5] text-[#2F2620] text-[10px] font-sans font-medium border border-[#D5C2A5]">
-                    <PiMoonFill className="text-[#7D2235] text-xs" />
-                    <span>Night Owl Reader</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EFE5D5] text-[#2F2620] text-[10px] font-sans font-medium border border-[#D5C2A5]">
-                    <PiPenNibBold className="text-[#7D2235] text-xs" />
-                    <span>Marginalia Scribe</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EFE5D5] text-[#2F2620] text-[10px] font-sans font-medium border border-[#D5C2A5]">
-                    <PiColumnsBold className="text-[#7D2235] text-xs" />
-                    <span>Classics Initiate</span>
-                  </span>
-                </div>
-
-                {/* Level Progress Station */}
-                <div className="mt-5 pt-4 border-t border-[#E5D4BC] text-left text-xs font-sans">
-                  <div className="flex items-center justify-between text-[11px] mb-1">
-                    <span className="text-[#76675B]">Literary Level</span>
-                    <span className="font-bold text-[#7D2235]">Lv. 4</span>
-                  </div>
-                  <div className="text-xs font-serif font-bold text-[#2F2620] mb-2">
-                    The Attentive Reader
-                  </div>
-
-                  {/* XP Bar */}
-                  <div className="w-full h-2 rounded-full bg-[#E5D7C2] overflow-hidden">
-                    <div className="h-full bg-[#7D2235] rounded-full w-[78%] transition-all duration-500" />
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] font-mono text-[#76675B] mt-1.5">
-                    <span>1,240 / 1,500 XP</span>
-                    <span>Lv. 4</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          {/* ============================================================
-              MIDDLE COLUMN (6 COLS): FROM THE COMMON ROOM (FEED)
-              ============================================================ */}
-          <div className="lg:col-span-6 space-y-4">
-            
-            {/* Header with Sorting & Filtering Dropdowns */}
-            <div className="flex items-center justify-between pb-2 mb-1">
-              <h2 className="font-serif text-lg font-bold text-[#2F2620] flex items-center gap-2 border-b-2 border-[#7D2235] pb-1">
-                <span>From the Common Room</span>
-                <PiFeatherBold className="text-sm text-[#7D2235]" />
-              </h2>
-
-              <div className="flex items-center gap-2 text-xs">
-                {/* Recent Sort Dropdown */}
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSortDropdownOpen((prev) => !prev);
-                      setParlourDropdownOpen(false);
-                    }}
-                    className="px-2.5 py-1 rounded-lg border border-[#D8CCB8] bg-[#FAF5ED] text-[#483B32] font-medium flex items-center gap-1.5 cute-press cursor-pointer"
-                  >
-                    <span>{sortOption}</span>
-                    <PiCaretDownBold className="text-[10px]" />
-                  </button>
-                  {sortDropdownOpen && (
-                    <div className="absolute right-0 top-full mt-1 w-36 bg-[#FAF5ED] rounded-xl shadow-lg border border-[#D8CCB8] py-1 z-30 text-xs">
-                      {['Recent', 'Top Reflections', 'Most Discussed'].map((opt) => (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => {
-                            setSortOption(opt);
-                            setSortDropdownOpen(false);
-                          }}
-                          className={`w-full text-left px-3 py-1.5 hover:bg-[#EFE7D8] text-[#2F2620] ${
-                            sortOption === opt ? 'font-bold text-[#7D2235]' : ''
-                          }`}
-                        >
-                          {opt}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* All Parlours Filter Dropdown */}
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setParlourDropdownOpen((prev) => !prev);
-                      setSortDropdownOpen(false);
-                    }}
-                    className="px-2.5 py-1 rounded-lg border border-[#D8CCB8] bg-[#FAF5ED] text-[#483B32] font-medium flex items-center gap-1.5 cute-press cursor-pointer"
-                  >
-                    <span>{filterParlour}</span>
-                    <PiCaretDownBold className="text-[10px]" />
-                  </button>
-                  {parlourDropdownOpen && (
-                    <div className="absolute right-0 top-full mt-1 w-48 bg-[#FAF5ED] rounded-xl shadow-lg border border-[#D8CCB8] py-1 z-30 text-xs">
-                      {['All Parlours', 'The Gothic Study', 'The Midnight Philosophers', 'Slow Readers Society'].map(
-                        (opt) => (
-                          <button
-                            key={opt}
-                            type="button"
-                            onClick={() => {
-                              setFilterParlour(opt);
-                              setParlourDropdownOpen(false);
-                            }}
-                            className={`w-full text-left px-3 py-1.5 hover:bg-[#EFE7D8] text-[#2F2620] ${
-                              filterParlour === opt ? 'font-bold text-[#7D2235]' : ''
-                            }`}
-                          >
-                            {opt}
-                          </button>
-                        )
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Posts Cards */}
-            {sortedPosts.map((post) => (
-              <article
-                key={post.id}
-                className="p-5 sm:p-6 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm relative overflow-hidden text-left"
-              >
-                {/* Author Top Row */}
-                <div className="flex items-center justify-between mb-3.5">
-                  <div className="flex items-center gap-2.5">
-                    <img
-                      src={post.avatar}
-                      alt={post.author}
-                      className="w-9 h-9 rounded-full object-cover border border-[#D8CCB8] shadow-2xs"
-                    />
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-serif font-bold text-sm text-[#2F2620]">
-                          {post.author}
-                        </span>
-                        <span className="text-[11px] font-sans text-[#7A6A5E]">
-                          @{post.handle}
-                        </span>
-                      </div>
-                      <span className="text-[10.5px] text-[#7A6A5E] block">
-                        {post.time} &bull; in{' '}
-                        <strong className="text-[#7D2235] font-medium">
-                          {post.parlour}
-                        </strong>
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => enqueueSnackbar(`Options for @${post.handle}`, { variant: 'info' })}
-                    className="p-1 rounded-full hover:bg-black/5 text-[#7A6A5E]"
-                  >
-                    <PiDotsThreeBold className="text-base" />
-                  </button>
-                </div>
-
-                {/* Highlighted Quote Box with image thumbnail */}
-                {post.quote && (
-                  <div className="p-4 rounded-xl bg-[#F0E6D5] border border-[#D8C7B0] mb-3.5 flex items-center justify-between gap-4">
-                    <div className="flex-1">
-                      <blockquote className="font-serif italic text-xs sm:text-[13px] text-[#2F2620] leading-relaxed">
-                        {post.quote}
-                      </blockquote>
-                      <span className="font-serif text-[11px] text-[#7A6A5E] mt-1 block">
-                        — {post.quoteAuthor}
-                      </span>
-                    </div>
-
-                    {post.quoteImg && (
-                      <div className="w-24 h-16 rounded-lg overflow-hidden border border-[#D8C7B0] flex-shrink-0 shadow-2xs">
-                        <img
-                          src={post.quoteImg}
-                          alt="Open book spread with dried flowers"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Main Reflection Text */}
-                <p className="text-xs sm:text-[12.5px] text-[#2F2620] leading-relaxed mb-4 font-sans">
-                  {post.content}
-                </p>
-
-                {/* Bottom Interactive Actions */}
-                <div className="pt-3 border-t border-[#E5D7C2] flex items-center justify-between text-xs text-[#6E5F53]">
-                  <div className="flex items-center gap-4">
-                    {/* Heart Like */}
-                    <button
-                      type="button"
-                      onClick={() => handleLike(post.id)}
-                      className={`flex items-center gap-1.5 transition-colors cute-press cursor-pointer ${
-                        post.liked ? 'text-[#7D2235] font-bold' : 'hover:text-[#7D2235]'
-                      }`}
-                    >
-                      {post.liked ? (
-                        <PiHeartFill className="text-sm text-[#7D2235] animate-jelly-pop" />
-                      ) : (
-                        <PiHeartBold className="text-sm" />
-                      )}
-                      <span>{post.likes}</span>
-                    </button>
-
-                    {/* Comments Toggle */}
-                    <button
-                      type="button"
-                      onClick={() => toggleComments(post.id)}
-                      className={`flex items-center gap-1.5 transition-colors cute-press cursor-pointer ${
-                        post.showComments ? 'text-[#7D2235] font-bold' : 'hover:text-[#2F2620]'
-                      }`}
-                    >
-                      <PiChatCircleBold className="text-sm" />
-                      <span>{post.commentsCount}</span>
-                    </button>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    {/* Bookmark */}
-                    <button
-                      type="button"
-                      onClick={() => handleBookmark(post.id)}
-                      className="p-1 rounded hover:text-[#7D2235] transition-colors cute-press cursor-pointer"
-                      title={post.bookmarked ? 'Saved to marginalia' : 'Save reflection'}
-                    >
-                      {post.bookmarked ? (
-                        <PiBookmarkSimpleFill className="text-sm text-[#7D2235]" />
-                      ) : (
-                        <PiBookmarkSimpleBold className="text-sm" />
-                      )}
-                    </button>
-
-                    {/* Share */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        playPaperUnwrap();
-                        navigator.clipboard?.writeText(window.location.href);
-                        enqueueSnackbar('Copied reflection link to clipboard 📜', { variant: 'info' });
-                      }}
-                      className="flex items-center gap-1 hover:text-[#2F2620] cute-press cursor-pointer text-xs"
-                    >
-                      <PiShareNetworkBold className="text-xs" />
-                      <span>Share</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Expandable Comments Section */}
-                {post.showComments && (
-                  <div className="mt-4 pt-3 border-t border-[#E5D7C2] space-y-3 animate-fade-in">
-                    <span className="text-[11px] font-serif font-bold text-[#7A6A5E] block">
-                      Common Room Discussion ({post.commentsCount})
-                    </span>
-
-                    {/* Comment list */}
-                    <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
-                      {post.commentsList.map((c) => (
-                        <div key={c.id} className="p-2.5 rounded-xl bg-[#F0E6D5] border border-[#DECDB8] text-xs">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="font-serif font-bold text-[#2F2620]">{c.author}</span>
-                            <span className="text-[10px] text-[#7A6A5E]">{c.time}</span>
-                          </div>
-                          <p className="text-[#3E3228] leading-snug">{c.text}</p>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Add comment input */}
-                    <div className="flex items-center gap-2 pt-1">
-                      <input
-                        type="text"
-                        value={commentInputs[post.id] || ''}
-                        onChange={(e) =>
-                          setCommentInputs({ ...commentInputs, [post.id]: e.target.value })
-                        }
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') handleAddComment(post.id);
-                        }}
-                        placeholder="Inscribe a thought..."
-                        className="flex-1 p-2 rounded-xl border border-[#D9CDB8] bg-[#FFFDF9] text-xs text-[#2F2620] focus:outline-none focus:border-[#7D2235]"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleAddComment(post.id)}
-                        className="px-3 py-2 rounded-xl bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold cute-press cursor-pointer"
-                      >
-                        <PiPaperPlaneRightBold className="text-xs" />
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-              </article>
-            ))}
-          </div>
-
-          {/* ============================================================
-              RIGHT COLUMN (3 COLS): FEATURED LITERARY PARLOURS
-              ============================================================ */}
-          <div className="lg:col-span-3 space-y-4">
-            
-            <div className="flex items-center justify-between pb-2 mb-1">
-              <h3 className="font-serif text-lg font-bold text-[#2F2620]">
-                Featured Literary Parlours
-              </h3>
-              <button
-                type="button"
-                onClick={() => {
-                  playPageFlipSound();
-                  setActiveTab('parlours');
-                }}
-                className="text-xs text-[#7D2235] font-semibold hover:underline cursor-pointer"
-              >
-                View All →
-              </button>
-            </div>
-
-            {/* Parlour Cards */}
-            {parlours.map((parlour) => (
-              <div
-                key={parlour.id}
-                className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF5EB] border border-[#D9CDB8] shadow-sm flex items-start gap-3.5 group hover:border-[#7D2235]/40 transition-all text-left"
-              >
-                <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#D8C7B0] flex-shrink-0 shadow-2xs">
-                  <img
-                    src={parlour.img}
-                    alt={parlour.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                  />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-serif font-bold text-xs sm:text-[13px] text-[#2F2620] leading-snug">
-                    {parlour.title}
-                  </h4>
-                  <p className="text-[11px] text-[#7A6A5E] mt-0.5 line-clamp-2 leading-tight font-sans">
-                    {parlour.desc}
-                  </p>
-
-                  <div className="flex items-center justify-between mt-2 pt-1 border-t border-[#E5D7C2]/60">
-                    <span className="text-[10px] font-mono text-[#7A6A5E]">
-                      {parlour.members} members
-                    </span>
-
-                    <button
-                      type="button"
-                      onClick={() => handleToggleJoin(parlour.id)}
-                      className={`px-3 py-1 rounded-full text-[10.5px] font-semibold transition-all cute-press cursor-pointer ${
-                        parlour.joined
-                          ? 'bg-[#EAE0CF] text-[#4A3D34] border border-[#D5C2A5]'
-                          : 'bg-[#7D2235] hover:bg-[#92283F] text-white shadow-xs'
-                      }`}
-                    >
-                      {parlour.joined ? '✓ Entered' : 'Enter →'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
       </main>
 
       <Footer />
