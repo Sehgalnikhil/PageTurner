@@ -22,18 +22,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
           {/* Brand Colophon */}
           <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-3 group/logo cursor-pointer">
-              <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F7EFE4] border border-[#DECDB8] shadow-subtle group-hover/logo:rotate-[-4deg] group-hover/logo:scale-105 transition-transform duration-300">
-                <img
-                  src="/images/pageturner-emblem.png"
-                  alt="PageTurner"
-                  className="w-full h-full object-cover mix-blend-multiply"
-                />
-              </div>
-              <span className="font-serif text-2xl font-medium text-[#302A27] tracking-tight group-hover/logo:text-[#8D263B] transition-colors">
-                PageTurner
-              </span>
-            </div>
+            <Link to="/" className="inline-block mb-3 group/logo cursor-pointer" title="PageTurner">
+              <img
+                src="/images/pageturner-full-transparent.png"
+                alt="PageTurner"
+                className="h-16 sm:h-20 w-auto object-contain transition-transform duration-300 group-hover/logo:scale-105 filter drop-shadow-[0_2px_8px_rgba(60,30,15,0.12)]"
+              />
+            </Link>
             <p className="text-xs text-[#81766D] leading-relaxed max-w-sm mb-4">
               An art-directed digital literary boutique and discovery sanctuary. Designed for curious readers, thoughtful collectors, and seekers of timeless narratives.
             </p>

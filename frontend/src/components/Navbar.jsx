@@ -163,28 +163,20 @@ const Navbar = ({ totalBooks = 0 }) => {
 
       <header className="sticky top-0 z-40 bg-[#F7F3EC]/95 backdrop-blur-md border-b border-[#E8DED1] transition-colors duration-150 w-full overflow-x-clip">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[66px] sm:h-[70px] gap-3">
+          <div className="flex items-center justify-between h-[72px] sm:h-[78px] gap-3">
             
             {/* 1. BRAND SECTION (LEFT) */}
             <div className="flex items-center flex-shrink-0">
-              <Link to="/" className="group flex items-center gap-2.5 sm:gap-3">
-                {/* Official PageTurner Hand-Crafted Emblem */}
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden bg-[#F7EFE4] border border-[#DECDB8] shadow-xs flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:rotate-[-4deg] group-hover:scale-105">
-                  <img
-                    src="/images/pageturner-emblem.png"
-                    alt="PageTurner Emblem"
-                    className="w-full h-full object-cover mix-blend-multiply"
-                  />
-                </div>
-
-                <div className="flex flex-col justify-center">
-                  <span className="font-serif text-[22px] sm:text-[24px] font-semibold text-[#302A27] tracking-tight leading-none group-hover:text-[#8D263B] transition-colors">
-                    PageTurner
-                  </span>
-                  <span className="font-serif italic text-[11px] sm:text-[11.5px] text-[#81766D] mt-1 leading-none group-hover:text-[#67202F] transition-colors">
-                    A Curated Literary Sanctuary
-                  </span>
-                </div>
+              <Link to="/" className="group flex items-center gap-3 py-0.5" title="PageTurner — Return to Sanctuary">
+                {/* Official Full PageTurner Logo Artwork & Typography */}
+                <img
+                  src="/images/pageturner-full-transparent.png"
+                  alt="PageTurner"
+                  className="h-[54px] sm:h-[64px] w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_8px_rgba(60,30,15,0.12)]"
+                />
+                <span className="hidden xl:inline font-serif italic text-xs text-[#81766D] pl-3 border-l border-[#D9CCB7] leading-tight">
+                  A Curated Literary Sanctuary
+                </span>
               </Link>
             </div>
 

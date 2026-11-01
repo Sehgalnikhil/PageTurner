@@ -130,22 +130,12 @@ const Login = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30 pointer-events-none" />
 
             {/* Top Emblem & Brand Signature */}
-            <div className="relative z-10 flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl overflow-hidden bg-[#F7EFE4] border border-white/60 shadow-md flex items-center justify-center">
-                <img
-                  src="/images/pageturner-emblem.png"
-                  alt="PageTurner"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-serif text-base font-semibold tracking-tight text-white/95 leading-none">
-                  PageTurner
-                </span>
-                <span className="font-serif italic text-[10.5px] text-[#DDB7B0] leading-none mt-0.5">
-                  A quieter sanctuary...
-                </span>
-              </div>
+            <div className="relative z-10 flex items-center">
+              <img
+                src="/images/pageturner-full-transparent.png"
+                alt="PageTurner"
+                className="h-14 sm:h-16 w-auto object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] brightness-105"
+              />
             </div>
 
             {/* Middle Feature Quote in Cormorant Garamond */}
