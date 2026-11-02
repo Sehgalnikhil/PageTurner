@@ -42,7 +42,7 @@ const EDITORIAL_ISSUES = [
     titlePrefix: 'In the quiet of',
     titleAccent: 'the midnight hour.',
     subtitle: 'Gothic obsession, celestial wonders, and pages read past 2 AM.',
-    image: '/images/moods/dark-academia-real.jpg',
+    image: '/images/hero_issue_23_midnight.jpg',
     tagline: 'Intellectual passion, mystery & candlelit soliloquies.',
   },
   {
@@ -50,7 +50,7 @@ const EDITORIAL_ISSUES = [
     titlePrefix: 'Ideas that shift',
     titleAccent: 'your perspective.',
     subtitle: 'Timeless philosophy, human experience, and mountain horizons.',
-    image: '/images/moods/perspective-shifts-real.jpg',
+    image: '/images/hero_issue_22_philosophy.jpg',
     tagline: 'Clearer thinking, deep clarity & expansive views.',
   },
   {
@@ -58,7 +58,7 @@ const EDITORIAL_ISSUES = [
     titlePrefix: 'Quiet rituals &',
     titleAccent: 'the craftsman’s desk.',
     subtitle: 'Habits, deliberate focus, and timeless volumes bound in cloth.',
-    image: '/images/moods/personal-growth-real.jpg',
+    image: '/images/hero_issue_21_craft.jpg',
     tagline: 'Refinement, tactile craft & intentional days.',
   },
 ];
@@ -246,6 +246,10 @@ const Home = () => {
               key={EDITORIAL_ISSUES[issueIndex].image}
               src={EDITORIAL_ISSUES[issueIndex].image}
               alt={EDITORIAL_ISSUES[issueIndex].titlePrefix}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = '/images/clean_hero_window.jpg';
+              }}
               className="w-full h-full object-cover object-left-top opacity-95 group-hover:scale-102 transition-all duration-700 animate-fade-in"
             />
             {/* Soft feathered blend so the paper background transitions seamlessly into the window */}
