@@ -266,20 +266,20 @@ const Home = () => {
             </svg>
           </div>
 
-          {/* Left Content Column with Deckle-Edge Parchment feel */}
-          <div className="relative z-10 p-8 sm:p-10 lg:p-12 max-w-xl xl:max-w-2xl min-h-[220px] sm:min-h-[240px] lg:min-h-[260px] flex flex-col justify-center">
+          {/* Left Content Column with Deckle-Edge Parchment feel - Locked consistent normal height across all 4 issues */}
+          <div className="relative z-10 p-6 sm:p-8 lg:py-7 lg:px-10 max-w-xl xl:max-w-2xl min-h-[220px] sm:min-h-[235px] lg:min-h-[245px] flex flex-col justify-center">
             {/* Archival Tag */}
-            <div className="flex items-center gap-2 mb-3 sm:mb-3.5">
+            <div className="flex items-center gap-2 mb-2 sm:mb-2.5">
               <span className="h-[1px] w-6 bg-[#C6A16B]" />
               <span className="text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-[0.24em] text-[#8D263B]">
                 Digital Reading Journal &bull; {EDITORIAL_ISSUES[issueIndex].issue}
               </span>
             </div>
 
-            {/* Serif Headline with Italic Crimson Accent */}
+            {/* Serif Headline with Italic Crimson Accent - Proportional normal sizing */}
             <h1
               key={`title-${issueIndex}`}
-              className="font-serif text-3xl sm:text-4xl lg:text-[46px] font-bold text-[#2A1E17] tracking-tight leading-tight mb-2 animate-fade-in"
+              className="font-serif text-2xl sm:text-3xl lg:text-[34px] xl:text-[38px] font-bold text-[#2A1E17] tracking-tight leading-[1.15] mb-2 animate-fade-in"
             >
               {EDITORIAL_ISSUES[issueIndex].titlePrefix}{' '}
               <span className="italic font-normal text-[#8D263B]">
@@ -290,7 +290,7 @@ const Home = () => {
             {/* Subtitle */}
             <p
               key={`sub-${issueIndex}`}
-              className="text-xs sm:text-[13px] text-[#7A6C60] font-serif italic mt-0 mb-6 leading-relaxed max-w-lg animate-fade-in"
+              className="text-xs sm:text-[12.5px] text-[#7A6C60] font-serif italic mt-0 mb-4 sm:mb-5 leading-relaxed max-w-lg animate-fade-in line-clamp-2"
             >
               {EDITORIAL_ISSUES[issueIndex].subtitle}
             </p>
@@ -303,7 +303,7 @@ const Home = () => {
                   const el = document.getElementById('curated-collections');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#7D1D2D] to-[#6B1829] hover:from-[#8D263B] hover:to-[#7B1D30] text-[#FFFDF9] font-serif text-xs sm:text-[13px] font-medium tracking-wide shadow-[0_4px_12px_rgba(125,29,45,0.3)] hover:shadow-[0_6px_16px_rgba(125,29,45,0.4)] transition-all duration-200 active:scale-95 cursor-pointer"
+                className="group relative inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-2.5 rounded-full bg-gradient-to-r from-[#7D1D2D] to-[#6B1829] hover:from-[#8D263B] hover:to-[#7B1D30] text-[#FFFDF9] font-serif text-xs sm:text-[13px] font-medium tracking-wide shadow-[0_4px_12px_rgba(125,29,45,0.3)] hover:shadow-[0_6px_16px_rgba(125,29,45,0.4)] transition-all duration-200 active:scale-95 cursor-pointer"
               >
                 <span>Start Exploring</span>
                 <PiArrowRightBold className="text-xs transition-transform duration-200 group-hover:translate-x-1" />
@@ -311,7 +311,7 @@ const Home = () => {
 
               <div className="hidden sm:flex items-center gap-3 pl-1">
                 <span className="h-5 w-[1px] bg-[#DFCBB5]" aria-hidden="true" />
-                <span className="text-[9.5px] sm:text-[10.5px] font-mono text-[#7A6C60] uppercase tracking-wider max-w-[240px] leading-relaxed">
+                <span className="text-[9.5px] sm:text-[10px] font-mono text-[#7A6C60] uppercase tracking-wider max-w-[240px] leading-relaxed truncate">
                   {EDITORIAL_ISSUES[issueIndex].tagline}
                 </span>
               </div>
