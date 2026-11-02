@@ -21,10 +21,66 @@ import {
   PiXBold,
   PiArrowRightBold,
   PiCompassBold,
+  PiCheckBold,
+  PiCaretDownBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { ReadingListContext } from '../context/ReadingListContext';
 import { bookService } from '../services/api';
+
+const EDITORIAL_ISSUES = [
+  {
+    issue: 'Issue No. 24',
+    titlePrefix: 'Fall into',
+    titleAccent: 'another world.',
+    subtitle: 'Stories to cherish. Ideas to collect. Worlds to get lost in.',
+    image: '/images/clean_hero_window.jpg',
+    tagline: 'A curated universe of books, ideas & quieter days.',
+  },
+  {
+    issue: 'Issue No. 23',
+    titlePrefix: 'In the quiet of',
+    titleAccent: 'the midnight hour.',
+    subtitle: 'Gothic obsession, celestial wonders, and pages read past 2 AM.',
+    image: '/images/moods/dark-academia-real.jpg',
+    tagline: 'Intellectual passion, mystery & candlelit soliloquies.',
+  },
+  {
+    issue: 'Issue No. 22',
+    titlePrefix: 'Ideas that shift',
+    titleAccent: 'your perspective.',
+    subtitle: 'Timeless philosophy, human experience, and mountain horizons.',
+    image: '/images/moods/perspective-shifts-real.jpg',
+    tagline: 'Clearer thinking, deep clarity & expansive views.',
+  },
+  {
+    issue: 'Issue No. 21',
+    titlePrefix: 'Quiet rituals &',
+    titleAccent: 'the craftsman’s desk.',
+    subtitle: 'Habits, deliberate focus, and timeless volumes bound in cloth.',
+    image: '/images/moods/personal-growth-real.jpg',
+    tagline: 'Refinement, tactile craft & intentional days.',
+  },
+];
+
+const GENRE_OPTIONS = [
+  'All Genres',
+  'Fiction',
+  'Non-Fiction',
+  'Sci-Fi',
+  'Biography',
+  'Technology',
+  'Uncategorized',
+];
+
+const SORT_OPTIONS = [
+  { value: 'createdAt', label: 'Recently Added' },
+  { value: 'rating-desc', label: 'Highest Rated' },
+  { value: 'title-asc', label: 'Title (A-Z)' },
+  { value: 'title-desc', label: 'Title (Z-A)' },
+  { value: 'year-newest', label: 'Year (Newest)' },
+  { value: 'year-oldest', label: 'Year (Oldest)' },
+];
 
 const Home = () => {
   const [books, setBooks] = useState([]);
@@ -38,6 +94,9 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalBooks, setTotalBooks] = useState(0);
+  const [issueIndex, setIssueIndex] = useState(0);
+  const [genreOpen, setGenreOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -170,12 +229,22 @@ const Home = () => {
           {/* Right Window Scene with Sleeping Cat, Warm Lamp, Mug, Books, & Pinned Note */}
           <div className="absolute inset-y-0 right-0 w-full sm:w-[50%] md:w-[48%] lg:w-[46%] overflow-hidden pointer-events-none select-none">
             <img
-              src="/images/clean_hero_window.jpg"
-              alt="Window with sleeping cat, warm lamp, and autumn foliage"
-              className="w-full h-full object-cover object-left-top opacity-95 group-hover:scale-102 transition-transform duration-700"
+              src={EDITORIAL_ISSUES[issueIndex].image}
+              alt={EDITORIAL_ISSUES[issueIndex].titlePrefix}
+              className="w-full h-full object-cover object-left-top opacity-95 group-hover:scale-102 transition-all duration-700"
             />
             {/* Soft feathered blend so the paper background transitions seamlessly into the window */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#FAF5EE] via-[#FAF5EE]/30 to-transparent pointer-events-none" />
+
+            {/* Deckle-Edge Ragged Paper Transition Contour */}
+            <svg
+              className="absolute inset-y-0 left-0 h-full w-6 text-[#FAF5EE] fill-current pointer-events-none hidden sm:block"
+              preserveAspectRatio="none"
+              viewBox="0 0 20 100"
+              aria-hidden="true"
+            >
+              <path d="M0 0 C 7 12, 3 24, 8 36 C 14 48, 4 60, 9 72 C 15 84, 6 92, 10 100 L 0 100 Z" />
+            </svg>
           </div>
 
           {/* Left Content Column with Deckle-Edge Parchment feel */}
@@ -184,18 +253,21 @@ const Home = () => {
             <div className="flex items-center gap-2 mb-3 sm:mb-3.5">
               <span className="h-[1px] w-6 bg-[#C6A16B]" />
               <span className="text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-[0.24em] text-[#8D263B]">
-                Digital Reading Journal &bull; Issue No. 24
+                Digital Reading Journal &bull; {EDITORIAL_ISSUES[issueIndex].issue}
               </span>
             </div>
 
             {/* Serif Headline with Italic Crimson Accent */}
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[48px] font-bold text-[#2A1E17] tracking-tight leading-tight mb-2">
-              Fall into <span className="italic font-normal text-[#8D263B]">another world.</span>
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[46px] font-bold text-[#2A1E17] tracking-tight leading-tight mb-2 transition-all duration-300">
+              {EDITORIAL_ISSUES[issueIndex].titlePrefix}{' '}
+              <span className="italic font-normal text-[#8D263B]">
+                {EDITORIAL_ISSUES[issueIndex].titleAccent}
+              </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xs sm:text-[13px] text-[#7A6C60] font-serif italic mt-0 mb-6 leading-relaxed max-w-lg">
-              Stories to cherish. Ideas to collect. Worlds to get lost in.
+            <p className="text-xs sm:text-[13px] text-[#7A6C60] font-serif italic mt-0 mb-6 leading-relaxed max-w-lg transition-all duration-300">
+              {EDITORIAL_ISSUES[issueIndex].subtitle}
             </p>
 
             {/* Start Exploring Button & Curated Universe Subtext */}
@@ -215,28 +287,38 @@ const Home = () => {
               <div className="hidden sm:flex items-center gap-3 pl-1">
                 <span className="h-5 w-[1px] bg-[#DFCBB5]" aria-hidden="true" />
                 <span className="text-[9.5px] sm:text-[10.5px] font-mono text-[#7A6C60] uppercase tracking-wider max-w-[240px] leading-relaxed">
-                  A curated universe of books, ideas &amp; quieter days.
+                  {EDITORIAL_ISSUES[issueIndex].tagline}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Crimson Wax Seal pinned at the seam */}
-          <div className="hidden md:block absolute bottom-5 sm:bottom-7 left-[50%] lg:left-[52%] -translate-x-1/2 z-20 pointer-events-none select-none">
+          {/* Crimson Wax Seal pinned at the seam with tactile hover rotation */}
+          <div className="hidden md:block absolute bottom-5 sm:bottom-7 left-[50%] lg:left-[52%] -translate-x-1/2 z-20 pointer-events-auto select-none group/seal cursor-pointer" title="PageTurner Editorial Ex-Libris Seal">
             <img
               src="/images/clean_wax_seal.png"
               alt="PageTurner Crimson Wax Seal"
-              className="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-[0_4px_12px_rgba(40,10,15,0.4)]"
+              className="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-[0_4px_12px_rgba(40,10,15,0.4)] transition-all duration-300 group-hover/seal:scale-110 group-hover/seal:rotate-6 group-hover/seal:drop-shadow-[0_8px_20px_rgba(141,38,59,0.5)]"
             />
           </div>
         </header>
 
-        {/* Carousel Pagination Dots */}
-        <div className="flex items-center justify-center gap-2.5 mt-2 mb-8" aria-hidden="true">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#3B2219] shadow-2xs" />
-          <span className="w-2 h-2 rounded-full border border-[#8C7667] bg-transparent" />
-          <span className="w-2 h-2 rounded-full border border-[#8C7667] bg-transparent" />
-          <span className="w-2 h-2 rounded-full border border-[#8C7667] bg-transparent" />
+        {/* Interactive Carousel Pagination Dots */}
+        <div className="flex items-center justify-center gap-2 mt-2 mb-8" aria-label="Select Editorial Issue">
+          {EDITORIAL_ISSUES.map((iss, idx) => (
+            <button
+              key={iss.issue}
+              type="button"
+              onClick={() => setIssueIndex(idx)}
+              title={`Switch to ${iss.issue}: ${iss.titlePrefix} ${iss.titleAccent}`}
+              className={`transition-all duration-300 cursor-pointer ${
+                issueIndex === idx
+                  ? 'w-6 h-2.5 rounded-full bg-[#3B2219] shadow-xs'
+                  : 'w-2.5 h-2.5 rounded-full border border-[#8C7667] bg-transparent hover:bg-[#8C7667]/40'
+              }`}
+              aria-label={iss.issue}
+            />
+          ))}
         </div>
 
         {/* Curated Atmospheric Collections: Sophisticated, Image-Led Tiles matching reference screenshot */}
@@ -303,64 +385,135 @@ const Home = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleSearch}
-                  className="w-full pl-9 pr-8 py-1.5 rounded-full text-xs text-[#302A27] placeholder-[#81766D]/60 bg-[#FFFDFA] border border-[#E8DED1] hover:border-[#8D263B]/40 focus:outline-none focus:border-[#8D263B] shadow-subtle transition-colors"
+                  className="w-full pl-9 pr-8 h-8.5 rounded-full text-xs text-[#302A27] placeholder-[#81766D]/70 bg-[#FFFDFA] border border-[#DFCBB5] hover:border-[#C6A16B] focus:outline-none focus:border-[#8D263B] shadow-2xs transition-colors"
                 />
                 {searchQuery && (
                   <button
                     onClick={handleClearSearch}
                     aria-label="Clear search"
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#81766D] hover:text-[#302A27] transition-colors p-0.5 rounded-full"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#81766D] hover:text-[#302A27] transition-colors p-0.5 rounded-full cursor-pointer"
                   >
                     <PiXBold className="text-xs" />
                   </button>
                 )}
               </div>
 
-              {/* Genre Dropdown with hover border transition */}
-              <div className="relative group/genre">
-                <select
-                  value={category}
-                  onChange={handleCategoryChange}
-                  className="text-[#302A27] text-xs font-medium rounded-full px-3.5 py-1.5 pr-7 cursor-pointer appearance-none bg-[#FFFDFA] border border-[#E8DED1] hover:border-[#8D263B]/40 focus:outline-none focus:border-[#8D263B] shadow-subtle transition-colors"
+              {/* Custom Editorial Genre Dropdown */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGenreOpen((prev) => !prev);
+                    setSortOpen(false);
+                  }}
+                  className={`h-8.5 px-3.5 rounded-full text-xs font-sans font-medium flex items-center gap-2 transition-all cursor-pointer shadow-2xs border ${
+                    genreOpen || (category && category !== 'All')
+                      ? 'border-[#8D263B] bg-[#8D263B]/5 text-[#8D263B]'
+                      : 'border-[#DFCBB5] bg-[#FFFDFA] hover:border-[#C6A16B] text-[#5C4F46] hover:text-[#2C1E18]'
+                  }`}
                 >
-                  <option value="All">All Genres</option>
-                  <option value="Fiction">Fiction</option>
-                  <option value="Non-Fiction">Non-Fiction</option>
-                  <option value="Sci-Fi">Sci-Fi</option>
-                  <option value="Biography">Biography</option>
-                  <option value="Technology">Technology</option>
-                  <option value="Uncategorized">Uncategorized</option>
-                </select>
-                <PiFunnelBold className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#81766D] group-hover/genre:text-[#8D263B] text-[11px] pointer-events-none transition-colors" />
+                  <PiFunnelBold className="text-xs" />
+                  <span>{category === 'All' ? 'All Genres' : category}</span>
+                  <PiCaretDownBold className={`text-[10px] transition-transform ${genreOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {genreOpen && (
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="absolute right-0 top-full mt-1.5 w-48 rounded-2xl bg-[#FFFDF9] border border-[#DECDBA] shadow-card py-2 z-50 animate-modal-in"
+                  >
+                    <div className="px-3 py-1 text-[10px] font-mono text-[#8C7E72] uppercase tracking-wider font-semibold border-b border-[#EFE8DC] mb-1">
+                      Literary Genres
+                    </div>
+                    {GENRE_OPTIONS.map((g) => {
+                      const isSelected = category === g || (g === 'All Genres' && category === 'All');
+                      return (
+                        <button
+                          key={g}
+                          type="button"
+                          onClick={() => {
+                            setCategory(g === 'All Genres' ? 'All' : g);
+                            setSelectedMood(null);
+                            setPage(1);
+                            setGenreOpen(false);
+                          }}
+                          className={`w-full text-left px-3.5 py-1.5 text-xs font-sans flex items-center justify-between hover:bg-[#FAF4EA] transition-colors cursor-pointer ${
+                            isSelected ? 'font-semibold text-[#8D263B]' : 'text-[#3D322A]'
+                          }`}
+                        >
+                          <span>{g}</span>
+                          {isSelected && <PiCheckBold className="text-xs text-[#8D263B]" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
-              {/* Sort Dropdown */}
-              <div className="relative group/sort">
-                <select
-                  value={sortBy}
-                  onChange={handleSortChange}
-                  className="text-[#302A27] text-xs font-medium rounded-full px-3.5 py-1.5 pr-7 cursor-pointer appearance-none bg-[#FFFDFA] border border-[#E8DED1] hover:border-[#8D263B]/40 focus:outline-none focus:border-[#8D263B] shadow-subtle transition-colors"
+              {/* Custom Editorial Sort Dropdown */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSortOpen((prev) => !prev);
+                    setGenreOpen(false);
+                  }}
+                  className={`h-8.5 px-3.5 rounded-full text-xs font-sans font-medium flex items-center gap-2 transition-all cursor-pointer shadow-2xs border ${
+                    sortOpen || sortBy !== 'createdAt'
+                      ? 'border-[#8D263B] bg-[#8D263B]/5 text-[#8D263B]'
+                      : 'border-[#DFCBB5] bg-[#FFFDFA] hover:border-[#C6A16B] text-[#5C4F46] hover:text-[#2C1E18]'
+                  }`}
                 >
-                  <option value="createdAt">Recently Added</option>
-                  <option value="rating-desc">Highest Rated</option>
-                  <option value="title-asc">Title (A-Z)</option>
-                  <option value="title-desc">Title (Z-A)</option>
-                  <option value="year-newest">Year (Newest)</option>
-                  <option value="year-oldest">Year (Oldest)</option>
-                </select>
-                <PiSortAscendingBold className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#81766D] group-hover/sort:text-[#8D263B] text-[11px] pointer-events-none transition-colors" />
+                  <PiSortAscendingBold className="text-xs" />
+                  <span>
+                    {SORT_OPTIONS.find((s) => s.value === sortBy)?.label || 'Sort'}
+                  </span>
+                  <PiCaretDownBold className={`text-[10px] transition-transform ${sortOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {sortOpen && (
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="absolute right-0 top-full mt-1.5 w-48 rounded-2xl bg-[#FFFDF9] border border-[#DECDBA] shadow-card py-2 z-50 animate-modal-in"
+                  >
+                    <div className="px-3 py-1 text-[10px] font-mono text-[#8C7E72] uppercase tracking-wider font-semibold border-b border-[#EFE8DC] mb-1">
+                      Order Stories By
+                    </div>
+                    {SORT_OPTIONS.map((s) => {
+                      const isSelected = sortBy === s.value;
+                      return (
+                        <button
+                          key={s.value}
+                          type="button"
+                          onClick={() => {
+                            setSortBy(s.value);
+                            setPage(1);
+                            setSortOpen(false);
+                          }}
+                          className={`w-full text-left px-3.5 py-1.5 text-xs font-sans flex items-center justify-between hover:bg-[#FAF4EA] transition-colors cursor-pointer ${
+                            isSelected ? 'font-semibold text-[#8D263B]' : 'text-[#3D322A]'
+                          }`}
+                        >
+                          <span>{s.label}</span>
+                          {isSelected && <PiCheckBold className="text-xs text-[#8D263B]" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
-              {/* Layout Switcher */}
-              <div className="inline-flex rounded-full bg-[#FFFDFA] p-0.5 border border-[#E8DED1] shadow-subtle">
+              {/* Unified Rounded-Full Layout Switcher */}
+              <div className="inline-flex rounded-full bg-[#FFFDFA] p-0.5 border border-[#DFCBB5] shadow-2xs">
                 <button
                   type="button"
                   onClick={() => setShowType('masonry')}
                   title="Gallery"
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${showType === 'masonry'
-                    ? 'bg-[#302A27] text-[#FFFDFA] shadow-subtle'
-                    : 'text-[#81766D] hover:text-[#302A27]'
-                    }`}
+                  className={`flex items-center gap-1.5 h-7.5 px-3 rounded-full text-xs font-sans font-medium transition-all cursor-pointer ${
+                    showType === 'masonry'
+                      ? 'bg-[#292522] text-[#FFFDF9] shadow-2xs'
+                      : 'text-[#81766D] hover:text-[#292522]'
+                  }`}
                 >
                   <PiSquaresFourBold className="text-sm" />
                   <span className="hidden md:inline">Gallery</span>
@@ -369,22 +522,24 @@ const Home = () => {
                   type="button"
                   onClick={() => setShowType('shelf')}
                   title="Oak Hardwood Bookshelf"
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${showType === 'shelf'
-                    ? 'bg-[#292522] text-white shadow-2xs'
-                    : 'text-[#827870] hover:text-[#292522]'
-                    }`}
+                  className={`flex items-center gap-1.5 h-7.5 px-3 rounded-full text-xs font-sans font-medium transition-all cursor-pointer ${
+                    showType === 'shelf'
+                      ? 'bg-[#292522] text-[#FFFDF9] shadow-2xs'
+                      : 'text-[#81766D] hover:text-[#292522]'
+                  }`}
                 >
-                  <PiBooksBold className="text-sm text-amber-500" />
+                  <PiBooksBold className="text-sm text-[#C6A16B]" />
                   <span className="hidden md:inline">Oak Shelf</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowType('table')}
                   title="Bibliographic Table View"
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${showType === 'table'
-                    ? 'bg-[#292522] text-white shadow-2xs'
-                    : 'text-[#827870] hover:text-[#292522]'
-                    }`}
+                  className={`flex items-center gap-1.5 h-7.5 px-3 rounded-full text-xs font-sans font-medium transition-all cursor-pointer ${
+                    showType === 'table'
+                      ? 'bg-[#292522] text-[#FFFDF9] shadow-2xs'
+                      : 'text-[#81766D] hover:text-[#292522]'
+                  }`}
                 >
                   <PiListBulletsBold className="text-sm" />
                   <span className="hidden md:inline">Table</span>
@@ -437,8 +592,24 @@ const Home = () => {
 
         {/* Pinterest-Inspired Organic Gallery */}
         {loading ? (
-          <div className="py-24 flex justify-center items-center">
-            <Spinner />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 py-4">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div
+                key={i}
+                className="rounded-[0.875rem] border border-[#E8DED1] bg-[#FFFDFA] p-3 space-y-3 shadow-subtle animate-pulse"
+              >
+                <div
+                  className={`w-full bg-[#EAE2D5] rounded-lg ${
+                    i % 3 === 0 ? 'h-64' : i % 3 === 1 ? 'h-52' : 'h-72'
+                  }`}
+                />
+                <div className="space-y-2 pt-1">
+                  <div className="h-4 bg-[#EAE2D5] rounded w-4/5" />
+                  <div className="h-3 bg-[#EFE8DD] rounded w-3/5" />
+                  <div className="h-3 bg-[#EFE8DD] rounded w-2/5 pt-1" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : displayedBooks.length > 0 ? (
           <div>

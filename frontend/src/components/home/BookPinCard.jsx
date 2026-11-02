@@ -134,6 +134,26 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
 
         {/* Cover Artwork Container with natural aspect ratio & authentic spine depth */}
         <div className={`book-cover-wrap relative w-full overflow-hidden bg-[#F0E9DE] ${!isFeatured ? 'rounded-t-[0.875rem]' : ''}`}>
+          {/* Hardcover Bound Spine Ridge & Embossed Lighting Effect */}
+          <div
+            className="absolute inset-y-0 left-0 w-3 pointer-events-none z-10"
+            style={{
+              background:
+                'linear-gradient(to right, rgba(0,0,0,0.32) 0%, rgba(255,255,255,0.18) 35%, rgba(0,0,0,0.12) 65%, transparent 100%)',
+            }}
+            aria-hidden="true"
+          />
+
+          {/* On-Shelf Bookmark Ribbon Accent */}
+          {isSaved && (
+            <div className="absolute top-0 right-3.5 z-30 pointer-events-none select-none drop-shadow-sm">
+              <div className="relative bg-[#8D263B] text-[#FFFDF9] text-[9.5px] font-sans font-semibold px-2 pt-1 pb-1.5 rounded-b flex items-center gap-1 border-b border-x border-[#671A29]">
+                <PiBookmarkSimpleFill className="text-[10px] text-[#E8C4A0]" />
+                <span className="tracking-wide">On Shelf</span>
+              </div>
+            </div>
+          )}
+
           {imageUrl && !imgError ? (
             <img
               src={imageUrl}
@@ -185,11 +205,11 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
                     onClick={handleQuickPreview}
                     title="Quick preview"
                     aria-label="Quick preview"
-                    className="w-8 h-8 rounded-full bg-[#FFFDFA]/95 hover:bg-[#FFFDFA] text-[#302A27] shadow-sm flex items-center justify-center transition-all duration-150 hover:scale-105 active:scale-95 border border-[#E8DED1] backdrop-blur-xs cursor-pointer"
+                    className="w-8 h-8 rounded-full bg-[#FFFDF9]/90 hover:bg-[#FFFDF9] text-[#302A27] shadow-sm flex items-center justify-center transition-all duration-150 hover:scale-105 active:scale-95 border border-[#DECDBA] backdrop-blur-md cursor-pointer"
                   >
                     <PiEyeBold className="text-sm" />
                   </button>
-                  <span className="pointer-events-none absolute -bottom-7 left-0 whitespace-nowrap rounded-md bg-[#302A27] px-2 py-0.5 text-[10px] font-medium text-[#FFFDFA] opacity-0 transition-opacity duration-150 group-hover/preview:opacity-100 z-30 shadow-xs">
+                  <span className="pointer-events-none absolute -bottom-7 left-0 whitespace-nowrap rounded-md bg-[#241C16] px-2 py-0.5 text-[10px] font-medium text-[#FFFDF9] opacity-0 transition-opacity duration-150 group-hover/preview:opacity-100 z-30 shadow-xs">
                     Quick preview
                   </span>
                 </div>
@@ -206,25 +226,25 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
                     popping ? 'scale-110 rotate-[-3deg]' : ''
                   } ${
                     isSaved
-                      ? 'bg-[#302A27] text-[#C6A16B] border-[#C6A16B]/30'
-                      : 'bg-[#8D263B] hover:bg-[#67202F] text-[#FFFDFA] border-transparent'
+                      ? 'bg-[#241C16]/90 backdrop-blur-md text-[#E8C4A0] border-[#E8C4A0]/40'
+                      : 'bg-[#8D263B]/95 hover:bg-[#731D2E] backdrop-blur-md text-[#FFFDF9] border-white/20'
                   }`}
                 >
                   {isSaved ? (
                     <>
                       <PiBookmarkSimpleFill
-                        className={`text-xs text-[#C6A16B] ${popping ? 'animate-bookmark-pop' : ''}`}
+                        className={`text-xs text-[#E8C4A0] ${popping ? 'animate-bookmark-pop' : ''}`}
                       />
-                      <span className="font-sans text-[11px] font-medium">Saved</span>
+                      <span className="font-sans text-[11px] font-semibold">Saved</span>
                     </>
                   ) : (
                     <>
                       <PiBookmarkSimpleBold className="text-xs" />
-                      <span className="font-sans text-[11px] font-medium">Save</span>
+                      <span className="font-sans text-[11px] font-semibold">Save</span>
                     </>
                   )}
                 </button>
-                <span className="pointer-events-none absolute -bottom-7 right-0 whitespace-nowrap rounded-md bg-[#302A27] px-2 py-0.5 text-[10px] font-medium text-[#FFFDFA] opacity-0 transition-opacity duration-150 group-hover/bookmark:opacity-100 z-30 shadow-xs">
+                <span className="pointer-events-none absolute -bottom-7 right-0 whitespace-nowrap rounded-md bg-[#241C16] px-2 py-0.5 text-[10px] font-medium text-[#FFFDF9] opacity-0 transition-opacity duration-150 group-hover/bookmark:opacity-100 z-30 shadow-xs">
                   {isSaved ? 'On your shelf' : 'Save to shelf'}
                 </span>
               </div>

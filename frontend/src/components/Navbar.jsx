@@ -300,18 +300,33 @@ const Navbar = ({ totalBooks = 0 }) => {
                 >
                   {ambientSound === 'rain' ? (
                     <>
-                      <PiCloudRainBold className="text-sm text-[#8D263B] animate-pulse" />
+                      <PiCloudRainBold className="text-sm text-[#8D263B]" />
                       <span className="capitalize">Rain</span>
+                      <span className="flex items-end gap-[2px] ml-0.5 h-3" aria-hidden="true">
+                        <span className="w-[2px] h-2 bg-[#8D263B] rounded-full animate-[pulse_0.8s_ease-in-out_infinite]" />
+                        <span className="w-[2px] h-3 bg-[#8D263B] rounded-full animate-[pulse_0.6s_ease-in-out_infinite_0.15s]" />
+                        <span className="w-[2px] h-1.5 bg-[#8D263B] rounded-full animate-[pulse_1s_ease-in-out_infinite_0.3s]" />
+                      </span>
                     </>
                   ) : ambientSound === 'fireplace' ? (
                     <>
-                      <PiFlameBold className="text-sm text-[#8D263B] animate-pulse" />
+                      <PiFlameBold className="text-sm text-[#8D263B]" />
                       <span className="capitalize">Hearth</span>
+                      <span className="flex items-end gap-[2px] ml-0.5 h-3" aria-hidden="true">
+                        <span className="w-[2px] h-2 bg-[#8D263B] rounded-full animate-[pulse_0.8s_ease-in-out_infinite]" />
+                        <span className="w-[2px] h-3 bg-[#8D263B] rounded-full animate-[pulse_0.6s_ease-in-out_infinite_0.15s]" />
+                        <span className="w-[2px] h-1.5 bg-[#8D263B] rounded-full animate-[pulse_1s_ease-in-out_infinite_0.3s]" />
+                      </span>
                     </>
                   ) : ambientSound === 'clock' ? (
                     <>
-                      <PiClockBold className="text-sm text-[#8D263B] animate-pulse" />
+                      <PiClockBold className="text-sm text-[#8D263B]" />
                       <span className="capitalize">Clock</span>
+                      <span className="flex items-end gap-[2px] ml-0.5 h-3" aria-hidden="true">
+                        <span className="w-[2px] h-2 bg-[#8D263B] rounded-full animate-[pulse_0.8s_ease-in-out_infinite]" />
+                        <span className="w-[2px] h-3 bg-[#8D263B] rounded-full animate-[pulse_0.6s_ease-in-out_infinite_0.15s]" />
+                        <span className="w-[2px] h-1.5 bg-[#8D263B] rounded-full animate-[pulse_1s_ease-in-out_infinite_0.3s]" />
+                      </span>
                     </>
                   ) : (
                     <>

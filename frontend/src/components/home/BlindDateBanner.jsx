@@ -279,6 +279,7 @@ const BlindDateBanner = ({ books = [] }) => {
   // Non-repeating book selection tracking
   const [seenIds, setSeenIds] = useState(() => new Set());
   const [currentBook, setCurrentBook] = useState(null);
+  const [activeClueTab, setActiveClueTab] = useState('all'); // 'all' | 'atmosphere' | 'theme'
 
   // Unwrapping stage: 'sealed' | 'compressing' | 'cracking' | 'loosening' | 'peeling' | 'revealed'
   const [unwrappingStage, setUnwrappingStage] = useState('sealed');
@@ -451,6 +452,20 @@ const BlindDateBanner = ({ books = [] }) => {
         {/* Inner Gilded Hairline Filigree Frame */}
         <div className="absolute inset-2 sm:inset-3 rounded-[22px] border border-[#C6A16B]/25 pointer-events-none z-10" />
 
+        {/* Antique Victorian Gilded Filigree Corner Accents */}
+        <svg className="absolute top-3 left-3 w-6 h-6 text-[#C6A16B]/70 pointer-events-none z-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+          <path d="M2 14 V4 C2 2.9 2.9 2 4 2 H14 M2 8 H8 V2 M4 4 H6 V6 H4 Z" />
+        </svg>
+        <svg className="absolute top-3 right-3 w-6 h-6 text-[#C6A16B]/70 pointer-events-none z-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+          <path d="M22 14 V4 C22 2.9 21.1 2 20 2 H10 M22 8 H16 V2 M20 4 H18 V6 H20 Z" />
+        </svg>
+        <svg className="absolute bottom-3 left-3 w-6 h-6 text-[#C6A16B]/70 pointer-events-none z-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+          <path d="M2 10 V20 C2 21.1 2.9 22 4 22 H14 M2 16 H8 V22 M4 20 H6 V18 H4 Z" />
+        </svg>
+        <svg className="absolute bottom-3 right-3 w-6 h-6 text-[#C6A16B]/70 pointer-events-none z-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+          <path d="M22 10 V20 C22 21.1 21.1 22 20 22 H10 M22 16 H16 V22 M20 20 H18 V18 H20 Z" />
+        </svg>
+
         {/* Cinematic Candlelit Studio Ambience on the right matching Mockup */}
         <div className="absolute inset-y-0 right-0 w-full sm:w-[55%] md:w-[50%] lg:w-[48%] overflow-hidden pointer-events-none select-none opacity-40 mix-blend-screen">
           <img
@@ -502,70 +517,104 @@ const BlindDateBanner = ({ books = [] }) => {
                 <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-[#FAF4EC] to-[#F1E5D5] text-[#1A120B] border border-[#CBB39C] shadow-[0_10px_30px_-5px_rgba(0,0,0,0.45)] relative overflow-hidden">
                   <div className="flex items-center justify-between gap-2 border-b border-[#D8C4AE] pb-2.5 mb-3.5 flex-wrap">
                     <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF5EB] border border-[#D5C6B3] text-[9.5px] font-mono uppercase tracking-wider font-bold text-[#5A4535] shadow-2xs">
+                      <button
+                        type="button"
+                        onClick={() => setActiveClueTab('all')}
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9.5px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
+                          activeClueTab === 'all'
+                            ? 'bg-[#FAF5EB] border border-[#BFA78E] text-[#5A4535] shadow-xs'
+                            : 'bg-[#FAF5EB]/50 border border-[#D5C6B3]/50 text-[#7A6453] hover:bg-[#FAF5EB]/80'
+                        }`}
+                      >
                         <span>🪶 ARCHIVAL MYSTERY CLUES</span>
                         <span className="text-[9px] text-[#81766D]">&gt;</span>
-                      </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF5EB]/60 border border-[#D5C6B3]/60 text-[9.5px] font-mono uppercase tracking-wider font-medium text-[#7A6453]">
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveClueTab('atmosphere')}
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9.5px] font-mono uppercase tracking-wider font-medium transition-all cursor-pointer ${
+                          activeClueTab === 'atmosphere'
+                            ? 'bg-[#FAF5EB] border border-[#BFA78E] text-[#5A4535] shadow-xs font-bold'
+                            : 'bg-[#FAF5EB]/50 border border-[#D5C6B3]/50 text-[#7A6453] hover:bg-[#FAF5EB]/80'
+                        }`}
+                      >
                         <span>◎ ATMOSPHERE &amp; SETTING</span>
                         <span className="text-[9px] text-[#81766D]">&gt;</span>
-                      </span>
-                      <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF5EB]/60 border border-[#D5C6B3]/60 text-[9.5px] font-mono uppercase tracking-wider font-medium text-[#7A6453]">
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveClueTab('theme')}
+                        className={`hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9.5px] font-mono uppercase tracking-wider font-medium transition-all cursor-pointer ${
+                          activeClueTab === 'theme'
+                            ? 'bg-[#FAF5EB] border border-[#BFA78E] text-[#5A4535] shadow-xs font-bold'
+                            : 'bg-[#FAF5EB]/50 border border-[#D5C6B3]/50 text-[#7A6453] hover:bg-[#FAF5EB]/80'
+                        }`}
+                      >
                         <span>✦ LIKELY THEMES</span>
                         <span className="text-[9px] text-[#81766D]">&gt;</span>
-                      </span>
+                      </button>
                     </div>
                     <span className="text-[9px] sm:text-[10px] font-mono text-[#7A6453] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full bg-[#E8D9C7]/60 border border-[#D0BFAF]/60">
                       Unopened Volume
                     </span>
                   </div>
 
-                  {/* 3 Distinct Lines with Refined Decorative Markers */}
+                  {/* Dynamic Clue Reveal with Highlight Transitions */}
                   <ul className="space-y-3 font-serif">
                     {/* Clue 1: Atmosphere / Setting */}
-                    <li className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-[#8D263B]/10 text-[#8D263B] flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <PiCompassBold className="text-[11px]" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#735A47] block">
-                          Atmosphere &amp; Setting
-                        </span>
-                        <p className="text-[#1A120B] italic font-semibold text-xs sm:text-[13px] leading-relaxed mt-0.5">
-                          &ldquo;{clues.atmosphere}&rdquo;
-                        </p>
-                      </div>
-                    </li>
+                    {(activeClueTab === 'all' || activeClueTab === 'atmosphere') && (
+                      <li className={`flex items-start gap-3 transition-all duration-300 ${
+                        activeClueTab === 'atmosphere' ? 'bg-[#FAF2E6] p-2.5 rounded-xl border border-[#D5C6B3]' : ''
+                      }`}>
+                        <div className="w-5 h-5 rounded-full bg-[#8D263B]/10 text-[#8D263B] flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <PiCompassBold className="text-[11px]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#735A47] block">
+                            Atmosphere &amp; Setting
+                          </span>
+                          <p className="text-[#1A120B] italic font-semibold text-xs sm:text-[13px] leading-relaxed mt-0.5">
+                            &ldquo;{clues.atmosphere}&rdquo;
+                          </p>
+                        </div>
+                      </li>
+                    )}
 
                     {/* Clue 2: Genre / Narrative Style */}
-                    <li className="flex items-start gap-3 pt-2.5 border-t border-[#E6D6C4]/80">
-                      <div className="w-5 h-5 rounded-full bg-[#B26E2B]/10 text-[#B26E2B] flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <PiBookOpenBold className="text-[11px]" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#735A47] block">
-                          Narrative Style &amp; Form
-                        </span>
-                        <p className="text-[#1A120B] italic font-semibold text-xs sm:text-[13px] leading-relaxed mt-0.5">
-                          &ldquo;{clues.genre}&rdquo;
-                        </p>
-                      </div>
-                    </li>
+                    {activeClueTab === 'all' && (
+                      <li className="flex items-start gap-3 pt-2.5 border-t border-[#E6D6C4]/80">
+                        <div className="w-5 h-5 rounded-full bg-[#B26E2B]/10 text-[#B26E2B] flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <PiBookOpenBold className="text-[11px]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#735A47] block">
+                            Narrative Style &amp; Form
+                          </span>
+                          <p className="text-[#1A120B] italic font-semibold text-xs sm:text-[13px] leading-relaxed mt-0.5">
+                            &ldquo;{clues.genre}&rdquo;
+                          </p>
+                        </div>
+                      </li>
+                    )}
 
                     {/* Clue 3: Theme / Reading Mood */}
-                    <li className="flex items-start gap-3 pt-2.5 border-t border-[#E6D6C4]/80">
-                      <div className="w-5 h-5 rounded-full bg-[#5A6E55]/10 text-[#4E6349] flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <PiSparkleBold className="text-[11px]" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#735A47] block">
-                          Core Theme &amp; Resonance
-                        </span>
-                        <p className="text-[#1A120B] italic font-semibold text-xs sm:text-[13px] leading-relaxed mt-0.5">
-                          &ldquo;{clues.theme}&rdquo;
-                        </p>
-                      </div>
-                    </li>
+                    {(activeClueTab === 'all' || activeClueTab === 'theme') && (
+                      <li className={`flex items-start gap-3 transition-all duration-300 ${
+                        activeClueTab === 'theme' ? 'bg-[#FAF2E6] p-2.5 rounded-xl border border-[#D5C6B3]' : 'pt-2.5 border-t border-[#E6D6C4]/80'
+                      }`}>
+                        <div className="w-5 h-5 rounded-full bg-[#5A6E55]/10 text-[#4E6349] flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <PiSparkleBold className="text-[11px]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#735A47] block">
+                            Core Theme &amp; Resonance
+                          </span>
+                          <p className="text-[#1A120B] italic font-semibold text-xs sm:text-[13px] leading-relaxed mt-0.5">
+                            &ldquo;{clues.theme}&rdquo;
+                          </p>
+                        </div>
+                      </li>
+                    )}
                   </ul>
                 </div>
 
