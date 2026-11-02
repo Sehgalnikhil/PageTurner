@@ -70,7 +70,7 @@ const BooksTable = ({ books = [] }) => {
                       <div>
                         <Link
                           to={`/books/details/${book._id}`}
-                          className="font-serif font-bold text-[#302A27] hover:text-burgundy block transition-colors leading-snug"
+                          className="font-serif font-semibold text-[15px] text-[#221B16] hover:text-burgundy block transition-colors leading-snug"
                         >
                           {book.title}
                         </Link>
@@ -82,7 +82,7 @@ const BooksTable = ({ books = [] }) => {
                   </td>
 
                   {/* Author */}
-                  <td className="py-3.5 px-5 text-[#302A27] text-xs font-medium">
+                  <td className="py-3.5 px-5 text-[#332922] text-[13px] font-sans font-medium">
                     {book.author}
                   </td>
 

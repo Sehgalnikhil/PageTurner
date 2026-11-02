@@ -84,25 +84,28 @@ const BookSingleCard = ({ book }) => {
 
           {/* Info */}
           <div>
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-[#81766D]">
+            <span className="text-[10px] font-sans uppercase tracking-wider font-semibold text-[#8C7E72]">
               {book.category || 'General'}
             </span>
-            <h3 className="font-serif text-base font-bold text-[#302A27] group-hover:text-burgundy leading-snug line-clamp-1 transition-colors">
+            <h3 className="font-serif text-[17px] font-semibold text-[#221B16] group-hover:text-burgundy leading-snug line-clamp-1 transition-colors">
               {book.title}
             </h3>
-            <p className="text-xs text-[#81766D] truncate mt-0.5 font-medium">by {book.author}</p>
+            <p className="text-[12.5px] font-sans text-[#786C62] truncate mt-1">
+              <span className="font-serif italic text-[11.5px] text-[#9A8D82] mr-1">by</span>
+              <span className="font-medium text-[#332922]">{book.author}</span>
+            </p>
           </div>
         </div>
 
         {/* Footer info */}
-        <div className="mt-3 pt-2.5 border-t border-stone-100 flex items-center justify-between text-xs">
+        <div className="mt-3 pt-2.5 border-t border-[#EFE8DC] flex items-center justify-between text-xs">
           {book.averageRating > 0 ? (
-            <span className="flex items-center gap-1 font-semibold text-amber-900 bg-amber-50 px-2 py-0.5 rounded-md text-[11px]">
-              <PiStarFill className="text-amber-500 text-xs" />
-              {book.averageRating.toFixed(1)}
+            <span className="flex items-center gap-1 font-sans font-semibold text-[#2C211A] bg-[#F7F2E8] px-2 py-0.5 rounded-full border border-[#E8DFC9] text-[11.5px] shadow-2xs">
+              <PiStarFill className="text-[#C69B4C] text-xs" />
+              <span>{book.averageRating.toFixed(1)}</span>
             </span>
           ) : (
-            <span className="text-stone-400 text-[11px]">No reviews</span>
+            <span className="text-stone-400 text-[11px] font-sans">No reviews</span>
           )}
 
           {isAdmin && (

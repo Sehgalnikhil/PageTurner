@@ -123,12 +123,12 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
         />
         {/* Curated Spotlight Banner: Fixed initial height, never expands on hover */}
         {isFeatured && (
-          <div className="px-3.5 py-1 bg-[#8D263B] text-[#FFFDFA] flex items-center justify-between text-[10px] font-mono uppercase tracking-wider font-medium rounded-t-[0.875rem]">
+          <div className="px-3.5 py-1.5 bg-[#8D263B] text-[#FFFDF9] flex items-center justify-between text-[10.5px] font-sans font-semibold uppercase tracking-wider rounded-t-[0.875rem]">
             <span className="flex items-center gap-1.5">
-              <PiSparkleBold className="text-[#C6A16B] text-xs" />
+              <PiSparkleBold className="text-[#E8C4A0] text-xs" />
               <span>Curator&apos;s Pick</span>
             </span>
-            <span className="opacity-85 text-[9px] font-normal">{book.category || 'Featured'}</span>
+            <span className="text-[#E8C4A0] text-[9.5px] font-medium tracking-widest">{book.category || 'Featured'}</span>
           </div>
         )}
 
@@ -232,13 +232,13 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
 
             {/* Bottom Bar: Category & Rating */}
             <div className="flex items-center justify-between w-full pointer-events-auto">
-              <span className="px-2.5 py-0.5 rounded-full bg-black/65 backdrop-blur-md text-[#FFFDFA] text-[10px] font-mono font-medium shadow-xs border border-white/10 tracking-wide">
+              <span className="px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[#FFFDF9] text-[10px] font-sans font-medium uppercase tracking-wider shadow-xs border border-white/15">
                 {book.category || 'Classic'}
               </span>
 
               {book.averageRating > 0 && (
-                <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/65 backdrop-blur-md text-[#C6A16B] text-[10px] font-mono font-medium shadow-xs border border-white/10">
-                  <PiStarFill className="text-[#C6A16B] text-xs" />
+                <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[#F4D086] text-[10.5px] font-sans font-semibold shadow-xs border border-white/15">
+                  <PiStarFill className="text-[#F4D086] text-xs" />
                   <span>{book.averageRating.toFixed(1)}</span>
                 </span>
               )}
@@ -250,7 +250,7 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
         <div className="p-4 sm:p-4.5 flex flex-col justify-between">
           <div>
             <div className="flex items-start justify-between gap-2">
-              <h3 className="font-serif text-[16px] sm:text-[17px] font-medium text-[#302A27] leading-snug tracking-tight group-hover:text-[#8D263B] transition-colors duration-200 line-clamp-2">
+              <h3 className="font-serif text-[17px] sm:text-[18px] font-semibold text-[#221B16] leading-snug tracking-normal group-hover:text-[#8D263B] transition-colors duration-200 line-clamp-2">
                 {book.title}
               </h3>
 
@@ -294,30 +294,31 @@ const BookPinCard = ({ book, index = 0, isFeatured = false }) => {
 
             {/* Author Attribution */}
             <div className="flex items-center gap-2 mt-2">
-              <div className="w-5 h-5 rounded-full bg-[#8D263B]/10 text-[#8D263B] font-serif text-[10px] font-medium flex items-center justify-center flex-shrink-0 border border-[#8D263B]/20">
+              <div className="w-5 h-5 rounded-full bg-[#F4EDE2] text-[#8D263B] font-serif text-[11px] font-bold flex items-center justify-center flex-shrink-0 border border-[#DECDBA] shadow-2xs">
                 {authorInitial}
               </div>
-              <p className="text-xs text-[#81766D] font-serif italic truncate">
-                by <span className="text-[#302A27] font-medium not-italic">{book.author}</span>
+              <p className="text-[12.5px] font-sans text-[#786C62] truncate">
+                <span className="font-serif italic text-[11.5px] text-[#9A8D82] mr-1">by</span>
+                <span className="font-medium text-[#332922] group-hover:text-[#8D263B] transition-colors">{book.author}</span>
               </p>
             </div>
           </div>
 
           {/* Footer Metadata */}
-          <div className="mt-3 pt-2.5 border-t border-[#E8DED1] flex items-center justify-between text-[11px] font-mono text-[#81766D]">
-            <span className="flex items-center gap-1.5">
+          <div className="mt-3.5 pt-2.5 border-t border-[#EFE8DC] flex items-center justify-between text-[11.5px] font-sans text-[#7A6D63]">
+            <span className="flex items-center gap-1.5 font-medium">
               <span>{book.publishYear}</span>
               {book.pageCount && (
                 <>
-                  <span className="text-[#81766D]/40">&bull;</span>
+                  <span className="text-[#C8BCAD]">&bull;</span>
                   <span>{book.pageCount}p</span>
                 </>
               )}
             </span>
 
             {book.averageRating > 0 && (
-              <span className="flex items-center gap-1 font-medium text-[#302A27]">
-                <PiStarFill className="text-[#C6A16B] text-xs" />
+              <span className="flex items-center gap-1 font-sans text-[11.5px] font-semibold text-[#2C211A] bg-[#F7F2E8] px-2 py-0.5 rounded-full border border-[#E8DFC9] shadow-2xs">
+                <PiStarFill className="text-[#C69B4C] text-[11px]" />
                 <span>{book.averageRating.toFixed(1)}</span>
               </span>
             )}

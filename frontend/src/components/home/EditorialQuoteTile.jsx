@@ -39,24 +39,24 @@ const EditorialQuoteTile = ({ quoteIndex = 0 }) => {
       <PiQuotesBold className="text-3xl text-[#8D263B]/25 group-hover:text-[#8D263B]/60 group-hover:scale-115 transition-all duration-300 mb-3" />
 
       {/* Quote text: elegant Cormorant Garamond */}
-      <blockquote className="font-serif text-lg sm:text-xl italic font-normal text-[#302A27] leading-snug mb-4">
+      <blockquote className="font-serif text-[18px] sm:text-[20px] italic font-normal text-[#241C16] leading-relaxed mb-4">
         &ldquo;{item.quote}&rdquo;
       </blockquote>
 
       {/* Author & Attribution */}
-      <div className="pt-3 border-t border-[#E8DED1] flex items-center justify-between text-xs">
+      <div className="pt-3.5 border-t border-[#EFE8DC] flex items-center justify-between text-xs">
         <div>
-          <span className="font-serif font-medium text-[#302A27] block text-sm">
+          <span className="font-serif font-bold text-[#241C16] block text-[15px] leading-tight">
             {item.author}
           </span>
-          <span className="text-[10px] text-[#81766D] font-mono">
+          <span className="text-[11px] text-[#7A6D63] font-sans font-medium mt-0.5 block">
             {item.work}
           </span>
         </div>
 
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFFDFA] border border-[#E8DED1] text-[10px] text-[#81766D] group-hover:border-[#8D263B]/30 transition-all duration-200 shadow-subtle cute-pill-hover cursor-pointer">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFFDFA] border border-[#DECDBA] text-[11px] font-sans text-[#7A6D63] group-hover:border-[#8D263B]/40 group-hover:text-[#241C16] transition-all duration-200 shadow-2xs cute-pill-hover cursor-pointer">
           <PiBookOpenTextBold className="text-xs text-[#8D263B] group-hover:rotate-6 transition-transform" />
-          <span className="font-medium text-[#81766D] group-hover:text-[#302A27] transition-colors">
+          <span className="font-medium transition-colors">
             Excerpt
           </span>
         </div>
