@@ -95,9 +95,19 @@ const Home = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalBooks, setTotalBooks] = useState(0);
   const [issueIndex, setIssueIndex] = useState(0);
+  const [isHeroPaused, setIsHeroPaused] = useState(false);
   const [genreOpen, setGenreOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const location = useLocation();
+
+  // Automatically advance hero editorial issue every 5 seconds (pauses on hover)
+  useEffect(() => {
+    if (isHeroPaused) return;
+    const interval = setInterval(() => {
+      setIssueIndex((prev) => (prev + 1) % EDITORIAL_ISSUES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isHeroPaused]);
 
   useEffect(() => {
     if (location.hash === '#curated-collections' || location.search.includes('curated-collections')) {
@@ -225,13 +235,18 @@ const Home = () => {
 
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
         {/* Seamlessly Integrated Editorial Masthead Banner matching Mockup */}
-        <header className="mb-6 rounded-2xl sm:rounded-3xl border border-[#DFCBB5] overflow-hidden shadow-[0_12px_36px_rgba(40,25,15,0.08)] relative group bg-[#FAF5EE]">
+        <header
+          onMouseEnter={() => setIsHeroPaused(true)}
+          onMouseLeave={() => setIsHeroPaused(false)}
+          className="mb-6 rounded-2xl sm:rounded-3xl border border-[#DFCBB5] overflow-hidden shadow-[0_12px_36px_rgba(40,25,15,0.08)] relative group bg-[#FAF5EE]"
+        >
           {/* Right Window Scene with Sleeping Cat, Warm Lamp, Mug, Books, & Pinned Note */}
           <div className="absolute inset-y-0 right-0 w-full sm:w-[50%] md:w-[48%] lg:w-[46%] overflow-hidden pointer-events-none select-none">
             <img
+              key={EDITORIAL_ISSUES[issueIndex].image}
               src={EDITORIAL_ISSUES[issueIndex].image}
               alt={EDITORIAL_ISSUES[issueIndex].titlePrefix}
-              className="w-full h-full object-cover object-left-top opacity-95 group-hover:scale-102 transition-all duration-700"
+              className="w-full h-full object-cover object-left-top opacity-95 group-hover:scale-102 transition-all duration-700 animate-fade-in"
             />
             {/* Soft feathered blend so the paper background transitions seamlessly into the window */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#FAF5EE] via-[#FAF5EE]/30 to-transparent pointer-events-none" />
@@ -258,7 +273,10 @@ const Home = () => {
             </div>
 
             {/* Serif Headline with Italic Crimson Accent */}
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[46px] font-bold text-[#2A1E17] tracking-tight leading-tight mb-2 transition-all duration-300">
+            <h1
+              key={`title-${issueIndex}`}
+              className="font-serif text-3xl sm:text-4xl lg:text-[46px] font-bold text-[#2A1E17] tracking-tight leading-tight mb-2 animate-fade-in"
+            >
               {EDITORIAL_ISSUES[issueIndex].titlePrefix}{' '}
               <span className="italic font-normal text-[#8D263B]">
                 {EDITORIAL_ISSUES[issueIndex].titleAccent}
@@ -266,7 +284,10 @@ const Home = () => {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xs sm:text-[13px] text-[#7A6C60] font-serif italic mt-0 mb-6 leading-relaxed max-w-lg transition-all duration-300">
+            <p
+              key={`sub-${issueIndex}`}
+              className="text-xs sm:text-[13px] text-[#7A6C60] font-serif italic mt-0 mb-6 leading-relaxed max-w-lg animate-fade-in"
+            >
               {EDITORIAL_ISSUES[issueIndex].subtitle}
             </p>
 
@@ -304,16 +325,21 @@ const Home = () => {
         </header>
 
         {/* Interactive Carousel Pagination Dots */}
-        <div className="flex items-center justify-center gap-2 mt-2 mb-8" aria-label="Select Editorial Issue">
+        <div
+          onMouseEnter={() => setIsHeroPaused(true)}
+          onMouseLeave={() => setIsHeroPaused(false)}
+          className="flex items-center justify-center gap-2 mt-2 mb-8"
+          aria-label="Select Editorial Issue"
+        >
           {EDITORIAL_ISSUES.map((iss, idx) => (
             <button
               key={iss.issue}
               type="button"
               onClick={() => setIssueIndex(idx)}
               title={`Switch to ${iss.issue}: ${iss.titlePrefix} ${iss.titleAccent}`}
-              className={`transition-all duration-300 cursor-pointer ${
+              className={`transition-all duration-500 ease-out cursor-pointer ${
                 issueIndex === idx
-                  ? 'w-6 h-2.5 rounded-full bg-[#3B2219] shadow-xs'
+                  ? 'w-7 h-2.5 rounded-full bg-[#3B2219] shadow-xs ring-2 ring-[#C6A16B]/30'
                   : 'w-2.5 h-2.5 rounded-full border border-[#8C7667] bg-transparent hover:bg-[#8C7667]/40'
               }`}
               aria-label={iss.issue}
