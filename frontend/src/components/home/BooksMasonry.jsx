@@ -113,19 +113,21 @@ const BooksMasonry = ({ books = [], isCollectionActive = false }) => {
             {colItems.map((item) => {
               if (item.type === 'quote') {
                 return (
-                  <EditorialQuoteTile
-                    key={item.key}
-                    quoteIndex={item.quoteIndex}
-                  />
+                  <div key={item.key} className="scroll-reveal-card">
+                    <EditorialQuoteTile
+                      quoteIndex={item.quoteIndex}
+                    />
+                  </div>
                 );
               }
               return (
-                <BookPinCard
-                  key={item.key}
-                  book={item.book}
-                  index={item.index}
-                  isFeatured={item.isFeatured}
-                />
+                <div key={item.key} className="scroll-reveal-card">
+                  <BookPinCard
+                    book={item.book}
+                    index={item.index}
+                    isFeatured={item.isFeatured}
+                  />
+                </div>
               );
             })}
           </div>

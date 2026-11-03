@@ -23,6 +23,7 @@ import {
   PiCompassBold,
   PiCheckBold,
   PiCaretDownBold,
+  PiFeatherBold,
 } from 'react-icons/pi';
 import { AuthContext } from '../context/AuthContext';
 import { ReadingListContext } from '../context/ReadingListContext';
@@ -98,7 +99,17 @@ const Home = () => {
   const [isHeroPaused, setIsHeroPaused] = useState(false);
   const [genreOpen, setGenreOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const location = useLocation();
+
+  // Scroll position listener for floating back-to-top sanctuary button
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 350);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Automatically advance hero editorial issue every 5 seconds (pauses on hover)
   useEffect(() => {
@@ -250,7 +261,7 @@ const Home = () => {
                 e.currentTarget.onerror = null;
                 e.currentTarget.src = '/images/clean_hero_window.jpg';
               }}
-              className="w-full h-full object-cover object-left-top opacity-95 group-hover:scale-102 transition-all duration-700 animate-fade-in"
+              className="hero-parallax-img w-full h-full object-cover object-left-top opacity-95 group-hover:scale-102 transition-all duration-700 animate-fade-in"
             />
             {/* Soft feathered blend so the paper background transitions seamlessly into the window */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#FAF5EE] via-[#FAF5EE]/30 to-transparent pointer-events-none" />
@@ -363,7 +374,7 @@ const Home = () => {
         <BlindDateBanner books={books} />
 
         {/* Streamlined Discovery Toolbar (Search, Filter, Tab toggles) */}
-        <section className="mb-6">
+        <section className="mb-6 scroll-reveal-section">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-4 border-b border-[#E8DED1]">
             {/* View Tab Buttons */}
             <div className="flex items-center gap-2">
@@ -707,6 +718,29 @@ const Home = () => {
           onClose={() => setShowBlindDate(false)}
           books={books}
         />
+
+        {/* Floating Return to Sanctuary Button (Appears on Scroll) */}
+        <div
+          className={`fixed bottom-6 right-6 z-40 transition-all duration-300 pointer-events-auto ${
+            showScrollTop
+              ? 'opacity-100 translate-y-0 scale-100'
+              : 'opacity-0 translate-y-6 scale-90 pointer-events-none'
+          }`}
+        >
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="scroll-top-btn group flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-[#FAF5EE]/95 backdrop-blur-md text-[#302A27] border border-[#DFCBB5] hover:border-[#8D263B] shadow-[0_8px_24px_rgba(40,25,15,0.18)] cursor-pointer"
+            title="Return to the top of the sanctuary"
+          >
+            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#8D263B] to-[#67202F] text-amber-200 flex items-center justify-center text-xs shadow-xs transition-transform duration-300 group-hover:-translate-y-0.5">
+              <PiFeatherBold />
+            </div>
+            <span className="font-serif text-xs font-semibold text-[#302A27] group-hover:text-[#8D263B] transition-colors pr-1">
+              Top
+            </span>
+          </button>
+        </div>
       </main>
 
       <Footer />

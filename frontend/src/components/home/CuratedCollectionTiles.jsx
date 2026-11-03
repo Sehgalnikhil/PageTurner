@@ -93,7 +93,7 @@ const CuratedCollectionTiles = ({
   };
 
   return (
-    <section id="curated-collections" className="mb-14 scroll-mt-24">
+    <section id="curated-collections" className="mb-14 scroll-mt-24 scroll-reveal-section">
       {/* 1. SECTION HEADER: Title, Metadata, Actions, & Carousel Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-2">

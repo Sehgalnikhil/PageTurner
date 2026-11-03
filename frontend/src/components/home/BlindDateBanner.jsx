@@ -446,7 +446,7 @@ const BlindDateBanner = ({ books = [] }) => {
   };
 
   return (
-    <section id="blind-date-section" className="mb-8 sm:mb-10 scroll-mt-24">
+    <section id="blind-date-section" className="mb-8 sm:mb-10 scroll-mt-24 scroll-reveal-section">
       {/* Immersive Studio Environment Container - Editorial Noir with Gilded Filigree Frame */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#38151D] via-[#240C12] to-[#16070B] text-[#FAF5ED] p-6 sm:p-8 lg:p-10 xl:p-12 border border-[#C6A16B]/40 shadow-[0_20px_60px_rgba(20,5,10,0.5)]">
         {/* Inner Gilded Hairline Filigree Frame */}

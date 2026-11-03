@@ -43,10 +43,24 @@ const Navbar = ({ totalBooks = 0 }) => {
   const [ambientSound, setAmbientSound] = useState('off'); // 'off' | 'rain' | 'fireplace' | 'clock'
   const [announcement, setAnnouncement] = useState(null);
   const [announcementDismissed, setAnnouncementDismissed] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const { user, logout, isAdmin } = useContext(AuthContext);
   const { count: bookmarkCount, setIsDrawerOpen } = useContext(ReadingListContext);
   const location = useLocation();
+
+  // Scroll Progress Tracking for Editorial Reading Journey Bar
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollable > 0) {
+        setScrollProgress(Math.min(1, Math.max(0, window.scrollY / scrollable)));
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Load public broadcast banner
   useEffect(() => {
@@ -575,6 +589,17 @@ const Navbar = ({ totalBooks = 0 }) => {
             </nav>
           </div>
         )}
+
+        {/* Editorial Reading Journey Progress Bar (Scroll-driven animation with CSS + reactive fallback) */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#E8DED1]/40 overflow-hidden pointer-events-none"
+          aria-hidden="true"
+        >
+          <div
+            className="scroll-progress-bar h-full bg-gradient-to-r from-[#8D263B] via-[#C6A16B] to-[#7D1D2D] origin-left shadow-[0_0_8px_rgba(198,161,107,0.4)] transition-[transform] duration-75"
+            style={{ transform: `scaleX(${scrollProgress})` }}
+          />
+        </div>
       </header>
 
       {/* Command-K Omnisearch Palette Modal */}
