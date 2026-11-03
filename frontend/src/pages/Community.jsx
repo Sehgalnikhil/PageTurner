@@ -1059,7 +1059,7 @@ const Community = () => {
         )}
 
         {/* ============================================================
-            TAB 1: SALON FEED (Section 3D & 3E - Common Room)
+            TAB 1: SALON FEED (NATURAL 2-COLUMN SCROLL-ANIMATED FEED)
             ============================================================ */}
         {activeTab === 'feed' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start animate-fadeIn">
@@ -1067,6 +1067,33 @@ const Community = () => {
             {/* MAIN COLUMN (8 COLS): SOCIAL READING FEED */}
             <div className="lg:col-span-8 space-y-5">
               
+              {/* Quick Inscribe Thought Bar (Scroll Reveal) */}
+              <div
+                onClick={() => {
+                  playPaperUnwrap();
+                  setShowCompose(true);
+                }}
+                className="scroll-reveal-card p-4 rounded-2xl bg-[#FFFCF6] border border-[#E9DDCC] shadow-2xs hover:border-[#B18A51]/60 transition-all flex items-center justify-between gap-3 cursor-pointer group"
+              >
+                <div className="flex items-center gap-3">
+                  <img
+                    src={userAvatar}
+                    alt={readerName}
+                    className="w-9 h-9 rounded-full object-cover border border-[#E9DDCC] shadow-2xs"
+                  />
+                  <span className="text-xs sm:text-[13px] text-[#827363] group-hover:text-[#32221D] font-serif italic transition-colors">
+                    Inscribe a thought on what you are reading today...
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  className="px-4 py-1.5 rounded-full bg-[#812638] text-white text-xs font-medium tracking-wide flex items-center gap-1.5 shadow-2xs group-hover:bg-[#6A1F2E] transition-colors cursor-pointer"
+                >
+                  <PiFeatherBold className="text-xs text-[#F7D8A4]" />
+                  <span>Share</span>
+                </button>
+              </div>
+
               {/* Feed Controls Header: Sort Pills & Parlour Dropdown */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 sm:px-4 rounded-xl bg-[#FFFCF6] border border-[#E9DDCC] shadow-2xs">
                 {/* Sort Filter Tabs */}
@@ -1105,38 +1132,45 @@ const Community = () => {
                 </div>
               </div>
 
-              {/* Socratic Debate Lectern Provocation */}
-              <SocraticDebateLectern />
+              {/* Socratic Debate Lectern Provocation (Scroll Reveal) */}
+              <div className="scroll-reveal-card">
+                <SocraticDebateLectern />
+              </div>
 
-              {/* Reflection Posts List */}
+              {/* Reflection Posts List (Smooth Staggered Scroll-Reveal Cards) */}
               {sortedPosts.length > 0 ? (
-                sortedPosts.map((post) => (
-                  <ReflectionPostCard
+                sortedPosts.map((post, idx) => (
+                  <div
                     key={post.id || post._id}
-                    post={post}
-                    user={user}
-                    userAvatar={userAvatar}
-                    readerName={readerName}
-                    onLike={handleLike}
-                    onBookmark={handleBookmark}
-                    onShare={handleSharePost}
-                    onAddComment={handleAddComment}
-                    onEnterParlour={handleEnterParlour}
-                    onOpenExcerpt={(p) => {
-                      playBookSpineSlide();
-                      const key =
-                        p.parlourSlug === 'slow' || p.parlour?.includes('Slow')
-                          ? 'slow'
-                          : p.parlourSlug === 'midnight' || p.parlour?.includes('Midnight')
-                          ? 'midnight'
-                          : p.parlourSlug === 'poetry' || p.parlour?.includes('Poetry')
-                          ? 'poetry'
-                          : p.parlourSlug === 'dostoevsky' || p.parlour?.includes('Dostoevsky')
-                          ? 'dostoevsky'
-                          : 'gothic';
-                      setActiveExcerptKey(key);
-                    }}
-                  />
+                    className="scroll-reveal-card"
+                    style={{ animationDelay: `${Math.min(idx * 0.06, 0.4)}s` }}
+                  >
+                    <ReflectionPostCard
+                      post={post}
+                      user={user}
+                      userAvatar={userAvatar}
+                      readerName={readerName}
+                      onLike={handleLike}
+                      onBookmark={handleBookmark}
+                      onShare={handleSharePost}
+                      onAddComment={handleAddComment}
+                      onEnterParlour={handleEnterParlour}
+                      onOpenExcerpt={(p) => {
+                        playBookSpineSlide();
+                        const key =
+                          p.parlourSlug === 'slow' || p.parlour?.includes('Slow')
+                            ? 'slow'
+                            : p.parlourSlug === 'midnight' || p.parlour?.includes('Midnight')
+                            ? 'midnight'
+                            : p.parlourSlug === 'poetry' || p.parlour?.includes('Poetry')
+                            ? 'poetry'
+                            : p.parlourSlug === 'dostoevsky' || p.parlour?.includes('Dostoevsky')
+                            ? 'dostoevsky'
+                            : 'gothic';
+                        setActiveExcerptKey(key);
+                      }}
+                    />
+                  </div>
                 ))
               ) : (
                 <div className="p-10 rounded-2xl bg-[#FFFCF6] border border-[#E9DDCC] text-center">
@@ -1147,44 +1181,46 @@ const Community = () => {
               )}
             </div>
 
-            {/* SIDEBAR COLUMN (4 COLS): PERSONAL IDENTITY & UTILITIES (Section 3E) */}
-            <div className="lg:col-span-4 space-y-5">
+            {/* SIDEBAR COLUMN (4 COLS): PERSONAL IDENTITY & UTILITIES (Sticky & Scroll-Reveal) */}
+            <div className="lg:col-span-4 space-y-5 lg:sticky lg:top-24 self-start">
               
               {/* 1. Personal Reading Identity Card */}
-              <PersonalReadingIdentityCard
-                user={user}
-                userAvatar={userAvatar}
-                readerName={readerName}
-                passportXP={passportXP}
-                claimedDailyXP={claimedDailyXP}
-                onClaimDailyXP={async () => {
-                  playWaxSealCrack();
-                  setClaimedDailyXP(true);
-                  setPassportXP((x) => x + 50);
-                  try {
-                    const res = await communityService.claimDailyXp({ email: user?.email });
-                    if (res.data?.sanctuaryXp) {
-                      setPassportXP(res.data.sanctuaryXp);
+              <div className="scroll-reveal-card">
+                <PersonalReadingIdentityCard
+                  user={user}
+                  userAvatar={userAvatar}
+                  readerName={readerName}
+                  passportXP={passportXP}
+                  claimedDailyXP={claimedDailyXP}
+                  onClaimDailyXP={async () => {
+                    playWaxSealCrack();
+                    setClaimedDailyXP(true);
+                    setPassportXP((x) => x + 50);
+                    try {
+                      const res = await communityService.claimDailyXp({ email: user?.email });
+                      if (res.data?.sanctuaryXp) {
+                        setPassportXP(res.data.sanctuaryXp);
+                      }
+                    } catch (err) {
+                      console.warn('Could not sync daily XP with database:', err);
                     }
-                  } catch (err) {
-                    console.warn('Could not sync daily XP with database:', err);
-                  }
-                  enqueueSnackbar('✨ Claimed Daily Sanctuary XP (+50 XP)!', {
-                    variant: 'success',
-                  });
-                }}
-                onOpenPassportDossier={() => {
-                  playPaperUnwrap();
-                  setShowPassportDossier(true);
-                }}
-                onChangeAvatar={() => {
-                  playPaperUnwrap();
-                  setShowChangeAvatarModal(true);
-                }}
-              />
+                    enqueueSnackbar('✨ Claimed Daily Sanctuary XP (+50 XP)!', {
+                      variant: 'success',
+                    });
+                  }}
+                  onOpenPassportDossier={() => {
+                    playPaperUnwrap();
+                    setShowPassportDossier(true);
+                  }}
+                  onChangeAvatar={() => {
+                    playPaperUnwrap();
+                    setShowChangeAvatarModal(true);
+                  }}
+                />
+              </div>
 
               {/* 2. Spotlight Trending Parlour */}
-              <div className="rounded-2xl bg-[#FFFCF6] border border-[#E9DDCC] p-4.5 shadow-[0_2px_12px_rgba(50,34,29,0.03)] text-left">
+              <div className="scroll-reveal-card rounded-2xl bg-[#FFFCF6] border border-[#E9DDCC] p-4.5 shadow-[0_2px_12px_rgba(50,34,29,0.03)] text-left">
                 <div className="flex items-center justify-between pb-2 mb-3 border-b border-[#E9DDCC]/70">
                   <span className="font-serif font-bold text-xs uppercase tracking-wider text-[#32221D]">
                     Featured Parlour
@@ -1235,7 +1271,7 @@ const Community = () => {
               </div>
 
               {/* 3. Sanctuary Atmosphere Quick Soundscape Toggle */}
-              <div className="rounded-2xl bg-[#FFFCF6] border border-[#E9DDCC] p-4.5 shadow-[0_2px_12px_rgba(50,34,29,0.03)] text-left">
+              <div className="scroll-reveal-card rounded-2xl bg-[#FFFCF6] border border-[#E9DDCC] p-4.5 shadow-[0_2px_12px_rgba(50,34,29,0.03)] text-left">
                 <div className="flex items-center justify-between pb-2 mb-3 border-b border-[#E9DDCC]/70">
                   <span className="font-serif font-bold text-xs uppercase tracking-wider text-[#32221D]">
                     Sanctuary Audio

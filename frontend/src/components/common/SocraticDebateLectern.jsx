@@ -26,6 +26,7 @@ const SocraticDebateLectern = () => {
   const [argumentText, setArgumentText] = useState('');
   const [argumentStance, setArgumentStance] = useState('thesis');
   const [showInscribeForm, setShowInscribeForm] = useState(false);
+  const [showArguments, setShowArguments] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const currentUserIdentifier =
@@ -145,18 +146,18 @@ const SocraticDebateLectern = () => {
   );
 
   return (
-    <div className="p-6 sm:p-7 rounded-3xl bg-[#FAF5EB] border-2 border-[#D8C7B0] shadow-sm text-left animate-fade-in relative overflow-hidden">
+    <div className="p-5 sm:p-6 rounded-2xl bg-[#FFFCF6] border border-[#E9DDCC] shadow-[0_2px_12px_rgba(50,34,29,0.03)] text-left relative overflow-hidden transition-all">
       {/* Decorative Stamp Ribbon */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#E5D7C2] gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3.5 border-b border-[#E9DDCC] gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="w-9 h-9 rounded-full bg-[#7D2235] text-[#F7D8A4] flex items-center justify-center text-sm shadow-xs font-serif">
+          <span className="w-8 h-8 rounded-full bg-[#812638] text-[#F7D8A4] flex items-center justify-center text-xs shadow-xs font-serif flex-shrink-0">
             ⚖
           </span>
           <div>
-            <span className="text-[10px] uppercase font-mono tracking-wider text-[#7D2235] font-bold block">
+            <span className="text-[10px] uppercase font-mono tracking-wider text-[#812638] font-bold block">
               Active Weekly Socratic Debate &bull; Lectern Inquiry
             </span>
-            <h3 className="font-serif text-lg sm:text-xl font-bold text-[#2F2620]">
+            <h3 className="font-serif text-base sm:text-lg font-bold text-[#32221D]">
               {debate.topic}
             </h3>
           </div>
@@ -168,60 +169,60 @@ const SocraticDebateLectern = () => {
             playPaperUnwrap();
             setShowInscribeForm((prev) => !prev);
           }}
-          className="px-4 py-2 rounded-full bg-[#7D2235] hover:bg-[#92283F] text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs cute-press cursor-pointer self-start sm:self-auto"
+          className="px-3.5 py-1.5 rounded-full bg-[#812638] hover:bg-[#6A1F2E] text-white text-xs font-semibold flex items-center gap-1.5 shadow-2xs cute-press cursor-pointer self-start sm:self-auto"
         >
-          <PiFeatherBold className="text-sm" />
+          <PiFeatherBold className="text-xs text-[#F7D8A4]" />
           <span>Inscribe Argument</span>
         </button>
       </div>
 
       {/* Motion & Classical Context */}
-      <div className="my-5 p-4.5 rounded-2xl bg-[#F0E6D5] border border-[#DECDB8]">
-        <span className="text-[10.5px] uppercase font-mono tracking-wider text-[#7A6A5E] font-semibold block mb-1">
+      <div className="my-4 p-4 rounded-xl bg-[#F7F2E9] border border-[#E9DDCC]">
+        <span className="text-[10px] uppercase font-mono tracking-wider text-[#827363] font-semibold block mb-1">
           {debate.book} &bull; Motion for Discourse
         </span>
-        <blockquote className="font-serif italic text-sm sm:text-base text-[#2F2620] leading-relaxed">
+        <blockquote className="font-serif italic text-xs sm:text-[13.5px] text-[#32221D] leading-relaxed">
           “{debate.motion}”
         </blockquote>
         {debate.context && (
-          <p className="text-xs text-[#695D53] font-serif mt-2 border-t border-[#DECDB8] pt-2">
+          <p className="text-[11px] text-[#827363] font-serif mt-2 border-t border-[#E9DDCC]/80 pt-2">
             <em>Archival Context:</em> {debate.context}
           </p>
         )}
       </div>
 
       {/* Live Seal Voting Tally Bar */}
-      <div className="mb-6 space-y-2">
+      <div className="mb-3 space-y-2">
         <div className="flex items-center justify-between text-xs font-serif font-bold">
-          <span className="text-[#7D2235]">
+          <span className="text-[#812638]">
             {debate.thesisLabel} ({debate.thesisVotes?.length || 0} Seals &bull;{' '}
             {thesisPercent}%)
           </span>
-          <span className="text-[#4A3728]">
+          <span className="text-[#32221D]">
             {debate.antithesisLabel} ({debate.antithesisVotes?.length || 0} Seals &bull;{' '}
             {antithesisPercent}%)
           </span>
         </div>
 
-        <div className="w-full h-3 rounded-full bg-[#DECDB8] overflow-hidden flex">
+        <div className="w-full h-2.5 rounded-full bg-[#E9DDCC] overflow-hidden flex">
           <div
-            className="h-full bg-[#7D2235] transition-all duration-700"
+            className="h-full bg-[#812638] transition-all duration-700"
             style={{ width: `${thesisPercent}%` }}
           />
           <div
-            className="h-full bg-[#4A3728] transition-all duration-700"
+            className="h-full bg-[#32221D] transition-all duration-700"
             style={{ width: `${antithesisPercent}%` }}
           />
         </div>
 
-        <div className="flex items-center justify-center gap-3 pt-2">
+        <div className="flex items-center justify-center gap-2.5 pt-1.5 flex-wrap">
           <button
             type="button"
             onClick={() => handleVote('thesis')}
-            className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
               selectedSide === 'thesis'
-                ? 'bg-[#7D2235] text-white shadow-xs'
-                : 'border border-[#7D2235] text-[#7D2235] hover:bg-[#7D2235]/10'
+                ? 'bg-[#812638] text-white shadow-2xs'
+                : 'border border-[#812638] text-[#812638] hover:bg-[#812638]/10'
             }`}
           >
             <span>❦</span>
@@ -231,10 +232,10 @@ const SocraticDebateLectern = () => {
           <button
             type="button"
             onClick={() => handleVote('antithesis')}
-            className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
               selectedSide === 'antithesis'
-                ? 'bg-[#4A3728] text-white shadow-xs'
-                : 'border border-[#4A3728] text-[#4A3728] hover:bg-[#4A3728]/10'
+                ? 'bg-[#32221D] text-white shadow-2xs'
+                : 'border border-[#32221D] text-[#32221D] hover:bg-[#32221D]/10'
             }`}
           >
             <span>✒</span>
@@ -305,80 +306,100 @@ const SocraticDebateLectern = () => {
         </form>
       )}
 
-      {/* Dual Column Discourse Arena */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
-        {/* Left Column: Thesis Arguments */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 pb-2 border-b border-[#E5D7C2]">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#7D2235]" />
-            <h4 className="font-serif font-bold text-xs uppercase tracking-wider text-[#7D2235]">
-              Thesis Inscriptions ({thesisArgs.length})
-            </h4>
-          </div>
-
-          {thesisArgs.map((arg, idx) => (
-            <div
-              key={arg._id || idx}
-              className="p-4 rounded-xl bg-[#FFFDF9] border border-[#DECDB8] shadow-2xs space-y-2"
-            >
-              <div className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <img
-                    src={arg.authorAvatar || '/images/eleanor-avatar.jpg'}
-                    alt={arg.author}
-                    className="w-5 h-5 rounded-full object-cover border border-[#D5C2AC]"
-                  />
-                  <span className="font-serif font-bold text-[#2F2620]">
-                    {arg.author}
-                  </span>
-                </div>
-                <span className="font-mono text-[10px] text-[#8C7A6D]">
-                  @{arg.authorHandle}
-                </span>
-              </div>
-              <p className="font-serif italic text-xs leading-relaxed text-[#40342C]">
-                “{arg.text}”
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Right Column: Antithesis Arguments */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 pb-2 border-b border-[#E5D7C2]">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#4A3728]" />
-            <h4 className="font-serif font-bold text-xs uppercase tracking-wider text-[#4A3728]">
-              Antithesis Inscriptions ({antithesisArgs.length})
-            </h4>
-          </div>
-
-          {antithesisArgs.map((arg, idx) => (
-            <div
-              key={arg._id || idx}
-              className="p-4 rounded-xl bg-[#FFFDF9] border border-[#DECDB8] shadow-2xs space-y-2"
-            >
-              <div className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <img
-                    src={arg.authorAvatar || '/images/arthur-avatar.jpg'}
-                    alt={arg.author}
-                    className="w-5 h-5 rounded-full object-cover border border-[#D5C2AC]"
-                  />
-                  <span className="font-serif font-bold text-[#2F2620]">
-                    {arg.author}
-                  </span>
-                </div>
-                <span className="font-mono text-[10px] text-[#8C7A6D]">
-                  @{arg.authorHandle}
-                </span>
-              </div>
-              <p className="font-serif italic text-xs leading-relaxed text-[#40342C]">
-                “{arg.text}”
-              </p>
-            </div>
-          ))}
-        </div>
+      {/* Toggle Scholarly Counterpoints */}
+      <div className="pt-3 border-t border-[#E9DDCC] flex items-center justify-between">
+        <span className="font-serif italic text-xs text-[#827363]">
+          {debate.motion.length > 60 ? debate.motion.slice(0, 60) + '...' : debate.motion}
+        </span>
+        <button
+          type="button"
+          onClick={() => setShowArguments((prev) => !prev)}
+          className="text-xs font-serif font-semibold text-[#812638] hover:underline flex items-center gap-1 cursor-pointer py-1"
+        >
+          <span>
+            {showArguments
+              ? 'Hide Scholarly Inscriptions ▲'
+              : `View Scholarly Inscriptions (${thesisArgs.length + antithesisArgs.length}) ▼`}
+          </span>
+        </button>
       </div>
+
+      {/* Dual Column Discourse Arena */}
+      {showArguments && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-3 animate-fade-in">
+          {/* Left Column: Thesis Arguments */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 pb-2 border-b border-[#E5D7C2]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#7D2235]" />
+              <h4 className="font-serif font-bold text-xs uppercase tracking-wider text-[#7D2235]">
+                Thesis Inscriptions ({thesisArgs.length})
+              </h4>
+            </div>
+
+            {thesisArgs.map((arg, idx) => (
+              <div
+                key={arg._id || idx}
+                className="p-4 rounded-xl bg-[#FFFDF9] border border-[#DECDB8] shadow-2xs space-y-2"
+              >
+                <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={arg.authorAvatar || '/images/eleanor-avatar.jpg'}
+                      alt={arg.author}
+                      className="w-5 h-5 rounded-full object-cover border border-[#D5C2AC]"
+                    />
+                    <span className="font-serif font-bold text-[#2F2620]">
+                      {arg.author}
+                    </span>
+                  </div>
+                  <span className="font-mono text-[10px] text-[#8C7A6D]">
+                    @{arg.authorHandle}
+                  </span>
+                </div>
+                <p className="font-serif italic text-xs leading-relaxed text-[#40342C]">
+                  “{arg.text}”
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Right Column: Antithesis Arguments */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 pb-2 border-b border-[#E5D7C2]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#4A3728]" />
+              <h4 className="font-serif font-bold text-xs uppercase tracking-wider text-[#4A3728]">
+                Antithesis Inscriptions ({antithesisArgs.length})
+              </h4>
+            </div>
+
+            {antithesisArgs.map((arg, idx) => (
+              <div
+                key={arg._id || idx}
+                className="p-4 rounded-xl bg-[#FFFDF9] border border-[#DECDB8] shadow-2xs space-y-2"
+              >
+                <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={arg.authorAvatar || '/images/arthur-avatar.jpg'}
+                      alt={arg.author}
+                      className="w-5 h-5 rounded-full object-cover border border-[#D5C2AC]"
+                    />
+                    <span className="font-serif font-bold text-[#2F2620]">
+                      {arg.author}
+                    </span>
+                  </div>
+                  <span className="font-mono text-[10px] text-[#8C7A6D]">
+                    @{arg.authorHandle}
+                  </span>
+                </div>
+                <p className="font-serif italic text-xs leading-relaxed text-[#40342C]">
+                  “{arg.text}”
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -201,3 +201,4 @@ const ParlourDiscoverySections = ({
 };
 
 export default ParlourDiscoverySections;
+

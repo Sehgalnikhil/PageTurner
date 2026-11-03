@@ -41,3 +41,4 @@ const LiteraryMoodPills = ({ selectedMood = 'All', onSelectMood }) => {
 };
 
 export default LiteraryMoodPills;
+

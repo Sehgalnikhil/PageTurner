@@ -108,3 +108,4 @@ const CommunityDiscoveryHeader = ({
 };
 
 export default CommunityDiscoveryHeader;
+

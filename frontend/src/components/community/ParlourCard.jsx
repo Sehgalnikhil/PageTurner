@@ -158,3 +158,4 @@ const ParlourCard = ({
 };
 
 export default ParlourCard;
+
